@@ -1,7 +1,7 @@
 use std::borrow::Cow;
 
 use crate::{
-    parsed::info::Method,
+    parsed::{info::Method, Type},
     raw::{self, flattened::Collection},
 };
 
@@ -32,11 +32,15 @@ impl Parser {
             .map_err(|_| format!("Unknown method {}", value.method))?;
         let description = value.description.as_ref().map(Cow::to_string);
         let parameters = Self::parse_parameters(&value.parameters)?;
-        let returns = value
-            .returns
-            .as_ref()
-            .map(|r| Self::parse_returns(r))
-            .transpose()?;
+
+        let returns = if let Some(returns) = value.returns.as_ref() {
+            Some(Self::parse_returns(returns)?)
+        } else {
+            None
+        };
+
+        println!("{returns:?}");
+
         let protected = value.protected.map(|v| v == 1).unwrap_or(false);
         let proxy_to = value.proxy_to.as_ref().map(Cow::to_string);
 
@@ -53,23 +57,40 @@ impl Parser {
     }
 
     fn parse_returns(returns: &raw::Returns) -> Result<Returns, String> {
-        for (name, prop) in returns.properties.iter() {
-            Self::parse_property(&name, prop);
-        }
+        // if let Some(ty) = &returns.ty {
+        //     let ty = Type::parse(
+        //         &returns.optional,
+        //         &ty,
+        //         None,
+        //         None,
+        //         returns.items.as_ref(),
+        //         returns.format.as_ref(),
+        //         returns.properties.as_ref(),
+        //         returns.additional_properties.map(|v| v != 0),
+        //     )?;
 
+        //     Ok(Returns {
+        //         ty,
+        //         description: returns.description.as_ref().map(Cow::to_string),
+        //     })
+        // } else {
+        //     Err(format!("Meh"))
+        // }
         todo!()
     }
 
     fn parse_parameters(parameters: &raw::Parameters) -> Result<Parameters, String> {
-        for (name, prop) in parameters.properties.iter() {
-            Self::parse_property(&name, prop);
-        }
-
-        Err("bruh".into())
+        Ok(Parameters {
+            allow_additional_properties: false,
+            ty: Type {
+                kind: super::r#type::TypeKind::Boolean,
+                optional: false,
+            },
+        })
     }
 
     fn parse_property(name: &str, prop: &raw::Property) {
-        let prop: Result<Property, _> = (name, prop).try_into();
+        let prop: Result<Property, _> = Property::try_from((name, prop));
 
         match prop {
             Ok(prop) => println!("{prop:?}"),

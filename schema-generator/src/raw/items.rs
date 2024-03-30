@@ -18,18 +18,13 @@ pub struct Items<'a> {
         skip_serializing_if = "Option::is_none"
     )]
     pub additional_properties: Option<u32>,
-    #[serde(borrow, default, skip_serializing_if = "BTreeMap::is_empty")]
-    pub properties: BTreeMap<Cow<'a, str>, Property<'a>>,
+    #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
+    pub properties: Option<BTreeMap<Cow<'a, str>, Property<'a>>>,
     // Wat, nexted items?
     #[serde(borrow, skip_serializing_if = "Option::is_none")]
     pub items: Option<Box<Items<'a>>>,
-    #[serde(
-        borrow,
-        rename = "enum",
-        default,
-        skip_serializing_if = "HashSet::is_empty"
-    )]
-    pub enum_values: HashSet<Cow<'a, str>>,
+    #[serde(borrow, rename = "enum")]
+    pub enum_values: Option<HashSet<Cow<'a, str>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<Cow<'a, str>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

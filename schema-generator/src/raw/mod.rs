@@ -1,4 +1,4 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::{borrow::Cow, collections::BTreeMap};
 
 pub mod flattened;
@@ -24,6 +24,9 @@ pub use property::{ParametersOrU32, Property};
 mod returns;
 pub use returns::Returns;
 
+mod ty;
+pub use ty::{Type, TypeKind};
+
 #[derive(Debug, Clone, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct TreeNode<'a> {
@@ -44,4 +47,33 @@ pub struct Value<'a> {
     pub text: Cow<'a, str>,
     #[serde(borrow, default)]
     pub info: BTreeMap<Cow<'a, str>, Info<'a>>,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize, Default)]
+pub struct Optional(Option<serde_json::Value>);
+
+impl Optional {
+    pub const FALSE: Self = Optional(None);
+
+    pub fn is_empty(&self) -> bool {
+        self.0.is_none()
+    }
+
+    pub fn get(&self) -> bool {
+        use serde_json::Value::*;
+
+        let val = self.0.as_ref();
+
+        if let Some(String(str)) = val {
+            str == "1"
+        } else if let Some(Number(num)) = val {
+            if let Some(v) = num.as_u64() {
+                v == 1
+            } else {
+                false
+            }
+        } else {
+            false
+        }
+    }
 }

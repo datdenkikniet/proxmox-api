@@ -2,7 +2,7 @@ use std::{borrow::Cow, collections::BTreeMap};
 
 use serde::Deserialize;
 
-use super::{Format, Items, Property};
+use super::{Format, Items, Optional, Property};
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -18,12 +18,12 @@ pub struct Returns<'a> {
     pub links: Vec<Link<'a>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub minimum: Option<u32>,
-    #[serde(borrow, default, skip_serializing_if = "BTreeMap::is_empty")]
-    pub properties: BTreeMap<Cow<'a, str>, Property<'a>>,
+    #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
+    pub properties: Option<BTreeMap<Cow<'a, str>, Property<'a>>>,
     #[serde(rename = "additionalProperties", default)]
     pub additional_properties: Option<u32>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub optional: Option<u32>,
+    #[serde(default, skip_serializing_if = "Optional::is_empty")]
+    pub optional: Optional,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub format: Option<Format<'a>>,
 }

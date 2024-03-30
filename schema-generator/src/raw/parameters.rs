@@ -9,14 +9,14 @@ use super::Property;
 pub struct Parameters<'a> {
     #[serde(rename = "additionalProperties", default)]
     pub additional_properties: Option<u32>,
-    #[serde(borrow, default, skip_serializing_if = "BTreeMap::is_empty")]
-    pub properties: BTreeMap<Cow<'a, str>, Property<'a>>,
+    #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
+    pub properties: Option<BTreeMap<Cow<'a, str>, Property<'a>>>,
     #[serde(rename = "type", borrow, default)]
     pub ty: Cow<'a, str>,
 }
 
 impl Parameters<'_> {
     pub fn is_empty(&self) -> bool {
-        self.ty.is_empty() && self.additional_properties.is_none() && self.properties.is_empty()
+        self.ty.is_empty() && self.additional_properties.is_none() && self.properties.is_none()
     }
 }
