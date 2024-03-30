@@ -1,9 +1,6 @@
 use std::path::PathBuf;
 
-use schema_generator::{
-    parsed::Parser,
-    raw::{flattened::Collection, Returns, TreeNode, Type, TypeKind},
-};
+use schema_generator::raw::{flattened::Collection, TreeNode};
 
 fn main() -> std::io::Result<()> {
     let mut args = std::env::args();
@@ -21,10 +18,6 @@ fn main() -> std::io::Result<()> {
 
     let flattened = Collection::from_nodes(&tree).unwrap();
     println!("Total of {} nodes.", flattened.len());
-
-    Parser::parse(&flattened);
-
-    println!("Done!");
 
     Ok(())
 }
