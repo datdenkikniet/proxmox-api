@@ -1,95 +1,120 @@
-use std::{
-    borrow::Cow,
-    collections::{BTreeMap, HashSet},
-};
-
 use serde::{Deserialize, Serialize};
 
-use super::Optional;
+use super::Type;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(untagged)]
 pub enum Format<'a> {
+    Kind(KnownFormat),
     #[serde(borrow)]
-    StringDescription(Cow<'a, str>),
-    #[serde(borrow)]
-    Properties(BTreeMap<Cow<'a, str>, FormatProperty<'a>>),
+    Properties(Type<'a>),
 }
 
-impl Format<'_> {
-    pub fn is_pve_prev_list(&self) -> bool {
-        matches!(
-            self,
-            Self::StringDescription(Cow::Borrowed("pve-prev-list"))
-        )
-    }
-}
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "kebab-case")]
+pub enum KnownFormat {
+    EmailOpt,
+    #[serde(rename = "IPorCIDRorAlias")]
+    IpOrCidrOrAlias,
+    InternetAddress,
+    Cidr,
+    #[serde(rename = "string-alist")]
+    ArgumentList,
+    StoragePairList,
+    DnsName,
+    DnsNameList,
+    BridgePairList,
+    EmailOrUsernameList,
+    BackupPerformance,
+    PruneBackups,
+    StringList,
+    Address,
+    AddressList,
+    Ip,
+    LdapSimpleAttr,
+    LdapSimpleAttrList,
+    GraphitePath,
+    #[serde(rename = "urlencoded")]
+    UrlEncoded,
 
-impl PartialEq<str> for Format<'_> {
-    fn eq(&self, other: &str) -> bool {
-        if let Self::StringDescription(str) = self {
-            str == other
-        } else {
-            false
-        }
-    }
-}
+    LxcIpWithLlIfaceList,
+    PemCertificate,
+    MacAddr,
+    RealmSyncOptions,
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
-pub struct FormatProperty<'a> {
-    // This is practically always `minimum`, but only in the next-id case is it `min`
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub min: Option<u32>,
-    // This is practically always `maximum`, but only in the next-id case is it `max`
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub max: Option<u32>,
-    // Practically always a u32, but sometimes in string form, because
-    // god knows why
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub minimum: Option<serde_json::Value>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub maximum: Option<u32>,
-    // Practically always u32, but not always, of course...
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub default: Option<serde_json::Value>,
-    #[serde(default, skip_serializing_if = "Optional::is_empty")]
-    pub optional: Optional,
-    #[serde(rename = "type", borrow)]
-    pub ty: Option<Cow<'a, str>>,
-    #[serde(rename = "typetext", default, skip_serializing_if = "Option::is_none")]
-    pub ty_text: Option<Cow<'a, str>>,
-    #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
-    pub format: Option<Box<Format<'a>>>,
-    #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
-    pub format_description: Option<Cow<'a, str>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub default_key: Option<u32>,
-    #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
-    pub description: Option<Cow<'a, str>>,
-    #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
-    pub pattern: Option<Cow<'a, str>>,
-    #[serde(
-        borrow,
-        rename = "enum",
-        default,
-        skip_serializing_if = "HashSet::is_empty"
-    )]
-    pub enum_values: HashSet<Cow<'a, str>>,
-    #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
-    pub verbose_description: Option<Cow<'a, str>>,
-    #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
-    pub alias: Option<Cow<'a, str>>,
-    #[serde(
-        alias = "keyAlias",
-        borrow,
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub key_alias: Option<Cow<'a, str>>,
-    #[serde(alias = "maxLength", default, skip_serializing_if = "Option::is_none")]
-    pub max_length: Option<u32>,
-    #[serde(alias = "minLength", default, skip_serializing_if = "Option::is_none")]
-    pub min_length: Option<u32>,
+    // PVE specific
+    PveTfaConfig,
+    PveDirOverrideList,
+    PveCtTimezone,
+    PvePrivList,
+    PveRealm,
+    PveReplicationJobId,
+    ProxmoxRemote,
+    PveBridgeIdList,
+    PveIface,
+    PveTaskStatusTypeList,
+    PveCommandBatch,
+    PveNode,
+    PveNodeList,
+    #[serde(rename = "pve-vmid")]
+    PveVmId,
+    #[serde(rename = "pve-vmid-list")]
+    PveVmidList,
+    PveVmCpuConf,
+    #[serde(rename = "pve-ha-resource-or-vm-id")]
+    PveHaResourceOrVmId,
+    PveCalendarEvent,
+    PveHaGroupNodeList,
+    PveVolumeId,
+    PveHotplugFeatures,
+    PveStartupOrder,
+    PveTagList,
+
+    #[serde(rename = "pve-poolid")]
+    PvePoolId,
+    #[serde(rename = "pve-userid")]
+    PveUserId,
+    #[serde(rename = "pve-userid-list")]
+    PveUserIdList,
+    #[serde(rename = "pve-groupid")]
+    PveGroupId,
+    #[serde(rename = "pve-groupid-list")]
+    PveGroupIdList,
+    #[serde(rename = "pve-roleid")]
+    PveRoleId,
+
+    #[serde(rename = "pve-configid")]
+    PveConfigId,
+    #[serde(rename = "pve-configid-list")]
+    PveConfigIdList,
+
+    PveStoragePortalDns,
+    PveStorageServer,
+    PveStorageId,
+    PveStorageIdList,
+    PveStorageContent,
+    PveStorageContentList,
+    PveStoragePath,
+    PveStorageFormat,
+    PveStoragePortalDnsList,
+    PveStorageOptions,
+    #[serde(rename = "pve-storage-vgname")]
+    PveStorageVgName,
+
+    #[serde(rename = "pve-cpuset")]
+    PveCpuSet,
+
+    PveQmBoot,
+    #[serde(rename = "pve-qm-bootdisk")]
+    PveQmBootDisk,
+    PveQmIde,
+    #[serde(rename = "pve-qm-cicustom")]
+    PveQmCiCustom,
+    PveQmHostpci,
+    PveQmWatchdog,
+    #[serde(rename = "pve-qm-ipconfig")]
+    PveQmIpConfig,
+    PveQmSmbios1,
+
+    PveFwConntrackHelper,
 }

@@ -4,7 +4,7 @@ use std::{borrow::Cow, collections::BTreeMap};
 pub mod flattened;
 
 mod format;
-pub use format::{Format, FormatProperty};
+pub use format::Format;
 
 mod info;
 pub use info::Info;
@@ -66,5 +66,11 @@ impl Optional {
         } else {
             false
         }
+    }
+}
+
+impl PartialEq for Optional {
+    fn eq(&self, other: &Self) -> bool {
+        self.get() == other.get()
     }
 }
