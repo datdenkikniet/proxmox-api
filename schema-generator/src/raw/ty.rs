@@ -5,13 +5,20 @@ use std::{
 
 use serde::{Deserialize, Serialize};
 
-use super::Optional;
+use super::{Format, Optional};
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
 pub struct Type<'a> {
     #[serde(flatten, borrow, default, skip_serializing_if = "Option::is_none")]
     pub ty: Option<TypeKind<'a>>,
 
+    #[serde(
+        rename = "typetext",
+        borrow,
+        default,
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub type_text: Option<Cow<'a, str>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub title: Option<Cow<'a, str>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -22,18 +29,31 @@ pub struct Type<'a> {
     pub description: Option<Cow<'a, str>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub verbose_description: Option<Cow<'a, str>>,
+    #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
+    pub format: Option<Box<Format<'a>>>,
+    #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
+    pub format_description: Option<Cow<'a, str>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub ty_text: Option<Cow<'a, str>>,
-    // format
-    // pattern
+    pub default_key: Option<u32>,
     // Another field in the parent object is required
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub requires: Option<Cow<'a, str>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub renderer: Option<Cow<'a, str>>,
+    // This type is an alias for a field in the parent object
+    #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
+    pub alias: Option<Cow<'a, str>>,
+    // This type is an alias for a field in the parent object.
+    #[serde(
+        alias = "keyAlias",
+        borrow,
+        default,
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub key_alias: Option<Cow<'a, str>>,
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
 #[serde(tag = "type", rename_all = "kebab-case")]
 pub enum TypeKind<'a> {
     Null,
@@ -42,11 +62,13 @@ pub enum TypeKind<'a> {
         max_length: Option<u32>,
         #[serde(rename = "minLength", default, skip_serializing_if = "Option::is_none")]
         min_length: Option<u32>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pattern: Option<Cow<'a, str>>,
     },
     Number {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
+        #[serde(default, alias = "min", skip_serializing_if = "Option::is_none")]
         minimum: Option<serde_json::Value>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
+        #[serde(default, alias = "max", skip_serializing_if = "Option::is_none")]
         maximum: Option<u32>,
     },
     Integer {
@@ -71,46 +93,4 @@ pub enum TypeKind<'a> {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         default: Option<Cow<'a, str>>,
     },
-
-    IpOrCidrOrAlias,
-    InternetAddress,
-    Cidr,
-    ArgumentList,
-    StoragePairList,
-    DnsName,
-    BridgePairList,
-    EmailOrUsernameList,
-    BackupPerformance,
-    PruneBackups,
-    StringList,
-
-    // PVE specific
-    PvePrivList,
-    PveRealm,
-    PveReplicationJobId,
-    ProxmoxRemote,
-    PveBridgeIdList,
-    PveIface,
-    PveTaskStatusTypeList,
-    PveCommandBatch,
-    PveNode,
-    PveVmId,
-    PveVmidList,
-    PveHaResourceOrVmId,
-    PveCalendarEvent,
-
-    PvePoolId,
-    PveUserId,
-    PveGroupId,
-    PveRoleId,
-
-    PveConfigId,
-    PveConfigIdList,
-
-    PveStoragePortalDns,
-    PveStorageServer,
-    PveStorageId,
-    PveStorageIdList,
-    PveStorageContent,
-    PveStorageContentList,
 }

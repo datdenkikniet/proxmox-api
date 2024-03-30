@@ -19,5 +19,7 @@ fn main() -> std::io::Result<()> {
     let flattened = Collection::from_nodes(&tree).unwrap();
     println!("Total of {} nodes.", flattened.len());
 
+    println!("{flattened:#?}");
+
     Ok(())
 }
