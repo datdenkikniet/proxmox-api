@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use schema_generator::{
     parsed::Parser,
-    raw::{flattened::Collection, TreeNode},
+    raw::{flattened::Collection, Returns, TreeNode, Type, TypeKind},
 };
 
 fn main() -> std::io::Result<()> {
@@ -23,6 +23,8 @@ fn main() -> std::io::Result<()> {
     println!("Total of {} nodes.", flattened.len());
 
     Parser::parse(&flattened);
+
+    println!("Done!");
 
     Ok(())
 }

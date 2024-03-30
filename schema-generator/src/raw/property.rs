@@ -5,7 +5,7 @@ use std::{
 
 use serde::Deserialize;
 
-use super::{Format, Items, Parameters};
+use super::{Format, Items, Optional, Parameters};
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -15,9 +15,8 @@ pub struct Property<'a> {
     // Can be string if type is 'enum'
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub default: Option<serde_json::Value>,
-    // Should always be u32 (because boolean), but is a string, sometimes.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub optional: Option<serde_json::Value>,
+    #[serde(default, skip_serializing_if = "Optional::is_empty")]
+    pub optional: Optional,
     #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
     pub description: Option<Cow<'a, str>>,
     #[serde(rename = "type", borrow)]
@@ -48,8 +47,8 @@ pub struct Property<'a> {
     pub verbose_description: Option<Cow<'a, str>>,
     #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
     pub renderer: Option<Cow<'a, str>>,
-    #[serde(borrow, default, skip_serializing_if = "BTreeMap::is_empty")]
-    pub properties: BTreeMap<Cow<'a, str>, Property<'a>>,
+    #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
+    pub properties: Option<BTreeMap<Cow<'a, str>, Property<'a>>>,
     #[serde(
         alias = "additionalProperties",
         default,
@@ -65,4 +64,14 @@ pub enum ParametersOrU32<'a> {
     U32(u32),
     #[serde(borrow)]
     Parameters(Parameters<'a>),
+}
+
+impl ParametersOrU32<'_> {
+    pub fn allow_additional(&self) -> bool {
+        if let ParametersOrU32::U32(v) = self {
+            *v != 0
+        } else {
+            true
+        }
+    }
 }

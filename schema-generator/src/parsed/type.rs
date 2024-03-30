@@ -1,18 +1,55 @@
 use std::{
     borrow::Cow,
-    collections::{HashMap, HashSet},
+    collections::{BTreeMap, HashSet},
 };
 
-use crate::raw::{Format, Items};
+use crate::raw::{self, Format, Items, Optional, ParametersOrU32};
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum Type {
+pub struct Type {
+    pub kind: TypeKind,
+    pub optional: bool,
+}
+
+impl Type {
+    pub fn parse(
+        optional: &Optional,
+        ty_str: &str,
+        ty_text: Option<&Cow<str>>,
+        enum_values: Option<&HashSet<Cow<str>>>,
+        items: Option<&Items>,
+        format: Option<&Format>,
+        properties: Option<&BTreeMap<Cow<str>, raw::Property>>,
+        allow_additional_properties: Option<bool>,
+    ) -> Result<Self, String> {
+        let kind = TypeKind::parse(
+            ty_str,
+            ty_text,
+            enum_values,
+            items,
+            format,
+            properties,
+            allow_additional_properties,
+        )?;
+
+        Ok(Self {
+            kind,
+            optional: optional.get(),
+        })
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum TypeKind {
     String,
     Number,
     Integer,
     Boolean,
     Array(Box<Type>),
-    Object(HashMap<String, Type>),
+    Object {
+        properties: BTreeMap<String, Type>,
+        allow_additional_properties: bool,
+    },
     Enum(HashSet<String>),
 
     IPorCIDRorAlias,
@@ -37,6 +74,7 @@ pub enum Type {
     PveTaskStatusTypeList,
     PveCommandBatch,
     PveNode,
+    PveVmId,
     PveVmidList,
     PveHaResourceOrVmId,
     PveCalendarEvent,
@@ -57,32 +95,84 @@ pub enum Type {
     PveStorageContentList,
 }
 
-impl Type {
-    fn parse_format(format: &Format) -> Result<HashMap<String, Type>, String> {
-        todo!()
-    }
-
+impl TypeKind {
     pub fn parse(
         ty_str: &str,
         ty_text: Option<&Cow<str>>,
         enum_values: Option<&HashSet<Cow<str>>>,
         items: Option<&Items>,
         format: Option<&Format>,
+        properties: Option<&BTreeMap<Cow<str>, raw::Property>>,
+        allow_additional_properties: Option<bool>,
     ) -> Result<Self, String> {
+        let allow_additional_properties = allow_additional_properties.unwrap_or(false);
+
         let ty = match ty_str {
             "integer" => Self::Integer,
             "string" => Self::String,
             "number" => Self::Number,
             "boolean" => Self::Boolean,
             "object" => {
-                if let Some(format) = format {
-                    let format = Self::parse_format(format)?;
-                    return Ok(Self::Object(format));
+                return if let Some(properties) = properties {
+                    let mut props = BTreeMap::new();
+                    for (name, prop) in properties.iter() {
+                        let ty = if let Some(ty) = prop.ty.as_ref() {
+                            Type::parse(
+                                &prop.optional,
+                                ty,
+                                prop.ty_text.as_ref(),
+                                prop.enum_values.as_ref(),
+                                prop.items.as_ref(),
+                                prop.format.as_ref(),
+                                prop.properties.as_ref(),
+                                prop.additional_properties
+                                    .as_ref()
+                                    .map(ParametersOrU32::allow_additional),
+                            )?
+                        } else {
+                            let kind = TypeKind::Object {
+                                properties: Default::default(),
+                                allow_additional_properties,
+                            };
+
+                            Type {
+                                kind,
+                                optional: prop.optional.get(),
+                            }
+                        };
+
+                        props.insert(name.to_string(), ty);
+                    }
+
+                    Ok(Self::Object {
+                        properties: props,
+                        allow_additional_properties,
+                    })
                 } else {
-                    return Err(format!("Object type without format"));
+                    Ok(Self::Object {
+                        properties: BTreeMap::new(),
+                        allow_additional_properties,
+                    })
+                };
+            }
+            "array" => {
+                if let Some(items) = items {
+                    let array_type = Type::parse(
+                        &Optional::FALSE,
+                        &items.ty,
+                        None,
+                        items.enum_values.as_ref(),
+                        items.items.as_ref().map(|v| v.as_ref()),
+                        items.format.as_ref(),
+                        items.properties.as_ref(),
+                        items.additional_properties.map(|v| v != 0),
+                    )?;
+
+                    return Ok(Self::Array(Box::new(array_type)));
+                } else {
+                    return Err(format!("Encountered array type without items."));
                 }
             }
-            "array" => return Err(format!("Cannot parse {ty_str} correctly yet.")),
             _ => return Err(format!("Unknown type {ty_str}")),
         };
 
@@ -162,6 +252,10 @@ impl Type {
             };
 
             return Ok(value);
+        } else if let (Self::Integer, Some(format)) = (&ty, format) {
+            if format == "pve-vmid" {
+                return Ok(Self::PveVmId);
+            }
         }
 
         if let Some(enum_values) = enum_values {

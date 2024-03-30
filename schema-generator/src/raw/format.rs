@@ -5,6 +5,8 @@ use std::{
 
 use serde::{Deserialize, Serialize};
 
+use super::Optional;
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 #[serde(untagged)]
@@ -52,8 +54,8 @@ pub struct FormatProperty<'a> {
     // Practically always u32, but not always, of course...
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub default: Option<serde_json::Value>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub optional: Option<u32>,
+    #[serde(default, skip_serializing_if = "Optional::is_empty")]
+    pub optional: Optional,
     #[serde(rename = "type", borrow)]
     pub ty: Option<Cow<'a, str>>,
     #[serde(rename = "typetext", default, skip_serializing_if = "Option::is_none")]
