@@ -6,14 +6,15 @@ use std::{
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
 pub struct Type<'a> {
+    #[serde(flatten, borrow, default, skip_serializing_if = "Option::is_none")]
+    pub ty: Option<TypeKind<'a>>,
+
     #[serde(default)]
     pub optional: Option<serde_json::Value>,
-    #[serde(default)]
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub default: Option<serde_json::Value>,
-    #[serde(flatten, borrow)]
-    pub ty: TypeKind<'a>,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -28,13 +29,16 @@ pub enum TypeKind<'a> {
         items: Box<Type<'a>>,
     },
     Object {
-        #[serde(borrow)]
-        properties: BTreeMap<Cow<'a, str>, Type<'a>>,
+        #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
+        properties: Option<BTreeMap<Cow<'a, str>, Type<'a>>>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
         additional_properties: Option<serde_json::Value>,
     },
     Enum {
         #[serde(rename = "enum")]
         values: HashSet<Cow<'a, str>>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        default: Option<Cow<'a, str>>,
     },
 
     IpOrCidrOrAlias,
