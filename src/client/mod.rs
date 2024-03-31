@@ -13,6 +13,8 @@ use crate::{
 mod nodes;
 pub use nodes::NodeClient;
 
+mod test;
+
 #[derive(Debug)]
 pub enum Error {
     Reqwest(reqwest::Error),
@@ -205,14 +207,15 @@ impl Client {
         }
     }
 
-    fn get<R, S>(&self, path: S) -> Result<R, Error>
+    fn get<R, S, Q>(&self, path: S, query: &Q) -> Result<R, Error>
     where
         R: DeserializeOwned,
         S: AsRef<str>,
+        Q: Serialize,
     {
         log::debug!("GET {}", path.as_ref());
 
-        let request = self.client.get(self.route(path.as_ref()));
+        let request = self.client.get(self.route(path.as_ref())).query(query);
 
         let response = self.append_headers(request).send()?;
         let response_status = response.status();
@@ -244,18 +247,18 @@ impl Client {
 // Cluster
 impl Client {
     pub fn cluster_nextid(&self) -> Result<NextId, Error> {
-        self.get("/cluster/nextid")
+        self.get("/cluster/nextid", &())
     }
 
     pub fn cluster_status(&self) -> Result<serde_json::Value, Error> {
-        self.get("/cluster/status")
+        self.get("/cluster/status", &())
     }
 }
 
 // Pool
 impl Client {
     pub fn pool_info(&self, pool_id: &str) -> Result<PoolData, Error> {
-        self.get(&format!("/pools/{pool_id}"))
+        self.get(&format!("/pools/{pool_id}"), &())
     }
 }
 
