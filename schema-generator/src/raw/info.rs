@@ -2,7 +2,7 @@ use std::borrow::Cow;
 
 use serde::Deserialize;
 
-use super::{Permission, Type};
+use super::{Parameters, Permission, Type};
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -20,7 +20,7 @@ pub struct Info<'a> {
     #[serde(borrow)]
     pub method: Cow<'a, str>,
     #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
-    pub parameters: Option<Type<'a>>,
+    pub parameters: Option<Parameters<'a>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub permissions: Option<Permission>,
     #[serde(borrow, default, skip_serializing_if = "Option::is_none")]

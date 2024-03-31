@@ -13,7 +13,7 @@ macro_rules! sub_client {
             where
                 O: DeserializeOwned,
             {
-                self.client.get(&format!("{}/{}", self.path, path))
+                self.client.get(&format!("{}/{}", self.path, path), &())
             }
 
             fn post<I, O>(&self, path: &str, request: &I) -> Result<O, Error>
@@ -48,7 +48,7 @@ impl<'a> NodeClient<'a> {
     }
 
     pub fn lxc(&self, vm: VmId) -> LxcClient<'a> {
-        LxcClient::new(self, vm)
+        LxcClient::new(self.client, &self.path, vm)
     }
 
     pub fn hosts(&self) -> Result<serde_json::Value, Error> {
@@ -70,12 +70,9 @@ pub struct LxcClient<'a> {
 sub_client!(LxcClient);
 
 impl<'a> LxcClient<'a> {
-    pub(crate) fn new(client: &NodeClient<'a>, _vm: VmId) -> Self {
-        let path = format!("{}/lxc/{}", client.path, _vm);
-        Self {
-            client: client.client,
-            path,
-        }
+    pub(crate) fn new(client: &'a crate::client::Client, path: &str, vm: VmId) -> Self {
+        let path = format!("{}/lxc/{}", path, vm);
+        Self { client, path }
     }
 
     pub fn clone(&self, request: &CloneLxcRequest) -> Result<String, Error> {

@@ -1,8 +1,10 @@
 use std::{
     borrow::Cow,
-    collections::{BTreeMap, HashSet},
+    collections::{HashMap, HashSet},
 };
 
+use proc_macro2::TokenStream;
+use quote::quote;
 use serde::{Deserialize, Serialize};
 
 use super::{Format, Optional};
@@ -83,7 +85,7 @@ pub enum TypeKind<'a> {
     },
     Object {
         #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
-        properties: Option<BTreeMap<Cow<'a, str>, Type<'a>>>,
+        properties: Option<HashMap<Cow<'a, str>, Type<'a>>>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         additional_properties: Option<serde_json::Value>,
     },
@@ -93,4 +95,40 @@ pub enum TypeKind<'a> {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         default: Option<Cow<'a, str>>,
     },
+}
+
+impl Type<'_> {
+    pub fn to_tokens(&self) -> TokenStream {
+        let ty = if let Some(ty) = self.ty.as_ref() {
+            match ty {
+                TypeKind::Null => quote! { () },
+                TypeKind::String { .. } => quote! { String },
+                TypeKind::Number { .. } => quote! { f64 },
+                TypeKind::Integer { .. } => quote! { u32 },
+                TypeKind::Boolean => quote! { bool },
+                TypeKind::Array { items } => {
+                    let inner = items.to_tokens();
+                    quote! { Vec<#inner> }
+                }
+                TypeKind::Object { .. } => {
+                    // TODO: emit object definition
+                    quote! { () }
+                }
+                TypeKind::Enum { .. } => {
+                    // TODO: emit enum definition
+                    quote! { () }
+                }
+            }
+        } else {
+            quote! { () }
+        };
+
+        let ty = if self.optional.get() {
+            quote! { Option<#ty> }
+        } else {
+            ty
+        };
+
+        ty
+    }
 }

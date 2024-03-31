@@ -32,7 +32,7 @@ impl PathElement {
         }
     }
 
-    pub fn as_string_without_braces(&self) -> &str {
+    pub fn as_string_without_brackets(&self) -> &str {
         match self {
             PathElement::Literal(v) | PathElement::Placeholder(v) => &v,
         }

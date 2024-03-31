@@ -1,5 +1,3 @@
-use std::num::{NonZeroU16, NonZeroU32};
-
 use serde::Serialize;
 
 use crate::Bool;

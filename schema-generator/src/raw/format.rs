@@ -1,3 +1,5 @@
+use std::{borrow::Cow, collections::HashMap};
+
 use serde::{Deserialize, Serialize};
 
 use super::Type;
@@ -7,16 +9,28 @@ use super::Type;
 pub enum Format<'a> {
     Kind(KnownFormat),
     #[serde(borrow)]
-    Properties(Type<'a>),
+    Properties(HashMap<Cow<'a, str>, Type<'a>>),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub enum KnownFormat {
+    Ipv4,
+    #[serde(rename = "ipv4mask")]
+    Ipv4Mask,
+    #[serde(rename = "CIDRv4")]
+    CidrV4,
+    Ipv6,
+    #[serde(rename = "CIDRv6")]
+    CidrV6,
     EmailOpt,
+    EmailList,
     #[serde(rename = "IPorCIDRorAlias")]
     IpOrCidrOrAlias,
+    #[serde(rename = "IPorCIDR")]
+    IpOrCidr,
     InternetAddress,
+    #[serde(alias = "CIDR")]
     Cidr,
     #[serde(rename = "string-alist")]
     ArgumentList,
@@ -31,6 +45,7 @@ pub enum KnownFormat {
     Address,
     AddressList,
     Ip,
+    IpList,
     LdapSimpleAttr,
     LdapSimpleAttrList,
     GraphitePath,
@@ -39,10 +54,21 @@ pub enum KnownFormat {
 
     LxcIpWithLlIfaceList,
     PemCertificate,
+    PemCertificateChain,
+    PemString,
     MacAddr,
+    MacPrefix,
     RealmSyncOptions,
+    DiskSize,
 
     // PVE specific
+    PveAcmeDomain,
+    PveAcmeDomainList,
+    PveAcmeAlias,
+    PveLxcMpString,
+    PveVolumeIdOrQmPath,
+    PveVolumeIdOrAbsolutePath,
+    PveDayOfWeekList,
     PveTfaConfig,
     PveDirOverrideList,
     PveCtTimezone,
@@ -50,8 +76,11 @@ pub enum KnownFormat {
     PveRealm,
     PveReplicationJobId,
     ProxmoxRemote,
+    #[serde(alias = "pve-bridgeid")]
+    PveBridgeId,
     PveBridgeIdList,
     PveIface,
+    PveIfaceList,
     PveTaskStatusTypeList,
     PveCommandBatch,
     PveNode,
@@ -82,7 +111,12 @@ pub enum KnownFormat {
     PveGroupIdList,
     #[serde(rename = "pve-roleid")]
     PveRoleId,
-
+    #[serde(rename = "pve-roleid-list")]
+    PveRoleIdList,
+    #[serde(rename = "pve-tokenid")]
+    PveTokenId,
+    #[serde(rename = "pve-tokenid-list")]
+    PveTokenIdList,
     #[serde(rename = "pve-configid")]
     PveConfigId,
     #[serde(rename = "pve-configid-list")]
@@ -115,6 +149,15 @@ pub enum KnownFormat {
     #[serde(rename = "pve-qm-ipconfig")]
     PveQmIpConfig,
     PveQmSmbios1,
+    PveQmUsbDevice,
 
     PveFwConntrackHelper,
+    PveFwSportSpec,
+    PveFwDportSpec,
+    PveFwAddrSpec,
+    PveFwProtocolSpec,
+    PveFwIcmpTypeSpec,
+
+    PveIpv4Config,
+    PveIpv6Config,
 }
