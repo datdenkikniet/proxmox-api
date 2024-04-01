@@ -1,3 +1,5 @@
+//! Hardcoded API definitions required for authentication.
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize)]

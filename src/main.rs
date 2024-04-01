@@ -1,5 +1,8 @@
 use clap::{Parser, Subcommand};
-use proxmox_api::{client::Client, nodes::lxc::CloneLxcRequest, VmId};
+use proxmox_api::Client;
+
+#[allow(warnings)]
+mod generated;
 
 #[derive(Debug, Parser)]
 pub struct Cli {
@@ -32,40 +35,24 @@ fn main() {
         .expect("User must be provided as <user>@<realm>");
 
     let client = Client::new(&cli.host, user, realm, &cli.password).unwrap();
-    let proxmox = client.node("proxmox");
 
-    let status = client.cluster_status();
-    println!("Status: {status:#?}");
-
-    let next_id = client.cluster_nextid().unwrap();
-    println!("nextid: {next_id:?}");
-
-    let req = CloneLxcRequest::new(next_id.get())
-        .full(false)
-        .pool("pool")
-        .pool("github-runners")
-        .hostname(format!("runner-{}", next_id.get()));
-
-    // let clone_result = proxmox.lxc(VmId::new(125).unwrap()).clone(&req);
-    // println!("{clone_result:?}");
-
-    let pool_info = client.pool_info("github-runners");
-    println!("{pool_info:?}");
-
-    let id = VmId::new(105).unwrap();
-    let lxc = proxmox.lxc(id);
-    println!("{id} status: {:?}", lxc.status());
-
-    let interfaces = lxc.interfaces();
-    println!("{interfaces:?}");
-
-    println!("{:?}", proxmox.hosts());
-
-    let access_client =
-        proxmox_api::client::test::access::AccessClient::new(std::sync::Arc::new(client));
+    let client = std::sync::Arc::new(client);
+    let access_client = generated::access::AccessClient::new(client.clone());
 
     println!(
         "{:?}",
         access_client.users().userid("root@pam").token().get()
+    );
+
+    let cluster_client = generated::cluster::ClusterClient::new(client.clone());
+
+    println!("{:?}", cluster_client.nextid().get(Default::default()));
+
+    let v: Vec<generated::cluster::resources::GETReturnsItems> =
+        serde_json::from_str(include_str!("./data.json")).unwrap();
+
+    println!(
+        "{:?}",
+        cluster_client.resources().get(Default::default()).unwrap()[0]
     );
 }

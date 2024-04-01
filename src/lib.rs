@@ -1,7 +1,10 @@
-mod api2;
-pub use api2::*;
-
-pub mod client;
-
 mod path;
 pub use path::{Path, PathElement};
+
+mod api2;
+
+mod client;
+pub use client::{Client, Error};
+
+mod serde;
+pub use serde::*;

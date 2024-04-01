@@ -1,19 +1,12 @@
+#![allow(warnings)]
+
 use std::time::{Duration, Instant};
 
 use parking_lot::RwLock;
 use reqwest::{blocking::RequestBuilder, Method, StatusCode};
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
-use crate::{
-    access::{Ticket, TicketResponse},
-    cluster::NextId,
-    pools::PoolData,
-};
-
-mod nodes;
-pub use nodes::NodeClient;
-
-pub mod test;
+use crate::api2::{Ticket, TicketResponse};
 
 #[derive(Debug)]
 pub enum Error {
@@ -176,11 +169,11 @@ impl Client {
         Ok(())
     }
 
-    fn request_with_body<T, R, S>(&self, method: Method, path: S, body: &T) -> Result<R, Error>
+    fn request_with_body<P, B, R>(&self, method: Method, path: P, body: &B) -> Result<R, Error>
     where
-        T: Serialize,
+        P: AsRef<str>,
+        B: Serialize,
         R: DeserializeOwned,
-        S: AsRef<str>,
     {
         log::debug!("{} {}", method, path.as_ref());
 
@@ -207,38 +200,38 @@ impl Client {
         }
     }
 
-    fn put<T, R, S>(&self, path: S, body: &T) -> Result<R, Error>
+    pub fn put<P, B, R>(&self, path: P, body: &B) -> Result<R, Error>
     where
-        T: Serialize,
+        P: AsRef<str>,
+        B: Serialize,
         R: DeserializeOwned,
-        S: AsRef<str>,
     {
         self.request_with_body(Method::PUT, path, body)
     }
 
-    fn post<T, R, S>(&self, path: S, body: &T) -> Result<R, Error>
+    pub fn post<P, B, R>(&self, path: P, body: &B) -> Result<R, Error>
     where
-        T: Serialize,
+        P: AsRef<str>,
+        B: Serialize,
         R: DeserializeOwned,
-        S: AsRef<str>,
     {
         self.request_with_body(Method::POST, path, body)
     }
 
-    fn delete<T, R, S>(&self, path: S, body: &T) -> Result<R, Error>
+    pub fn delete<P, B, R>(&self, path: P, body: &B) -> Result<R, Error>
     where
-        T: Serialize,
+        P: AsRef<str>,
+        B: Serialize,
         R: DeserializeOwned,
-        S: AsRef<str>,
     {
         self.request_with_body(Method::DELETE, path, body)
     }
 
-    fn get<R, S, Q>(&self, path: S, query: &Q) -> Result<R, Error>
+    pub fn get<P, Q, R>(&self, path: P, query: &Q) -> Result<R, Error>
     where
-        R: DeserializeOwned,
-        S: AsRef<str>,
         Q: Serialize,
+        P: AsRef<str>,
+        R: DeserializeOwned,
     {
         log::debug!("GET {}", path.as_ref());
 
@@ -261,31 +254,6 @@ impl Client {
         } else {
             Err(Error::UnknownFailure(response_status))
         }
-    }
-
-    pub fn node<T>(&self, node: T) -> NodeClient
-    where
-        T: AsRef<str>,
-    {
-        NodeClient::new(self, node)
-    }
-}
-
-// Cluster
-impl Client {
-    pub fn cluster_nextid(&self) -> Result<NextId, Error> {
-        self.get("/cluster/nextid", &())
-    }
-
-    pub fn cluster_status(&self) -> Result<serde_json::Value, Error> {
-        self.get("/cluster/status", &())
-    }
-}
-
-// Pool
-impl Client {
-    pub fn pool_info(&self, pool_id: &str) -> Result<PoolData, Error> {
-        self.get(&format!("/pools/{pool_id}"), &())
     }
 }
 
