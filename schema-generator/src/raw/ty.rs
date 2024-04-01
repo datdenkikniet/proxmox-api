@@ -173,7 +173,8 @@ impl Type<'_> {
                                 };
 
                                 let field_name = crate::name_to_ident(&original_name);
-                                let inner = ty.type_def(&field_name, struct_suffix);
+                                let inner = ty
+                                    .type_def(&field_name, &format!("{struct_suffix}{field_name}"));
 
                                 external_defs.push(inner.clone());
 
