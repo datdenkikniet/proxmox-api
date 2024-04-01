@@ -1,4 +1,4 @@
-use proc_macro2::TokenStream;
+use proc_macro2::{Literal, TokenStream};
 use quote::{quote, ToTokens};
 use syn::{spanned::Spanned, Ident, Lit, LitStr};
 
@@ -6,6 +6,18 @@ use crate::{
     raw::flattened::{Collection, Node},
     PathElement, StructDef,
 };
+
+use self::def::PrimitiveTypeDef;
+
+pub(crate) mod def;
+
+pub(self) fn proxmox_api(path: TokenStream) -> TokenStream {
+    quote! { ::proxmox_api::#path }
+}
+
+pub(self) fn proxmox_api_str(path: String) -> Lit {
+    Lit::new(Literal::string(&format!("::proxmox_api::{path}")))
+}
 
 pub struct Generator<'a> {
     collection: Collection<'a>,
@@ -64,53 +76,64 @@ impl<'a> Generator<'a> {
             let fn_name_str = method.to_ascii_lowercase();
             let fn_name = Ident::new(&fn_name_str, quote!().span());
 
-            let mut returns_definitions = Vec::new();
-
-            let returns = info
-                .returns
-                .as_ref()
-                .map(|v| {
-                    (
-                        v.to_definition(&format!("{}Returns", method)),
-                        v.optional.get(),
-                    )
-                })
-                .map(|(def, optional)| {
-                    let returns_def = quote! { #def };
-
-                    returns_definitions.push(returns_def);
-                    let name = def.as_field_ty(optional).clone();
-                    quote! { -> Result<#name, ::proxmox_api::client::Error> }
-                })
-                .unwrap_or(quote! {});
-
-            let (fn_definition, params_def) =
-                if let Some(StructDef { definition, name }) = parameters {
+            let (signature, defer_signature, params_def) =
+                if let Some(StructDef { name, definition }) = parameters {
                     let name = Ident::new(&name, quote! {}.span());
-
-                    let def = quote! {
-                        pub fn #fn_name(&self, params: #name) #returns {
-                            let path = self.path.to_string();
-                            self.client.#fn_name(&path, &params)
-                        }
-                    };
-
-                    (def, Some(definition))
+                    (
+                        quote!(&self, params: #name),
+                        quote!(&path, &params),
+                        Some(definition),
+                    )
                 } else {
-                    let def = quote! {
-                        pub fn #fn_name(&self) #returns {
-                            let path = self.path.to_string();
-                            self.client.#fn_name(&path, &())
-                        }
-                    };
-
-                    (def, None)
+                    (quote!(&self), quote!(&path, &()), None)
                 };
+
+            let (returns, returns_definition, call) = if let Some(ret) = info.returns.as_ref() {
+                let def = ret.to_definition(&format!("{}Returns", method));
+
+                let returns_def = quote! { #def };
+
+                let name = def.as_field_ty(ret.optional.get());
+                let error = proxmox_api(quote!(Error));
+
+                let call = match def.primitive() {
+                    Some(PrimitiveTypeDef::Integer) => {
+                        let int = proxmox_api(quote!(Integer));
+                        quote!(Ok(self.client.#fn_name::<_, _, #int>(#defer_signature)?.get()))
+                    }
+                    Some(PrimitiveTypeDef::Number) => {
+                        let number = proxmox_api(quote!(Number));
+                        quote!(Ok(self.client.#fn_name::<_, _, #number>(#defer_signature)?.get()))
+                    }
+                    Some(PrimitiveTypeDef::Boolean) => {
+                        let bool = proxmox_api(quote!(Bool));
+                        quote!(Ok(self.client.#fn_name::<_, _, #bool>(#defer_signature)?.get()))
+                    }
+                    Some(PrimitiveTypeDef::String) | None => {
+                        quote!(self.client.#fn_name(#defer_signature))
+                    }
+                };
+
+                (quote! { -> Result<#name, #error> }, Some(returns_def), call)
+            } else {
+                (
+                    quote!(),
+                    None,
+                    quote!(self.client.#fn_name(#defer_signature)),
+                )
+            };
+
+            let fn_definition = quote! {
+                pub fn #fn_name(#signature) #returns {
+                    let path = self.path.to_string();
+                    #call
+                }
+            };
 
             let block = quote! {
                 #params_def
 
-                #(#returns_definitions)*
+                #returns_definition
 
                 impl #name {
                     #fn_definition
@@ -169,9 +192,10 @@ impl<'a> Generator<'a> {
             }
         };
 
+        let client = proxmox_api(quote!(Client));
         let definition = quote! {
             pub struct #name {
-                client: ::std::sync::Arc<::proxmox_api::client::Client>,
+                client: ::std::sync::Arc<#client>,
                 path: String,
             }
 
@@ -189,10 +213,11 @@ impl<'a> Generator<'a> {
 
     fn make_placeholder_constructor(has_parent: bool, placeholder: &str) -> TokenStream {
         let placeholder_ident = Ident::new(placeholder, quote!().span());
+        let client = proxmox_api(quote!(Client));
 
         if has_parent {
             quote! {
-                pub fn new(client: ::std::sync::Arc<::proxmox_api::client::Client>, parent_path: &str, #placeholder_ident: &str) -> Self {
+                pub fn new(client: ::std::sync::Arc<#client>, parent_path: &str, #placeholder_ident: &str) -> Self {
                     Self {
                         client,
                         path: format!("{}/{}", parent_path, #placeholder_ident)
@@ -201,7 +226,7 @@ impl<'a> Generator<'a> {
             }
         } else {
             quote! {
-                pub fn new(client: ::std::sync::Arc<::proxmox_api::client::Client>, #placeholder_ident: &str) -> Self {
+                pub fn new(client: ::std::sync::Arc<#client>, #placeholder_ident: &str) -> Self {
                     Self {
                         client,
                         path: #placeholder_ident.to_string()
@@ -213,10 +238,11 @@ impl<'a> Generator<'a> {
 
     fn make_literal_constructor(has_parent: bool, literal: &str) -> TokenStream {
         let literal = Lit::Str(LitStr::new(&format!("/{literal}"), quote!().span()));
+        let client = proxmox_api(quote!(Client));
 
         if has_parent {
             quote! {
-                pub fn new(client: ::std::sync::Arc<::proxmox_api::client::Client>, parent_path: &str) -> Self {
+                pub fn new(client: ::std::sync::Arc<#client>, parent_path: &str) -> Self {
                     Self {
                         client,
                         path: format!("{}{}", parent_path, #literal)
@@ -225,7 +251,7 @@ impl<'a> Generator<'a> {
             }
         } else {
             quote! {
-                pub fn new(client: ::std::sync::Arc<::proxmox_api::client::Client>) -> Self {
+                pub fn new(client: ::std::sync::Arc<#client>) -> Self {
                     Self {
                         client,
                         path: #literal.to_string()

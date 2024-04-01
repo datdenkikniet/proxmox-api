@@ -7,12 +7,9 @@ use quote::quote;
 use serde::{Deserialize, Serialize};
 use syn::{spanned::Spanned, Ident};
 
-use crate::raw::def::FieldDef;
+use crate::generator::def::{FieldDef, PrimitiveTypeDef, TypeDef};
 
-use super::{
-    def::{PrimitiveTypeDef, TypeDef},
-    Format, Optional,
-};
+use super::{Format, Optional};
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
 pub struct Type<'a> {
@@ -79,6 +76,12 @@ pub enum TypeKind<'a> {
         min_length: Option<u32>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         pattern: Option<Cow<'a, str>>,
+
+        // If it's an enum
+        #[serde(rename = "enum", default, skip_serializing_if = "Option::is_none")]
+        enum_values: Option<HashSet<Cow<'a, str>>>,
+        #[serde(default)]
+        default: Option<Cow<'a, str>>,
     },
     Number {
         #[serde(default, alias = "min", skip_serializing_if = "Option::is_none")]
@@ -106,12 +109,6 @@ pub enum TypeKind<'a> {
         )]
         additional_properties: Option<Box<IntOrTy<'a>>>,
     },
-    Enum {
-        #[serde(rename = "enum")]
-        values: HashSet<Cow<'a, str>>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        default: Option<Cow<'a, str>>,
-    },
 }
 
 impl Type<'_> {
@@ -121,7 +118,11 @@ impl Type<'_> {
         if let Some(ty) = self.ty.as_ref() {
             match ty {
                 TypeKind::Null => TypeDef::Unit,
-                TypeKind::String { .. } => TypeDef::Primitive(PrimitiveTypeDef::String),
+                TypeKind::String {
+                    enum_values,
+                    default,
+                    ..
+                } => TypeDef::Primitive(PrimitiveTypeDef::String),
                 TypeKind::Number { .. } => TypeDef::Primitive(PrimitiveTypeDef::Number),
                 TypeKind::Integer { .. } => TypeDef::Primitive(PrimitiveTypeDef::Integer),
                 TypeKind::Boolean => TypeDef::Primitive(PrimitiveTypeDef::Boolean),
@@ -184,10 +185,6 @@ impl Type<'_> {
                     } else {
                         TypeDef::Unit
                     }
-                }
-                TypeKind::Enum { .. } => {
-                    // TODO: emit enum definition
-                    TypeDef::Unit
                 }
             }
         } else {

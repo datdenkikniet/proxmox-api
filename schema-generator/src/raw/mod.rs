@@ -1,8 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::{borrow::Cow, collections::HashMap};
 
-pub(crate) mod def;
-
 pub mod flattened;
 
 mod format;
