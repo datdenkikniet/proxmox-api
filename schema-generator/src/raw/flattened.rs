@@ -44,6 +44,10 @@ pub struct Collection<'a> {
 }
 
 impl<'a> Collection<'a> {
+    pub fn idx(&self, idx: usize) -> Option<&(PathElement, Node)> {
+        self.values.get(idx)
+    }
+
     pub fn from_nodes<'b>(nodes: &'b [TreeNode<'a>]) -> Result<Self, ()> {
         let mut values = Vec::new();
         for node in nodes {
@@ -54,6 +58,10 @@ impl<'a> Collection<'a> {
         }
 
         Ok(Self { values })
+    }
+
+    pub fn iter(&self) -> impl Iterator<Item = &'_ Node> {
+        self.values.iter().map(|(_, node)| node)
     }
 
     pub fn path<'b>(&'b self, path: &Path) -> Option<&'b Value<'a>> {

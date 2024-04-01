@@ -1,7 +1,7 @@
 use std::time::{Duration, Instant};
 
 use parking_lot::RwLock;
-use reqwest::{blocking::RequestBuilder, StatusCode};
+use reqwest::{blocking::RequestBuilder, Method, StatusCode};
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
 use crate::{
@@ -13,7 +13,7 @@ use crate::{
 mod nodes;
 pub use nodes::NodeClient;
 
-mod test;
+pub mod test;
 
 #[derive(Debug)]
 pub enum Error {
@@ -176,13 +176,13 @@ impl Client {
         Ok(())
     }
 
-    fn post<T, R, S>(&self, path: S, body: &T) -> Result<R, Error>
+    fn request_with_body<T, R, S>(&self, method: Method, path: S, body: &T) -> Result<R, Error>
     where
         T: Serialize,
         R: DeserializeOwned,
         S: AsRef<str>,
     {
-        log::debug!("POST {}", path.as_ref());
+        log::debug!("{} {}", method, path.as_ref());
 
         let body = serde_urlencoded::to_string(body).unwrap();
 
@@ -205,6 +205,33 @@ impl Client {
         } else {
             Err(Error::UnknownFailure(response_status))
         }
+    }
+
+    fn put<T, R, S>(&self, path: S, body: &T) -> Result<R, Error>
+    where
+        T: Serialize,
+        R: DeserializeOwned,
+        S: AsRef<str>,
+    {
+        self.request_with_body(Method::PUT, path, body)
+    }
+
+    fn post<T, R, S>(&self, path: S, body: &T) -> Result<R, Error>
+    where
+        T: Serialize,
+        R: DeserializeOwned,
+        S: AsRef<str>,
+    {
+        self.request_with_body(Method::POST, path, body)
+    }
+
+    fn delete<T, R, S>(&self, path: S, body: &T) -> Result<R, Error>
+    where
+        T: Serialize,
+        R: DeserializeOwned,
+        S: AsRef<str>,
+    {
+        self.request_with_body(Method::DELETE, path, body)
     }
 
     fn get<R, S, Q>(&self, path: S, query: &Q) -> Result<R, Error>

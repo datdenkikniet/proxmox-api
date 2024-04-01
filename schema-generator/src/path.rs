@@ -24,6 +24,10 @@ impl core::fmt::Display for PathElement {
 }
 
 impl PathElement {
+    pub fn is_placeholder(&self) -> bool {
+        matches!(self, Self::Placeholder(_))
+    }
+
     pub fn matches(&self, other: &Self) -> bool {
         match (self, other) {
             (Self::Placeholder(_), _) => true,
