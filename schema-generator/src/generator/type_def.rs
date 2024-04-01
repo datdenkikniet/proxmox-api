@@ -1,80 +1,10 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
-use proc_macro2::Literal;
 use proc_macro2::TokenStream;
-use quote::quote;
-use quote::ToTokens;
-use syn::spanned::Spanned;
-use syn::Ident;
-use syn::Lit;
+use quote::{quote, ToTokens};
+use syn::{spanned::Spanned, Ident};
 
-use super::proxmox_api_str;
-
-#[derive(Debug, Clone)]
-pub struct FieldDef {
-    pub rename: Option<String>,
-    pub name: String,
-    pub ty: TokenStream,
-    pub optional: bool,
-    pub primitive_ty: Option<PrimitiveTypeDef>,
-}
-
-impl ToTokens for FieldDef {
-    fn to_tokens(&self, tokens: &mut TokenStream) {
-        let FieldDef {
-            rename,
-            name,
-            ty,
-            optional,
-            primitive_ty,
-        } = self;
-
-        let name = Ident::new(name, quote!().span());
-
-        let rename = if let Some(rename) = rename {
-            let renamed = Lit::new(Literal::string(&rename));
-            Some(quote!(#[serde(rename = #renamed)]))
-        } else {
-            None
-        };
-
-        let serialize = if let Some(primitive) = primitive_ty {
-            let ser_des = |name: &str| {
-                let name = if *optional {
-                    format!("{name}_optional")
-                } else {
-                    name.to_string()
-                };
-
-                let ser_fn = proxmox_api_str(format!("serialize_{name}"));
-                let des_fn = proxmox_api_str(format!("deserialize_{name}"));
-                Some(quote! { #[serde(serialize_with = #ser_fn, deserialize_with = #des_fn )] })
-            };
-
-            match primitive {
-                PrimitiveTypeDef::String => None,
-                PrimitiveTypeDef::Number => ser_des("number"),
-                PrimitiveTypeDef::Integer => ser_des("int"),
-                PrimitiveTypeDef::Boolean => ser_des("bool"),
-            }
-        } else {
-            None
-        };
-
-        let default_skip = if self.optional {
-            Some(quote!(#[serde(skip_serializing_if = "Option::is_none", default)]))
-        } else {
-            None
-        };
-
-        tokens.extend(quote! {
-            #rename
-            #serialize
-            #default_skip
-            pub #name: #ty,
-        })
-    }
-}
+use super::{field_def::FieldDef, EnumDef};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum PrimitiveTypeDef {
@@ -97,7 +27,7 @@ impl ToTokens for PrimitiveTypeDef {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum TypeDef {
     Unit,
     Primitive(PrimitiveTypeDef),
@@ -105,17 +35,12 @@ pub enum TypeDef {
         inner: Box<TypeDef>,
     },
     Struct {
-        name: TokenStream,
+        name: String,
         derives: Vec<String>,
         fields: Vec<FieldDef>,
         external_defs: Vec<TypeDef>,
     },
-    Enum {
-        name: TokenStream,
-        derives: Vec<String>,
-        values: HashSet<String>,
-        default: Option<String>,
-    },
+    Enum(EnumDef),
 }
 
 impl TypeDef {
@@ -126,6 +51,51 @@ impl TypeDef {
         "::serde::Deserialize",
     ];
 
+    pub fn transfer_enums_in_scope(&mut self, output: &mut HashMap<String, EnumDef>) {
+        match self {
+            TypeDef::Unit => {}
+            TypeDef::Primitive(_) => {}
+            TypeDef::Array { inner } => {
+                Self::transfer_enums_in_scope(inner.as_mut(), output);
+            }
+            TypeDef::Struct { external_defs, .. } => {
+                external_defs
+                    .iter_mut()
+                    .for_each(|v| v.transfer_enums_in_scope(output));
+                external_defs.retain(|v| !matches!(v, TypeDef::Unit))
+            }
+            TypeDef::Enum(def) => {
+                if let Some(previous_def) = output.get_mut(&def.name) {
+                    if previous_def.values != def.values {
+                        eprintln!(
+                            "The previous definition of enum '{}' has a different set of enum variants.",
+                            def.name
+                        );
+
+                        let mut prev: Vec<_> = previous_def.values.iter().collect();
+                        prev.sort();
+
+                        let mut now: Vec<_> = def.values.iter().collect();
+                        now.sort();
+
+                        eprintln!("S1: {prev:?}");
+                        eprintln!("S2: {now:?}");
+
+                        eprintln!("Updating S1 with missing values from S2...");
+
+                        def.values.iter().for_each(|v| {
+                            previous_def.values.insert(v.clone());
+                        });
+                    }
+                } else {
+                    output.insert(def.name.to_string(), def.clone());
+                }
+
+                *self = TypeDef::Unit;
+            }
+        }
+    }
+
     pub fn primitive(&self) -> Option<PrimitiveTypeDef> {
         if let Self::Primitive(p) = self {
             Some(*p)
@@ -135,7 +105,7 @@ impl TypeDef {
     }
 
     pub fn new_enum<I: AsRef<str>, T: IntoIterator<Item = I>>(
-        name: TokenStream,
+        name: String,
         extra_derives: T,
         values: HashSet<String>,
         default: Option<String>,
@@ -144,7 +114,7 @@ impl TypeDef {
             assert!(values.contains(default));
         }
 
-        Self::Enum {
+        Self::Enum(EnumDef {
             name,
             derives: Self::DEFAULT_DERIVES
                 .into_iter()
@@ -154,11 +124,11 @@ impl TypeDef {
                 .collect(),
             values,
             default,
-        }
+        })
     }
 
     pub fn new_struct<I: AsRef<str>, T: IntoIterator<Item = I>>(
-        name: TokenStream,
+        name: String,
         extra_derives: T,
         fields: Vec<FieldDef>,
         external_defs: Vec<TypeDef>,
@@ -179,26 +149,25 @@ impl TypeDef {
     pub fn as_field_ty(&self, optional: bool) -> TokenStream {
         let ty = match self {
             TypeDef::Unit => quote!(()),
-            TypeDef::Struct { name, .. } => name.clone(),
+            TypeDef::Struct { name, .. } => {
+                let ident = Ident::new(name, quote!().span());
+                quote!(#ident)
+            }
             TypeDef::Primitive(name) => name.to_token_stream(),
             TypeDef::Array { inner } => {
                 let inner = inner.as_field_ty(optional);
                 quote!(Vec<#inner>)
             }
-            TypeDef::Enum { name, .. } => name.clone(),
+            TypeDef::Enum(EnumDef { name, .. }) => {
+                let ident = Ident::new(name, quote!().span());
+                quote!(crate::generated::#ident)
+            }
         };
 
         if optional {
             quote!(Option<#ty>)
         } else {
             ty
-        }
-    }
-
-    pub fn is_enum_with_default(&self) -> bool {
-        match self {
-            TypeDef::Enum { default, .. } => default.is_some(),
-            _ => false,
         }
     }
 }
@@ -208,44 +177,15 @@ impl ToTokens for TypeDef {
         match self {
             TypeDef::Primitive(_) | TypeDef::Unit => {}
             TypeDef::Array { inner } => inner.to_tokens(tokens),
-            TypeDef::Enum {
-                name,
-                values,
-                default,
-                derives,
-            } => {
-                let derives = derives.iter().map(|v| {
-                    let parsed: TokenStream = v.parse().unwrap();
-                    quote! { #parsed, }
-                });
-
-                let variants = values.iter().map(|v| Ident::new(&v, quote!().span()));
-
-                tokens.extend(quote! {
-                    #[derive(#(#derives)*)]
-                    pub enum #name {
-                        #(#variants,)*
-                    }
-                });
-
-                if let Some(default) = default {
-                    let default_ident = Ident::new(&default, quote!().span());
-
-                    tokens.extend(quote! {
-                        impl Default for #name {
-                            fn default() -> Self {
-                                Self::#default_ident
-                            }
-                        }
-                    })
-                }
-            }
+            TypeDef::Enum(def) => def.to_tokens(tokens),
             TypeDef::Struct {
                 name,
                 derives,
                 fields,
                 external_defs,
             } => {
+                let name = Ident::new(name, quote!().span());
+
                 tokens.extend(external_defs.iter().map(|def| quote! { #def }));
 
                 let derives = derives.iter().map(|v| {

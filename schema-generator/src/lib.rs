@@ -3,9 +3,6 @@ pub mod raw;
 mod path;
 pub use path::{Path, PathElement};
 
-mod struct_def;
-pub use struct_def::StructDef;
-
 mod generator;
 pub use generator::Generator;
 
@@ -45,7 +42,7 @@ pub(crate) fn name_to_underscore_name(name: &str) -> String {
     check_rename(name)
 }
 
-pub(crate) fn name_to_struct_name(name: &str) -> String {
+pub(crate) fn name_to_ident(name: &str) -> String {
     let mut chars = name.chars();
     let mut new_name = String::new();
 
@@ -59,6 +56,9 @@ pub(crate) fn name_to_struct_name(name: &str) -> String {
             continue;
         } else if char == '-' || char == '_' || char == '{' {
             prev_was_dash = true;
+        } else if char == '+' || char == '.' {
+            prev_was_dash = true;
+            new_name.push('_')
         } else {
             if prev_was_dash {
                 new_name.push(char.to_ascii_uppercase());

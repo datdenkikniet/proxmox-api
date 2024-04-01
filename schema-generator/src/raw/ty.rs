@@ -1,13 +1,8 @@
-use std::{
-    borrow::Cow,
-    collections::{HashMap, HashSet},
-};
+use std::{borrow::Cow, collections::HashMap};
 
-use quote::quote;
 use serde::{Deserialize, Serialize};
-use syn::{spanned::Spanned, Ident};
 
-use crate::generator::def::{FieldDef, PrimitiveTypeDef, TypeDef};
+use crate::generator::{FieldDef, PrimitiveTypeDef, TypeDef};
 
 use super::{Format, Optional};
 
@@ -79,7 +74,7 @@ pub enum TypeKind<'a> {
 
         // If it's an enum
         #[serde(rename = "enum", default, skip_serializing_if = "Option::is_none")]
-        enum_values: Option<HashSet<Cow<'a, str>>>,
+        enum_values: Option<Vec<Cow<'a, str>>>,
         #[serde(default)]
         default: Option<Cow<'a, str>>,
     },
@@ -112,9 +107,13 @@ pub enum TypeKind<'a> {
 }
 
 impl Type<'_> {
-    pub fn to_definition(&self, struct_name: &str) -> TypeDef {
-        let struct_name = crate::name_to_struct_name(struct_name);
-
+    pub fn type_def(
+        &self,
+        field_name: &str,
+        struct_prefix: &str,
+        struct_suffix: &str,
+        enum_prefix: &str,
+    ) -> TypeDef {
         if let Some(ty) = self.ty.as_ref() {
             match ty {
                 TypeKind::Null => TypeDef::Unit,
@@ -122,12 +121,37 @@ impl Type<'_> {
                     enum_values,
                     default,
                     ..
-                } => TypeDef::Primitive(PrimitiveTypeDef::String),
+                } => {
+                    if let Some(enum_values) = enum_values {
+                        let default = if enum_values.iter().any(|v| Some(v) == default.as_ref()) {
+                            default.as_ref().map(Cow::to_string)
+                        } else {
+                            None
+                        };
+
+                        let enum_values = enum_values
+                            .iter()
+                            .map(Cow::to_string)
+                            .chain(default.clone())
+                            .collect();
+                        let no_derives = Option::<&str>::None;
+
+                        let name = crate::name_to_ident(&format!("{enum_prefix}{field_name}"));
+                        TypeDef::new_enum(name, no_derives, enum_values, default)
+                    } else {
+                        TypeDef::Primitive(PrimitiveTypeDef::String)
+                    }
+                }
                 TypeKind::Number { .. } => TypeDef::Primitive(PrimitiveTypeDef::Number),
                 TypeKind::Integer { .. } => TypeDef::Primitive(PrimitiveTypeDef::Integer),
                 TypeKind::Boolean => TypeDef::Primitive(PrimitiveTypeDef::Boolean),
                 TypeKind::Array { items } => {
-                    let inner = items.to_definition(&format!("{struct_name}Items"));
+                    let inner = items.type_def(
+                        field_name,
+                        struct_prefix,
+                        &format!("{struct_suffix}Items"),
+                        &enum_prefix,
+                    );
 
                     TypeDef::Array {
                         inner: Box::new(inner),
@@ -140,9 +164,15 @@ impl Type<'_> {
                     if let Some(IntOrTy::Ty(additional_props)) = additional_properties.as_deref() {
                         assert!(properties.is_none(), "Cannot handle combination of typed additional properties & normal properties.");
 
-                        additional_props.to_definition(&struct_name)
+                        additional_props.type_def(
+                            field_name,
+                            struct_prefix,
+                            struct_suffix,
+                            enum_prefix,
+                        )
                     } else if let Some(props) = properties {
-                        let mut external_defs = Vec::new();
+                        let mut external_defs: Vec<TypeDef> = Vec::new();
+
                         let fields: Vec<_> = props
                             .iter()
                             .map(|(original_name, ty)| {
@@ -153,35 +183,30 @@ impl Type<'_> {
                                     None
                                 };
 
-                                let optional = ty.optional.get();
-                                let inner = ty.to_definition(&format!(
-                                    "{struct_name}{}",
-                                    crate::name_to_struct_name(&original_name)
-                                ));
+                                let field_name = crate::name_to_ident(&original_name);
+                                let inner = ty.type_def(
+                                    &field_name,
+                                    struct_prefix,
+                                    struct_suffix,
+                                    enum_prefix,
+                                );
 
-                                let ty = inner.as_field_ty(ty.optional.get());
-                                let primitive_ty = inner.primitive();
-                                external_defs.push(inner);
+                                external_defs.push(inner.clone());
 
-                                FieldDef {
-                                    rename,
-                                    name: field_name,
-                                    ty,
-                                    optional,
-                                    primitive_ty,
-                                }
+                                FieldDef::new(rename, field_name, inner, ty.optional.get())
                             })
                             .collect();
 
-                        let name = Ident::new(&struct_name, quote!().span());
-
-                        let dervs = if fields.iter().all(|f| f.optional) {
+                        let dervs = if fields.iter().all(|f| f.optional()) {
                             &["Default"][..]
                         } else {
                             &[][..]
                         };
 
-                        TypeDef::new_struct(quote!(#name), dervs, fields, external_defs)
+                        let struct_name = crate::name_to_ident(&format!(
+                            "{struct_prefix}{field_name}{struct_suffix}"
+                        ));
+                        TypeDef::new_struct(struct_name, dervs, fields, external_defs)
                     } else {
                         TypeDef::Unit
                     }
