@@ -4,7 +4,9 @@ use proc_macro2::TokenStream;
 use quote::{quote, ToTokens};
 use syn::{spanned::Spanned, Ident};
 
-use super::{field_def::FieldDef, EnumDef, StructDef};
+use crate::raw::KnownFormat;
+
+use super::{field_def::FieldDef, proxmox_api, EnumDef, StructDef};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum PrimitiveTypeDef {
@@ -31,7 +33,13 @@ impl ToTokens for PrimitiveTypeDef {
 pub enum TypeDef {
     Unit,
     Primitive(PrimitiveTypeDef),
-    Array { inner: Box<TypeDef> },
+    KnownType {
+        format: KnownFormat,
+        fallback: PrimitiveTypeDef,
+    },
+    Array {
+        inner: Box<TypeDef>,
+    },
     Struct(StructDef),
     Enum(EnumDef),
 }
@@ -47,6 +55,7 @@ impl TypeDef {
     pub fn hoist_enum_defs(&mut self, output: &mut HashMap<String, EnumDef>) {
         match self {
             TypeDef::Unit => {}
+            TypeDef::KnownType { .. } => {}
             TypeDef::Primitive(_) => {}
             TypeDef::Array { inner } => {
                 Self::hoist_enum_defs(inner.as_mut(), output);
@@ -112,6 +121,7 @@ impl TypeDef {
                 let ident = Ident::new(strt.name(), quote!().span());
                 quote!(#ident)
             }
+            TypeDef::KnownType { format, fallback } => Self::known_type(format, fallback),
             TypeDef::Primitive(name) => name.to_token_stream(),
             TypeDef::Array { inner } => {
                 let inner = inner.as_field_ty(optional);
@@ -129,12 +139,19 @@ impl TypeDef {
             ty
         }
     }
+
+    fn known_type(known: &KnownFormat, fallback: &PrimitiveTypeDef) -> TokenStream {
+        match known {
+            KnownFormat::PveVmId => proxmox_api(quote!(VmId)),
+            _ => fallback.to_token_stream(),
+        }
+    }
 }
 
 impl ToTokens for TypeDef {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         match self {
-            TypeDef::Primitive(_) | TypeDef::Unit => {}
+            TypeDef::Primitive(_) | TypeDef::Unit | TypeDef::KnownType { .. } => {}
             TypeDef::Array { inner } => inner.to_tokens(tokens),
             TypeDef::Enum(def) => def.to_tokens(tokens),
             TypeDef::Struct(strt) => strt.to_tokens(tokens),

@@ -27,7 +27,7 @@ pub struct Type<'a> {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub verbose_description: Option<Cow<'a, str>>,
     #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
-    pub format: Option<Box<Format<'a>>>,
+    pub format: Option<Format<'a>>,
     #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
     pub format_description: Option<Cow<'a, str>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -60,7 +60,7 @@ impl Type<'_> {
     }
 
     pub fn type_def(&self, field_name: &str, struct_suffix: &str) -> TypeDef {
-        if let Some(ty) = self.ty.as_ref() {
+        let output_type = if let Some(ty) = self.ty.as_ref() {
             match ty {
                 TypeKind::Null => TypeDef::Unit,
                 TypeKind::String {
@@ -136,6 +136,17 @@ impl Type<'_> {
             }
         } else {
             TypeDef::Unit
+        };
+
+        if let (Some(fallback), Some(Format::Kind(format))) =
+            (output_type.primitive(), &self.format)
+        {
+            TypeDef::KnownType {
+                format: *format,
+                fallback,
+            }
+        } else {
+            output_type
         }
     }
 }

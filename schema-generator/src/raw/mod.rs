@@ -4,7 +4,7 @@ use std::{borrow::Cow, collections::HashMap};
 pub mod flattened;
 
 mod format;
-pub use format::Format;
+pub use format::{Format, KnownFormat};
 
 mod info;
 pub use info::Info;
