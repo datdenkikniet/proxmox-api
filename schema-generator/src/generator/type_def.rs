@@ -36,7 +36,6 @@ pub enum TypeDef {
     },
     Struct {
         name: String,
-        derives: Vec<String>,
         fields: Vec<FieldDef>,
         external_defs: Vec<TypeDef>,
     },
@@ -113,20 +112,9 @@ impl TypeDef {
         Self::Enum(EnumDef::new(name, extra_derives, values, default))
     }
 
-    pub fn new_struct<I: AsRef<str>, T: IntoIterator<Item = I>>(
-        name: String,
-        extra_derives: T,
-        fields: Vec<FieldDef>,
-        external_defs: Vec<TypeDef>,
-    ) -> Self {
+    pub fn new_struct(name: String, fields: Vec<FieldDef>, external_defs: Vec<TypeDef>) -> Self {
         Self::Struct {
             name,
-            derives: Self::DEFAULT_DERIVES
-                .into_iter()
-                .map(str::to_string)
-                .chain(extra_derives.into_iter().map(|e| e.as_ref().to_string()))
-                .map(|v| v.to_string())
-                .collect(),
             fields,
             external_defs,
         }
@@ -166,7 +154,6 @@ impl ToTokens for TypeDef {
             TypeDef::Enum(def) => def.to_tokens(tokens),
             TypeDef::Struct {
                 name,
-                derives,
                 fields,
                 external_defs,
             } => {
@@ -174,14 +161,54 @@ impl ToTokens for TypeDef {
 
                 tokens.extend(external_defs.iter().map(|def| quote! { #def }));
 
-                let derives = derives.iter().map(|v| {
-                    let parsed: TokenStream = v.parse().unwrap();
-                    quote! { #parsed, }
-                });
+                let default_derive = if fields.iter().all(|f| f.optional()) {
+                    Some("Default")
+                } else {
+                    let optional_fields = fields.iter().filter(|f| f.optional());
+                    let non_optional_fields = fields.iter().filter(|f| !f.optional());
+
+                    let default_fields = optional_fields.map(|f| {
+                        let name = f.name();
+                        let name = Ident::new(name, quote!().span());
+                        quote!(#name: Default::default())
+                    });
+
+                    let args = non_optional_fields.clone().map(|f| {
+                        let name = f.name();
+                        let name = Ident::new(name, quote!().span());
+                        let ty = f.ty();
+                        quote!(#name: #ty)
+                    });
+
+                    let arg_setters = non_optional_fields.map(|f| {
+                        let name = f.name();
+                        let name = Ident::new(name, quote!().span());
+                        quote!(#name)
+                    });
+
+                    tokens.extend(quote! {
+                        impl #name {
+                            pub fn new(#(#args),*) -> Self {
+                                Self {
+                                    #(#arg_setters),*,
+                                    #(#default_fields),*
+                                }
+                            }
+                        }
+                    });
+
+                    None
+                };
+
+                let derives = Self::DEFAULT_DERIVES
+                    .iter()
+                    .chain(default_derive.iter())
+                    .map(|v| {
+                        let parsed: TokenStream = v.parse().unwrap();
+                        quote! { #parsed, }
+                    });
 
                 let name = &name;
-
-                let fields = &fields;
 
                 tokens.extend(quote! {
                     #[derive(#(#derives)*)]

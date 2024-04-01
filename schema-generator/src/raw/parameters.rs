@@ -22,8 +22,6 @@ impl Parameters<'_> {
         if let Some(properties) = &self.properties {
             let name = crate::name_to_ident(&format!("{prefix}Params"));
 
-            let optional = properties.values().all(|prop| prop.optional.get());
-
             let mut external_defs = Vec::new();
             let fields = properties.iter().filter_map(|(name, ty)| {
                 if path.iter().any(|p| {
@@ -39,23 +37,8 @@ impl Parameters<'_> {
                 let typedef = ty.type_def(name, "Returns");
                 external_defs.push(typedef.clone());
 
-                let field_ident = crate::name_to_underscore_name(&name);
-
-                let rename = if &field_ident != name {
-                    Some(name.to_string())
-                } else {
-                    None
-                };
-
-                Some(FieldDef::new(
-                    rename,
-                    field_ident,
-                    typedef,
-                    ty.optional.get(),
-                ))
+                Some(FieldDef::new(name.to_string(), typedef, ty.optional.get()))
             });
-
-            let derive = if optional { Some("Default") } else { None };
 
             let fields: Vec<_> = fields.collect();
 
@@ -63,7 +46,7 @@ impl Parameters<'_> {
                 return None;
             }
 
-            let type_def = TypeDef::new_struct(name.clone(), derive, fields, external_defs);
+            let type_def = TypeDef::new_struct(name.clone(), fields, external_defs);
 
             Some(type_def)
         } else {

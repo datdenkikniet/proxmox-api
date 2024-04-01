@@ -165,34 +165,21 @@ impl Type<'_> {
                         let fields: Vec<_> = props
                             .iter()
                             .map(|(original_name, ty)| {
-                                let field_name = crate::name_to_underscore_name(&original_name);
-                                let rename = if &field_name != original_name {
-                                    Some(original_name.to_string())
-                                } else {
-                                    None
-                                };
-
                                 let field_name = crate::name_to_ident(&original_name);
                                 let inner = ty
                                     .type_def(&field_name, &format!("{struct_suffix}{field_name}"));
 
                                 external_defs.push(inner.clone());
 
-                                FieldDef::new(rename, field_name, inner, ty.optional.get())
+                                FieldDef::new(original_name.to_string(), inner, ty.optional.get())
                             })
                             .collect();
-
-                        let dervs = if fields.iter().all(|f| f.optional()) {
-                            &["Default"][..]
-                        } else {
-                            &[][..]
-                        };
 
                         let field_name = crate::name_to_ident(field_name);
                         let suffix = crate::name_to_ident(struct_suffix);
 
                         let struct_name = format!("{field_name}{suffix}");
-                        TypeDef::new_struct(struct_name, dervs, fields, external_defs)
+                        TypeDef::new_struct(struct_name, fields, external_defs)
                     } else {
                         TypeDef::Unit
                     }
