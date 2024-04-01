@@ -52,12 +52,6 @@ impl<'a> Generator<'a> {
 
             stream.extend(quote! { pub mod #mod_ident { #client_code } });
         }
-
-        let enums = enums.values();
-
-        stream.extend(quote! {
-            #(#enums)*
-        })
     }
 
     fn generate_client(
