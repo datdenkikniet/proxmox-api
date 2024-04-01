@@ -40,7 +40,7 @@ pub enum TypeDef {
         fields: Vec<FieldDef>,
         external_defs: Vec<TypeDef>,
     },
-    Enum(EnumDef),
+    // Enum(EnumDef),
 }
 
 impl TypeDef {
@@ -63,36 +63,35 @@ impl TypeDef {
                     .iter_mut()
                     .for_each(|v| v.transfer_enums_in_scope(output));
                 external_defs.retain(|v| !matches!(v, TypeDef::Unit))
-            }
-            TypeDef::Enum(def) => {
-                if let Some(previous_def) = output.get_mut(&def.name) {
-                    if previous_def.values != def.values {
-                        eprintln!(
-                            "The previous definition of enum '{}' has a different set of enum variants.",
-                            def.name
-                        );
+            } // TypeDef::Enum(def) => {
+              //     if let Some(previous_def) = output.get_mut(&def.name) {
+              //         if previous_def.values != def.values {
+              //             eprintln!(
+              //                 "The previous definition of enum '{}' has a different set of enum variants.",
+              //                 def.name
+              //             );
 
-                        let mut prev: Vec<_> = previous_def.values.iter().collect();
-                        prev.sort();
+              //             let mut prev: Vec<_> = previous_def.values.iter().collect();
+              //             prev.sort();
 
-                        let mut now: Vec<_> = def.values.iter().collect();
-                        now.sort();
+              //             let mut now: Vec<_> = def.values.iter().collect();
+              //             now.sort();
 
-                        eprintln!("S1: {prev:?}");
-                        eprintln!("S2: {now:?}");
+              //             eprintln!("S1: {prev:?}");
+              //             eprintln!("S2: {now:?}");
 
-                        eprintln!("Updating S1 with missing values from S2...");
+              //             eprintln!("Updating S1 with missing values from S2...");
 
-                        def.values.iter().for_each(|v| {
-                            previous_def.values.insert(v.clone());
-                        });
-                    }
-                } else {
-                    output.insert(def.name.to_string(), def.clone());
-                }
+              //             def.values.iter().for_each(|v| {
+              //                 previous_def.values.insert(v.clone());
+              //             });
+              //         }
+              //     } else {
+              //         output.insert(def.name.to_string(), def.clone());
+              //     }
 
-                *self = TypeDef::Unit;
-            }
+              //     *self = TypeDef::Unit;
+              // }
         }
     }
 
@@ -114,17 +113,19 @@ impl TypeDef {
             assert!(values.contains(default));
         }
 
-        Self::Enum(EnumDef {
-            name,
-            derives: Self::DEFAULT_DERIVES
-                .into_iter()
-                .map(str::to_string)
-                .chain(extra_derives.into_iter().map(|e| e.as_ref().to_string()))
-                .map(|v| v.to_string())
-                .collect(),
-            values,
-            default,
-        })
+        // Self::Enum(EnumDef {
+        //     name,
+        //     derives: Self::DEFAULT_DERIVES
+        //         .into_iter()
+        //         .map(str::to_string)
+        //         .chain(extra_derives.into_iter().map(|e| e.as_ref().to_string()))
+        //         .map(|v| v.to_string())
+        //         .collect(),
+        //     values,
+        //     default,
+        // })
+
+        Self::Unit
     }
 
     pub fn new_struct<I: AsRef<str>, T: IntoIterator<Item = I>>(
@@ -157,11 +158,10 @@ impl TypeDef {
             TypeDef::Array { inner } => {
                 let inner = inner.as_field_ty(optional);
                 quote!(Vec<#inner>)
-            }
-            TypeDef::Enum(EnumDef { name, .. }) => {
-                let ident = Ident::new(name, quote!().span());
-                quote!(crate::generated::#ident)
-            }
+            } // TypeDef::Enum(EnumDef { name, .. }) => {
+              //     let ident = Ident::new(name, quote!().span());
+              //     quote!(crate::generated::#ident)
+              // }
         };
 
         if optional {
@@ -177,7 +177,7 @@ impl ToTokens for TypeDef {
         match self {
             TypeDef::Primitive(_) | TypeDef::Unit => {}
             TypeDef::Array { inner } => inner.to_tokens(tokens),
-            TypeDef::Enum(def) => def.to_tokens(tokens),
+            // TypeDef::Enum(def) => def.to_tokens(tokens),
             TypeDef::Struct {
                 name,
                 derives,

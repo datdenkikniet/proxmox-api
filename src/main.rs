@@ -48,7 +48,7 @@ fn main() {
 
     println!("{:?}", cluster_client.nextid().get(Default::default()));
 
-    let v: Vec<generated::cluster::resources::GETReturnsItems> =
+    let v: Vec<generated::cluster::resources::GETOutputItems> =
         serde_json::from_str(include_str!("./data.json")).unwrap();
 
     println!(
