@@ -1,22 +1,29 @@
+use std::collections::HashMap;
+
 use proc_macro2::{Literal, TokenStream};
 use quote::{quote, ToTokens};
-use syn::{spanned::Spanned, Ident, Lit, LitStr};
+use syn::{spanned::Spanned, Ident};
 
 use crate::{
     raw::flattened::{Collection, Node},
-    PathElement, StructDef,
+    PathElement,
 };
 
-use self::def::PrimitiveTypeDef;
+mod enum_def;
+pub(crate) use enum_def::EnumDef;
 
-pub(crate) mod def;
+mod field_def;
+pub(crate) use field_def::FieldDef;
+
+mod type_def;
+pub(crate) use type_def::{PrimitiveTypeDef, TypeDef};
 
 pub(self) fn proxmox_api(path: TokenStream) -> TokenStream {
     quote! { ::proxmox_api::#path }
 }
 
-pub(self) fn proxmox_api_str(path: String) -> Lit {
-    Lit::new(Literal::string(&format!("::proxmox_api::{path}")))
+pub(self) fn proxmox_api_str(path: String) -> Literal {
+    Literal::string(&format!("::proxmox_api::{path}"))
 }
 
 pub struct Generator<'a> {
@@ -29,8 +36,10 @@ impl<'a> Generator<'a> {
     }
 
     pub fn generate(&self, stream: &mut TokenStream) {
+        let mut enums = HashMap::new();
+
         for node in self.collection.iter() {
-            let (_, client_code) = Self::generate_client(None, node);
+            let (_, client_code) = Self::generate_client(None, node, &mut enums);
 
             let mod_name = node
                 .value
@@ -43,53 +52,76 @@ impl<'a> Generator<'a> {
 
             stream.extend(quote! { pub mod #mod_ident { #client_code } });
         }
+
+        let enums = enums.values();
+
+        stream.extend(quote! {
+            #(#enums)*
+        })
     }
 
-    fn generate_client(parent: Option<&Node>, node: &Node) -> (String, TokenStream) {
+    fn generate_client(
+        parent: Option<&Node>,
+        node: &Node,
+        enums: &mut HashMap<String, EnumDef>,
+    ) -> (String, TokenStream) {
         let path = node.value.path.iter().last().unwrap();
-        Self::generate_client_impl(parent.is_some(), node, path)
+        Self::generate_client_impl(parent.is_some(), node, path, enums)
     }
 
     fn generate_client_impl(
         has_parent: bool,
         node: &Node,
         segment: &PathElement,
+        enums: &mut HashMap<String, EnumDef>,
     ) -> (String, TokenStream) {
         let segment_name = segment.as_string_without_braces();
-        let mut name = crate::name_to_struct_name(segment_name);
+        let mut name = crate::name_to_ident(segment_name);
         name.push_str("Client");
 
         let name = Ident::new(&name, quote!().span());
 
-        let methods = node.value.info.values().filter_map(|info| {
+        let methods: Vec<_> = node.value.info.values().filter_map(|info| {
             let method = &info.method;
 
-            let parameters = info
+            let mut parameters = info
                 .parameters
                 .as_ref()
                 .map(|v| {
-                    let prefix = crate::name_to_struct_name(&method);
-                    v.struct_def(&prefix, &node.value.path)
+                    let prefix = crate::name_to_ident(&method);
+                    let mut type_def = v.type_def(&prefix, &node.value.path);
+
+                    if let Some(def) = type_def.as_mut() {
+                        def.transfer_enums_in_scope(enums);
+                    }
+
+                    type_def
                 })
                 .flatten();
 
             let fn_name_str = method.to_ascii_lowercase();
             let fn_name = Ident::new(&fn_name_str, quote!().span());
 
+            if let Some(parameters) = &mut parameters {
+                parameters.transfer_enums_in_scope(enums);
+            }
+
             let (signature, defer_signature, params_def) =
-                if let Some(StructDef { name, definition }) = parameters {
-                    let name = Ident::new(&name, quote! {}.span());
+                if let Some(TypeDef::Struct { name, .. }) = &parameters {
+                    let name = Ident::new(name, quote! {}.span());
                     (
                         quote!(&self, params: #name),
                         quote!(&path, &params),
-                        Some(definition),
+                        Some(quote! { #parameters }),
                     )
                 } else {
                     (quote!(&self), quote!(&path, &()), None)
                 };
 
             let (returns, returns_definition, call) = if let Some(ret) = info.returns.as_ref() {
-                let def = ret.to_definition(&format!("{}Returns", method));
+                let mut def = ret.type_def("", &format!("{method}Output"));
+
+                def.transfer_enums_in_scope(enums);
 
                 let returns_def = quote! { #def };
 
@@ -141,7 +173,7 @@ impl<'a> Generator<'a> {
             };
 
             Some(block)
-        });
+        }).collect();
 
         let children = node.children.iter().map(|(segment, child)| {
             assert_eq!(
@@ -153,7 +185,8 @@ impl<'a> Generator<'a> {
             let segment_no_braces =
                 crate::name_to_underscore_name(segment.as_string_without_braces());
             let mod_name = Ident::new(&segment_no_braces, quote!().span());
-            let (child_name, child_data) = Self::generate_client(Some(node), child);
+
+            let (child_name, child_data) = Self::generate_client(Some(node), child, enums);
             let child_name = Ident::new(&child_name, quote!().span());
             let defer = quote! { #mod_name::#child_name };
             let child_fn_name = Ident::new(&segment_no_braces, quote!().span());
@@ -237,7 +270,7 @@ impl<'a> Generator<'a> {
     }
 
     fn make_literal_constructor(has_parent: bool, literal: &str) -> TokenStream {
-        let literal = Lit::Str(LitStr::new(&format!("/{literal}"), quote!().span()));
+        let literal = Literal::string(&format!("/{literal}"));
         let client = proxmox_api(quote!(Client));
 
         if has_parent {

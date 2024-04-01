@@ -1,11 +1,11 @@
 use std::{borrow::Cow, collections::HashMap};
 
 use serde::Deserialize;
-use syn::{spanned::Spanned, Ident, Lit, LitStr};
 
-use quote::quote;
-
-use crate::{struct_def::StructDef, Path, PathElement};
+use crate::{
+    generator::{FieldDef, TypeDef},
+    Path, PathElement,
+};
 
 use super::Type;
 
@@ -18,14 +18,13 @@ pub struct Parameters<'a> {
 }
 
 impl Parameters<'_> {
-    pub fn struct_def(&self, prefix: &str, path: &Path) -> Option<StructDef> {
+    pub fn type_def(&self, prefix: &str, path: &Path, enum_prefix: &str) -> Option<TypeDef> {
         if let Some(properties) = &self.properties {
             let name = format!("{prefix}Params");
-            let ident = Ident::new(&name, quote::quote! {}.span());
 
             let optional = properties.values().all(|prop| prop.optional.get());
 
-            let mut definitions = Vec::new();
+            let mut external_defs = Vec::new();
             let fields = properties.iter().filter_map(|(name, ty)| {
                 if path.iter().any(|p| {
                     if let PathElement::Placeholder(placeholder) = p {
@@ -37,35 +36,26 @@ impl Parameters<'_> {
                     return None;
                 }
 
-                let typedef = ty.to_definition(name);
-                definitions.push(quote! { #typedef });
-
-                let ty_name = typedef.as_field_ty(ty.optional.get());
+                let typedef = ty.type_def(name, "", "Returns", enum_prefix);
+                external_defs.push(typedef.clone());
 
                 let field_ident = crate::name_to_underscore_name(&name);
 
-                let serde_attr = if &field_ident != name {
-                    let name = Lit::Str(LitStr::new(&name, quote!().span()));
-                    quote! {
-                        #[serde(rename = #name)]
-                    }
+                let rename = if &field_ident != name {
+                    Some(name.to_string())
                 } else {
-                    quote! {}
+                    None
                 };
 
-                let field_ident = Ident::new(&field_ident, quote!().span());
-
-                Some(quote::quote! {
-                    #serde_attr
-                    pub #field_ident: #ty_name,
-                })
+                Some(FieldDef::new(
+                    rename,
+                    field_ident,
+                    typedef,
+                    ty.optional.get(),
+                ))
             });
 
-            let derive = if optional {
-                quote! { #[derive(::std::fmt::Debug, ::serde::Serialize, Default)] }
-            } else {
-                quote! { #[derive(::std::fmt::Debug, ::serde::Serialize)] }
-            };
+            let derive = if optional { Some("Default") } else { None };
 
             let fields: Vec<_> = fields.collect();
 
@@ -73,16 +63,9 @@ impl Parameters<'_> {
                 return None;
             }
 
-            let definition = quote::quote! {
-                #(#definitions)*
+            let type_def = TypeDef::new_struct(name.clone(), derive, fields, external_defs);
 
-                #derive
-                pub struct #ident {
-                    #(#fields)*
-                }
-            };
-
-            Some(StructDef { name, definition })
+            Some(type_def)
         } else {
             None
         }
