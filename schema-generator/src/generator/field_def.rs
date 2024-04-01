@@ -16,10 +16,15 @@ pub struct FieldDef {
     name: String,
     ty: Box<TypeDef>,
     optional: bool,
+    doc: Vec<String>,
 }
 
 impl FieldDef {
-    pub fn new(name: String, ty: TypeDef, optional: bool) -> Self {
+    pub fn new<S, D>(name: String, ty: TypeDef, optional: bool, doc: D) -> Self
+    where
+        D: Iterator<Item = S>,
+        S: Into<String>,
+    {
         let fixed_name = crate::name_to_underscore_name(&name);
 
         let rename = if fixed_name != name {
@@ -33,6 +38,7 @@ impl FieldDef {
             rename,
             ty: Box::new(ty),
             optional,
+            doc: doc.map(Into::into).collect(),
         }
     }
 
@@ -63,6 +69,7 @@ impl ToTokens for FieldDef {
             name,
             ty,
             optional,
+            doc,
         } = self;
 
         let name = crate::name_to_underscore_name(name);
@@ -106,10 +113,18 @@ impl ToTokens for FieldDef {
 
         let ty = ty.as_field_ty(*optional);
 
+        let doc = doc.iter().map(|v| {
+            let doc_literal = Literal::string(v);
+            quote! {
+                #[doc = #doc_literal]
+            }
+        });
+
         tokens.extend(quote! {
             #rename
             #serialize
             #default_skip
+            #(#doc)*
             pub #name: #ty,
         })
     }

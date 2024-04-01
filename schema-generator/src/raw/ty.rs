@@ -50,68 +50,15 @@ pub struct Type<'a> {
     pub key_alias: Option<Cow<'a, str>>,
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
-#[serde(untagged)]
-pub enum IntOrTy<'a> {
-    Int(u32),
-    #[serde(borrow)]
-    Ty(Type<'a>),
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
-#[serde(tag = "type", rename_all = "kebab-case")]
-pub enum TypeKind<'a> {
-    Null,
-    String {
-        #[serde(rename = "maxLength", default, skip_serializing_if = "Option::is_none")]
-        max_length: Option<u32>,
-        #[serde(rename = "minLength", default, skip_serializing_if = "Option::is_none")]
-        min_length: Option<u32>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        pattern: Option<Cow<'a, str>>,
-
-        // If it's an enum
-        #[serde(rename = "enum", default, skip_serializing_if = "Option::is_none")]
-        enum_values: Option<Vec<Cow<'a, str>>>,
-        #[serde(default)]
-        default: Option<Cow<'a, str>>,
-    },
-    Number {
-        #[serde(default, alias = "min", skip_serializing_if = "Option::is_none")]
-        minimum: Option<serde_json::Value>,
-        #[serde(default, alias = "max", skip_serializing_if = "Option::is_none")]
-        maximum: Option<f32>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        default: Option<f32>,
-    },
-    Integer {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        minimum: Option<u32>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        maximum: Option<u32>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        default: Option<u32>,
-    },
-    Boolean {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        default: Option<u32>,
-    },
-    Array {
-        items: Box<Type<'a>>,
-    },
-    Object {
-        #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
-        properties: Option<HashMap<Cow<'a, str>, Type<'a>>>,
-        #[serde(
-            default,
-            skip_serializing_if = "Option::is_none",
-            rename = "additionalProperties"
-        )]
-        additional_properties: Option<Box<IntOrTy<'a>>>,
-    },
-}
-
 impl Type<'_> {
+    pub fn doc(&self) -> impl Iterator<Item = String> + '_ {
+        self.description
+            .as_ref()
+            .into_iter()
+            .chain(self.verbose_description.as_ref().into_iter())
+            .map(Cow::to_string)
+    }
+
     pub fn type_def(&self, field_name: &str, struct_suffix: &str) -> TypeDef {
         if let Some(ty) = self.ty.as_ref() {
             match ty {
@@ -171,7 +118,9 @@ impl Type<'_> {
 
                                 external_defs.push(inner.clone());
 
-                                FieldDef::new(original_name.to_string(), inner, ty.optional.get())
+                                let doc = ty.doc();
+                                let optional = ty.optional.get();
+                                FieldDef::new(original_name.to_string(), inner, optional, doc)
                             })
                             .collect();
 
@@ -189,4 +138,65 @@ impl Type<'_> {
             TypeDef::Unit
         }
     }
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
+#[serde(untagged)]
+pub enum IntOrTy<'a> {
+    Int(u32),
+    #[serde(borrow)]
+    Ty(Type<'a>),
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
+#[serde(tag = "type", rename_all = "kebab-case")]
+pub enum TypeKind<'a> {
+    Null,
+    String {
+        #[serde(rename = "maxLength", default, skip_serializing_if = "Option::is_none")]
+        max_length: Option<u32>,
+        #[serde(rename = "minLength", default, skip_serializing_if = "Option::is_none")]
+        min_length: Option<u32>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        pattern: Option<Cow<'a, str>>,
+
+        // If it's an enum
+        #[serde(rename = "enum", default, skip_serializing_if = "Option::is_none")]
+        enum_values: Option<Vec<Cow<'a, str>>>,
+        #[serde(default)]
+        default: Option<Cow<'a, str>>,
+    },
+    Number {
+        #[serde(default, alias = "min", skip_serializing_if = "Option::is_none")]
+        minimum: Option<serde_json::Value>,
+        #[serde(default, alias = "max", skip_serializing_if = "Option::is_none")]
+        maximum: Option<f32>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        default: Option<f32>,
+    },
+    Integer {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        minimum: Option<u32>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        maximum: Option<u32>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        default: Option<u32>,
+    },
+    Boolean {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        default: Option<u32>,
+    },
+    Array {
+        items: Box<Type<'a>>,
+    },
+    Object {
+        #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
+        properties: Option<HashMap<Cow<'a, str>, Type<'a>>>,
+        #[serde(
+            default,
+            skip_serializing_if = "Option::is_none",
+            rename = "additionalProperties"
+        )]
+        additional_properties: Option<Box<IntOrTy<'a>>>,
+    },
 }

@@ -37,7 +37,9 @@ impl Parameters<'_> {
                 let typedef = ty.type_def(name, "Returns");
                 external_defs.push(typedef.clone());
 
-                Some(FieldDef::new(name.to_string(), typedef, ty.optional.get()))
+                let doc = ty.doc();
+                let optional = ty.optional.get();
+                Some(FieldDef::new(name.to_string(), typedef, optional, doc))
             });
 
             let fields: Vec<_> = fields.collect();
