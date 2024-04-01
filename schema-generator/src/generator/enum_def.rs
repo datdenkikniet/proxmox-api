@@ -92,6 +92,7 @@ impl ToTokens for EnumDef {
 
         if let Some(default) = default {
             let default = Self::fix_name(default);
+            let default = crate::name_to_ident(&default);
             let default_ident = Ident::new(&default, quote!().span());
 
             tokens.extend(quote! {

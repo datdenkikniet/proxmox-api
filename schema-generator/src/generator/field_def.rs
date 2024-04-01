@@ -7,6 +7,7 @@ use syn::Ident;
 
 use super::proxmox_api_str;
 use super::type_def::PrimitiveTypeDef;
+use super::EnumDef;
 use super::TypeDef;
 
 #[derive(Debug, Clone)]
@@ -29,6 +30,13 @@ impl FieldDef {
 
     pub fn optional(&self) -> bool {
         self.optional
+            || matches!(
+                *self.ty,
+                TypeDef::Enum(EnumDef {
+                    default: Some(_),
+                    ..
+                })
+            )
     }
 }
 
