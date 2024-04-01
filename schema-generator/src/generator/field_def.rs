@@ -19,10 +19,18 @@ pub struct FieldDef {
 }
 
 impl FieldDef {
-    pub fn new(rename: Option<String>, name: String, ty: TypeDef, optional: bool) -> Self {
+    pub fn new(name: String, ty: TypeDef, optional: bool) -> Self {
+        let fixed_name = crate::name_to_underscore_name(&name);
+
+        let rename = if fixed_name != name {
+            Some(name.to_string())
+        } else {
+            None
+        };
+
         Self {
+            name: fixed_name,
             rename,
-            name,
             ty: Box::new(ty),
             optional,
         }
@@ -37,6 +45,14 @@ impl FieldDef {
                     ..
                 })
             )
+    }
+
+    pub fn ty(&self) -> TokenStream {
+        self.ty.as_field_ty(self.optional)
+    }
+
+    pub fn name(&self) -> &str {
+        &self.name
     }
 }
 
