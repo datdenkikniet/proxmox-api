@@ -15,6 +15,9 @@ pub(crate) use enum_def::EnumDef;
 mod field_def;
 pub(crate) use field_def::FieldDef;
 
+mod struct_def;
+pub(crate) use struct_def::StructDef;
+
 mod type_def;
 pub(crate) use type_def::{PrimitiveTypeDef, TypeDef};
 
@@ -63,10 +66,10 @@ impl<'a> Generator<'a> {
         segment: &PathElement,
     ) -> (String, TokenStream) {
         let segment_name = segment.as_string_without_braces();
-        let mut name = crate::name_to_ident(segment_name);
-        name.push_str("Client");
+        let mut client_name = crate::name_to_ident(segment_name);
+        client_name.push_str("Client");
 
-        let name = Ident::new(&name, quote!().span());
+        let client_name = Ident::new(&client_name, quote!().span());
 
         let mut enums = HashMap::new();
 
@@ -81,7 +84,7 @@ impl<'a> Generator<'a> {
                     let mut type_def = v.type_def(&prefix, &node.value.path);
 
                     if let Some(def) = type_def.as_mut() {
-                        def.transfer_enums_in_scope(&mut enums);
+                        def.hoist_enum_defs(&mut enums);
                     }
 
                     type_def
@@ -92,12 +95,12 @@ impl<'a> Generator<'a> {
             let fn_name = Ident::new(&fn_name_str, quote!().span());
 
             if let Some(parameters) = &mut parameters {
-                parameters.transfer_enums_in_scope(&mut enums);
+                parameters.hoist_enum_defs(&mut enums);
             }
 
             let (signature, defer_signature, params_def) =
-                if let Some(TypeDef::Struct { name, .. }) = &parameters {
-                    let name = Ident::new(name, quote! {}.span());
+                if let Some(TypeDef::Struct (strt)) = &parameters {
+                    let name = Ident::new(strt.name(), quote! {}.span());
                     (
                         quote!(&self, params: #name),
                         quote!(&path, &params),
@@ -110,7 +113,7 @@ impl<'a> Generator<'a> {
             let (returns, returns_definition, call) = if let Some(ret) = info.returns.as_ref() {
                 let mut def = ret.type_def("", &format!("{method}Output"));
 
-                def.transfer_enums_in_scope(&mut enums);
+                def.hoist_enum_defs(&mut enums);
 
                 let returns_def = quote! { #def };
 
@@ -144,7 +147,16 @@ impl<'a> Generator<'a> {
                 )
             };
 
+            let doc = if let Some(doc) = &info.description {
+                let doc = Literal::string(&doc);
+                Some(quote! { #[doc = #doc] })
+            } else {
+                None
+            };
+
+
             let fn_definition = quote! {
+                #doc
                 pub fn #fn_name(#signature) #returns {
                     let path = self.path.to_string();
                     #call
@@ -156,7 +168,7 @@ impl<'a> Generator<'a> {
 
                 #returns_definition
 
-                impl #name {
+                impl #client_name {
                     #fn_definition
                 }
             };
@@ -199,7 +211,7 @@ impl<'a> Generator<'a> {
                     #child_data
                 }
 
-                impl #name {
+                impl #client_name {
                     pub fn #new_sig {
                         #child_call
                     }
@@ -216,13 +228,14 @@ impl<'a> Generator<'a> {
 
         let client = proxmox_api(quote!(Client));
         let enums = enums.values();
+
         let definition = quote! {
-            pub struct #name {
+            pub struct #client_name {
                 client: ::std::sync::Arc<#client>,
                 path: String,
             }
 
-            impl #name {
+            impl #client_name {
                 #new
             }
 
@@ -233,7 +246,7 @@ impl<'a> Generator<'a> {
             #(#children)*
         };
 
-        (name.to_string(), definition)
+        (client_name.to_string(), definition)
     }
 
     fn make_placeholder_constructor(has_parent: bool, placeholder: &str) -> TokenStream {

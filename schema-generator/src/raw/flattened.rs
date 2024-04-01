@@ -8,7 +8,7 @@ use super::{Info, TreeNode};
 pub struct Value<'a> {
     pub leaf: Option<u32>,
     pub path: Path,
-    pub text: Cow<'a, str>,
+    text: Cow<'a, str>,
     pub info: HashMap<Cow<'a, str>, Info<'a>>,
 }
 

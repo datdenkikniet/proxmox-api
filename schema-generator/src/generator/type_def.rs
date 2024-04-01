@@ -4,7 +4,7 @@ use proc_macro2::TokenStream;
 use quote::{quote, ToTokens};
 use syn::{spanned::Spanned, Ident};
 
-use super::{field_def::FieldDef, EnumDef};
+use super::{field_def::FieldDef, EnumDef, StructDef};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum PrimitiveTypeDef {
@@ -31,14 +31,8 @@ impl ToTokens for PrimitiveTypeDef {
 pub enum TypeDef {
     Unit,
     Primitive(PrimitiveTypeDef),
-    Array {
-        inner: Box<TypeDef>,
-    },
-    Struct {
-        name: String,
-        fields: Vec<FieldDef>,
-        external_defs: Vec<TypeDef>,
-    },
+    Array { inner: Box<TypeDef> },
+    Struct(StructDef),
     Enum(EnumDef),
 }
 
@@ -50,19 +44,14 @@ impl TypeDef {
         "::serde::Deserialize",
     ];
 
-    pub fn transfer_enums_in_scope(&mut self, output: &mut HashMap<String, EnumDef>) {
+    pub fn hoist_enum_defs(&mut self, output: &mut HashMap<String, EnumDef>) {
         match self {
             TypeDef::Unit => {}
             TypeDef::Primitive(_) => {}
             TypeDef::Array { inner } => {
-                Self::transfer_enums_in_scope(inner.as_mut(), output);
+                Self::hoist_enum_defs(inner.as_mut(), output);
             }
-            TypeDef::Struct { external_defs, .. } => {
-                external_defs
-                    .iter_mut()
-                    .for_each(|v| v.transfer_enums_in_scope(output));
-                external_defs.retain(|v| !matches!(v, TypeDef::Unit))
-            }
+            TypeDef::Struct(strt) => strt.hoist_enum_defs(output),
             TypeDef::Enum(def) => {
                 if let Some(previous_def) = output.get_mut(&def.name) {
                     if previous_def.values != def.values {
@@ -113,18 +102,14 @@ impl TypeDef {
     }
 
     pub fn new_struct(name: String, fields: Vec<FieldDef>, external_defs: Vec<TypeDef>) -> Self {
-        Self::Struct {
-            name,
-            fields,
-            external_defs,
-        }
+        Self::Struct(StructDef::new(name, fields, external_defs))
     }
 
     pub fn as_field_ty(&self, optional: bool) -> TokenStream {
         let ty = match self {
             TypeDef::Unit => quote!(()),
-            TypeDef::Struct { name, .. } => {
-                let ident = Ident::new(&name, quote!().span());
+            TypeDef::Struct(strt) => {
+                let ident = Ident::new(strt.name(), quote!().span());
                 quote!(#ident)
             }
             TypeDef::Primitive(name) => name.to_token_stream(),
@@ -152,71 +137,7 @@ impl ToTokens for TypeDef {
             TypeDef::Primitive(_) | TypeDef::Unit => {}
             TypeDef::Array { inner } => inner.to_tokens(tokens),
             TypeDef::Enum(def) => def.to_tokens(tokens),
-            TypeDef::Struct {
-                name,
-                fields,
-                external_defs,
-            } => {
-                let name = Ident::new(name, quote!().span());
-
-                tokens.extend(external_defs.iter().map(|def| quote! { #def }));
-
-                let default_derive = if fields.iter().all(|f| f.optional()) {
-                    Some("Default")
-                } else {
-                    let optional_fields = fields.iter().filter(|f| f.optional());
-                    let non_optional_fields = fields.iter().filter(|f| !f.optional());
-
-                    let default_fields = optional_fields.map(|f| {
-                        let name = f.name();
-                        let name = Ident::new(name, quote!().span());
-                        quote!(#name: Default::default())
-                    });
-
-                    let args = non_optional_fields.clone().map(|f| {
-                        let name = f.name();
-                        let name = Ident::new(name, quote!().span());
-                        let ty = f.ty();
-                        quote!(#name: #ty)
-                    });
-
-                    let arg_setters = non_optional_fields.map(|f| {
-                        let name = f.name();
-                        let name = Ident::new(name, quote!().span());
-                        quote!(#name)
-                    });
-
-                    tokens.extend(quote! {
-                        impl #name {
-                            pub fn new(#(#args),*) -> Self {
-                                Self {
-                                    #(#arg_setters),*,
-                                    #(#default_fields),*
-                                }
-                            }
-                        }
-                    });
-
-                    None
-                };
-
-                let derives = Self::DEFAULT_DERIVES
-                    .iter()
-                    .chain(default_derive.iter())
-                    .map(|v| {
-                        let parsed: TokenStream = v.parse().unwrap();
-                        quote! { #parsed, }
-                    });
-
-                let name = &name;
-
-                tokens.extend(quote! {
-                    #[derive(#(#derives)*)]
-                    pub struct #name {
-                        #(#fields)*
-                    }
-                });
-            }
+            TypeDef::Struct(strt) => strt.to_tokens(tokens),
         }
     }
 }
