@@ -13,6 +13,41 @@ pub struct EnumDef {
     pub default: Option<String>,
 }
 
+impl EnumDef {
+    pub fn new<I: AsRef<str>, T: IntoIterator<Item = I>>(
+        name: String,
+        extra_derives: T,
+        values: HashSet<String>,
+        default: Option<String>,
+    ) -> Self {
+        if let Some(default) = default.as_ref() {
+            assert!(values.contains(default));
+        }
+
+        let me = EnumDef {
+            name,
+            derives: super::TypeDef::DEFAULT_DERIVES
+                .into_iter()
+                .map(str::to_string)
+                .chain(extra_derives.into_iter().map(|e| e.as_ref().to_string()))
+                .map(|v| v.to_string())
+                .collect(),
+            values,
+            default,
+        };
+
+        me
+    }
+
+    fn fix_name(name: &str) -> String {
+        if name.chars().next().unwrap().is_numeric() {
+            format!("_{name}")
+        } else {
+            name.to_string()
+        }
+    }
+}
+
 impl ToTokens for EnumDef {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         let Self {
@@ -30,12 +65,7 @@ impl ToTokens for EnumDef {
         });
 
         let variants = values.iter().map(|orig| {
-            let v = if orig.chars().next().unwrap().is_numeric() {
-                format!("_{orig}")
-            } else {
-                orig.to_string()
-            };
-
+            let v = Self::fix_name(orig);
             let v = crate::name_to_ident(&v);
 
             let rename = if orig != &v {
@@ -61,6 +91,7 @@ impl ToTokens for EnumDef {
         });
 
         if let Some(default) = default {
+            let default = Self::fix_name(default);
             let default_ident = Ident::new(&default, quote!().span());
 
             tokens.extend(quote! {

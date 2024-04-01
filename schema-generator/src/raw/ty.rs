@@ -20,8 +20,6 @@ pub struct Type<'a> {
     pub type_text: Option<Cow<'a, str>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub title: Option<Cow<'a, str>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub default: Option<serde_json::Value>,
     #[serde(default, skip_serializing_if = "Optional::is_empty")]
     pub optional: Optional,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -82,15 +80,22 @@ pub enum TypeKind<'a> {
         #[serde(default, alias = "min", skip_serializing_if = "Option::is_none")]
         minimum: Option<serde_json::Value>,
         #[serde(default, alias = "max", skip_serializing_if = "Option::is_none")]
-        maximum: Option<u32>,
+        maximum: Option<f32>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        default: Option<f32>,
     },
     Integer {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         minimum: Option<u32>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         maximum: Option<u32>,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        default: Option<u32>,
     },
-    Boolean,
+    Boolean {
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        default: Option<u32>,
+    },
     Array {
         items: Box<Type<'a>>,
     },
@@ -138,7 +143,7 @@ impl Type<'_> {
                 }
                 TypeKind::Number { .. } => TypeDef::Primitive(PrimitiveTypeDef::Number),
                 TypeKind::Integer { .. } => TypeDef::Primitive(PrimitiveTypeDef::Integer),
-                TypeKind::Boolean => TypeDef::Primitive(PrimitiveTypeDef::Boolean),
+                TypeKind::Boolean { .. } => TypeDef::Primitive(PrimitiveTypeDef::Boolean),
                 TypeKind::Array { items } => {
                     let inner = items.type_def(field_name, &format!("{struct_suffix}Items"));
 

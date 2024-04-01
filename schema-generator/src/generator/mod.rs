@@ -36,10 +36,8 @@ impl<'a> Generator<'a> {
     }
 
     pub fn generate(&self, stream: &mut TokenStream) {
-        let mut enums = HashMap::new();
-
         for node in self.collection.iter() {
-            let (_, client_code) = Self::generate_client(None, node, &mut enums);
+            let (_, client_code) = Self::generate_client(None, node);
 
             let mod_name = node
                 .value
@@ -54,26 +52,23 @@ impl<'a> Generator<'a> {
         }
     }
 
-    fn generate_client(
-        parent: Option<&Node>,
-        node: &Node,
-        enums: &mut HashMap<String, EnumDef>,
-    ) -> (String, TokenStream) {
+    fn generate_client(parent: Option<&Node>, node: &Node) -> (String, TokenStream) {
         let path = node.value.path.iter().last().unwrap();
-        Self::generate_client_impl(parent.is_some(), node, path, enums)
+        Self::generate_client_impl(parent.is_some(), node, path)
     }
 
     fn generate_client_impl(
         has_parent: bool,
         node: &Node,
         segment: &PathElement,
-        enums: &mut HashMap<String, EnumDef>,
     ) -> (String, TokenStream) {
         let segment_name = segment.as_string_without_braces();
         let mut name = crate::name_to_ident(segment_name);
         name.push_str("Client");
 
         let name = Ident::new(&name, quote!().span());
+
+        let mut enums = HashMap::new();
 
         let methods: Vec<_> = node.value.info.values().filter_map(|info| {
             let method = &info.method;
@@ -86,7 +81,7 @@ impl<'a> Generator<'a> {
                     let mut type_def = v.type_def(&prefix, &node.value.path);
 
                     if let Some(def) = type_def.as_mut() {
-                        def.transfer_enums_in_scope(enums);
+                        def.transfer_enums_in_scope(&mut enums);
                     }
 
                     type_def
@@ -97,7 +92,7 @@ impl<'a> Generator<'a> {
             let fn_name = Ident::new(&fn_name_str, quote!().span());
 
             if let Some(parameters) = &mut parameters {
-                parameters.transfer_enums_in_scope(enums);
+                parameters.transfer_enums_in_scope(&mut enums);
             }
 
             let (signature, defer_signature, params_def) =
@@ -115,7 +110,7 @@ impl<'a> Generator<'a> {
             let (returns, returns_definition, call) = if let Some(ret) = info.returns.as_ref() {
                 let mut def = ret.type_def("", &format!("{method}Output"));
 
-                def.transfer_enums_in_scope(enums);
+                def.transfer_enums_in_scope(&mut enums);
 
                 let returns_def = quote! { #def };
 
@@ -180,7 +175,7 @@ impl<'a> Generator<'a> {
                 crate::name_to_underscore_name(segment.as_string_without_braces());
             let mod_name = Ident::new(&segment_no_braces, quote!().span());
 
-            let (child_name, child_data) = Self::generate_client(Some(node), child, enums);
+            let (child_name, child_data) = Self::generate_client(Some(node), child);
             let child_name = Ident::new(&child_name, quote!().span());
             let defer = quote! { #mod_name::#child_name };
             let child_fn_name = Ident::new(&segment_no_braces, quote!().span());
@@ -220,6 +215,7 @@ impl<'a> Generator<'a> {
         };
 
         let client = proxmox_api(quote!(Client));
+        let enums = enums.values();
         let definition = quote! {
             pub struct #name {
                 client: ::std::sync::Arc<#client>,
@@ -229,6 +225,8 @@ impl<'a> Generator<'a> {
             impl #name {
                 #new
             }
+
+            #(#enums)*
 
             #(#methods)*
 
