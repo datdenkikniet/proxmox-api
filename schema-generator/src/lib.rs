@@ -46,15 +46,20 @@ pub(crate) fn name_to_ident(name: &str) -> String {
     let mut chars = name.chars();
     let mut new_name = String::new();
 
-    if let Some(char) = chars.next() {
-        new_name.push(char.to_ascii_uppercase());
+    while let Some(char) = chars.next() {
+        if char == '.' || char == '{' || char == '}' || char == '[' || char == ']' {
+            continue;
+        } else {
+            new_name.push(char.to_ascii_uppercase());
+            break;
+        }
     }
 
     let mut prev_was_dash = false;
     for char in chars {
-        if char == '}' {
+        if char == '}' || char == ']' {
             continue;
-        } else if char == '-' || char == '_' || char == '{' {
+        } else if char == '-' || char == '_' || char == '{' || char == '[' {
             prev_was_dash = true;
         } else if char == '+' || char == '.' {
             prev_was_dash = true;

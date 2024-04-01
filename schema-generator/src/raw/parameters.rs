@@ -18,9 +18,9 @@ pub struct Parameters<'a> {
 }
 
 impl Parameters<'_> {
-    pub fn type_def(&self, prefix: &str, path: &Path, enum_prefix: &str) -> Option<TypeDef> {
+    pub fn type_def(&self, prefix: &str, path: &Path) -> Option<TypeDef> {
         if let Some(properties) = &self.properties {
-            let name = format!("{prefix}Params");
+            let name = crate::name_to_ident(&format!("{prefix}Params"));
 
             let optional = properties.values().all(|prop| prop.optional.get());
 
@@ -36,7 +36,7 @@ impl Parameters<'_> {
                     return None;
                 }
 
-                let typedef = ty.type_def(name, "", "Returns", enum_prefix);
+                let typedef = ty.type_def(name, "Returns");
                 external_defs.push(typedef.clone());
 
                 let field_ident = crate::name_to_underscore_name(&name);

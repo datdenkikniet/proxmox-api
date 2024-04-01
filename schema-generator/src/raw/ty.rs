@@ -107,13 +107,7 @@ pub enum TypeKind<'a> {
 }
 
 impl Type<'_> {
-    pub fn type_def(
-        &self,
-        field_name: &str,
-        struct_prefix: &str,
-        struct_suffix: &str,
-        enum_prefix: &str,
-    ) -> TypeDef {
+    pub fn type_def(&self, field_name: &str, struct_suffix: &str) -> TypeDef {
         if let Some(ty) = self.ty.as_ref() {
             match ty {
                 TypeKind::Null => TypeDef::Unit,
@@ -136,7 +130,7 @@ impl Type<'_> {
                             .collect();
                         let no_derives = Option::<&str>::None;
 
-                        let name = crate::name_to_ident(&format!("{enum_prefix}{field_name}"));
+                        let name = crate::name_to_ident(field_name);
                         TypeDef::new_enum(name, no_derives, enum_values, default)
                     } else {
                         TypeDef::Primitive(PrimitiveTypeDef::String)
@@ -146,12 +140,7 @@ impl Type<'_> {
                 TypeKind::Integer { .. } => TypeDef::Primitive(PrimitiveTypeDef::Integer),
                 TypeKind::Boolean => TypeDef::Primitive(PrimitiveTypeDef::Boolean),
                 TypeKind::Array { items } => {
-                    let inner = items.type_def(
-                        field_name,
-                        struct_prefix,
-                        &format!("{struct_suffix}Items"),
-                        &enum_prefix,
-                    );
+                    let inner = items.type_def(field_name, &format!("{struct_suffix}Items"));
 
                     TypeDef::Array {
                         inner: Box::new(inner),
@@ -164,12 +153,7 @@ impl Type<'_> {
                     if let Some(IntOrTy::Ty(additional_props)) = additional_properties.as_deref() {
                         assert!(properties.is_none(), "Cannot handle combination of typed additional properties & normal properties.");
 
-                        additional_props.type_def(
-                            field_name,
-                            struct_prefix,
-                            struct_suffix,
-                            enum_prefix,
-                        )
+                        additional_props.type_def(field_name, struct_suffix)
                     } else if let Some(props) = properties {
                         let mut external_defs: Vec<TypeDef> = Vec::new();
 
@@ -184,12 +168,7 @@ impl Type<'_> {
                                 };
 
                                 let field_name = crate::name_to_ident(&original_name);
-                                let inner = ty.type_def(
-                                    &field_name,
-                                    struct_prefix,
-                                    struct_suffix,
-                                    enum_prefix,
-                                );
+                                let inner = ty.type_def(&field_name, struct_suffix);
 
                                 external_defs.push(inner.clone());
 
@@ -203,9 +182,10 @@ impl Type<'_> {
                             &[][..]
                         };
 
-                        let struct_name = crate::name_to_ident(&format!(
-                            "{struct_prefix}{field_name}{struct_suffix}"
-                        ));
+                        let field_name = crate::name_to_ident(field_name);
+                        let suffix = crate::name_to_ident(struct_suffix);
+
+                        let struct_name = format!("{field_name}{suffix}");
                         TypeDef::new_struct(struct_name, dervs, fields, external_defs)
                     } else {
                         TypeDef::Unit
