@@ -110,21 +110,7 @@ impl TypeDef {
         values: HashSet<String>,
         default: Option<String>,
     ) -> Self {
-        if let Some(default) = default.as_ref() {
-            assert!(values.contains(default));
-        }
-
-        Self::Enum(EnumDef {
-            name,
-            derives: Self::DEFAULT_DERIVES
-                .into_iter()
-                .map(str::to_string)
-                .chain(extra_derives.into_iter().map(|e| e.as_ref().to_string()))
-                .map(|v| v.to_string())
-                .collect(),
-            values,
-            default,
-        })
+        Self::Enum(EnumDef::new(name, extra_derives, values, default))
     }
 
     pub fn new_struct<I: AsRef<str>, T: IntoIterator<Item = I>>(
@@ -160,7 +146,7 @@ impl TypeDef {
             }
             TypeDef::Enum(EnumDef { name, .. }) => {
                 let ident = Ident::new(name, quote!().span());
-                quote!(crate::generated::#ident)
+                quote!(#ident)
             }
         };
 
