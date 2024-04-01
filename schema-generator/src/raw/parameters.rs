@@ -1,7 +1,7 @@
 use std::{borrow::Cow, collections::HashMap};
 
 use serde::Deserialize;
-use syn::{spanned::Spanned, Ident};
+use syn::{spanned::Spanned, Ident, Lit, LitStr};
 
 use quote::quote;
 
@@ -25,6 +25,7 @@ impl Parameters<'_> {
 
             let optional = properties.values().all(|prop| prop.optional.get());
 
+            let mut definitions = Vec::new();
             let fields = properties.iter().filter_map(|(name, ty)| {
                 if path.iter().any(|p| {
                     if let PathElement::Placeholder(placeholder) = p {
@@ -36,11 +37,27 @@ impl Parameters<'_> {
                     return None;
                 }
 
-                let ty = ty.to_tokens();
-                let field_ident = Ident::new(&name.replace("-", "_"), quote::quote! {}.span());
+                let typedef = ty.to_definition(name);
+                definitions.push(quote! { #typedef });
+
+                let ty_name = typedef.as_field_ty(ty.optional.get());
+
+                let field_ident = crate::name_to_underscore_name(&name);
+
+                let serde_attr = if &field_ident != name {
+                    let name = Lit::Str(LitStr::new(&name, quote!().span()));
+                    quote! {
+                        #[serde(rename = #name)]
+                    }
+                } else {
+                    quote! {}
+                };
+
+                let field_ident = Ident::new(&field_ident, quote!().span());
 
                 Some(quote::quote! {
-                    pub #field_ident: #ty,
+                    #serde_attr
+                    pub #field_ident: #ty_name,
                 })
             });
 
@@ -57,6 +74,8 @@ impl Parameters<'_> {
             }
 
             let definition = quote::quote! {
+                #(#definitions)*
+
                 #derive
                 pub struct #ident {
                     #(#fields)*

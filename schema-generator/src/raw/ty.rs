@@ -3,11 +3,16 @@ use std::{
     collections::{HashMap, HashSet},
 };
 
-use proc_macro2::TokenStream;
 use quote::quote;
 use serde::{Deserialize, Serialize};
+use syn::{spanned::Spanned, Ident};
 
-use super::{Format, Optional};
+use crate::raw::def::FieldDef;
+
+use super::{
+    def::{PrimitiveTypeDef, TypeDef},
+    Format, Optional,
+};
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
 pub struct Type<'a> {
@@ -56,6 +61,14 @@ pub struct Type<'a> {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
+#[serde(untagged)]
+pub enum IntOrTy<'a> {
+    Int(u32),
+    #[serde(borrow)]
+    Ty(Type<'a>),
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
 #[serde(tag = "type", rename_all = "kebab-case")]
 pub enum TypeKind<'a> {
     Null,
@@ -86,8 +99,12 @@ pub enum TypeKind<'a> {
     Object {
         #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
         properties: Option<HashMap<Cow<'a, str>, Type<'a>>>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        additional_properties: Option<serde_json::Value>,
+        #[serde(
+            default,
+            skip_serializing_if = "Option::is_none",
+            rename = "additionalProperties"
+        )]
+        additional_properties: Option<Box<IntOrTy<'a>>>,
     },
     Enum {
         #[serde(rename = "enum")]
@@ -98,37 +115,83 @@ pub enum TypeKind<'a> {
 }
 
 impl Type<'_> {
-    pub fn to_tokens(&self) -> TokenStream {
-        let ty = if let Some(ty) = self.ty.as_ref() {
+    pub fn to_definition(&self, struct_name: &str) -> TypeDef {
+        let struct_name = crate::name_to_struct_name(struct_name);
+
+        if let Some(ty) = self.ty.as_ref() {
             match ty {
-                TypeKind::Null => quote! { () },
-                TypeKind::String { .. } => quote! { String },
-                TypeKind::Number { .. } => quote! { f64 },
-                TypeKind::Integer { .. } => quote! { u32 },
-                TypeKind::Boolean => quote! { bool },
+                TypeKind::Null => TypeDef::Unit,
+                TypeKind::String { .. } => TypeDef::Primitive(PrimitiveTypeDef::String),
+                TypeKind::Number { .. } => TypeDef::Primitive(PrimitiveTypeDef::Number),
+                TypeKind::Integer { .. } => TypeDef::Primitive(PrimitiveTypeDef::Integer),
+                TypeKind::Boolean => TypeDef::Primitive(PrimitiveTypeDef::Boolean),
                 TypeKind::Array { items } => {
-                    let inner = items.to_tokens();
-                    quote! { Vec<#inner> }
+                    let inner = items.to_definition(&format!("{struct_name}Items"));
+
+                    TypeDef::Array {
+                        inner: Box::new(inner),
+                    }
                 }
-                TypeKind::Object { .. } => {
-                    // TODO: emit object definition
-                    quote! { () }
+                TypeKind::Object {
+                    properties,
+                    additional_properties,
+                } => {
+                    if let Some(IntOrTy::Ty(additional_props)) = additional_properties.as_deref() {
+                        assert!(properties.is_none(), "Cannot handle combination of typed additional properties & normal properties.");
+
+                        additional_props.to_definition(&struct_name)
+                    } else if let Some(props) = properties {
+                        let mut external_defs = Vec::new();
+                        let fields: Vec<_> = props
+                            .iter()
+                            .map(|(original_name, ty)| {
+                                let field_name = crate::name_to_underscore_name(&original_name);
+                                let rename = if &field_name != original_name {
+                                    Some(original_name.to_string())
+                                } else {
+                                    None
+                                };
+
+                                let optional = ty.optional.get();
+                                let inner = ty.to_definition(&format!(
+                                    "{struct_name}{}",
+                                    crate::name_to_struct_name(&original_name)
+                                ));
+
+                                let ty = inner.as_field_ty(ty.optional.get());
+                                let primitive_ty = inner.primitive();
+                                external_defs.push(inner);
+
+                                FieldDef {
+                                    rename,
+                                    name: field_name,
+                                    ty,
+                                    optional,
+                                    primitive_ty,
+                                }
+                            })
+                            .collect();
+
+                        let name = Ident::new(&struct_name, quote!().span());
+
+                        let dervs = if fields.iter().all(|f| f.optional) {
+                            &["Default"][..]
+                        } else {
+                            &[][..]
+                        };
+
+                        TypeDef::new_struct(quote!(#name), dervs, fields, external_defs)
+                    } else {
+                        TypeDef::Unit
+                    }
                 }
                 TypeKind::Enum { .. } => {
                     // TODO: emit enum definition
-                    quote! { () }
+                    TypeDef::Unit
                 }
             }
         } else {
-            quote! { () }
-        };
-
-        let ty = if self.optional.get() {
-            quote! { Option<#ty> }
-        } else {
-            ty
-        };
-
-        ty
+            TypeDef::Unit
+        }
     }
 }

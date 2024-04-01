@@ -60,4 +60,12 @@ fn main() {
     println!("{interfaces:?}");
 
     println!("{:?}", proxmox.hosts());
+
+    let access_client =
+        proxmox_api::client::test::access::AccessClient::new(std::sync::Arc::new(client));
+
+    println!(
+        "{:?}",
+        access_client.users().userid("root@pam").token().get()
+    );
 }
