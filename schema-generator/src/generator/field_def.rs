@@ -41,7 +41,8 @@ impl ToTokens for FieldDef {
             optional,
         } = self;
 
-        let name = Ident::new(name, quote!().span());
+        let name = crate::name_to_underscore_name(name);
+        let name = Ident::new(&name, quote!().span());
 
         let rename = if let Some(rename) = rename {
             let renamed = Literal::string(&rename);
@@ -51,11 +52,11 @@ impl ToTokens for FieldDef {
         };
 
         let serialize = if let Some(primitive) = ty.primitive() {
-            let ser_des = |name: &str| {
+            let ser_des = |primitive: &str| {
                 let name = if *optional {
-                    format!("{name}_optional")
+                    format!("{primitive}_optional")
                 } else {
-                    name.to_string()
+                    primitive.to_string()
                 };
 
                 let ser_fn = proxmox_api_str(format!("serialize_{name}"));

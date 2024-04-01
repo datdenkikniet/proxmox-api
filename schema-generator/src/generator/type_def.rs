@@ -136,7 +136,7 @@ impl TypeDef {
         let ty = match self {
             TypeDef::Unit => quote!(()),
             TypeDef::Struct { name, .. } => {
-                let ident = Ident::new(name, quote!().span());
+                let ident = Ident::new(&name, quote!().span());
                 quote!(#ident)
             }
             TypeDef::Primitive(name) => name.to_token_stream(),
@@ -145,7 +145,7 @@ impl TypeDef {
                 quote!(Vec<#inner>)
             }
             TypeDef::Enum(EnumDef { name, .. }) => {
-                let ident = Ident::new(name, quote!().span());
+                let ident = Ident::new(&name, quote!().span());
                 quote!(#ident)
             }
         };
