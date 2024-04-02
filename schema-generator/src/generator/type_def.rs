@@ -6,7 +6,9 @@ use syn::{spanned::Spanned, Ident};
 
 use crate::raw::KnownFormat;
 
-use super::{field_def::FieldDef, proxmox_api, EnumDef, StructDef};
+use super::{
+    field_def::FieldDef, proxmox_api, struct_def::AdditionalProperties, EnumDef, StructDef,
+};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum PrimitiveTypeDef {
@@ -114,8 +116,18 @@ impl TypeDef {
         Self::Enum(EnumDef::new(name, extra_derives, values, default))
     }
 
-    pub fn new_struct(name: String, fields: Vec<FieldDef>, external_defs: Vec<TypeDef>) -> Self {
-        Self::Struct(StructDef::new(name, fields, external_defs))
+    pub fn new_struct(
+        name: String,
+        fields: Vec<FieldDef>,
+        additional_props: AdditionalProperties,
+        external_defs: Vec<TypeDef>,
+    ) -> Self {
+        Self::Struct(StructDef::new(
+            name,
+            fields,
+            additional_props,
+            external_defs,
+        ))
     }
 
     pub fn as_field_ty(&self, optional: bool) -> TokenStream {
