@@ -52,6 +52,10 @@ impl TypeDef {
         "::serde::Deserialize",
     ];
 
+    pub fn is_unit(&self) -> bool {
+        matches!(self, TypeDef::Unit)
+    }
+
     pub fn hoist_enum_defs(&mut self, output: &mut HashMap<String, EnumDef>) {
         match self {
             TypeDef::Unit => {}

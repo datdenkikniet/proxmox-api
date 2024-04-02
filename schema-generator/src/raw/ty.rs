@@ -111,7 +111,7 @@ impl Type<'_> {
 
                         let fields: Vec<_> = props
                             .iter()
-                            .map(|(original_name, ty)| {
+                            .filter_map(|(original_name, ty)| {
                                 let field_name = crate::name_to_ident(&original_name);
                                 let inner = ty
                                     .type_def(&field_name, &format!("{struct_suffix}{field_name}"));
@@ -120,7 +120,17 @@ impl Type<'_> {
 
                                 let doc = ty.doc();
                                 let optional = ty.optional.get();
-                                FieldDef::new(original_name.to_string(), inner, optional, doc)
+
+                                if inner.is_unit() && !optional {
+                                    None
+                                } else {
+                                    Some(FieldDef::new(
+                                        original_name.to_string(),
+                                        inner,
+                                        optional,
+                                        doc,
+                                    ))
+                                }
                             })
                             .collect();
 
