@@ -2,7 +2,7 @@ use std::{borrow::Cow, collections::HashMap};
 
 use serde::{Deserialize, Serialize};
 
-use crate::generator::{FieldDef, PrimitiveTypeDef, TypeDef};
+use crate::generator::{AdditionalProperties, FieldDef, PrimitiveTypeDef, TypeDef};
 
 use super::{Format, Optional};
 
@@ -102,11 +102,16 @@ impl Type<'_> {
                     properties,
                     additional_properties,
                 } => {
-                    if let Some(IntOrTy::Ty(additional_props)) = additional_properties.as_deref() {
-                        assert!(properties.is_none(), "Cannot handle combination of typed additional properties & normal properties.");
+                    let field_name = crate::name_to_ident(field_name);
+                    let suffix = crate::name_to_ident(struct_suffix);
+                    let struct_name = format!("{field_name}{suffix}");
 
-                        additional_props.type_def(field_name, struct_suffix)
-                    } else if let Some(props) = properties {
+                    let additional_props = IntOrTy::as_additional_properties(
+                        additional_properties.as_ref(),
+                        struct_suffix,
+                    );
+
+                    if let Some(props) = properties {
                         let mut external_defs: Vec<TypeDef> = Vec::new();
 
                         let fields: Vec<_> = props
@@ -134,11 +139,9 @@ impl Type<'_> {
                             })
                             .collect();
 
-                        let field_name = crate::name_to_ident(field_name);
-                        let suffix = crate::name_to_ident(struct_suffix);
-
-                        let struct_name = format!("{field_name}{suffix}");
-                        TypeDef::new_struct(struct_name, fields, external_defs)
+                        TypeDef::new_struct(struct_name, fields, additional_props, external_defs)
+                    } else if !additional_props.is_none() {
+                        TypeDef::new_struct(struct_name, Vec::new(), additional_props, Vec::new())
                     } else {
                         TypeDef::Unit
                     }
@@ -166,7 +169,27 @@ impl Type<'_> {
 pub enum IntOrTy<'a> {
     Int(u32),
     #[serde(borrow)]
-    Ty(Type<'a>),
+    Ty(Box<Type<'a>>),
+}
+
+impl IntOrTy<'_> {
+    pub fn as_additional_properties(
+        me: Option<&Self>,
+        struct_suffix: &str,
+    ) -> AdditionalProperties {
+        if let Some(props) = me {
+            match props {
+                IntOrTy::Int(1) => AdditionalProperties::Untyped,
+                IntOrTy::Ty(ty) => {
+                    let ty = ty.type_def("additional_properties", struct_suffix);
+                    AdditionalProperties::Type(Box::new(ty))
+                }
+                _ => AdditionalProperties::None,
+            }
+        } else {
+            AdditionalProperties::Untyped
+        }
+    }
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
@@ -218,6 +241,6 @@ pub enum TypeKind<'a> {
             skip_serializing_if = "Option::is_none",
             rename = "additionalProperties"
         )]
-        additional_properties: Option<Box<IntOrTy<'a>>>,
+        additional_properties: Option<IntOrTy<'a>>,
     },
 }

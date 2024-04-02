@@ -16,7 +16,7 @@ mod field_def;
 pub(crate) use field_def::FieldDef;
 
 mod struct_def;
-pub(crate) use struct_def::StructDef;
+pub(crate) use struct_def::{AdditionalProperties, StructDef};
 
 mod type_def;
 pub(crate) use type_def::{PrimitiveTypeDef, TypeDef};

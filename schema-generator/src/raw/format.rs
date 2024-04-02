@@ -160,4 +160,7 @@ pub enum KnownFormat {
 
     PveIpv4Config,
     PveIpv6Config,
+
+    #[serde(other)]
+    Unknown,
 }

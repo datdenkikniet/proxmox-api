@@ -7,14 +7,14 @@ use crate::{
     Path, PathElement,
 };
 
-use super::Type;
+use super::{ty::IntOrTy, Type};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Parameters<'a> {
     #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
     pub properties: Option<HashMap<Cow<'a, str>, Type<'a>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub additional_properties: Option<serde_json::Value>,
+    pub additional_properties: Option<IntOrTy<'a>>,
 }
 
 impl Parameters<'_> {
@@ -48,7 +48,11 @@ impl Parameters<'_> {
                 return None;
             }
 
-            let type_def = TypeDef::new_struct(name.clone(), fields, external_defs);
+            let additional_properties =
+                IntOrTy::as_additional_properties(self.additional_properties.as_ref(), "Params");
+
+            let type_def =
+                TypeDef::new_struct(name.clone(), fields, additional_properties, external_defs);
 
             Some(type_def)
         } else {
