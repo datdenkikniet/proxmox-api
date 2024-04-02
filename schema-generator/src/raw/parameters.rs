@@ -13,8 +13,8 @@ use super::{ty::IntOrTy, Type};
 pub struct Parameters<'a> {
     #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
     pub properties: Option<HashMap<Cow<'a, str>, Type<'a>>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub additional_properties: Option<IntOrTy<'a>>,
+    #[serde(default, skip_serializing_if = "IntOrTy::is_unset")]
+    pub additional_properties: IntOrTy<'a>,
 }
 
 impl Parameters<'_> {
@@ -48,8 +48,9 @@ impl Parameters<'_> {
                 return None;
             }
 
-            let additional_properties =
-                IntOrTy::as_additional_properties(self.additional_properties.as_ref(), "Params");
+            let additional_properties = self
+                .additional_properties
+                .as_additional_properties("Params");
 
             let type_def =
                 TypeDef::new_struct(name.clone(), fields, additional_properties, external_defs);
