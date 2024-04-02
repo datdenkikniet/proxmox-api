@@ -1,8 +1,5 @@
 use clap::{Parser, Subcommand};
-use proxmox_api::Client;
-
-#[allow(warnings)]
-mod generated;
+use proxmox_api::{Client, Error};
 
 #[derive(Debug, Parser)]
 pub struct Cli {
@@ -37,22 +34,4 @@ fn main() {
     let client = Client::new(&cli.host, user, realm, &cli.password).unwrap();
 
     let client = std::sync::Arc::new(client);
-    let access_client = generated::access::AccessClient::new(client.clone());
-
-    println!(
-        "{:?}",
-        access_client.users().userid("root@pam").token().get()
-    );
-
-    let cluster_client = generated::cluster::ClusterClient::new(client.clone());
-
-    println!("{:?}", cluster_client.nextid().get(Default::default()));
-
-    let v: Vec<generated::cluster::resources::GETOutputItems> =
-        serde_json::from_str(include_str!("./data.json")).unwrap();
-
-    println!(
-        "{:?}",
-        cluster_client.resources().get(Default::default()).unwrap()[0]
-    );
 }

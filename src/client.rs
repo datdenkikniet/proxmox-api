@@ -175,11 +175,47 @@ impl Client {
         B: Serialize,
         R: DeserializeOwned,
     {
+        self.request_with_body_and_query::<_, _, (), _>(method, path, Some(body), None)
+    }
+
+    fn request_with_query<P, Q, R>(&self, method: Method, path: P, query: &Q) -> Result<R, Error>
+    where
+        P: AsRef<str>,
+        Q: Serialize,
+        R: DeserializeOwned,
+    {
+        self.request_with_body_and_query::<_, (), _, _>(method, path, None, Some(query))
+    }
+
+    fn request_with_body_and_query<P, B, Q, R>(
+        &self,
+        method: Method,
+        path: P,
+        body: Option<&B>,
+        query: Option<&Q>,
+    ) -> Result<R, Error>
+    where
+        P: AsRef<str>,
+        B: Serialize,
+        Q: Serialize,
+        R: DeserializeOwned,
+    {
         log::debug!("{} {}", method, path.as_ref());
 
-        let body = serde_urlencoded::to_string(body).unwrap();
+        let request = self.client.request(method, self.route(path.as_ref()));
 
-        let request = self.client.post(self.route(path.as_ref())).body(body);
+        let request = if let Some(body) = body {
+            let body = serde_urlencoded::to_string(body).unwrap();
+            request.body(body)
+        } else {
+            request
+        };
+
+        let request = if let Some(query) = query {
+            request.query(query)
+        } else {
+            request
+        };
 
         let response = self.append_headers(request).send()?;
         let response_status = response.status();
@@ -233,27 +269,7 @@ impl Client {
         P: AsRef<str>,
         R: DeserializeOwned,
     {
-        log::debug!("GET {}", path.as_ref());
-
-        let request = self.client.get(self.route(path.as_ref())).query(query);
-
-        let response = self.append_headers(request).send()?;
-        let response_status = response.status();
-        let json_data = response.bytes()?;
-        let json_str = std::str::from_utf8(&json_data).map_err(|_| Error::ResponseWasNotString)?;
-
-        log::debug!("JSON response: {json_str}");
-
-        let result: Response<R> = serde_json::from_str(json_str)
-            .map_err(|e| Error::DecodingFailed(json_str.into(), e))?;
-
-        if let Some(data) = result.data {
-            Ok(data)
-        } else if let Some(errors) = result.errors {
-            Err(Error::EncounteredErrors(errors))
-        } else {
-            Err(Error::UnknownFailure(response_status))
-        }
+        self.request_with_query(Method::GET, path, query)
     }
 }
 
