@@ -106,10 +106,8 @@ impl Type<'_> {
                     let suffix = crate::name_to_ident(struct_suffix);
                     let struct_name = format!("{field_name}{suffix}");
 
-                    let additional_props = IntOrTy::as_additional_properties(
-                        additional_properties.as_ref(),
-                        struct_suffix,
-                    );
+                    let additional_props =
+                        additional_properties.as_additional_properties(struct_suffix);
 
                     if let Some(props) = properties {
                         let mut external_defs: Vec<TypeDef> = Vec::new();
@@ -173,22 +171,25 @@ pub enum IntOrTy<'a> {
 }
 
 impl IntOrTy<'_> {
-    pub fn as_additional_properties(
-        me: Option<&Self>,
-        struct_suffix: &str,
-    ) -> AdditionalProperties {
-        if let Some(props) = me {
-            match props {
-                IntOrTy::Int(1) => AdditionalProperties::Untyped,
-                IntOrTy::Ty(ty) => {
-                    let ty = ty.type_def("additional_properties", struct_suffix);
-                    AdditionalProperties::Type(Box::new(ty))
-                }
-                _ => AdditionalProperties::None,
+    pub fn as_additional_properties(&self, struct_suffix: &str) -> AdditionalProperties {
+        match self {
+            IntOrTy::Int(1) => AdditionalProperties::Untyped,
+            IntOrTy::Ty(ty) => {
+                let ty = ty.type_def("additional_properties", struct_suffix);
+                AdditionalProperties::Type(Box::new(ty))
             }
-        } else {
-            AdditionalProperties::Untyped
+            _ => AdditionalProperties::None,
         }
+    }
+
+    pub fn is_unset(&self) -> bool {
+        matches!(self, Self::Int(0))
+    }
+}
+
+impl Default for IntOrTy<'_> {
+    fn default() -> Self {
+        Self::Int(1)
     }
 }
 
@@ -238,9 +239,9 @@ pub enum TypeKind<'a> {
         properties: Option<HashMap<Cow<'a, str>, Type<'a>>>,
         #[serde(
             default,
-            skip_serializing_if = "Option::is_none",
+            skip_serializing_if = "IntOrTy::is_unset",
             rename = "additionalProperties"
         )]
-        additional_properties: Option<IntOrTy<'a>>,
+        additional_properties: IntOrTy<'a>,
     },
 }
