@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
-use proc_macro2::{Literal, TokenStream};
-use quote::quote;
+use proc_macro2::{Literal, Punct, TokenStream};
+use quote::{quote, ToTokens};
 use syn::{spanned::Spanned, Ident};
 
 use crate::{
@@ -32,17 +32,19 @@ pub(self) fn proxmox_api_str(path: String) -> Literal {
     Literal::string(&format!("::proxmox_api::{path}"))
 }
 
-pub struct Generator<'a> {
-    collection: Collection<'a>,
+pub struct Generator {
+    mods: Vec<ClientModDef>,
 }
 
-impl<'a> Generator<'a> {
-    pub fn new(collection: Collection<'a>) -> Self {
-        Self { collection }
+impl Generator {
+    pub fn new(collection: &Collection) -> Self {
+        Self {
+            mods: Self::generate(&collection),
+        }
     }
 
-    pub fn generate(&self) -> Vec<ClientModDef> {
-        self.collection
+    fn generate(collection: &Collection) -> Vec<ClientModDef> {
+        collection
             .iter()
             .map(|n| Self::generate_client(None, n))
             .collect()
@@ -292,5 +294,50 @@ impl<'a> Generator<'a> {
                 }
             }
         }
+    }
+
+    fn generate_impl(has_parent: bool, def: &ClientModDef, stream: &mut TokenStream) {
+        if !has_parent {
+            stream.extend(def.client_tokens.clone());
+            def.children
+                .iter()
+                .for_each(|c| Self::generate_impl(true, c, stream));
+        } else {
+            let mod_name = Ident::new(&def.name, quote!().span());
+
+            stream.extend(quote!(pub mod #mod_name));
+            Punct::new('{', proc_macro2::Spacing::Alone).to_tokens(stream);
+            stream.extend(def.client_tokens.clone());
+            def.children
+                .iter()
+                .for_each(|c| Self::generate_impl(true, c, stream));
+            Punct::new('}', proc_macro2::Spacing::Alone).to_tokens(stream);
+        }
+    }
+}
+
+impl ToTokens for Generator {
+    fn to_tokens(&self, tokens: &mut TokenStream) {
+        for def in &self.mods {
+            Self::generate_impl(false, def, tokens);
+        }
+    }
+}
+
+impl IntoIterator for Generator {
+    type Item = ClientModDef;
+
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.mods.into_iter()
+    }
+}
+
+impl core::ops::Deref for Generator {
+    type Target = [ClientModDef];
+
+    fn deref(&self) -> &Self::Target {
+        &self.mods
     }
 }
