@@ -2,8 +2,10 @@ name: Generate the JSON definitions for Proxmox
 on: [push]
 jobs:
   create:
-    runs-on: debian:bookworm
+    runs-on: ubuntu-latest
+    container: debian:bookworm
     steps:
+      - uses: actions/checkout@v4
       - name: Set up proxmox bookworm
         run: ./ci/setup.sh
       - name: Generate JSON schema
