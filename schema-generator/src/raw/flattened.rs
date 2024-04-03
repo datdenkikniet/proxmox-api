@@ -1,4 +1,4 @@
-use std::{borrow::Cow, collections::HashMap};
+use std::{borrow::Cow, collections::BTreeMap};
 
 use crate::{Path, PathElement};
 
@@ -9,7 +9,7 @@ pub struct Value<'a> {
     pub leaf: Option<u32>,
     pub path: Path,
     text: Cow<'a, str>,
-    pub info: HashMap<Cow<'a, str>, Info<'a>>,
+    pub info: BTreeMap<Cow<'a, str>, Info<'a>>,
 }
 
 impl core::fmt::Debug for Value<'_> {

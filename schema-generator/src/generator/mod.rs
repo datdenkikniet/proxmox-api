@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 use proc_macro2::{Literal, Punct, TokenStream};
 use quote::{quote, ToTokens};
@@ -67,7 +67,7 @@ impl Generator {
 
         let client_name = Ident::new(&client_name, quote!().span());
 
-        let mut enums = HashMap::new();
+        let mut enums = BTreeMap::new();
 
         let methods: Vec<_> = node.value.info.values().filter_map(|info| {
             let method = &info.method;
