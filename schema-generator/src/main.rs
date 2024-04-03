@@ -48,13 +48,14 @@ fn main() -> std::io::Result<()> {
     }
 }
 
-fn open_rw_append<P>(path: P) -> std::io::Result<std::fs::File>
+fn open_rw_truncate<P>(path: P) -> std::io::Result<std::fs::File>
 where
     P: AsRef<Path>,
 {
     std::fs::File::options()
         .write(true)
         .create(true)
+        .truncate(true)
         .append(false)
         .open(&path)
 }
@@ -63,7 +64,7 @@ fn generate<P>(output: P, generator: Generator) -> std::io::Result<()>
 where
     P: AsRef<Path>,
 {
-    let mut file = open_rw_append(&output)?;
+    let mut file = open_rw_truncate(&output)?;
     write!(file, "{}", generator.to_token_stream())
 }
 
@@ -71,7 +72,7 @@ fn generate_tree<P>(output: P, generator: Generator) -> std::io::Result<()>
 where
     P: AsRef<Path>,
 {
-    let mut file = open_rw_append(&output)?;
+    let mut file = open_rw_truncate(&output)?;
 
     let child_names = generator
         .iter()
@@ -97,7 +98,7 @@ fn generate_tree_impl(path: &PathBuf, def: ClientModDef) -> std::io::Result<()> 
 
     let my_file = my_dir.with_extension("rs");
     println!("Writing new file {:?}", my_file);
-    let mut my_file = open_rw_append(my_file)?;
+    let mut my_file = open_rw_truncate(my_file)?;
 
     let child_names = def
         .children
