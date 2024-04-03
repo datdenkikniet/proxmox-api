@@ -1,5 +1,7 @@
 use clap::{Parser, Subcommand};
-use proxmox_api::{Client, Error};
+use proxmox_api::Client;
+
+use access::AccessClient;
 
 #[derive(Debug, Parser)]
 pub struct Cli {
@@ -34,4 +36,8 @@ fn main() {
     let client = Client::new(&cli.host, user, realm, &cli.password).unwrap();
 
     let client = std::sync::Arc::new(client);
+
+    let access_client = AccessClient::new(client.clone());
+
+    println!("{:?}", access_client.get());
 }

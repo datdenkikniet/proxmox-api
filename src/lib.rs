@@ -1,9 +1,7 @@
-mod path;
-use std::collections::HashMap;
-
-pub use path::{Path, PathElement};
-
 mod api2;
+
+mod path;
+pub use path::{Path, PathElement};
 
 mod client;
 pub use client::{Client, Error};
@@ -13,3 +11,6 @@ pub use serde::*;
 
 mod vmid;
 pub use vmid::VmId;
+
+mod generated;
+pub use generated::*;
