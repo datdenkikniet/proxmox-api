@@ -25,11 +25,15 @@ pub(crate) use type_def::{PrimitiveTypeDef, TypeDef};
 pub use self::mod_def::ClientModDef;
 
 pub(self) fn proxmox_api(path: TokenStream) -> TokenStream {
-    quote! { ::proxmox_api::#path }
+    quote! { crate::#path }
 }
 
 pub(self) fn proxmox_api_str(path: String) -> Literal {
-    Literal::string(&format!("::proxmox_api::{path}"))
+    Literal::string(&format!("crate::{path}"))
+}
+
+pub fn clean_doc(input: &str) -> String {
+    input.replace('<', "\\<").replace('>', "\\>")
 }
 
 pub struct Generator {
@@ -140,6 +144,7 @@ impl Generator {
             };
 
             let doc = if let Some(doc) = &info.description {
+                let doc = clean_doc(&doc);
                 let doc = Literal::string(&doc);
                 Some(quote! { #[doc = #doc] })
             } else {
