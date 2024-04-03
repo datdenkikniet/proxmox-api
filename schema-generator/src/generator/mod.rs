@@ -69,108 +69,115 @@ impl Generator {
 
         let mut enums = BTreeMap::new();
 
-        let methods: Vec<_> = node.value.info.values().filter_map(|info| {
-            let method: String = info.method.chars().take(1).chain(info.method.chars().skip(1).map(|c| c.to_ascii_lowercase())).collect();
+        let methods: Vec<_> = node
+            .value
+            .info
+            .values()
+            .filter_map(|info| {
+                let method: String = info
+                    .method
+                    .chars()
+                    .take(1)
+                    .chain(info.method.chars().skip(1).map(|c| c.to_ascii_lowercase()))
+                    .collect();
 
-            let mut parameters = info
-                .parameters
-                .as_ref()
-                .map(|v| {
-                    let mut type_def = v.type_def(&method, &node.value.path);
+                let mut parameters = info
+                    .parameters
+                    .as_ref()
+                    .map(|v| {
+                        let mut type_def = v.type_def(&method, &node.value.path);
 
-                    if let Some(def) = type_def.as_mut() {
-                        def.hoist_enum_defs(&mut enums);
-                    }
+                        if let Some(def) = type_def.as_mut() {
+                            def.hoist_enum_defs(&mut enums);
+                        }
 
-                    type_def
-                })
-                .flatten();
+                        type_def
+                    })
+                    .flatten();
 
-            let fn_name_str = method.to_ascii_lowercase();
-            let fn_name = Ident::new(&fn_name_str, quote!().span());
+                let fn_name_str = method.to_ascii_lowercase();
+                let fn_name = Ident::new(&fn_name_str, quote!().span());
 
-            if let Some(parameters) = &mut parameters {
-                parameters.hoist_enum_defs(&mut enums);
-            }
+                if let Some(parameters) = &mut parameters {
+                    parameters.hoist_enum_defs(&mut enums);
+                }
 
-            let (signature, defer_signature, params_def) =
-                if let Some(TypeDef::Struct (strt)) = &parameters {
-                    let name = Ident::new(strt.name(), quote! {}.span());
-                    (
-                        quote!(&self, params: #name),
-                        quote!(&path, &params),
-                        Some(quote! { #parameters }),
-                    )
+                let (signature, defer_signature, params_def) =
+                    if let Some(TypeDef::Struct(strt)) = &parameters {
+                        let name = Ident::new(strt.name(), quote! {}.span());
+                        (
+                            quote!(&self, params: #name),
+                            quote!(&path, &params),
+                            Some(quote! { #parameters }),
+                        )
+                    } else {
+                        (quote!(&self), quote!(&path, &()), None)
+                    };
+
+                let (returns, returns_definition, call) = if let Some(ret) = info.returns.as_ref() {
+                    let mut def = ret.type_def("", &format!("{method}Output"));
+
+                    def.hoist_enum_defs(&mut enums);
+
+                    let name = def.as_field_ty(ret.optional.get());
+                    let error = proxmox_api(quote!(Error));
+
+                    let call = match def.primitive() {
+                        Some(PrimitiveTypeDef::Integer) => {
+                            let int = proxmox_api(quote!(Integer));
+                            quote!(Ok(self.client.#fn_name::<_, _, #int>(#defer_signature)?.get()))
+                        }
+                        Some(PrimitiveTypeDef::Number) => {
+                            let num_ty = proxmox_api(quote!(Number));
+                            quote!(Ok(self.client.#fn_name::<_, _, #num_ty>(#defer_signature)?.get()))
+                        }
+                        Some(PrimitiveTypeDef::Boolean) => {
+                            let bool_ty = proxmox_api(quote!(Bool));
+                            quote!(Ok(self.client.#fn_name::<_, _, #bool_ty>(#defer_signature)?.get()))
+                        }
+                        Some(PrimitiveTypeDef::String) | None => {
+                            quote!(self.client.#fn_name(#defer_signature))
+                        }
+                    };
+
+                    (quote! { -> Result<#name, #error> }, Some(def), call)
                 } else {
-                    (quote!(&self), quote!(&path, &()), None)
+                    (
+                        quote!(),
+                        None,
+                        quote!(self.client.#fn_name(#defer_signature)),
+                    )
                 };
 
-            let (returns, returns_definition, call) = if let Some(ret) = info.returns.as_ref() {
-                let mut def = ret.type_def("", &format!("{method}Output"));
+                let doc = if let Some(doc) = &info.description {
+                    let doc = clean_doc(&doc);
+                    let doc = Literal::string(&doc);
+                    Some(quote! { #[doc = #doc] })
+                } else {
+                    None
+                };
 
-                def.hoist_enum_defs(&mut enums);
-
-                let returns_def = quote! { #def };
-
-                let name = def.as_field_ty(ret.optional.get());
-                let error = proxmox_api(quote!(Error));
-
-                let call = match def.primitive() {
-                    Some(PrimitiveTypeDef::Integer) => {
-                        let int = proxmox_api(quote!(Integer));
-                        quote!(Ok(self.client.#fn_name::<_, _, #int>(#defer_signature)?.get()))
-                    }
-                    Some(PrimitiveTypeDef::Number) => {
-                        let number = proxmox_api(quote!(Number));
-                        quote!(Ok(self.client.#fn_name::<_, _, #number>(#defer_signature)?.get()))
-                    }
-                    Some(PrimitiveTypeDef::Boolean) => {
-                        let bool = proxmox_api(quote!(Bool));
-                        quote!(Ok(self.client.#fn_name::<_, _, #bool>(#defer_signature)?.get()))
-                    }
-                    Some(PrimitiveTypeDef::String) | None => {
-                        quote!(self.client.#fn_name(#defer_signature))
+                let fn_definition = quote! {
+                    #doc
+                    pub fn #fn_name(#signature) #returns {
+                        let path = self.path.to_string();
+                        #call
                     }
                 };
 
-                (quote! { -> Result<#name, #error> }, Some(returns_def), call)
-            } else {
-                (
-                    quote!(),
-                    None,
-                    quote!(self.client.#fn_name(#defer_signature)),
-                )
-            };
+                let block = quote! {
+                    #params_def
 
-            let doc = if let Some(doc) = &info.description {
-                let doc = clean_doc(&doc);
-                let doc = Literal::string(&doc);
-                Some(quote! { #[doc = #doc] })
-            } else {
-                None
-            };
+                    #returns_definition
 
+                    impl #client_name {
+                        #fn_definition
+                    }
+                };
 
-            let fn_definition = quote! {
-                #doc
-                pub fn #fn_name(#signature) #returns {
-                    let path = self.path.to_string();
-                    #call
-                }
-            };
-
-            let block = quote! {
-                #params_def
-
-                #returns_definition
-
-                impl #client_name {
-                    #fn_definition
-                }
-            };
-
-            Some(block)
-        }).collect();
+                Some(block)
+            })
+            .collect();
 
         let mut child_defs = Vec::new();
         let child_constructors = node.children.iter().map(|(segment, child)| {
