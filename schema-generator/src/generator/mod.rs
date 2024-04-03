@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use proc_macro2::{Literal, TokenStream};
-use quote::{quote, ToTokens};
+use quote::quote;
 use syn::{spanned::Spanned, Ident};
 
 use crate::{
@@ -10,6 +10,7 @@ use crate::{
 };
 
 mod enum_def;
+mod mod_def;
 pub(crate) use enum_def::EnumDef;
 
 mod field_def;
@@ -20,6 +21,8 @@ pub(crate) use struct_def::{AdditionalProperties, StructDef};
 
 mod type_def;
 pub(crate) use type_def::{PrimitiveTypeDef, TypeDef};
+
+pub use self::mod_def::ClientModDef;
 
 pub(self) fn proxmox_api(path: TokenStream) -> TokenStream {
     quote! { ::proxmox_api::#path }
@@ -38,35 +41,22 @@ impl<'a> Generator<'a> {
         Self { collection }
     }
 
-    pub fn generate(&self, stream: &mut TokenStream) {
-        for node in self.collection.iter() {
-            let (_, client_code) = Self::generate_client(None, node);
-
-            let mod_name = node
-                .value
-                .path
-                .iter()
-                .next()
-                .unwrap()
-                .as_string_without_braces();
-            let mod_ident = Ident::new(mod_name, quote!().span());
-
-            stream.extend(quote! { pub mod #mod_ident { #client_code } });
-        }
+    pub fn generate(&self) -> Vec<ClientModDef> {
+        self.collection
+            .iter()
+            .map(|n| Self::generate_client(None, n))
+            .collect()
     }
 
-    fn generate_client(parent: Option<&Node>, node: &Node) -> (String, TokenStream) {
+    fn generate_client(parent: Option<&Node>, node: &Node) -> ClientModDef {
         let path = node.value.path.iter().last().unwrap();
         Self::generate_client_impl(parent.is_some(), node, path)
     }
 
-    fn generate_client_impl(
-        has_parent: bool,
-        node: &Node,
-        segment: &PathElement,
-    ) -> (String, TokenStream) {
-        let segment_name = segment.as_string_without_braces();
-        let mut client_name = crate::name_to_ident(segment_name);
+    fn generate_client_impl(has_parent: bool, node: &Node, segment: &PathElement) -> ClientModDef {
+        let segment_no_braces = segment.as_string_without_braces();
+        let segment_name = crate::name_to_underscore_name(&segment_no_braces);
+        let mut client_name = crate::name_to_ident(&segment_name);
         client_name.push_str("Client");
 
         let client_name = Ident::new(&client_name, quote!().span());
@@ -176,7 +166,8 @@ impl<'a> Generator<'a> {
             Some(block)
         }).collect();
 
-        let children = node.children.iter().map(|(segment, child)| {
+        let mut child_defs = Vec::new();
+        let child_constructors = node.children.iter().map(|(segment, child)| {
             assert_eq!(
                 node.value.path.iter().count() + 1,
                 child.value.path.iter().count(),
@@ -187,8 +178,9 @@ impl<'a> Generator<'a> {
                 crate::name_to_underscore_name(segment.as_string_without_braces());
             let mod_name = Ident::new(&segment_no_braces, quote!().span());
 
-            let (child_name, child_data) = Self::generate_client(Some(node), child);
-            let child_name = Ident::new(&child_name, quote!().span());
+            let child_def = Self::generate_client(Some(node), child);
+
+            let child_name = Ident::new(&child_def.client_name, quote!().span());
             let defer = quote! { #mod_name::#child_name };
             let child_fn_name = Ident::new(&segment_no_braces, quote!().span());
 
@@ -206,11 +198,9 @@ impl<'a> Generator<'a> {
                 }
             };
 
-            quote! {
-                pub mod #mod_name {
-                    #child_data
-                }
+            child_defs.push(child_def);
 
+            quote! {
                 impl #client_name {
                     pub fn #new_sig {
                         #child_call
@@ -243,10 +233,15 @@ impl<'a> Generator<'a> {
 
             #(#methods)*
 
-            #(#children)*
+            #(#child_constructors)*
         };
 
-        (client_name.to_string(), definition)
+        ClientModDef {
+            client_name: client_name.to_string(),
+            name: segment_name.to_string(),
+            client_tokens: definition,
+            children: child_defs,
+        }
     }
 
     fn make_placeholder_constructor(has_parent: bool, placeholder: &str) -> TokenStream {
@@ -297,11 +292,5 @@ impl<'a> Generator<'a> {
                 }
             }
         }
-    }
-}
-
-impl ToTokens for Generator<'_> {
-    fn to_tokens(&self, tokens: &mut TokenStream) {
-        self.generate(tokens);
     }
 }
