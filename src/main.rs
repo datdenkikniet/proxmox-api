@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
 use proxmox_api::Client;
 
-use access::AccessClient;
+use proxmox_api::access::AccessClient;
 
 #[derive(Debug, Parser)]
 pub struct Cli {
