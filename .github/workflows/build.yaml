@@ -14,7 +14,7 @@ jobs:
         run: ./ci/dump-schema.pl > PVE-schema.json
 
       - name: Show line count
-        run: wc -l dumped.json
+        run: wc -l PVE-schema.json
 
       - name: Upload the generated JSON
         uses: actions/upload-artifact@v4
