@@ -105,13 +105,21 @@ impl ToTokens for FieldDef {
             None
         };
 
-        let default_skip = if self.optional {
-            Some(quote!(#[serde(skip_serializing_if = "Option::is_none", default)]))
+        let (optional, skip_default) = if ty.is_array() {
+            (
+                false,
+                Some(quote!(#[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)])),
+            )
+        } else if *optional {
+            (
+                true,
+                Some(quote!(#[serde(skip_serializing_if = "Option::is_none", default)])),
+            )
         } else {
-            None
+            (false, None)
         };
 
-        let ty = ty.as_field_ty(*optional);
+        let ty = ty.as_field_ty(optional);
 
         let doc = doc.iter().map(|v| {
             let v = super::clean_doc(&v);
@@ -124,7 +132,7 @@ impl ToTokens for FieldDef {
         tokens.extend(quote! {
             #rename
             #serialize
-            #default_skip
+            #skip_default
             #(#doc)*
             pub #name: #ty,
         })

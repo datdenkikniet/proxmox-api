@@ -58,6 +58,10 @@ impl TypeDef {
         matches!(self, TypeDef::Unit)
     }
 
+    pub fn is_array(&self) -> bool {
+        matches!(self, TypeDef::Array { .. })
+    }
+
     pub fn hoist_enum_defs(&mut self, output: &mut BTreeMap<String, EnumDef>) {
         match self {
             TypeDef::Unit => {}
@@ -140,7 +144,7 @@ impl TypeDef {
             TypeDef::KnownType { format, fallback } => Self::known_type(format, fallback),
             TypeDef::Primitive(name) => name.to_token_stream(),
             TypeDef::Array { inner } => {
-                let inner = inner.as_field_ty(optional);
+                let inner = inner.as_field_ty(false);
                 quote!(Vec<#inner>)
             }
             TypeDef::Enum(EnumDef { name, .. }) => {
