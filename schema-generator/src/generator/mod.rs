@@ -70,14 +70,13 @@ impl Generator {
         let mut enums = BTreeMap::new();
 
         let methods: Vec<_> = node.value.info.values().filter_map(|info| {
-            let method = &info.method;
+            let method: String = info.method.chars().take(1).chain(info.method.chars().skip(1).map(|c| c.to_ascii_lowercase())).collect();
 
             let mut parameters = info
                 .parameters
                 .as_ref()
                 .map(|v| {
-                    let prefix = crate::name_to_ident(&method);
-                    let mut type_def = v.type_def(&prefix, &node.value.path);
+                    let mut type_def = v.type_def(&method, &node.value.path);
 
                     if let Some(def) = type_def.as_mut() {
                         def.hoist_enum_defs(&mut enums);
