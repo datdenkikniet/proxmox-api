@@ -62,6 +62,12 @@ pub(crate) fn name_to_ident(name: &str) -> String {
         }
     }
 
+    if let Some(v) = new_name.chars().next() {
+        if v.is_numeric() {
+            new_name = format!("_{new_name}");
+        }
+    }
+
     let mut prev_was_dash = false;
     for char in chars {
         if char == '}' || char == ']' {
@@ -70,7 +76,6 @@ pub(crate) fn name_to_ident(name: &str) -> String {
             prev_was_dash = true;
         } else if char == '+' || char == '.' {
             prev_was_dash = true;
-            new_name.push('_')
         } else {
             if prev_was_dash {
                 new_name.push(char.to_ascii_uppercase());
