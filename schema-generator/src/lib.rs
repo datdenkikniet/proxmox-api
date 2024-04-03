@@ -4,7 +4,7 @@ mod path;
 pub use path::{Path, PathElement};
 
 mod generator;
-pub use generator::Generator;
+pub use generator::{ClientModDef, Generator};
 
 const RENAME_MAP: &'static [(&'static str, &'static str)] = &[
     ("type", "ty"),
