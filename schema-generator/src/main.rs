@@ -1,6 +1,7 @@
 use std::path::Path;
 use std::{io::Write, path::PathBuf};
 
+use proc_macro2::Literal;
 use schema_generator::{
     raw::{flattened::Collection, TreeNode},
     ClientModDef, Generator,
@@ -78,7 +79,14 @@ where
         .iter()
         .map(|c| Ident::new(&c.name, quote!().span()));
 
-    let child_mods = quote! { #(mod #child_names;)* };
+    let child_name_literal = generator.iter().map(|c| Literal::string(&c.name));
+
+    let child_mods = quote! {
+        #(
+            #[cfg(feature = #child_name_literal)]
+            pub mod #child_names;
+        )*
+    };
     write!(file, "{child_mods}")?;
 
     let mut buf = output.as_ref().to_path_buf();
@@ -105,7 +113,7 @@ fn generate_tree_impl(path: &PathBuf, def: ClientModDef) -> std::io::Result<()> 
         .iter()
         .map(|c| Ident::new(&c.name, quote!().span()));
 
-    let child_mods = quote! {#(mod #child_names;)* };
+    let child_mods = quote! {#(pub mod #child_names;)* };
     let body = &def.client_tokens;
 
     write!(my_file, "{child_mods}{body}")?;
