@@ -48,7 +48,7 @@ impl<'a> Collection<'a> {
         self.values.get(idx)
     }
 
-    pub fn from_nodes<'b>(nodes: &'b [TreeNode<'a>]) -> Result<Self, ()> {
+    pub fn from_nodes<'b>(nodes: &'b [TreeNode<'a>]) -> Self {
         let mut values = Vec::new();
         for node in nodes {
             let element = Node::nth_element(&node.value.path, 0);
@@ -57,7 +57,7 @@ impl<'a> Collection<'a> {
             values.push((element, node));
         }
 
-        Ok(Self { values })
+        Self { values }
     }
 
     pub fn iter(&self) -> impl Iterator<Item = &'_ Node> {

@@ -1,4 +1,4 @@
-use schema_generator::{
+use generator::{
     raw::{flattened::Collection, TreeNode},
     Generator,
 };
@@ -34,7 +34,7 @@ fn main() -> std::io::Result<()> {
 
     let tree: Vec<TreeNode> = serde_json::from_str(&str).unwrap();
 
-    let collection = Collection::from_nodes(&tree).unwrap();
+    let collection = Collection::from_nodes(&tree);
     let generator = Generator::new(&collection);
 
     match cli {
