@@ -6,9 +6,18 @@ jobs:
     container: debian:bookworm
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up proxmox bookworm
         run: ./ci/setup.sh
+
       - name: Generate JSON schema
-        run: ./ci/dump-schema.pl > dumped.json
+        run: ./ci/dump-schema.pl > PVE-schema.json
+
       - name: Show line count
         run: wc -l dumped.json
+
+      - name: Upload the generated JSON
+        uses: actions/upload-artifact@v4
+        with:
+          name: PVE-schema.json
+          path: ./PVE-schema.json
