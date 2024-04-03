@@ -10,14 +10,17 @@ use crate::{
 };
 
 mod enum_def;
-mod mod_def;
 pub(crate) use enum_def::EnumDef;
 
 mod field_def;
 pub(crate) use field_def::FieldDef;
 
+mod file;
+
 mod struct_def;
 pub(crate) use struct_def::{AdditionalProperties, StructDef};
+
+mod mod_def;
 
 mod type_def;
 pub(crate) use type_def::{PrimitiveTypeDef, TypeDef};

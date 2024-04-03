@@ -38,6 +38,5 @@ fn main() {
     let client = std::sync::Arc::new(client);
 
     let access_client = AccessClient::new(client.clone());
-
-    println!("{:?}", access_client.get());
+    println!("{:#?}", access_client.users().get(Default::default()));
 }
