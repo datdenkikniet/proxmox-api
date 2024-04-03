@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::{borrow::Cow, collections::HashMap};
+use std::{borrow::Cow, collections::BTreeMap};
 
 pub mod flattened;
 
@@ -40,7 +40,7 @@ pub struct Value<'a> {
     #[serde(borrow)]
     pub text: Cow<'a, str>,
     #[serde(borrow, default)]
-    pub info: HashMap<Cow<'a, str>, Info<'a>>,
+    pub info: BTreeMap<Cow<'a, str>, Info<'a>>,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, Default)]

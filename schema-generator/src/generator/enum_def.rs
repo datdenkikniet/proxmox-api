@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::BTreeSet;
 
 use proc_macro2::{Literal, TokenStream};
 
@@ -9,7 +9,7 @@ use syn::{spanned::Spanned, Ident};
 pub struct EnumDef {
     pub name: String,
     pub derives: Vec<String>,
-    pub values: HashSet<String>,
+    pub values: BTreeSet<String>,
     pub default: Option<String>,
 }
 
@@ -17,7 +17,7 @@ impl EnumDef {
     pub fn new<I: AsRef<str>, T: IntoIterator<Item = I>>(
         name: String,
         extra_derives: T,
-        values: HashSet<String>,
+        values: BTreeSet<String>,
         default: Option<String>,
     ) -> Self {
         if let Some(default) = default.as_ref() {

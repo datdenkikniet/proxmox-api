@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, BTreeSet};
 
 use proc_macro2::TokenStream;
 use quote::{quote, ToTokens};
@@ -58,7 +58,7 @@ impl TypeDef {
         matches!(self, TypeDef::Unit)
     }
 
-    pub fn hoist_enum_defs(&mut self, output: &mut HashMap<String, EnumDef>) {
+    pub fn hoist_enum_defs(&mut self, output: &mut BTreeMap<String, EnumDef>) {
         match self {
             TypeDef::Unit => {}
             TypeDef::KnownType { .. } => {}
@@ -110,7 +110,7 @@ impl TypeDef {
     pub fn new_enum<I: AsRef<str>, T: IntoIterator<Item = I>>(
         name: String,
         extra_derives: T,
-        values: HashSet<String>,
+        values: BTreeSet<String>,
         default: Option<String>,
     ) -> Self {
         Self::Enum(EnumDef::new(name, extra_derives, values, default))

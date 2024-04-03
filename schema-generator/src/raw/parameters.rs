@@ -1,4 +1,4 @@
-use std::{borrow::Cow, collections::HashMap};
+use std::{borrow::Cow, collections::BTreeMap};
 
 use serde::Deserialize;
 
@@ -12,7 +12,7 @@ use super::{ty::IntOrTy, Type};
 #[derive(Debug, Clone, Deserialize)]
 pub struct Parameters<'a> {
     #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
-    pub properties: Option<HashMap<Cow<'a, str>, Type<'a>>>,
+    pub properties: Option<BTreeMap<Cow<'a, str>, Type<'a>>>,
     #[serde(default, skip_serializing_if = "IntOrTy::is_unset")]
     pub additional_properties: IntOrTy<'a>,
 }

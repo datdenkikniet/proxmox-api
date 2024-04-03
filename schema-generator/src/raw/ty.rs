@@ -1,4 +1,4 @@
-use std::{borrow::Cow, collections::HashMap};
+use std::{borrow::Cow, collections::BTreeMap};
 
 use serde::{Deserialize, Serialize};
 
@@ -236,7 +236,7 @@ pub enum TypeKind<'a> {
     },
     Object {
         #[serde(borrow, default, skip_serializing_if = "Option::is_none")]
-        properties: Option<HashMap<Cow<'a, str>, Type<'a>>>,
+        properties: Option<BTreeMap<Cow<'a, str>, Type<'a>>>,
         #[serde(
             default,
             skip_serializing_if = "IntOrTy::is_unset",

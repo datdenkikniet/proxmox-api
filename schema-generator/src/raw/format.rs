@@ -1,4 +1,4 @@
-use std::{borrow::Cow, collections::HashMap};
+use std::{borrow::Cow, collections::BTreeMap};
 
 use serde::{Deserialize, Serialize};
 
@@ -9,7 +9,7 @@ use super::Type;
 pub enum Format<'a> {
     Kind(KnownFormat),
     #[serde(borrow)]
-    Properties(HashMap<Cow<'a, str>, Type<'a>>),
+    Properties(BTreeMap<Cow<'a, str>, Type<'a>>),
 }
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]

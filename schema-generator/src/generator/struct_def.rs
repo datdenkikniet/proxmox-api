@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 use proc_macro2::TokenStream;
 use quote::ToTokens;
@@ -56,7 +56,7 @@ impl StructDef {
         &self.external_defs
     }
 
-    pub fn hoist_enum_defs(&mut self, output: &mut HashMap<String, EnumDef>) {
+    pub fn hoist_enum_defs(&mut self, output: &mut BTreeMap<String, EnumDef>) {
         self.external_defs
             .iter_mut()
             .for_each(|v| v.hoist_enum_defs(output));
