@@ -1,12 +1,16 @@
-name: Generating JSON definitions for Proxmox
+name: Validate that generated methods
 run-name: Generating JSON definitions for Proxmox
 on: [push]
 jobs:
   create:
     runs-on: ubuntu-latest
-    container: debian:bookworm
+    # container: debian:bookworm
+    name: "Generate JSON definitions"
     steps:
       - uses: actions/checkout@v4
+
+      - name: Start container?
+        run: docker run debian:bookworm true
 
       - name: Set up proxmox bookworm
         run: ./ci/setup.sh
