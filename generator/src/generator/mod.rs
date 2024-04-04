@@ -206,9 +206,15 @@ impl Generator {
                     quote! { #defer::new(self.client.clone(), &self.path) },
                 ),
                 PathElement::Placeholder(p) => {
+                    let next_val_ty = if p == "vmid" {
+                        proxmox_api(quote!(VmId))
+                    } else {
+                        quote!(&str)
+                    };
+
                     let next_val_ident = Ident::new(p, quote!().span());
                     (
-                        quote! { #child_fn_name(&self, #next_val_ident: &str) -> #defer },
+                        quote! { #child_fn_name(&self, #next_val_ident: #next_val_ty) -> #defer },
                         quote! { #defer::new(self.client.clone(), &self.path, #next_val_ident)},
                     )
                 }
@@ -264,9 +270,15 @@ impl Generator {
         let placeholder_ident = Ident::new(placeholder, quote!().span());
         let client = proxmox_api(quote!(Client));
 
+        let placeholder_ty = if placeholder == "vmid" {
+            proxmox_api(quote!(VmId))
+        } else {
+            quote!(&str)
+        };
+
         if has_parent {
             quote! {
-                pub fn new(client: ::std::sync::Arc<#client>, parent_path: &str, #placeholder_ident: &str) -> Self {
+                pub fn new(client: ::std::sync::Arc<#client>, parent_path: &str, #placeholder_ident: #placeholder_ty) -> Self {
                     Self {
                         client,
                         path: format!("{}/{}", parent_path, #placeholder_ident)
@@ -275,7 +287,7 @@ impl Generator {
             }
         } else {
             quote! {
-                pub fn new(client: ::std::sync::Arc<#client>, #placeholder_ident: &str) -> Self {
+                pub fn new(client: ::std::sync::Arc<#client>, #placeholder_ident: #placeholder_ty) -> Self {
                     Self {
                         client,
                         path: #placeholder_ident.to_string()
