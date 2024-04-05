@@ -8,8 +8,9 @@ Features:
 
 ## What's missing?
 
-* Pattern validation
-* Range validation for values
+- [ ] Pattern validation
+- [ ] Range validation for values
+- [ ] Rust-types for well known types
 
 ## License
 
