@@ -123,27 +123,26 @@ impl Generator {
                     def.hoist_enum_defs(&mut enums);
 
                     let name = def.as_field_ty(ret.optional.get());
-                    let error = proxmox_api(quote!(Error));
 
                     let call = match def.primitive() {
                         Some(PrimitiveTypeDef::Integer) => {
                             let int = proxmox_api(quote!(Integer));
-                            quote!(Ok(self.client.#fn_name::<_, _, #int>(#defer_signature)?.get()))
+                            quote!(Ok(self.client.#fn_name::<_, #int>(#defer_signature)?.get()))
                         }
                         Some(PrimitiveTypeDef::Number) => {
                             let num_ty = proxmox_api(quote!(Number));
-                            quote!(Ok(self.client.#fn_name::<_, _, #num_ty>(#defer_signature)?.get()))
+                            quote!(Ok(self.client.#fn_name::<_, #num_ty>(#defer_signature)?.get()))
                         }
                         Some(PrimitiveTypeDef::Boolean) => {
                             let bool_ty = proxmox_api(quote!(Bool));
-                            quote!(Ok(self.client.#fn_name::<_, _, #bool_ty>(#defer_signature)?.get()))
+                            quote!(Ok(self.client.#fn_name::<_, #bool_ty>(#defer_signature)?.get()))
                         }
                         Some(PrimitiveTypeDef::String) | None => {
                             quote!(self.client.#fn_name(#defer_signature))
                         }
                     };
 
-                    (quote! { -> Result<#name, #error> }, Some(def), call)
+                    (quote! { -> Result<#name, T::Error> }, Some(def), call)
                 } else {
                     (
                         quote!(),
@@ -168,12 +167,14 @@ impl Generator {
                     }
                 };
 
+                let client = proxmox_api(quote!(Client));
+
                 let block = quote! {
                     #params_def
 
                     #returns_definition
 
-                    impl #client_name {
+                    impl<T> #client_name<T> where T: #client {
                         #fn_definition
                     }
                 };
@@ -197,7 +198,7 @@ impl Generator {
             let child_def = Self::generate_client(Some(node), child);
 
             let child_name = Ident::new(&child_def.client_name, quote!().span());
-            let defer = quote! { #mod_name::#child_name };
+            let defer = quote! { #mod_name::#child_name::<T> };
             let child_fn_name = Ident::new(&segment_no_braces, quote!().span());
 
             let (new_sig, child_call) = match segment {
@@ -222,8 +223,9 @@ impl Generator {
 
             child_defs.push(child_def);
 
+            let client = proxmox_api(quote!(Client));
             quote! {
-                impl #client_name {
+                impl<T> #client_name<T> where T: #client {
                     pub fn #new_sig {
                         #child_call
                     }
@@ -242,12 +244,12 @@ impl Generator {
         let enums = enums.values();
 
         let definition = quote! {
-            pub struct #client_name {
-                client: ::std::sync::Arc<#client>,
+            pub struct #client_name<T> {
+                client: T,
                 path: String,
             }
 
-            impl #client_name {
+            impl<T> #client_name<T> where T: #client {
                 #new
             }
 
@@ -268,7 +270,6 @@ impl Generator {
 
     fn make_placeholder_constructor(has_parent: bool, placeholder: &str) -> TokenStream {
         let placeholder_ident = Ident::new(placeholder, quote!().span());
-        let client = proxmox_api(quote!(Client));
 
         let placeholder_ty = if placeholder == "vmid" {
             proxmox_api(quote!(VmId))
@@ -278,7 +279,7 @@ impl Generator {
 
         if has_parent {
             quote! {
-                pub fn new(client: ::std::sync::Arc<#client>, parent_path: &str, #placeholder_ident: #placeholder_ty) -> Self {
+                pub fn new(client: T, parent_path: &str, #placeholder_ident: #placeholder_ty) -> Self {
                     Self {
                         client,
                         path: format!("{}/{}", parent_path, #placeholder_ident)
@@ -287,7 +288,7 @@ impl Generator {
             }
         } else {
             quote! {
-                pub fn new(client: ::std::sync::Arc<#client>, #placeholder_ident: #placeholder_ty) -> Self {
+                pub fn new(client: T, #placeholder_ident: #placeholder_ty) -> Self {
                     Self {
                         client,
                         path: #placeholder_ident.to_string()
@@ -299,11 +300,10 @@ impl Generator {
 
     fn make_literal_constructor(has_parent: bool, literal: &str) -> TokenStream {
         let literal = Literal::string(&format!("/{literal}"));
-        let client = proxmox_api(quote!(Client));
 
         if has_parent {
             quote! {
-                pub fn new(client: ::std::sync::Arc<#client>, parent_path: &str) -> Self {
+                pub fn new(client: T, parent_path: &str) -> Self {
                     Self {
                         client,
                         path: format!("{}{}", parent_path, #literal)
@@ -312,7 +312,7 @@ impl Generator {
             }
         } else {
             quote! {
-                pub fn new(client: ::std::sync::Arc<#client>) -> Self {
+                pub fn new(client: T) -> Self {
                     Self {
                         client,
                         path: #literal.to_string()
