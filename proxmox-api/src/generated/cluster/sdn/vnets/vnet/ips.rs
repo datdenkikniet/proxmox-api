@@ -1,0 +1,130 @@
+pub struct IpsClient<T> {
+    client: T,
+    path: String,
+}
+impl<T> IpsClient<T>
+where
+    T: crate::client::Client,
+{
+    pub fn new(client: T, parent_path: &str) -> Self {
+        Self {
+            client,
+            path: format!("{}{}", parent_path, "/ips"),
+        }
+    }
+}
+impl DeleteParams {
+    pub fn new(ip: String, zone: String) -> Self {
+        Self {
+            ip,
+            zone,
+            mac: Default::default(),
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct DeleteParams {
+    #[doc = "The IP address to delete"]
+    pub ip: String,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Unicast MAC address."]
+    #[doc = "A common MAC address with the I/G (Individual/Group) bit not set."]
+    pub mac: Option<String>,
+    #[doc = "The SDN zone object identifier."]
+    pub zone: String,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+impl<T> IpsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Delete IP Mappings in a VNet"]
+    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.delete(&path, &params)
+    }
+}
+impl PostParams {
+    pub fn new(ip: String, zone: String) -> Self {
+        Self {
+            ip,
+            zone,
+            mac: Default::default(),
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct PostParams {
+    #[doc = "The IP address to associate with the given MAC address"]
+    pub ip: String,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Unicast MAC address."]
+    #[doc = "A common MAC address with the I/G (Individual/Group) bit not set."]
+    pub mac: Option<String>,
+    #[doc = "The SDN zone object identifier."]
+    pub zone: String,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+impl<T> IpsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create IP Mapping in a VNet"]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+impl PutParams {
+    pub fn new(ip: String, zone: String) -> Self {
+        Self {
+            ip,
+            zone,
+            mac: Default::default(),
+            vmid: Default::default(),
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct PutParams {
+    #[doc = "The IP address to associate with the given MAC address"]
+    pub ip: String,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Unicast MAC address."]
+    #[doc = "A common MAC address with the I/G (Individual/Group) bit not set."]
+    pub mac: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The (unique) ID of the VM."]
+    pub vmid: Option<crate::VmId>,
+    #[doc = "The SDN zone object identifier."]
+    pub zone: String,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+impl<T> IpsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update IP Mapping in a VNet"]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
