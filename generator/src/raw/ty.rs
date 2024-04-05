@@ -1,4 +1,7 @@
-use std::{borrow::Cow, collections::BTreeMap};
+use std::{
+    borrow::Cow,
+    collections::{BTreeMap, BTreeSet},
+};
 
 use serde::{Deserialize, Serialize};
 
@@ -75,14 +78,22 @@ impl Type<'_> {
                             None
                         };
 
-                        let enum_values = enum_values
+                        let enum_values: BTreeSet<_> = enum_values
                             .iter()
                             .map(Cow::to_string)
                             .chain(default.clone())
                             .collect();
                         let no_derives = Option::<&str>::None;
 
-                        let name = crate::name_to_ident(field_name);
+                        // TODO: Fix this ugly hack...
+                        // Would be nice to find a better workaround that doesn't require one-offs
+                        // and also doesn't require global state...
+                        let name = if enum_values.contains("cdrom-image-ignored") {
+                            crate::name_to_ident("warning_type")
+                        } else {
+                            crate::name_to_ident(field_name)
+                        };
+
                         TypeDef::new_enum(name, no_derives, enum_values, default)
                     } else {
                         TypeDef::Primitive(PrimitiveTypeDef::String)
