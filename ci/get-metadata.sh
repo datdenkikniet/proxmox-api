@@ -1,6 +1,6 @@
 #!/bin/bash
 
-metadata=$(cargo --offline metadata --format-version 1 --no-deps)
+metadata=$(cargo --offline metadata --format-version 1 --no-deps --manifest-path proxmox-api/Cargo.toml)
 
 if [ -z "$metadata" ]; then
     echo "Metadata was empty?" >&2
