@@ -1,12 +1,44 @@
 #![allow(warnings)]
 
-use std::time::{Duration, Instant};
+use std::{
+    sync::Arc,
+    time::{Duration, Instant},
+};
 
 use parking_lot::RwLock;
 use reqwest::{blocking::RequestBuilder, Method, StatusCode};
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
-use crate::api2::{Ticket, TicketResponse};
+// Hardcoded auth stuff so we don't have to activate all of `access`.
+
+#[derive(Debug, Serialize)]
+struct Ticket<'a> {
+    #[serde(rename = "username")]
+    user: &'a str,
+    realm: &'a str,
+    password: &'a str,
+}
+
+impl<'a> Ticket<'a> {
+    pub fn new(user: &'a str, realm: &'a str, password: &'a str) -> Self {
+        Self {
+            user,
+            realm,
+            password,
+        }
+    }
+}
+
+#[derive(Debug, Deserialize)]
+struct TicketResponse {
+    pub username: String,
+    #[serde(rename = "CSRFPreventionToken")]
+    pub csrf_token: Option<String>,
+    #[serde(rename = "clustername")]
+    pub cluster_name: Option<String>,
+    #[serde(rename = "ticket")]
+    pub auth_ticket: Option<String>,
+}
 
 #[derive(Debug)]
 pub enum Error {
@@ -32,23 +64,25 @@ struct AuthState {
     api_token: Option<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Client {
-    client: reqwest::blocking::Client,
+    client: Arc<reqwest::blocking::Client>,
     host: String,
 
     user: String,
     realm: String,
 
-    auth_state: RwLock<AuthState>,
+    auth_state: Arc<RwLock<AuthState>>,
 }
 
 impl Client {
-    fn client() -> reqwest::blocking::Client {
-        reqwest::blocking::ClientBuilder::new()
-            .danger_accept_invalid_certs(true)
-            .build()
-            .unwrap()
+    fn client() -> Arc<reqwest::blocking::Client> {
+        Arc::new(
+            reqwest::blocking::ClientBuilder::new()
+                .danger_accept_invalid_certs(true)
+                .build()
+                .unwrap(),
+        )
     }
 
     fn new_empty(host: &str, user: &str, realm: &str) -> Self {
@@ -57,12 +91,12 @@ impl Client {
             host: host.to_string(),
             user: user.into(),
             realm: realm.into(),
-            auth_state: RwLock::new(AuthState {
+            auth_state: Arc::new(RwLock::new(AuthState {
                 auth_ticket: None,
                 csrf_token: None,
                 auth_ticket_time: Instant::now(),
                 api_token: None,
-            }),
+            })),
         }
     }
 
@@ -124,7 +158,8 @@ impl Client {
         let realm = self.realm.to_string();
         let request = Ticket::new(&user, &realm, password);
 
-        let csrf_details: TicketResponse = self.post("/access/ticket", &request)?;
+        let csrf_details: TicketResponse =
+            crate::client::Client::post(self, "/access/ticket", &request)?;
 
         let mut auth_state = self.auth_state.write();
 
@@ -168,39 +203,31 @@ impl Client {
 
         Ok(())
     }
+}
 
-    fn request_with_body<P, B, R>(&self, method: Method, path: P, body: &B) -> Result<R, Error>
-    where
-        P: AsRef<str>,
-        B: Serialize,
-        R: DeserializeOwned,
-    {
-        self.request_with_body_and_query::<_, _, (), _>(method, path, Some(body), None)
-    }
+impl crate::client::Client for Client {
+    type Error = Error;
 
-    fn request_with_query<P, Q, R>(&self, method: Method, path: P, query: &Q) -> Result<R, Error>
-    where
-        P: AsRef<str>,
-        Q: Serialize,
-        R: DeserializeOwned,
-    {
-        self.request_with_body_and_query::<_, (), _, _>(method, path, None, Some(query))
-    }
-
-    fn request_with_body_and_query<P, B, Q, R>(
+    fn request_with_body_and_query<B, Q, R>(
         &self,
-        method: Method,
-        path: P,
+        method: crate::client::Method,
+        path: &str,
         body: Option<&B>,
         query: Option<&Q>,
     ) -> Result<R, Error>
     where
-        P: AsRef<str>,
         B: Serialize,
         Q: Serialize,
         R: DeserializeOwned,
     {
-        log::debug!("{} {}", method, path.as_ref());
+        let method = match method {
+            crate::client::Method::Post => Method::POST,
+            crate::client::Method::Get => Method::GET,
+            crate::client::Method::Put => Method::PUT,
+            crate::client::Method::Delete => Method::DELETE,
+        };
+
+        log::debug!("{} {}", method, path);
 
         let request = self.client.request(method, self.route(path.as_ref()));
 
@@ -234,42 +261,6 @@ impl Client {
         } else {
             Err(Error::UnknownFailure(response_status))
         }
-    }
-
-    pub fn put<P, B, R>(&self, path: P, body: &B) -> Result<R, Error>
-    where
-        P: AsRef<str>,
-        B: Serialize,
-        R: DeserializeOwned,
-    {
-        self.request_with_body(Method::PUT, path, body)
-    }
-
-    pub fn post<P, B, R>(&self, path: P, body: &B) -> Result<R, Error>
-    where
-        P: AsRef<str>,
-        B: Serialize,
-        R: DeserializeOwned,
-    {
-        self.request_with_body(Method::POST, path, body)
-    }
-
-    pub fn delete<P, B, R>(&self, path: P, body: &B) -> Result<R, Error>
-    where
-        P: AsRef<str>,
-        B: Serialize,
-        R: DeserializeOwned,
-    {
-        self.request_with_body(Method::DELETE, path, body)
-    }
-
-    pub fn get<P, Q, R>(&self, path: P, query: &Q) -> Result<R, Error>
-    where
-        Q: Serialize,
-        P: AsRef<str>,
-        R: DeserializeOwned,
-    {
-        self.request_with_query(Method::GET, path, query)
     }
 }
 

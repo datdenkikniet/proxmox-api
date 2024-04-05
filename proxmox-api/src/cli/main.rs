@@ -1,9 +1,5 @@
 use clap::{Parser, Subcommand};
-use proxmox_api::Client;
-
-use proxmox_api::{access::AccessClient, nodes::NodesClient};
-
-mod client;
+use proxmox_api::{access::AccessClient, ReqwestClient};
 
 #[derive(Debug, Parser)]
 pub struct Cli {
@@ -35,18 +31,10 @@ fn main() {
         .split_once('@')
         .expect("User must be provided as <user>@<realm>");
 
-    let client = Client::new(&cli.host, user, realm, &cli.password).unwrap();
+    let client = ReqwestClient::new(&cli.host, user, realm, &cli.password).unwrap();
 
-    let client = std::sync::Arc::new(client);
+    let client = client;
 
-    let access_client = AccessClient::new(client.clone());
+    let access_client = AccessClient::new(&client);
     println!("{:#?}", access_client.users().get(Default::default()));
-
-    let nodes_client = NodesClient::new(client.clone());
-    let lxc = nodes_client.node("proxmox").lxc();
-    let nodes = lxc.get().unwrap();
-
-    nodes.iter().for_each(|node| {
-        println!("{:?}", lxc.vmid(node.vmid).status().current().get());
-    });
 }
