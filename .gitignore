@@ -1,3 +1,4 @@
 /target
 /src/generated.rs
 /src/generated
+/ci/PVE-schema.json

@@ -1,36 +1,49 @@
-name: Validate that generated methods
-run-name: Generating JSON definitions for Proxmox
+name: Generate JSON definitions & build
+run-name: Generate JSON definitions & build
 on: [push]
 env:
   CONTAINER_NAME: json-container
 jobs:
   create:
     runs-on: ubuntu-latest
-    # container: debian:bookworm
-    name: "Generate JSON definitions"
+    name: Generate JSON definitions & build
     steps:
       - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Set environment variables
+        run: |
+          DISTRO=$(./ci/get-metadata.sh debian-distro)
+          PROXMOX_VE_VERSION=$(./ci/get-metadata.sh pve-version)
+          echo "DISTRO=$DISTRO" >> "$GITHUB_ENV"
+          echo "PROXMOX_VE_VERSION=$PROXMOX_VE_VERSION" >> "$GITHUB_ENV"
 
       - name: Create container
         run: |
-          docker run --mount "type=bind,source=./ci,target=/mnt" --name $CONTAINER_NAME debian:bookworm
+          docker create --mount "type=bind,source=./ci,target=/mnt" --name $CONTAINER_NAME debian:$DISTRO sleep infinity
+          docker start $CONTAINER_NAME
 
       - name: Setup proxmox bookworm
-        run: docker exec -it $CONTAINER_NAME /mnt/setup.sh
+        run: docker exec $CONTAINER_NAME /mnt/setup.sh $DISTRO $PROXMOX_VE_VERSION
 
       - name: Generate JSON schema
-        run: docker exec -it $CONTAINER_NAME /mnt/dump-schema.pl > PVE-schema.json
+        run: docker exec $CONTAINER_NAME /usr/bin/bash -c "/mnt/dump-schema.pl > /mnt/PVE-schema.json"
 
-      - name: Show line count
-        run: wc -l ./ci/PVE-schema.json
+      - name: Save package verions
+        run: docker exec $CONTAINER_NAME /usr/bin/bash -c "apt list --installed > /mnt/packages.txt"
 
-      # - name: Save all package versions to a file
-      #   run: |
-      #     apt list --installed > packages.txt
+      - name: Generate the client
+        run: cargo run --manifest-path generator/Cargo.toml -- recursive ./ci/PVE-schema.json src/generated.rs
 
-      - name: Upload the generated JSON
+      # TODO: validate that generated output is the same :)
+
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: artifacts
           path: |
             ./ci/PVE-schema.json
+            ./ci/packages.txt
+
+      - name: Show line count
+        run: wc -l ./ci/PVE-schema.json
