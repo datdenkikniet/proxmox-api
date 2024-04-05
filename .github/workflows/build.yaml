@@ -35,6 +35,9 @@ jobs:
       - name: Generate the client
         run: cargo run --manifest-path generator/Cargo.toml -- recursive ./ci/PVE-schema.json src/generated.rs
 
+      - name: Format the generated client
+        run: cargo fmt -- ./src/generated.rs
+
       # TODO: validate that generated output is the same :)
 
       - name: Upload artifacts
