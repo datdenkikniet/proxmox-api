@@ -1,6 +1,8 @@
 name: Validate that generated methods
 run-name: Generating JSON definitions for Proxmox
 on: [push]
+env:
+  CONTAINER_NAME: json-container
 jobs:
   create:
     runs-on: ubuntu-latest
@@ -9,26 +11,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Start container?
-        run: docker run debian:bookworm true
+      - name: Create container
+        run: |
+          docker run --mount "type=bind,source=./ci,target=/mnt" --name $CONTAINER_NAME debian:bookworm
 
-      - name: Set up proxmox bookworm
-        run: ./ci/setup.sh
+      - name: Setup proxmox bookworm
+        run: docker exec -it $CONTAINER_NAME /mnt/setup.sh
 
       - name: Generate JSON schema
-        run: ./ci/dump-schema.pl > PVE-schema.json
+        run: docker exec -it $CONTAINER_NAME /mnt/dump-schema.pl > PVE-schema.json
 
       - name: Show line count
-        run: wc -l PVE-schema.json
+        run: wc -l ./ci/PVE-schema.json
 
-      - name: Save all package versions to a file
-        run: |
-          apt list --installed > packages.txt
+      # - name: Save all package versions to a file
+      #   run: |
+      #     apt list --installed > packages.txt
 
       - name: Upload the generated JSON
         uses: actions/upload-artifact@v4
         with:
-          name: PVE-schema.json
+          name: artifacts
           path: |
-            ./PVE-schema.json
-            ./packages.txt
+            ./ci/PVE-schema.json
