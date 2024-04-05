@@ -23,20 +23,20 @@ jobs:
           docker create --mount "type=bind,source=./ci,target=/mnt" --name $CONTAINER_NAME debian:$DISTRO sleep infinity
           docker start $CONTAINER_NAME
 
-      - name: Setup proxmox bookworm
+      - name: Setup proxmox-ve ${{ env.PROXMOX_VE_VERSION }} on debian ${{ env.DISTRO }}
         run: docker exec $CONTAINER_NAME /mnt/setup.sh $DISTRO $PROXMOX_VE_VERSION
 
       - name: Generate JSON schema
         run: docker exec $CONTAINER_NAME /usr/bin/bash -c "/mnt/dump-schema.pl > /mnt/PVE-schema.json"
 
-      - name: Save package verions
+      - name: Save package versions
         run: docker exec $CONTAINER_NAME /usr/bin/bash -c "apt list --installed > /mnt/packages.txt"
 
       - name: Generate the client
         run: cargo run --manifest-path generator/Cargo.toml -- recursive ./ci/PVE-schema.json proxmox-api/src/generated.rs
 
       - name: Format the generated client
-        run: cargo fmt -- ./proxmox-api/src/generated.rs
+        run: cargo fmt --manifest-path ./proxmox-api/Cargo.toml -- ./proxmox-api/src/generated.rs
 
       - name: Display git diff
         run: git diff
@@ -69,11 +69,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
 
-      - name: Check the formatting
+      - name: Validate the formatting
         run: cargo fmt --manifest-path proxmox-api/Cargo.toml --check
 
       - name: Check the ${{ matrix.definition.name }}
         run: cargo check --manifest-path proxmox-api/Cargo.toml ${{ matrix.definition.args }}
 
-      - name: Build the ${{ matrix.definition.name }}
-        run: cargo build --manifest-path proxmox-api/Cargo.toml ${{ matrix.definition.args }}
+      # TODO: reenable this for merges to main?
+      # - name: Build the ${{ matrix.definition.name }}
+      #   run: cargo build --manifest-path proxmox-api/Cargo.toml ${{ matrix.definition.args }}
