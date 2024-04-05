@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
 use proxmox_api::Client;
 
-use proxmox_api::access::AccessClient;
+use proxmox_api::{access::AccessClient, nodes::NodesClient};
 
 #[derive(Debug, Parser)]
 pub struct Cli {
@@ -39,4 +39,12 @@ fn main() {
 
     let access_client = AccessClient::new(client.clone());
     println!("{:#?}", access_client.users().get(Default::default()));
+
+    let nodes_client = NodesClient::new(client.clone());
+    let lxc = nodes_client.node("proxmox").lxc();
+    let nodes = lxc.get().unwrap();
+
+    nodes.iter().for_each(|node| {
+        println!("{:?}", lxc.vmid(node.vmid).status().current().get());
+    });
 }

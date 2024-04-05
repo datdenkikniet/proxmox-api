@@ -14,3 +14,9 @@ impl VmId {
         self.0
     }
 }
+
+impl std::fmt::Display for VmId {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
