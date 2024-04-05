@@ -30,7 +30,7 @@ pub struct GetParams {
     pub content: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only list images for this VM"]
-    pub vmid: Option<crate::VmId>,
+    pub vmid: Option<crate::types::VmId>,
     #[serde(
         flatten,
         default,
@@ -81,8 +81,8 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Creation time (seconds since the UNIX Epoch)."]
@@ -99,21 +99,21 @@ pub struct GetOutputItems {
     #[doc = "Volume identifier of parent (for linked cloned)."]
     pub parent: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Protection status. Currently only supported for backups."]
     pub protected: Option<bool>,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Volume size in bytes."]
     pub size: u64,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Used space. Please note that most storage plugins do not report anything useful here."]
@@ -122,8 +122,8 @@ pub struct GetOutputItems {
     #[doc = "Last backup verification result, only useful for PBS storages."]
     pub verification: Option<VerificationGetOutputItemsVerification>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Associated Owner VMID."]
@@ -148,7 +148,7 @@ where
     }
 }
 impl PostParams {
-    pub fn new(filename: String, size: String, vmid: crate::VmId) -> Self {
+    pub fn new(filename: String, size: String, vmid: crate::types::VmId) -> Self {
         Self {
             filename,
             size,
@@ -167,7 +167,7 @@ pub struct PostParams {
     #[doc = "Size in kilobyte (1024 bytes). Optional suffixes 'M' (megabyte, 1024K) and 'G' (gigabyte, 1024M)"]
     pub size: String,
     #[doc = "Specify owner VM"]
-    pub vmid: crate::VmId,
+    pub vmid: crate::types::VmId,
     #[serde(
         flatten,
         default,

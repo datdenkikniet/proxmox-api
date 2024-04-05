@@ -58,8 +58,8 @@ impl GetOutput {
 pub struct GetOutput {
     #[serde(rename = "hasFeature")]
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     pub hasfeature: bool,
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]

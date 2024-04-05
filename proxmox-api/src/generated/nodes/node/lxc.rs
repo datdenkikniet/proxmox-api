@@ -104,7 +104,7 @@ pub enum Status {
     Stopped,
 }
 impl GetOutputItems {
-    pub fn new(status: Status, vmid: crate::VmId) -> Self {
+    pub fn new(status: Status, vmid: crate::types::VmId) -> Self {
         Self {
             status,
             vmid,
@@ -123,8 +123,8 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[serde(
-        serialize_with = "crate::serialize_number_optional",
-        deserialize_with = "crate::deserialize_number_optional"
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum usable CPUs."]
@@ -133,22 +133,22 @@ pub struct GetOutputItems {
     #[doc = "The current config lock, if any."]
     pub lock: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Root disk size in bytes."]
     pub maxdisk: Option<u64>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum memory in bytes."]
     pub maxmem: Option<u64>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum SWAP memory in bytes."]
@@ -162,14 +162,14 @@ pub struct GetOutputItems {
     #[doc = "The current configured tags, if any."]
     pub tags: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Uptime."]
     pub uptime: Option<u64>,
     #[doc = "The (unique) ID of the VM."]
-    pub vmid: crate::VmId,
+    pub vmid: crate::types::VmId,
     #[serde(
         flatten,
         default,
@@ -188,7 +188,7 @@ where
     }
 }
 impl PostParams {
-    pub fn new(ostemplate: String, vmid: crate::VmId) -> Self {
+    pub fn new(ostemplate: String, vmid: crate::types::VmId) -> Self {
         Self {
             ostemplate,
             vmid,
@@ -248,22 +248,22 @@ pub struct PostParams {
     #[doc = "Console mode. By default, the console command tries to open a connection to one of the available tty devices. By setting cmode to 'console' it tries to attach to /dev/console instead. If you set cmode to 'shell', it simply invokes a shell inside the container (no login)."]
     pub cmode: Option<Cmode>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Attach a console device (/dev/console) to the container."]
     pub console: Option<bool>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of cores assigned to the container. A container can use all available cores by default."]
     pub cores: Option<u64>,
     #[serde(
-        serialize_with = "crate::serialize_number_optional",
-        deserialize_with = "crate::deserialize_number_optional"
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Limit of CPU usage.\n\nNOTE: If the computer has 2 CPUs, it has a total of '2' CPU time. Value '0' indicates no CPU limit."]
@@ -273,8 +273,8 @@ pub struct PostParams {
     #[doc = "CPU weight for a container. Argument is used in the kernel fair scheduler. The larger the number is, the more CPU time this container gets. Number is relative to the weights of all the other running guests."]
     pub cpuunits: Option<()>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Try to be more verbose. For now this only enables debug log-level on start."]
@@ -290,8 +290,8 @@ pub struct PostParams {
     #[doc = "Allow containers access to advanced features."]
     pub features: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow to overwrite existing container."]
@@ -304,8 +304,8 @@ pub struct PostParams {
     pub hostname: Option<String>,
     #[serde(rename = "ignore-unpack-errors")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Ignore errors when extracting the template."]
@@ -314,8 +314,8 @@ pub struct PostParams {
     #[doc = "Lock/unlock the container."]
     pub lock: Option<Lock>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of RAM for the container in MB."]
@@ -332,8 +332,8 @@ pub struct PostParams {
     #[doc = "Specifies network interfaces for the container."]
     pub net_n: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specifies whether a container will be started during system bootup."]
@@ -350,15 +350,15 @@ pub struct PostParams {
     #[doc = "Add the VM to the specified pool."]
     pub pool: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Sets the protection flag of the container. This will prevent the CT or CT's disk remove/update operation."]
     pub protection: Option<bool>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Mark this as restore task."]
@@ -374,8 +374,8 @@ pub struct PostParams {
     #[doc = "Setup public SSH keys (one key per line, OpenSSH format)."]
     pub ssh_public_keys: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Start the CT after its creation finished successfully."]
@@ -387,8 +387,8 @@ pub struct PostParams {
     #[doc = "Default Storage."]
     pub storage: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of SWAP for the container in MB."]
@@ -397,8 +397,8 @@ pub struct PostParams {
     #[doc = "Tags of the Container. This is only meta information."]
     pub tags: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable Template."]
@@ -407,22 +407,22 @@ pub struct PostParams {
     #[doc = "Time zone to use in the container. If option isn't set, then nothing will be done. Can be set to 'host' to match the host time zone, or an arbitrary time zone option from /usr/share/zoneinfo/zone.tab"]
     pub timezone: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify the number of tty available to the container"]
     pub tty: Option<u64>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Assign a unique random ethernet address."]
     pub unique: Option<bool>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Makes the container run as unprivileged user. (Should not be modified manually.)"]
@@ -432,7 +432,7 @@ pub struct PostParams {
     #[doc = "Reference to unused volumes. This is used internally, and should not be modified manually."]
     pub unused_n: Option<String>,
     #[doc = "The (unique) ID of the VM."]
-    pub vmid: crate::VmId,
+    pub vmid: crate::types::VmId,
     #[serde(
         flatten,
         default,
@@ -454,7 +454,7 @@ impl<T> LxcClient<T>
 where
     T: crate::client::Client,
 {
-    pub fn vmid(&self, vmid: crate::VmId) -> vmid::VmidClient<T> {
+    pub fn vmid(&self, vmid: crate::types::VmId) -> vmid::VmidClient<T> {
         vmid::VmidClient::<T>::new(self.client.clone(), &self.path, vmid)
     }
 }

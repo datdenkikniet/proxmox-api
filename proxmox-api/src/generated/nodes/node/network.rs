@@ -154,8 +154,8 @@ pub struct PostParams {
     #[doc = "IP address."]
     pub address6: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Automatically start interface on boot."]
@@ -174,8 +174,8 @@ pub struct PostParams {
     #[doc = "Specify the interfaces you want to add to your bridge."]
     pub bridge_ports: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable bridge vlan support."]
@@ -201,8 +201,8 @@ pub struct PostParams {
     #[doc = "Network interface name."]
     pub iface: String,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "MTU."]
@@ -211,8 +211,8 @@ pub struct PostParams {
     #[doc = "Network mask."]
     pub netmask: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Network mask."]
@@ -230,8 +230,8 @@ pub struct PostParams {
     #[doc = "Specify the interfaces you want to add to your bridge."]
     pub ovs_ports: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify a VLan tag (used by OVSPort, OVSIntPort, OVSBond)"]
@@ -244,8 +244,8 @@ pub struct PostParams {
     pub ty: Type,
     #[serde(rename = "vlan-id")]
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "vlan-id for a custom named vlan interface (ifupdown2 only)."]

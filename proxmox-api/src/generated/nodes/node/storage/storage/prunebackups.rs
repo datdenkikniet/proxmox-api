@@ -43,7 +43,7 @@ pub struct DeleteParams {
     pub ty: Option<Type>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only prune backups for this VM."]
-    pub vmid: Option<crate::VmId>,
+    pub vmid: Option<crate::types::VmId>,
     #[serde(
         flatten,
         default,
@@ -73,7 +73,7 @@ pub struct GetParams {
     pub ty: Option<Type>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only consider backups for this guest."]
-    pub vmid: Option<crate::VmId>,
+    pub vmid: Option<crate::types::VmId>,
     #[serde(
         flatten,
         default,
@@ -96,8 +96,8 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Creation time of the backup (seconds since the UNIX epoch)."]
     pub ctime: u64,
@@ -107,8 +107,8 @@ pub struct GetOutputItems {
     #[doc = "One of 'qemu', 'lxc', 'openvz' or 'unknown'."]
     pub ty: String,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The VM the backup belongs to."]

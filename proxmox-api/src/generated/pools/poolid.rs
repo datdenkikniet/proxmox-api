@@ -67,8 +67,8 @@ pub struct MembersGetOutputMembersItems {
     #[serde(rename = "type")]
     pub ty: Type,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub vmid: Option<u64>,
@@ -108,8 +108,8 @@ where
 pub struct PutParams {
     #[serde(rename = "allow-move")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow adding a guest even if already in another pool. The guest will be removed from its current pool and added to this one."]
@@ -117,8 +117,8 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub comment: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Remove the passed VMIDs and/or storage IDs instead of adding them."]

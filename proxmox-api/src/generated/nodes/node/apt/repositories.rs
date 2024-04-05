@@ -105,8 +105,8 @@ pub struct RepositoriesGetOutputFilesItemsRepositoriesItems {
     pub components: Vec<String>,
     #[serde(rename = "Enabled")]
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     #[doc = "Whether the repository is enabled or not"]
     pub enabled: bool,
@@ -221,8 +221,8 @@ pub struct StandardReposGetOutputStandardReposItems {
     #[doc = "Full name of the repository."]
     pub name: String,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Indicating enabled/disabled status, if the repository is configured."]
@@ -303,15 +303,15 @@ pub struct PostParams {
     #[doc = "Digest to detect modifications."]
     pub digest: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Whether the repository should be enabled or not."]
     pub enabled: Option<bool>,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Index within the file (starting from 0)."]
     pub index: u64,

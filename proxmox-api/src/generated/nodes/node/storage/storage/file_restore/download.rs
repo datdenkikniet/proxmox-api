@@ -28,8 +28,8 @@ pub struct GetParams {
     #[doc = "base64-path to the directory or file to download."]
     pub filepath: String,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Download dirs as 'tar.zst' instead of 'zip'."]

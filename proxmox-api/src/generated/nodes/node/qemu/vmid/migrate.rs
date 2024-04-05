@@ -60,8 +60,8 @@ pub struct GetOutput {
     #[doc = "List not allowed nodes with additional informations, only passed if VM is offline"]
     pub not_allowed_nodes: Option<NotAllowedNodesGetOutputNotAllowedNodes>,
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     pub running: bool,
     #[serde(
@@ -102,8 +102,8 @@ pub struct PostParams {
     #[doc = "Override I/O bandwidth limit (in KiB/s)."]
     pub bwlimit: Option<()>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow to migrate VMs which use local devices. Only root may use this option."]
@@ -115,8 +115,8 @@ pub struct PostParams {
     #[doc = "Migration traffic is encrypted using an SSH tunnel by default. On secure, completely private networks this can be disabled to increase performance."]
     pub migration_type: Option<MigrationType>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Use online/live migration if VM is running. Ignored if VM is stopped."]
@@ -128,8 +128,8 @@ pub struct PostParams {
     pub targetstorage: Option<String>,
     #[serde(rename = "with-local-disks")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable live storage migration for local disk"]

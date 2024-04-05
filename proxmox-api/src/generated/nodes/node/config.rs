@@ -65,8 +65,8 @@ pub struct GetOutput {
     pub digest: Option<String>,
     #[serde(rename = "startall-onboot-delay")]
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Initial delay in seconds, before starting all the Virtual Guests with on-boot enabled."]
@@ -111,8 +111,8 @@ pub struct PutParams {
     pub digest: Option<String>,
     #[serde(rename = "startall-onboot-delay")]
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Initial delay in seconds, before starting all the Virtual Guests with on-boot enabled."]

@@ -19,15 +19,15 @@ pub struct GetParams {
     #[doc = "End before the given Cursor. Conflicts with 'until'"]
     pub endcursor: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Limit to the last X lines. Conflicts with a range."]
     pub lastentries: Option<u64>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Display all log since this UNIX epoch. Conflicts with 'startcursor'."]
@@ -36,8 +36,8 @@ pub struct GetParams {
     #[doc = "Start after the given Cursor. Conflicts with 'since'"]
     pub startcursor: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Display all log until this UNIX epoch. Conflicts with 'endcursor'."]

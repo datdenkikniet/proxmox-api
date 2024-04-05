@@ -45,8 +45,8 @@ pub struct GetOutputItems {
     #[doc = "A comment for the job."]
     pub comment: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     #[doc = "If the job is enabled or not."]
     pub enabled: bool,
@@ -54,16 +54,16 @@ pub struct GetOutputItems {
     pub id: String,
     #[serde(rename = "last-run")]
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Last execution time of the job in seconds since the beginning of the UNIX epoch"]
     pub last_run: Option<u64>,
     #[serde(rename = "next-run")]
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Next planned execution time of the job in seconds since the beginning of the UNIX epoch."]

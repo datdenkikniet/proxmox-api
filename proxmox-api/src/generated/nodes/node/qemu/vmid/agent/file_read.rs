@@ -46,8 +46,8 @@ pub struct GetOutput {
     #[doc = "The content of the file, maximum 16777216"]
     pub content: String,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If set to 1, the output is truncated and not complete"]

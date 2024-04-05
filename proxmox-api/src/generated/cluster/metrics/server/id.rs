@@ -102,8 +102,8 @@ pub struct PostParams {
     #[doc = "The InfluxDB bucket/db. Only necessary when using the http v2 api."]
     pub bucket: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Flag to disable the plugin."]
@@ -112,15 +112,15 @@ pub struct PostParams {
     pub influxdbproto: Option<Influxdbproto>,
     #[serde(rename = "max-body-size")]
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "InfluxDB max-body-size in bytes. Requests are batched up to this size."]
     pub max_body_size: Option<u64>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "MTU for metrics transmission over UDP"]
@@ -132,8 +132,8 @@ pub struct PostParams {
     #[doc = "root graphite path (ex: proxmox.mycluster.mykey)"]
     pub path: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "server network port"]
     pub port: u64,
@@ -143,8 +143,8 @@ pub struct PostParams {
     #[doc = "server dns name or IP address"]
     pub server: String,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "graphite TCP socket timeout (default=1)"]
@@ -157,8 +157,8 @@ pub struct PostParams {
     pub ty: Type,
     #[serde(rename = "verify-certificate")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set to 0 to disable certificate verification for https endpoints."]
@@ -219,8 +219,8 @@ pub struct PutParams {
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
     pub digest: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Flag to disable the plugin."]
@@ -229,15 +229,15 @@ pub struct PutParams {
     pub influxdbproto: Option<Influxdbproto>,
     #[serde(rename = "max-body-size")]
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "InfluxDB max-body-size in bytes. Requests are batched up to this size."]
     pub max_body_size: Option<u64>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "MTU for metrics transmission over UDP"]
@@ -249,8 +249,8 @@ pub struct PutParams {
     #[doc = "root graphite path (ex: proxmox.mycluster.mykey)"]
     pub path: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "server network port"]
     pub port: u64,
@@ -260,8 +260,8 @@ pub struct PutParams {
     #[doc = "server dns name or IP address"]
     pub server: String,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "graphite TCP socket timeout (default=1)"]
@@ -271,8 +271,8 @@ pub struct PutParams {
     pub token: Option<String>,
     #[serde(rename = "verify-certificate")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set to 0 to disable certificate verification for https endpoints."]

@@ -18,7 +18,7 @@ where
 pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only list replication jobs for this guest."]
-    pub guest: Option<crate::VmId>,
+    pub guest: Option<crate::types::VmId>,
     #[serde(
         flatten,
         default,

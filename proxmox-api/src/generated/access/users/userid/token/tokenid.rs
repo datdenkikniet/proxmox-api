@@ -31,8 +31,8 @@ pub struct GetOutput {
     #[doc = "API token expiration date (seconds since epoch). '0' means no expiration date."]
     pub expire: Option<()>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Restrict API token privileges with separate ACLs (default), or give full privileges of corresponding user."]
@@ -62,8 +62,8 @@ pub struct PostParams {
     #[doc = "API token expiration date (seconds since epoch). '0' means no expiration date."]
     pub expire: Option<()>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Restrict API token privileges with separate ACLs (default), or give full privileges of corresponding user."]
@@ -83,8 +83,8 @@ pub struct InfoPostOutputInfo {
     #[doc = "API token expiration date (seconds since epoch). '0' means no expiration date."]
     pub expire: Option<()>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Restrict API token privileges with separate ACLs (default), or give full privileges of corresponding user."]
@@ -132,8 +132,8 @@ pub struct PutParams {
     #[doc = "API token expiration date (seconds since epoch). '0' means no expiration date."]
     pub expire: Option<()>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Restrict API token privileges with separate ACLs (default), or give full privileges of corresponding user."]
@@ -153,8 +153,8 @@ pub struct PutOutput {
     #[doc = "API token expiration date (seconds since epoch). '0' means no expiration date."]
     pub expire: Option<()>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Restrict API token privileges with separate ACLs (default), or give full privileges of corresponding user."]

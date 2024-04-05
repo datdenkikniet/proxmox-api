@@ -28,8 +28,8 @@ pub struct GetParams {
     pub url: String,
     #[serde(rename = "verify-certificates")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If false, no SSL/TLS certificates will be verified."]
@@ -48,8 +48,8 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub mimetype: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub size: Option<u64>,
