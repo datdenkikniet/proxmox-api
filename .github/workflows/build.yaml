@@ -33,10 +33,10 @@ jobs:
         run: docker exec $CONTAINER_NAME /usr/bin/bash -c "apt list --installed > /mnt/packages.txt"
 
       - name: Generate the client
-        run: cargo run --manifest-path generator/Cargo.toml -- recursive ./ci/PVE-schema.json src/generated.rs
+        run: cargo run --manifest-path generator/Cargo.toml -- recursive ./ci/PVE-schema.json proxmox-api/src/generated.rs
 
       - name: Format the generated client
-        run: cargo fmt -- ./src/generated.rs
+        run: cargo fmt -- ./proxmox-api/src/generated.rs
 
       - name: Display git diff
         run: git diff
