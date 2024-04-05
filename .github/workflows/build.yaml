@@ -54,35 +54,27 @@ jobs:
       - name: Show line count
         run: wc -l ./ci/PVE-schema.json
 
-  build-lib:
-    name: Build the library
+  check-and-build:
+    strategy:
+      matrix:
+        definition:
+          lib:
+            name: "library"
+            args: "--lib"
+          cli:
+            name: "cli"
+            args: "--bin proxmox-api --features cli"
+    name: Build & check target ${{ matrix.definition.name }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
 
-      - name: Check the formatting of the lib
+      - name: Check the formatting
         run: cargo fmt --manifest-path proxmox-api/Cargo.toml --check
 
-      - name: Check the library
-        run: cargo check --manifest-path proxmox-api/Cargo.toml --lib
+      - name: Check
+        run: cargo check --manifest-path proxmox-api/Cargo.toml ${{ matrix.definition.args }}
 
-      - name: Build the library
-        run: cargo build --manifest-path proxmox-api/Cargo.toml --lib
-
-  build-cli:
-    name: Build the CLI tool
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-
-      # Technically redundant, but better to do this than to miss it in the future.
-      - name: Check the formatting of the bin
-        run: cargo fmt --manifest-path proxmox-api/Cargo.toml --check
-
-      - name: Check the CLI tool
-        run: cargo build --manifest-path proxmox-api/Cargo.toml --bin promox-api --features cli
-
-      - name: Build the CLI tool
-        run: cargo build --manifest-path proxmox-api/Cargo.toml --bin promox-api --features cli
+      - name: Build
+        run: cargo build --manifest-path proxmox-api/Cargo.toml ${{ matrix.definition.args }}
