@@ -58,13 +58,12 @@ jobs:
     strategy:
       matrix:
         definition:
-          lib:
-            name: "library"
+          - name: "library"
             args: "--lib"
-          cli:
-            name: "cli"
+          - name: "CLI tool"
             args: "--bin proxmox-api --features cli"
-    name: Build & check target ${{ matrix.definition.name }}
+
+    name: Build & check the ${{ matrix.definition.name }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -73,8 +72,8 @@ jobs:
       - name: Check the formatting
         run: cargo fmt --manifest-path proxmox-api/Cargo.toml --check
 
-      - name: Check
+      - name: Check the ${{ matrix.definition.name }}
         run: cargo check --manifest-path proxmox-api/Cargo.toml ${{ matrix.definition.args }}
 
-      - name: Build
+      - name: Build the ${{ matrix.definition.name }}
         run: cargo build --manifest-path proxmox-api/Cargo.toml ${{ matrix.definition.args }}
