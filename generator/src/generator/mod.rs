@@ -167,7 +167,7 @@ impl Generator {
                     }
                 };
 
-                let client = proxmox_api(quote!(Client));
+                let client = proxmox_api(quote!(client::Client));
 
                 let block = quote! {
                     #params_def
@@ -223,7 +223,7 @@ impl Generator {
 
             child_defs.push(child_def);
 
-            let client = proxmox_api(quote!(Client));
+            let client = proxmox_api(quote!(client::Client));
             quote! {
                 impl<T> #client_name<T> where T: #client {
                     pub fn #new_sig {
@@ -240,7 +240,7 @@ impl Generator {
             }
         };
 
-        let client = proxmox_api(quote!(Client));
+        let client = proxmox_api(quote!(client::Client));
         let enums = enums.values();
 
         let definition = quote! {

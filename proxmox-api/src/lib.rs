@@ -1,7 +1,4 @@
-mod api2;
-
-mod client;
-pub use client::Client;
+pub mod client;
 
 mod path;
 pub use path::{Path, PathElement};
@@ -14,3 +11,9 @@ pub use vmid::VmId;
 
 mod generated;
 pub use generated::*;
+
+#[cfg(feature = "reqwest")]
+mod reqwest_client;
+
+#[cfg(feature = "reqwest")]
+pub use reqwest_client::Client as ReqwestClient;
