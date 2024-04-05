@@ -38,7 +38,16 @@ jobs:
       - name: Format the generated client
         run: cargo fmt -- ./src/generated.rs
 
-      # TODO: validate that generated output is the same :)
+      # TODO: validate that generated output is the same as what is being checked in
+
+      - name: Check the generated client
+        run: cargo check
+
+      - name: Build the generated client library
+        run: cargo build --lib
+
+      - name: build the CLI tool
+        run: cargo build --bin promox-api
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
