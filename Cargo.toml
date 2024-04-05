@@ -12,6 +12,10 @@ pools = []
 storage = []
 version = []
 
+[package.metadata.proxmox]
+debian-distro = "bookworm"
+pve-version = "8.0.1"
+
 [dependencies]
 clap = { version = "4.5.3", features = ["derive", "env"] }
 log = "0.4.21"
