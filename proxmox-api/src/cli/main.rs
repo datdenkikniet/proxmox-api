@@ -3,6 +3,8 @@ use proxmox_api::Client;
 
 use proxmox_api::{access::AccessClient, nodes::NodesClient};
 
+mod client;
+
 #[derive(Debug, Parser)]
 pub struct Cli {
     #[clap(env = "PROXMOX_USER")]
