@@ -6,7 +6,7 @@ env:
 jobs:
   create:
     runs-on: ubuntu-latest
-    name: Generate JSON definitions & build
+    name: Validate generated code
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -38,16 +38,10 @@ jobs:
       - name: Format the generated client
         run: cargo fmt -- ./src/generated.rs
 
+      - name: Display git diff
+        run: git diff
+
       # TODO: validate that generated output is the same as what is being checked in
-
-      - name: Check the generated client
-        run: cargo check
-
-      - name: Build the generated client library
-        run: cargo build --lib
-
-      - name: build the CLI tool
-        run: cargo build --bin promox-api
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -59,3 +53,36 @@ jobs:
 
       - name: Show line count
         run: wc -l ./ci/PVE-schema.json
+
+  build-lib:
+    name: Build the library
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Check the formatting of the lib
+        run: cargo fmt --manifest-path proxmox-api/Cargo.toml --check
+
+      - name: Check the library
+        run: cargo check --manifest-path proxmox-api/Cargo.toml --lib
+
+      - name: Build the library
+        run: cargo build --manifest-path proxmox-api/Cargo.toml --lib
+
+  build-cli:
+    name: Build the CLI tool
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+
+      # Technically redundant, but better to do this than to miss it in the future.
+      - name: Check the formatting of the bin
+        run: cargo fmt --manifest-path proxmox-api/Cargo.toml --check
+
+      - name: Check the CLI tool
+        run: cargo build --manifest-path proxmox-api/Cargo.toml --bin promox-api --features cli
+
+      - name: Build the CLI tool
+        run: cargo build --manifest-path proxmox-api/Cargo.toml --bin promox-api --features cli
