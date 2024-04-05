@@ -43,8 +43,8 @@ pub struct NodelistGetOutputNodelistItems {
     #[doc = "The cluster node name."]
     pub name: String,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node id for this node."]
@@ -53,8 +53,8 @@ pub struct NodelistGetOutputNodelistItems {
     #[doc = "Certificate SHA 256 fingerprint."]
     pub pve_fp: String,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     pub quorum_votes: u64,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -129,8 +129,8 @@ pub struct PostParams {
     #[doc = "Certificate SHA 256 fingerprint."]
     pub fingerprint: String,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Do not throw error if node already exists."]
@@ -142,8 +142,8 @@ pub struct PostParams {
     #[doc = "Address and priority information of a single corosync link. (up to 8 links supported; link0..link7)"]
     pub link_n: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node id for this node."]
@@ -151,8 +151,8 @@ pub struct PostParams {
     #[doc = "Superuser (root) password of peer node."]
     pub password: String,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of votes for this node"]

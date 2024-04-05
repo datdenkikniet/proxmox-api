@@ -23,7 +23,7 @@ pub enum Format {
     Vmdk,
 }
 impl PostParams {
-    pub fn new(newid: crate::VmId) -> Self {
+    pub fn new(newid: crate::types::VmId) -> Self {
         Self {
             newid,
             bwlimit: Default::default(),
@@ -51,8 +51,8 @@ pub struct PostParams {
     #[doc = "Target format for file storage. Only valid for full clone."]
     pub format: Option<Format>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Create a full copy of all disks. This is always done when you clone a normal VM. For VM templates, we try to create a linked clone by default."]
@@ -61,7 +61,7 @@ pub struct PostParams {
     #[doc = "Set a name for the new VM."]
     pub name: Option<String>,
     #[doc = "VMID for the clone."]
-    pub newid: crate::VmId,
+    pub newid: crate::types::VmId,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Add the new VM to the specified pool."]
     pub pool: Option<String>,

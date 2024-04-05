@@ -20,7 +20,7 @@ where
     #[doc = "Get the status of a specific ceph flag."]
     pub fn get(&self) -> Result<bool, T::Error> {
         let path = self.path.to_string();
-        Ok(self.client.get::<_, crate::Bool>(&path, &())?.get())
+        Ok(self.client.get::<_, crate::types::Bool>(&path, &())?.get())
     }
 }
 impl PutParams {
@@ -34,8 +34,8 @@ impl PutParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PutParams {
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     #[doc = "The new value of the flag"]
     pub value: bool,

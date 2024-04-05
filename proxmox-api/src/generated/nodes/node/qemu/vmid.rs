@@ -31,7 +31,7 @@ impl<T> VmidClient<T>
 where
     T: crate::client::Client,
 {
-    pub fn new(client: T, parent_path: &str, vmid: crate::VmId) -> Self {
+    pub fn new(client: T, parent_path: &str, vmid: crate::types::VmId) -> Self {
         Self {
             client,
             path: format!("{}/{}", parent_path, vmid),
@@ -42,22 +42,22 @@ where
 pub struct DeleteParams {
     #[serde(rename = "destroy-unreferenced-disks")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If set, destroy additionally all disks not referenced in the config but with a matching VMID from all enabled storages."]
     pub destroy_unreferenced_disks: Option<bool>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Remove VMID from configurations, like backup & replication jobs and HA."]
     pub purge: Option<bool>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Ignore locks - only root is allowed to use this option."]

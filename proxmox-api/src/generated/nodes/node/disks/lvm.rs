@@ -28,21 +28,21 @@ impl ChildrenGetOutputChildrenItemsChildrenItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct ChildrenGetOutputChildrenItemsChildrenItems {
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The free bytes in the physical volume"]
     pub free: u64,
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     pub leaf: bool,
     #[doc = "The name of the physical volume"]
     pub name: String,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The size of the physical volume in bytes"]
     pub size: u64,
@@ -71,21 +71,21 @@ pub struct ChildrenGetOutputChildrenItems {
     #[doc = "The underlying physical volumes"]
     pub children: Vec<ChildrenGetOutputChildrenItemsChildrenItems>,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The free bytes in the volume group"]
     pub free: u64,
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     pub leaf: bool,
     #[doc = "The name of the volume group"]
     pub name: String,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The size of the volume group in bytes"]
     pub size: u64,
@@ -110,8 +110,8 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     pub children: Vec<ChildrenGetOutputChildrenItems>,
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     pub leaf: bool,
     #[serde(
@@ -144,8 +144,8 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure storage using the Volume Group"]

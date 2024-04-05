@@ -90,8 +90,8 @@ impl ToTokens for FieldDef {
                     primitive.to_string()
                 };
 
-                let ser_fn = proxmox_api_str(format!("serialize_{name}"));
-                let des_fn = proxmox_api_str(format!("deserialize_{name}"));
+                let ser_fn = proxmox_api_str(format!("types::serialize_{name}"));
+                let des_fn = proxmox_api_str(format!("types::deserialize_{name}"));
                 Some(quote! { #[serde(serialize_with = #ser_fn, deserialize_with = #des_fn )] })
             };
 

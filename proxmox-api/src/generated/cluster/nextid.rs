@@ -17,7 +17,7 @@ where
 pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The (unique) ID of the VM."]
-    pub vmid: Option<crate::VmId>,
+    pub vmid: Option<crate::types::VmId>,
     #[serde(
         flatten,
         default,
@@ -32,6 +32,9 @@ where
     #[doc = "Get next free VMID. Pass a VMID to assert that its free (at time of check)."]
     pub fn get(&self, params: GetParams) -> Result<u64, T::Error> {
         let path = self.path.to_string();
-        Ok(self.client.get::<_, crate::Integer>(&path, &params)?.get())
+        Ok(self
+            .client
+            .get::<_, crate::types::Integer>(&path, &params)?
+            .get())
     }
 }

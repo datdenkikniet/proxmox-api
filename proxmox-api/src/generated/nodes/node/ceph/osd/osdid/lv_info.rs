@@ -69,8 +69,8 @@ pub struct GetOutput {
     #[doc = "Path to the logical volume (LV)."]
     pub lv_path: String,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Size of the logical volume (LV)."]
     pub lv_size: u64,

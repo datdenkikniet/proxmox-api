@@ -126,15 +126,15 @@ impl Generator {
 
                     let call = match def.primitive() {
                         Some(PrimitiveTypeDef::Integer) => {
-                            let int = proxmox_api(quote!(Integer));
+                            let int = proxmox_api(quote!(types::Integer));
                             quote!(Ok(self.client.#fn_name::<_, #int>(#defer_signature)?.get()))
                         }
                         Some(PrimitiveTypeDef::Number) => {
-                            let num_ty = proxmox_api(quote!(Number));
+                            let num_ty = proxmox_api(quote!(types::Number));
                             quote!(Ok(self.client.#fn_name::<_, #num_ty>(#defer_signature)?.get()))
                         }
                         Some(PrimitiveTypeDef::Boolean) => {
-                            let bool_ty = proxmox_api(quote!(Bool));
+                            let bool_ty = proxmox_api(quote!(types::Bool));
                             quote!(Ok(self.client.#fn_name::<_, #bool_ty>(#defer_signature)?.get()))
                         }
                         Some(PrimitiveTypeDef::String) | None => {
@@ -208,7 +208,7 @@ impl Generator {
                 ),
                 PathElement::Placeholder(p) => {
                     let next_val_ty = if p == "vmid" {
-                        proxmox_api(quote!(VmId))
+                        proxmox_api(quote!(types::VmId))
                     } else {
                         quote!(&str)
                     };
@@ -272,7 +272,7 @@ impl Generator {
         let placeholder_ident = Ident::new(placeholder, quote!().span());
 
         let placeholder_ty = if placeholder == "vmid" {
-            proxmox_api(quote!(VmId))
+            proxmox_api(quote!(types::VmId))
         } else {
             quote!(&str)
         };

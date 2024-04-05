@@ -108,7 +108,7 @@ pub struct PutParams {
     pub mac: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The (unique) ID of the VM."]
-    pub vmid: Option<crate::VmId>,
+    pub vmid: Option<crate::types::VmId>,
     #[doc = "The SDN zone object identifier."]
     pub zone: String,
     #[serde(

@@ -97,8 +97,8 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub dport: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub enable: Option<u64>,
@@ -108,8 +108,8 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub iface: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub ipversion: Option<u64>,
@@ -120,8 +120,8 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub macro_def: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     pub pos: u64,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -170,8 +170,8 @@ pub struct PutParams {
     #[doc = "Restrict TCP/UDP destination port. You can use service names or simple numbers (0-65535), as defined in '/etc/services'. Port ranges can be specified with '\\d+:\\d+', for example '80:85', and you can use comma separated list to match several ports or ranges."]
     pub dport: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Flag to enable/disable a rule."]
@@ -191,8 +191,8 @@ pub struct PutParams {
     #[doc = "Use predefined standard macro."]
     pub macro_def: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Move rule to new position \\<moveto\\>. Other arguments are ignored."]

@@ -73,14 +73,14 @@ pub struct IdGetOutputMdsId {
     #[doc = "Hostname on which the service is running."]
     pub hostname: String,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Memory of the service currently in swap."]
     pub mem_swap_kb: u64,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Memory consumption of the service."]
     pub mem_total_kb: u64,
@@ -150,14 +150,14 @@ pub struct IdGetOutputMgrId {
     #[doc = "Hostname on which the service is running."]
     pub hostname: String,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Memory of the service currently in swap."]
     pub mem_swap_kb: u64,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Memory consumption of the service."]
     pub mem_total_kb: u64,
@@ -227,14 +227,14 @@ pub struct IdGetOutputMonId {
     #[doc = "Hostname on which the service is running."]
     pub hostname: String,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Memory of the service currently in swap."]
     pub mem_swap_kb: u64,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Memory consumption of the service."]
     pub mem_total_kb: u64,

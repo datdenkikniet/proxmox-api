@@ -51,14 +51,14 @@ pub struct DevicesGetOutputDevicesItems {
     #[doc = "Physical disks used"]
     pub devices: String,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Size in bytes"]
     pub size: u64,
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     #[doc = "Discard support of the physical device"]
     pub support_discard: bool,
@@ -115,14 +115,14 @@ pub struct OsdGetOutputOsd {
     #[doc = "Name of the host containing the OSD."]
     pub hostname: String,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "ID of the OSD."]
     pub id: u64,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Memory usage of the OSD service."]
     pub mem_usage: u64,
@@ -131,8 +131,8 @@ pub struct OsdGetOutputOsd {
     #[doc = "The type of object store used."]
     pub osd_objectstore: String,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "OSD process ID."]
     pub pid: u64,

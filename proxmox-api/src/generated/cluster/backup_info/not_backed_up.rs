@@ -39,8 +39,8 @@ pub struct GetOutputItems {
     #[doc = "Type of the guest."]
     pub ty: Type,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "VMID of the guest."]
     pub vmid: u64,

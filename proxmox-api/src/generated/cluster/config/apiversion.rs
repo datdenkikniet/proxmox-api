@@ -20,6 +20,9 @@ where
     #[doc = "Return the version of the cluster join API available on this node."]
     pub fn get(&self) -> Result<u64, T::Error> {
         let path = self.path.to_string();
-        Ok(self.client.get::<_, crate::Integer>(&path, &())?.get())
+        Ok(self
+            .client
+            .get::<_, crate::types::Integer>(&path, &())?
+            .get())
     }
 }

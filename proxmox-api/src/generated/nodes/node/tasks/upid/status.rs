@@ -52,13 +52,13 @@ pub struct GetOutput {
     pub id: String,
     pub node: String,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     pub pid: u64,
     #[serde(
-        serialize_with = "crate::serialize_number",
-        deserialize_with = "crate::deserialize_number"
+        serialize_with = "crate::types::serialize_number",
+        deserialize_with = "crate::types::deserialize_number"
     )]
     pub starttime: f64,
     pub status: Status,

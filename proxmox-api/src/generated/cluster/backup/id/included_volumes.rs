@@ -38,8 +38,8 @@ pub struct ChildrenGetOutputChildrenItemsChildrenItems {
     #[doc = "Configuration key of the volume."]
     pub id: String,
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     #[doc = "Whether the volume is included in the backup or not."]
     pub included: bool,
@@ -71,8 +71,8 @@ pub struct ChildrenGetOutputChildrenItems {
     #[doc = "The volumes of the guest with the information if they will be included in backups."]
     pub children: Vec<ChildrenGetOutputChildrenItemsChildrenItems>,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "VMID of the guest."]
     pub id: u64,
