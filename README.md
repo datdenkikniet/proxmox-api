@@ -11,6 +11,7 @@ Features:
 - [ ] Pattern validation
 - [ ] Range validation for values
 - [ ] Rust-types for well known types
+- [ ] Multi-named types
 
 ## License
 
