@@ -11,19 +11,25 @@ nodes = []
 pools = []
 storage = []
 version = []
+cli = [ "dep:clap", "dep:pretty_env_logger" ]
+
+[[bin]]
+name = "proxmox-api"
+path = "./src/cli/main.rs"
+required-features = [ "cli" ]
 
 [package.metadata.proxmox]
 debian-distro = "bookworm"
 pve-version = "8.0.1"
 
 [dependencies]
-clap = { version = "4.5.3", features = ["derive", "env"] }
 log = "0.4.21"
 parking_lot = "0.12.1"
-pretty_env_logger = "0.5.0"
 reqwest = { version = "0.12.1", features = ["blocking", "json"] }
 serde = { version = "1.0.197", features = ["derive"] }
 serde_json = "1.0.114"
 serde_urlencoded = "0.7.1"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+# CLI deps
+clap = { optional = true, version = "4.5.3", features = ["derive", "env"] }
+pretty_env_logger = { optional = true, version = "0.5.0" }
