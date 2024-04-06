@@ -14,6 +14,10 @@ pub struct EnumDef {
 }
 
 impl EnumDef {
+    pub fn has_default(&self) -> bool {
+        self.default.is_some()
+    }
+
     pub fn new<I: AsRef<str>, T: IntoIterator<Item = I>>(
         name: String,
         extra_derives: T,
