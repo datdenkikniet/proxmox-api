@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeSet;
 
 use proc_macro2::TokenStream;
 use quote::{quote, ToTokens};
@@ -60,47 +60,6 @@ impl TypeDef {
         matches!(self, TypeDef::Array(..))
     }
 
-    pub fn hoist_enum_defs(&mut self, output: &mut BTreeMap<String, EnumDef>) {
-        match self {
-            TypeDef::Unit => {}
-            TypeDef::KnownType { .. } => {}
-            TypeDef::Primitive(_) => {}
-            TypeDef::Array(inner) => {
-                Self::hoist_enum_defs(inner.as_mut(), output);
-            }
-            TypeDef::Struct(strt) => strt.hoist_enum_defs(output),
-            TypeDef::Enum(def) => {
-                if let Some(previous_def) = output.get_mut(def.name()) {
-                    if previous_def.values() != def.values() {
-                        eprintln!(
-                            "The previous definition of enum '{}' has a different set of enum variants.",
-                            def.name()
-                        );
-
-                        let mut prev: Vec<_> = previous_def.values().iter().collect();
-                        prev.sort();
-
-                        let mut now: Vec<_> = def.values().iter().collect();
-                        now.sort();
-
-                        eprintln!("S1: {prev:?}");
-                        eprintln!("S2: {now:?}");
-
-                        eprintln!("Updating S1 with missing values from S2...");
-
-                        def.values().iter().for_each(|v| {
-                            previous_def.values_mut().insert(v.clone());
-                        });
-                    }
-                } else {
-                    output.insert(def.name().to_string(), def.clone());
-                }
-
-                *self = TypeDef::Unit;
-            }
-        }
-    }
-
     pub fn primitive(&self) -> Option<PrimitiveTypeDef> {
         if let Self::Primitive(p) = self {
             Some(*p)
@@ -122,14 +81,8 @@ impl TypeDef {
         name: String,
         fields: Vec<FieldDef>,
         additional_props: AdditionalProperties,
-        external_defs: Vec<TypeDef>,
     ) -> Self {
-        Self::Struct(StructDef::new(
-            name,
-            fields,
-            additional_props,
-            external_defs,
-        ))
+        Self::Struct(StructDef::new(name, fields, additional_props))
     }
 
     pub fn as_field_ty(&self, optional: bool) -> TokenStream {

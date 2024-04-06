@@ -1,10 +1,8 @@
-use std::collections::BTreeMap;
-
 use proc_macro2::TokenStream;
 use quote::ToTokens;
 use syn::{spanned::Spanned, Ident};
 
-use super::{EnumDef, FieldDef, TypeDef};
+use super::{FieldDef, TypeDef};
 
 use quote::quote;
 
@@ -25,7 +23,6 @@ impl AdditionalProperties {
 pub struct StructDef {
     name: String,
     fields: Vec<FieldDef>,
-    external_defs: Vec<TypeDef>,
     additional_props: AdditionalProperties,
 }
 
@@ -34,12 +31,10 @@ impl StructDef {
         name: String,
         fields: Vec<FieldDef>,
         additional_props: AdditionalProperties,
-        external_defs: Vec<TypeDef>,
     ) -> Self {
         Self {
             name,
             fields,
-            external_defs,
             additional_props,
         }
     }
@@ -51,22 +46,6 @@ impl StructDef {
     pub fn fields(&self) -> &[FieldDef] {
         &self.fields
     }
-
-    pub fn external_defs(&self) -> &[TypeDef] {
-        &self.external_defs
-    }
-
-    pub fn hoist_enum_defs(&mut self, output: &mut BTreeMap<String, EnumDef>) {
-        self.external_defs
-            .iter_mut()
-            .for_each(|v| v.hoist_enum_defs(output));
-
-        self.external_defs.retain(|v| !matches!(v, TypeDef::Unit));
-
-        if let AdditionalProperties::Type(ty) = &mut self.additional_props {
-            ty.hoist_enum_defs(output);
-        }
-    }
 }
 
 impl ToTokens for StructDef {
@@ -74,13 +53,10 @@ impl ToTokens for StructDef {
         let Self {
             name,
             fields,
-            external_defs,
             additional_props,
         } = self;
 
         let name = Ident::new(name, quote!().span());
-
-        external_defs.iter().for_each(|def| def.to_tokens(tokens));
 
         let additional_props_ty = match additional_props {
             AdditionalProperties::None => None,

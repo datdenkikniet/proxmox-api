@@ -18,7 +18,7 @@ pub struct Parameters<'a> {
 }
 
 impl Parameters<'_> {
-    pub fn type_def(&self, prefix: &str, path: &Path) -> Option<TypeDef> {
+    pub fn type_def(&self, prefix: &str, path: &Path) -> Option<(TypeDef, Vec<TypeDef>)> {
         if let Some(properties) = &self.properties {
             let name = crate::name_to_ident(&format!("{prefix}Params"));
 
@@ -34,8 +34,9 @@ impl Parameters<'_> {
                     return None;
                 }
 
-                let typedef = ty.type_def(name, "Returns");
+                let (typedef, external) = ty.type_def(name, "Returns");
                 external_defs.push(typedef.clone());
+                external_defs.extend(external);
 
                 let doc = ty.doc();
                 let optional = ty.optional.get();
@@ -48,14 +49,14 @@ impl Parameters<'_> {
                 return None;
             }
 
-            let additional_properties = self
+            let (additional_properties, ext) = self
                 .additional_properties
                 .as_additional_properties("Params");
+            external_defs.extend(ext);
 
-            let type_def =
-                TypeDef::new_struct(name.clone(), fields, additional_properties, external_defs);
+            let type_def = TypeDef::new_struct(name.clone(), fields, additional_properties);
 
-            Some(type_def)
+            Some((type_def, external_defs))
         } else {
             None
         }

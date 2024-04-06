@@ -62,7 +62,7 @@ impl Type<'_> {
             .map(Cow::to_string)
     }
 
-    pub fn type_def(&self, field_name: &str, struct_suffix: &str) -> TypeDef {
+    pub fn type_def(&self, field_name: &str, struct_suffix: &str) -> (TypeDef, Vec<TypeDef>) {
         let output_type = if let Some(ty) = self.ty.as_ref() {
             match ty {
                 TypeKind::Null => TypeDef::Unit,
@@ -103,9 +103,11 @@ impl Type<'_> {
                 TypeKind::Integer { .. } => TypeDef::Primitive(PrimitiveTypeDef::Integer),
                 TypeKind::Boolean { .. } => TypeDef::Primitive(PrimitiveTypeDef::Boolean),
                 TypeKind::Array { items } => {
-                    let inner = items.type_def(field_name, &format!("{struct_suffix}Items"));
+                    let (inner, mut types) =
+                        items.type_def(field_name, &format!("{struct_suffix}Items"));
+                    types.push(inner.clone());
 
-                    TypeDef::Array(Box::new(inner))
+                    return (TypeDef::Array(Box::new(inner)), types);
                 }
                 TypeKind::Object {
                     properties,
@@ -114,21 +116,23 @@ impl Type<'_> {
                     let field_name = crate::name_to_ident(field_name);
                     let suffix = crate::name_to_ident(struct_suffix);
                     let struct_name = format!("{field_name}{suffix}");
+                    let mut all_external = Vec::new();
 
-                    let additional_props =
+                    let (additional_props, ext) =
                         additional_properties.as_additional_properties(struct_suffix);
 
-                    if let Some(props) = properties {
-                        let mut external_defs: Vec<TypeDef> = Vec::new();
+                    all_external.extend(ext);
 
+                    if let Some(props) = properties {
                         let fields: Vec<_> = props
                             .iter()
                             .filter_map(|(original_name, ty)| {
                                 let field_name = crate::name_to_ident(&original_name);
-                                let inner = ty
+                                let (inner, external) = ty
                                     .type_def(&field_name, &format!("{struct_suffix}{field_name}"));
 
-                                external_defs.push(inner.clone());
+                                all_external.push(inner.clone());
+                                all_external.extend(external);
 
                                 let doc = ty.doc();
                                 let optional = ty.optional.get();
@@ -146,9 +150,10 @@ impl Type<'_> {
                             })
                             .collect();
 
-                        TypeDef::new_struct(struct_name, fields, additional_props, external_defs)
+                        let def = TypeDef::new_struct(struct_name, fields, additional_props);
+                        return (def, all_external);
                     } else if !additional_props.is_none() {
-                        TypeDef::new_struct(struct_name, Vec::new(), additional_props, Vec::new())
+                        TypeDef::new_struct(struct_name, Vec::new(), additional_props)
                     } else {
                         TypeDef::Unit
                     }
@@ -173,9 +178,9 @@ impl Type<'_> {
                 format => *format,
             };
 
-            TypeDef::KnownType { format, fallback }
+            (TypeDef::KnownType { format, fallback }, Vec::new())
         } else {
-            output_type
+            (output_type, Vec::new())
         }
     }
 }
@@ -189,14 +194,17 @@ pub enum IntOrTy<'a> {
 }
 
 impl IntOrTy<'_> {
-    pub fn as_additional_properties(&self, struct_suffix: &str) -> AdditionalProperties {
+    pub fn as_additional_properties(
+        &self,
+        struct_suffix: &str,
+    ) -> (AdditionalProperties, Vec<TypeDef>) {
         match self {
-            IntOrTy::Int(1) => AdditionalProperties::Untyped,
+            IntOrTy::Int(1) => (AdditionalProperties::Untyped, Vec::new()),
             IntOrTy::Ty(ty) => {
-                let ty = ty.type_def("additional_properties", struct_suffix);
-                AdditionalProperties::Type(Box::new(ty))
+                let (ty, external) = ty.type_def("additional_properties", struct_suffix);
+                (AdditionalProperties::Type(Box::new(ty)), external)
             }
-            _ => AdditionalProperties::None,
+            _ => (AdditionalProperties::None, Vec::new()),
         }
     }
 

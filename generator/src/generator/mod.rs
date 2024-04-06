@@ -70,7 +70,7 @@ impl Generator {
 
         let client_name = Ident::new(&client_name, quote!().span());
 
-        let mut enums = BTreeMap::new();
+        let mut type_defs = Vec::new();
 
         let methods: Vec<_> = node
             .value
@@ -84,43 +84,35 @@ impl Generator {
                     .chain(info.method.chars().skip(1).map(|c| c.to_ascii_lowercase()))
                     .collect();
 
-                let mut parameters = info
+                let parameters = info
                     .parameters
                     .as_ref()
-                    .map(|v| {
-                        let mut type_def = v.type_def(&method, &node.value.path);
-
-                        if let Some(def) = type_def.as_mut() {
-                            def.hoist_enum_defs(&mut enums);
-                        }
-
-                        type_def
-                    })
+                    .map(|v| v.type_def(&method, &node.value.path))
                     .flatten();
+
+                let parameters = if let Some((params, externals)) = parameters {
+                    type_defs.push(params.clone());
+                    type_defs.extend(externals);
+                    Some(params)
+                } else {
+                    None
+                };
 
                 let fn_name_str = method.to_ascii_lowercase();
                 let fn_name = Ident::new(&fn_name_str, quote!().span());
 
-                if let Some(parameters) = &mut parameters {
-                    parameters.hoist_enum_defs(&mut enums);
-                }
+                let (signature, defer_signature) = if let Some(TypeDef::Struct(strt)) = &parameters
+                {
+                    let name = Ident::new(strt.name(), quote! {}.span());
+                    (quote!(&self, params: #name), quote!(&path, &params))
+                } else {
+                    (quote!(&self), quote!(&path, &()))
+                };
 
-                let (signature, defer_signature, params_def) =
-                    if let Some(TypeDef::Struct(strt)) = &parameters {
-                        let name = Ident::new(strt.name(), quote! {}.span());
-                        (
-                            quote!(&self, params: #name),
-                            quote!(&path, &params),
-                            Some(quote! { #parameters }),
-                        )
-                    } else {
-                        (quote!(&self), quote!(&path, &()), None)
-                    };
-
-                let (returns, returns_definition, call) = if let Some(ret) = info.returns.as_ref() {
-                    let mut def = ret.type_def("", &format!("{method}Output"));
-
-                    def.hoist_enum_defs(&mut enums);
+                let (returns, call) = if let Some(ret) = info.returns.as_ref() {
+                    let (def, additional) = ret.type_def("", &format!("{method}Output"));
+                    type_defs.push(def.clone());
+                    type_defs.extend(additional);
 
                     let name = def.as_field_ty(ret.optional.get());
 
@@ -142,13 +134,9 @@ impl Generator {
                         }
                     };
 
-                    (quote! { -> Result<#name, T::Error> }, Some(def), call)
+                    (quote! { -> Result<#name, T::Error> }, call)
                 } else {
-                    (
-                        quote!(),
-                        None,
-                        quote!(self.client.#fn_name(#defer_signature)),
-                    )
+                    (quote!(), quote!(self.client.#fn_name(#defer_signature)))
                 };
 
                 let doc = if let Some(doc) = &info.description {
@@ -170,10 +158,6 @@ impl Generator {
                 let client = proxmox_api(quote!(client::Client));
 
                 let block = quote! {
-                    #params_def
-
-                    #returns_definition
-
                     impl<T> #client_name<T> where T: #client {
                         #fn_definition
                     }
@@ -241,7 +225,8 @@ impl Generator {
         };
 
         let client = proxmox_api(quote!(client::Client));
-        let enums = enums.values();
+
+        let (structs, enums) = Self::deduplicate(type_defs.into_iter());
 
         let definition = quote! {
             pub struct #client_name<T> {
@@ -253,9 +238,11 @@ impl Generator {
                 #new
             }
 
-            #(#enums)*
-
             #(#methods)*
+
+            #(#structs)*
+
+            #(#enums)*
 
             #(#child_constructors)*
         };
@@ -266,6 +253,54 @@ impl Generator {
             client_tokens: definition,
             children: child_defs,
         }
+    }
+
+    fn deduplicate(
+        types: impl Iterator<Item = TypeDef>,
+    ) -> (
+        impl Iterator<Item = StructDef>,
+        impl Iterator<Item = EnumDef>,
+    ) {
+        let mut enums = BTreeMap::<_, EnumDef>::new();
+        let mut structs = BTreeMap::new();
+
+        for def in types {
+            match def {
+                TypeDef::Struct(strt) => {
+                    structs.insert(strt.name().to_string(), strt);
+                }
+                TypeDef::Enum(en) => {
+                    if let Some(previous_def) = enums.get_mut(en.name()) {
+                        if previous_def.values() != en.values() {
+                            eprintln!(
+                                "The previous definition of enum '{}' has a different set of enum variants.",
+                                en.name()
+                            );
+
+                            let mut prev: Vec<_> = previous_def.values().iter().collect();
+                            prev.sort();
+
+                            let mut now: Vec<_> = en.values().iter().collect();
+                            now.sort();
+
+                            eprintln!("S1: {prev:?}");
+                            eprintln!("S2: {now:?}");
+
+                            eprintln!("Updating S1 with missing values from S2...");
+
+                            en.values().iter().for_each(|v| {
+                                previous_def.values_mut().insert(v.clone());
+                            });
+                        }
+                    } else {
+                        enums.insert(en.name().to_string(), en);
+                    }
+                }
+                _ => {}
+            }
+        }
+
+        (structs.into_values(), enums.into_values())
     }
 
     fn make_placeholder_constructor(has_parent: bool, placeholder: &str) -> TokenStream {
