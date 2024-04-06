@@ -39,9 +39,7 @@ pub enum TypeDef {
         format: KnownFormat,
         fallback: PrimitiveTypeDef,
     },
-    Array {
-        inner: Box<TypeDef>,
-    },
+    Array(Box<TypeDef>),
     Struct(StructDef),
     Enum(EnumDef),
 }
@@ -59,7 +57,7 @@ impl TypeDef {
     }
 
     pub fn is_array(&self) -> bool {
-        matches!(self, TypeDef::Array { .. })
+        matches!(self, TypeDef::Array(..))
     }
 
     pub fn hoist_enum_defs(&mut self, output: &mut BTreeMap<String, EnumDef>) {
@@ -67,7 +65,7 @@ impl TypeDef {
             TypeDef::Unit => {}
             TypeDef::KnownType { .. } => {}
             TypeDef::Primitive(_) => {}
-            TypeDef::Array { inner } => {
+            TypeDef::Array(inner) => {
                 Self::hoist_enum_defs(inner.as_mut(), output);
             }
             TypeDef::Struct(strt) => strt.hoist_enum_defs(output),
@@ -143,7 +141,7 @@ impl TypeDef {
             }
             TypeDef::KnownType { format, fallback } => Self::known_type(format, fallback),
             TypeDef::Primitive(name) => name.to_token_stream(),
-            TypeDef::Array { inner } => {
+            TypeDef::Array(inner) => {
                 let inner = inner.as_field_ty(false);
                 quote!(Vec<#inner>)
             }
@@ -178,7 +176,7 @@ impl ToTokens for TypeDef {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         match self {
             TypeDef::Primitive(_) | TypeDef::Unit | TypeDef::KnownType { .. } => {}
-            TypeDef::Array { inner } => inner.to_tokens(tokens),
+            TypeDef::Array(inner) => inner.to_tokens(tokens),
             TypeDef::Enum(def) => def.to_tokens(tokens),
             TypeDef::Struct(strt) => strt.to_tokens(tokens),
         }

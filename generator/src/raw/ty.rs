@@ -105,9 +105,7 @@ impl Type<'_> {
                 TypeKind::Array { items } => {
                     let inner = items.type_def(field_name, &format!("{struct_suffix}Items"));
 
-                    TypeDef::Array {
-                        inner: Box::new(inner),
-                    }
+                    TypeDef::Array(Box::new(inner))
                 }
                 TypeKind::Object {
                     properties,
