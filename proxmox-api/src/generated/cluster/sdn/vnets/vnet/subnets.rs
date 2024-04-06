@@ -80,7 +80,7 @@ pub struct PostParams {
     #[serde(rename = "dhcp-dns-server")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "IP address for the DNS server"]
-    pub dhcp_dns_server: Option<String>,
+    pub dhcp_dns_server: Option<::std::net::IpAddr>,
     #[serde(rename = "dhcp-range")]
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "A list of DHCP ranges for this subnet"]
@@ -90,7 +90,7 @@ pub struct PostParams {
     pub dnszoneprefix: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Subnet Gateway: Will be assign on vnet for layer3 zones"]
-    pub gateway: Option<String>,
+    pub gateway: Option<::std::net::IpAddr>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

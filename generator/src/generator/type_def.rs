@@ -163,6 +163,9 @@ impl TypeDef {
     fn known_type(known: &KnownFormat, fallback: &PrimitiveTypeDef) -> TokenStream {
         match known {
             KnownFormat::PveVmId => proxmox_api(quote!(types::VmId)),
+            KnownFormat::Ipv4 => quote!(::std::net::Ipv4Addr),
+            KnownFormat::Ipv6 => quote!(::std::net::Ipv6Addr),
+            KnownFormat::Ip => quote!(::std::net::IpAddr),
             _ => fallback.to_token_stream(),
         }
     }
