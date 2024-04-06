@@ -8,6 +8,9 @@ pub use integer::{
     deserialize_int, deserialize_int_optional, serialize_int, serialize_int_optional, Integer,
 };
 
+mod multi;
+pub use multi::{deserialize_additional_data, deserialize_multi, serialize_multi};
+
 mod mac_addr;
 pub use mac_addr::MacAddr;
 
