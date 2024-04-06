@@ -156,7 +156,7 @@ pub struct PutParams {
     pub ipam: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Anycast logical router mac address"]
-    pub mac: Option<String>,
+    pub mac: Option<crate::types::MacAddr<true>>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
