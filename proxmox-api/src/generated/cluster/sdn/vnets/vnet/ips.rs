@@ -14,7 +14,7 @@ where
     }
 }
 impl DeleteParams {
-    pub fn new(ip: String, zone: String) -> Self {
+    pub fn new(ip: ::std::net::IpAddr, zone: String) -> Self {
         Self {
             ip,
             zone,
@@ -26,7 +26,7 @@ impl DeleteParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct DeleteParams {
     #[doc = "The IP address to delete"]
-    pub ip: String,
+    pub ip: ::std::net::IpAddr,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Unicast MAC address."]
     #[doc = "A common MAC address with the I/G (Individual/Group) bit not set."]
@@ -51,7 +51,7 @@ where
     }
 }
 impl PostParams {
-    pub fn new(ip: String, zone: String) -> Self {
+    pub fn new(ip: ::std::net::IpAddr, zone: String) -> Self {
         Self {
             ip,
             zone,
@@ -63,7 +63,7 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "The IP address to associate with the given MAC address"]
-    pub ip: String,
+    pub ip: ::std::net::IpAddr,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Unicast MAC address."]
     #[doc = "A common MAC address with the I/G (Individual/Group) bit not set."]
@@ -88,7 +88,7 @@ where
     }
 }
 impl PutParams {
-    pub fn new(ip: String, zone: String) -> Self {
+    pub fn new(ip: ::std::net::IpAddr, zone: String) -> Self {
         Self {
             ip,
             zone,
@@ -101,7 +101,7 @@ impl PutParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PutParams {
     #[doc = "The IP address to associate with the given MAC address"]
-    pub ip: String,
+    pub ip: ::std::net::IpAddr,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Unicast MAC address."]
     #[doc = "A common MAC address with the I/G (Individual/Group) bit not set."]

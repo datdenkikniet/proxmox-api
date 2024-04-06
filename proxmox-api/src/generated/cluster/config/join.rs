@@ -26,7 +26,12 @@ pub struct GetParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl NodelistGetOutputNodelistItems {
-    pub fn new(name: String, pve_addr: String, pve_fp: String, quorum_votes: u64) -> Self {
+    pub fn new(
+        name: String,
+        pve_addr: ::std::net::IpAddr,
+        pve_fp: String,
+        quorum_votes: u64,
+    ) -> Self {
         Self {
             name,
             pve_addr,
@@ -49,7 +54,7 @@ pub struct NodelistGetOutputNodelistItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node id for this node."]
     pub nodeid: Option<u64>,
-    pub pve_addr: String,
+    pub pve_addr: ::std::net::IpAddr,
     #[doc = "Certificate SHA 256 fingerprint."]
     pub pve_fp: String,
     #[serde(

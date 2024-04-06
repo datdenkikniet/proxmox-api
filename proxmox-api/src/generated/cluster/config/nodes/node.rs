@@ -45,7 +45,7 @@ pub struct PostParams {
     pub link_n: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "IP Address of node to add. Used as fallback if no links are given."]
-    pub new_node_ip: Option<String>,
+    pub new_node_ip: Option<::std::net::IpAddr>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"

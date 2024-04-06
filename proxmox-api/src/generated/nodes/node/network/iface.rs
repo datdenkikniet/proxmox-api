@@ -143,10 +143,10 @@ impl PutParams {
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "IP address."]
-    pub address: Option<String>,
+    pub address: Option<::std::net::Ipv4Addr>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "IP address."]
-    pub address6: Option<String>,
+    pub address6: Option<::std::net::Ipv6Addr>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -191,10 +191,10 @@ pub struct PutParams {
     pub delete: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Default gateway address."]
-    pub gateway: Option<String>,
+    pub gateway: Option<::std::net::Ipv4Addr>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Default ipv6 gateway address."]
-    pub gateway6: Option<String>,
+    pub gateway6: Option<::std::net::Ipv6Addr>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"

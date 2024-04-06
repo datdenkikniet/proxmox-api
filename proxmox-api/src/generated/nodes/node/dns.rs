@@ -53,13 +53,13 @@ impl PutParams {
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "First name server IP address."]
-    pub dns1: Option<String>,
+    pub dns1: Option<::std::net::IpAddr>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Second name server IP address."]
-    pub dns2: Option<String>,
+    pub dns2: Option<::std::net::IpAddr>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Third name server IP address."]
-    pub dns3: Option<String>,
+    pub dns3: Option<::std::net::IpAddr>,
     #[doc = "Search domain for host-name lookup."]
     pub search: String,
     #[serde(
