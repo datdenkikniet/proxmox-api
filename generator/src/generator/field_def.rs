@@ -45,11 +45,8 @@ impl FieldDef {
     pub fn optional(&self) -> bool {
         self.optional
             || matches!(
-                *self.ty,
-                TypeDef::Enum(EnumDef {
-                    default: Some(_),
-                    ..
-                })
+                self.ty.deref(),
+                TypeDef::Enum(en) if en.has_default()
             )
     }
 
