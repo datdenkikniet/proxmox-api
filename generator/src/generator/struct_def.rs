@@ -8,7 +8,7 @@ use super::{EnumDef, FieldDef, TypeDef};
 
 use quote::quote;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum AdditionalProperties {
     None,
     Untyped,
@@ -21,7 +21,7 @@ impl AdditionalProperties {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct StructDef {
     name: String,
     fields: Vec<FieldDef>,
@@ -103,20 +103,20 @@ impl ToTokens for StructDef {
 
             let default_fields = optional_fields.map(|f| {
                 let name = f.name();
-                let name = Ident::new(name, quote!().span());
+                let name = Ident::new(&name, quote!().span());
                 quote!(#name: Default::default())
             });
 
             let args = non_optional_fields.clone().map(|f| {
                 let name = f.name();
-                let name = Ident::new(name, quote!().span());
+                let name = Ident::new(&name, quote!().span());
                 let ty = f.ty();
                 quote!(#name: #ty)
             });
 
             let arg_setters = non_optional_fields.map(|f| {
                 let name = f.name();
-                let name = Ident::new(name, quote!().span());
+                let name = Ident::new(&name, quote!().span());
                 quote!(#name)
             });
 
@@ -157,7 +157,14 @@ impl ToTokens for StructDef {
             }
         });
 
+        let mut field_level_defs = Vec::new();
+        let fields: Vec<_> = fields
+            .into_iter()
+            .map(|f| f.to_tokens(&mut field_level_defs))
+            .collect();
+
         tokens.extend(quote! {
+            #(#field_level_defs)*
             #[derive(#(#derives)*)]
             pub struct #name {
                 #(#fields)*

@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand};
-use proxmox_api::{access::AccessClient, ReqwestClient};
+use proxmox_api::ReqwestClient;
 
 #[derive(Debug, Parser)]
 pub struct Cli {
@@ -31,10 +31,5 @@ fn main() {
         .split_once('@')
         .expect("User must be provided as <user>@<realm>");
 
-    let client = ReqwestClient::new(&cli.host, user, realm, &cli.password).unwrap();
-
-    let client = client;
-
-    let access_client = AccessClient::new(&client);
-    println!("{:#?}", access_client.users().get(Default::default()));
+    let _client = ReqwestClient::new(&cli.host, user, realm, &cli.password).unwrap();
 }

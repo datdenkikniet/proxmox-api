@@ -31,7 +31,7 @@ impl ToTokens for PrimitiveTypeDef {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum TypeDef {
     Unit,
     Primitive(PrimitiveTypeDef),
@@ -72,17 +72,17 @@ impl TypeDef {
             }
             TypeDef::Struct(strt) => strt.hoist_enum_defs(output),
             TypeDef::Enum(def) => {
-                if let Some(previous_def) = output.get_mut(&def.name) {
-                    if previous_def.values != def.values {
+                if let Some(previous_def) = output.get_mut(def.name()) {
+                    if previous_def.values() != def.values() {
                         eprintln!(
                             "The previous definition of enum '{}' has a different set of enum variants.",
-                            def.name
+                            def.name()
                         );
 
-                        let mut prev: Vec<_> = previous_def.values.iter().collect();
+                        let mut prev: Vec<_> = previous_def.values().iter().collect();
                         prev.sort();
 
-                        let mut now: Vec<_> = def.values.iter().collect();
+                        let mut now: Vec<_> = def.values().iter().collect();
                         now.sort();
 
                         eprintln!("S1: {prev:?}");
@@ -90,12 +90,12 @@ impl TypeDef {
 
                         eprintln!("Updating S1 with missing values from S2...");
 
-                        def.values.iter().for_each(|v| {
-                            previous_def.values.insert(v.clone());
+                        def.values().iter().for_each(|v| {
+                            previous_def.values_mut().insert(v.clone());
                         });
                     }
                 } else {
-                    output.insert(def.name.to_string(), def.clone());
+                    output.insert(def.name().to_string(), def.clone());
                 }
 
                 *self = TypeDef::Unit;
@@ -147,8 +147,8 @@ impl TypeDef {
                 let inner = inner.as_field_ty(false);
                 quote!(Vec<#inner>)
             }
-            TypeDef::Enum(EnumDef { name, .. }) => {
-                let ident = Ident::new(&name, quote!().span());
+            TypeDef::Enum(en) => {
+                let ident = Ident::new(en.name(), quote!().span());
                 quote!(#ident)
             }
         };

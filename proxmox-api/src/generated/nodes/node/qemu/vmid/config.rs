@@ -221,11 +221,11 @@ impl GetOutput {
             efidisk0: Default::default(),
             freeze: Default::default(),
             hookscript: Default::default(),
-            hostpci_n: Default::default(),
+            hostpcis: Default::default(),
             hotplug: Default::default(),
             hugepages: Default::default(),
-            ide_n: Default::default(),
-            ipconfig_n: Default::default(),
+            ides: Default::default(),
+            ipconfigs: Default::default(),
             ivshmem: Default::default(),
             keephugepages: Default::default(),
             keyboard: Default::default(),
@@ -238,20 +238,20 @@ impl GetOutput {
             migrate_speed: Default::default(),
             name: Default::default(),
             nameserver: Default::default(),
-            net_n: Default::default(),
+            nets: Default::default(),
             numa: Default::default(),
-            numa_n: Default::default(),
+            numas: Default::default(),
             onboot: Default::default(),
             ostype: Default::default(),
-            parallel_n: Default::default(),
+            parallels: Default::default(),
             protection: Default::default(),
             reboot: Default::default(),
             rng0: Default::default(),
-            sata_n: Default::default(),
-            scsi_n: Default::default(),
+            satas: Default::default(),
+            scsis: Default::default(),
             scsihw: Default::default(),
             searchdomain: Default::default(),
-            serial_n: Default::default(),
+            serials: Default::default(),
             shares: Default::default(),
             smbios1: Default::default(),
             smp: Default::default(),
@@ -265,17 +265,89 @@ impl GetOutput {
             tdf: Default::default(),
             template: Default::default(),
             tpmstate0: Default::default(),
-            unused_n: Default::default(),
-            usb_n: Default::default(),
+            unuseds: Default::default(),
+            usbs: Default::default(),
             vcpus: Default::default(),
             vga: Default::default(),
-            virtio_n: Default::default(),
+            virtios: Default::default(),
             vmgenid: Default::default(),
             vmstatestorage: Default::default(),
             watchdog: Default::default(),
             additional_properties: Default::default(),
         }
     }
+}
+#[derive(Default)]
+struct NumberedHostpcis;
+impl crate::types::multi::NumberedItems for NumberedHostpcis {
+    type Item = String;
+    const PREFIX: &'static str = "hostpci";
+}
+#[derive(Default)]
+struct NumberedIdes;
+impl crate::types::multi::NumberedItems for NumberedIdes {
+    type Item = String;
+    const PREFIX: &'static str = "ide";
+}
+#[derive(Default)]
+struct NumberedIpconfigs;
+impl crate::types::multi::NumberedItems for NumberedIpconfigs {
+    type Item = String;
+    const PREFIX: &'static str = "ipconfig";
+}
+#[derive(Default)]
+struct NumberedNets;
+impl crate::types::multi::NumberedItems for NumberedNets {
+    type Item = String;
+    const PREFIX: &'static str = "net";
+}
+#[derive(Default)]
+struct NumberedNumas;
+impl crate::types::multi::NumberedItems for NumberedNumas {
+    type Item = String;
+    const PREFIX: &'static str = "numa";
+}
+#[derive(Default)]
+struct NumberedParallels;
+impl crate::types::multi::NumberedItems for NumberedParallels {
+    type Item = String;
+    const PREFIX: &'static str = "parallel";
+}
+#[derive(Default)]
+struct NumberedSatas;
+impl crate::types::multi::NumberedItems for NumberedSatas {
+    type Item = String;
+    const PREFIX: &'static str = "sata";
+}
+#[derive(Default)]
+struct NumberedScsis;
+impl crate::types::multi::NumberedItems for NumberedScsis {
+    type Item = String;
+    const PREFIX: &'static str = "scsi";
+}
+#[derive(Default)]
+struct NumberedSerials;
+impl crate::types::multi::NumberedItems for NumberedSerials {
+    type Item = String;
+    const PREFIX: &'static str = "serial";
+}
+#[derive(Default)]
+struct NumberedUnuseds;
+impl crate::types::multi::NumberedItems for NumberedUnuseds {
+    type Item = String;
+    const PREFIX: &'static str = "unused";
+}
+#[derive(Default)]
+struct NumberedUsbs;
+impl crate::types::multi::NumberedItems for NumberedUsbs {
+    type Item = String;
+    const PREFIX: &'static str = "usb";
+}
+#[derive(Default)]
+struct NumberedVirtios;
+impl crate::types::multi::NumberedItems for NumberedVirtios {
+    type Item = String;
+    const PREFIX: &'static str = "virtio";
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutput {
@@ -388,10 +460,17 @@ pub struct GetOutput {
     #[doc = "Script that will be executed during various steps in the vms lifetime."]
     pub hookscript: Option<String>,
     #[serde(rename = "hostpci[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedHostpcis, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedHostpcis, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Map host PCI devices into guest."]
     #[doc = "Map host PCI devices into guest.\n\nNOTE: This option allows direct access to host hardware. So it is no longer\npossible to migrate such machines - use with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
-    pub hostpci_n: Option<String>,
+    pub hostpcis: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Selectively enable hotplug features. This is a comma separated list of hotplug features: 'network', 'disk', 'cpu', 'memory', 'usb' and 'cloudinit'. Use '0' to disable hotplug completely. Using '1' as value is an alias for the default `network,disk,usb`. USB hotplugging is possible for guests with machine version \\>= 7.1 and ostype l26 or windows \\> 7."]
     pub hotplug: Option<String>,
@@ -399,13 +478,27 @@ pub struct GetOutput {
     #[doc = "Enable/disable hugepages memory."]
     pub hugepages: Option<Hugepages>,
     #[serde(rename = "ide[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedIdes, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedIdes, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Use volume as IDE hard disk or CD-ROM (n is 0 to 3)."]
-    pub ide_n: Option<String>,
+    pub ides: ::std::collections::BTreeMap<u32, String>,
     #[serde(rename = "ipconfig[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedIpconfigs, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedIpconfigs, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "cloud-init: Specify IP addresses and gateways for the corresponding interface.\n\nIP addresses use CIDR notation, gateways are optional but need an IP of the same type specified.\n\nThe special string 'dhcp' can be used for IP addresses to use DHCP, in which case no explicit\ngateway should be provided.\nFor IPv6 the special string 'auto' can be used to use stateless autoconfiguration. This requires\ncloud-init 19.4 or newer.\n\nIf cloud-init is enabled and neither an IPv4 nor an IPv6 address is specified, it defaults to using\ndhcp on IPv4.\n"]
-    pub ipconfig_n: Option<String>,
+    pub ipconfigs: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Inter-VM shared memory. Useful for direct communication between VMs, or to the host."]
     pub ivshmem: Option<String>,
@@ -463,9 +556,16 @@ pub struct GetOutput {
     #[doc = "cloud-init: Sets DNS server IP address for a container. Create will automatically use the setting from the host if neither searchdomain nor nameserver are set."]
     pub nameserver: Option<String>,
     #[serde(rename = "net[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedNets, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedNets, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Specify network devices."]
-    pub net_n: Option<String>,
+    pub nets: ::std::collections::BTreeMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -474,9 +574,16 @@ pub struct GetOutput {
     #[doc = "Enable/disable NUMA."]
     pub numa: Option<bool>,
     #[serde(rename = "numa[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedNumas, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedNumas, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "NUMA topology."]
-    pub numa_n: Option<String>,
+    pub numas: ::std::collections::BTreeMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -489,10 +596,17 @@ pub struct GetOutput {
     #[doc = "Specify guest operating system. This is used to enable special\noptimization/features for specific operating systems:\n\n[horizontal]\nother;; unspecified OS\nwxp;; Microsoft Windows XP\nw2k;; Microsoft Windows 2000\nw2k3;; Microsoft Windows 2003\nw2k8;; Microsoft Windows 2008\nwvista;; Microsoft Windows Vista\nwin7;; Microsoft Windows 7\nwin8;; Microsoft Windows 8/2012/2012r2\nwin10;; Microsoft Windows 10/2016/2019\nwin11;; Microsoft Windows 11/2022\nl24;; Linux 2.4 Kernel\nl26;; Linux 2.6 - 6.X Kernel\nsolaris;; Solaris/OpenSolaris/OpenIndiania kernel\n"]
     pub ostype: Option<Ostype>,
     #[serde(rename = "parallel[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedParallels, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedParallels, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Map host parallel devices (n is 0 to 2)."]
     #[doc = "Map host parallel devices (n is 0 to 2).\n\nNOTE: This option allows direct access to host hardware. So it is no longer possible to migrate such\nmachines - use with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
-    pub parallel_n: Option<String>,
+    pub parallels: ::std::collections::BTreeMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -511,13 +625,27 @@ pub struct GetOutput {
     #[doc = "Configure a VirtIO-based Random Number Generator."]
     pub rng0: Option<String>,
     #[serde(rename = "sata[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedSatas, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedSatas, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Use volume as SATA hard disk or CD-ROM (n is 0 to 5)."]
-    pub sata_n: Option<String>,
+    pub satas: ::std::collections::BTreeMap<u32, String>,
     #[serde(rename = "scsi[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedScsis, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedScsis, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Use volume as SCSI hard disk or CD-ROM (n is 0 to 30)."]
-    pub scsi_n: Option<String>,
+    pub scsis: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "SCSI controller model"]
     pub scsihw: Option<Scsihw>,
@@ -525,10 +653,17 @@ pub struct GetOutput {
     #[doc = "cloud-init: Sets DNS search domains for a container. Create will automatically use the setting from the host if neither searchdomain nor nameserver are set."]
     pub searchdomain: Option<String>,
     #[serde(rename = "serial[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedSerials, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedSerials, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Create a serial device inside the VM (n is 0 to 3)"]
     #[doc = "Create a serial device inside the VM (n is 0 to 3), and pass through a\nhost serial device (i.e. /dev/ttyS0), or create a unix socket on the\nhost side (use 'qm terminal' to open a terminal connection).\n\nNOTE: If you pass through a host serial device, it is no longer possible to migrate such machines -\nuse with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
-    pub serial_n: Option<String>,
+    pub serials: ::std::collections::BTreeMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -594,13 +729,27 @@ pub struct GetOutput {
     #[doc = "Configure a Disk for storing TPM state. The format is fixed to 'raw'."]
     pub tpmstate0: Option<String>,
     #[serde(rename = "unused[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedUnuseds, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedUnuseds, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Reference to unused volumes. This is used internally, and should not be modified manually."]
-    pub unused_n: Option<String>,
+    pub unuseds: ::std::collections::BTreeMap<u32, String>,
     #[serde(rename = "usb[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedUsbs, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedUsbs, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Configure an USB device (n is 0 to 4, for machine version \\>= 7.1 and ostype l26 or windows \\> 7, n can be up to 14)."]
-    pub usb_n: Option<String>,
+    pub usbs: ::std::collections::BTreeMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -613,9 +762,16 @@ pub struct GetOutput {
     #[doc = "Configure the VGA Hardware. If you want to use high resolution modes (\\>= 1280x1024x16) you may need to increase the vga memory option. Since QEMU 2.9 the default VGA display type is 'std' for all OS types besides some Windows versions (XP and older) which use 'cirrus'. The 'qxl' option enables the SPICE display server. For win* OS you can select how many independent displays you want, Linux guests can add displays them self.\nYou can also run without any graphic card, using a serial device as terminal."]
     pub vga: Option<String>,
     #[serde(rename = "virtio[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedVirtios, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedVirtios, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Use volume as VIRTIO hard disk (n is 0 to 15)."]
-    pub virtio_n: Option<String>,
+    pub virtios: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set VM Generation ID. Use '1' to autogenerate on create or update, pass '0' to disable explicitly."]
     #[doc = "The VM generation ID (vmgenid) device exposes a 128-bit integer value identifier to the guest OS. This allows to notify the guest operating system when the virtual machine is executed with a different configuration (e.g. snapshot execution or creation from a template). The guest operating system notices the change, and is then able to react as appropriate by marking its copies of distributed databases as dirty, re-initializing its random number generator, etc.\nNote that auto-creation only works when done through API/CLI create or update methods, but not when manually editing the config file."]
@@ -643,6 +799,78 @@ where
         let path = self.path.to_string();
         self.client.get(&path, &params)
     }
+}
+#[derive(Default)]
+struct NumberedHostpcis;
+impl crate::types::multi::NumberedItems for NumberedHostpcis {
+    type Item = String;
+    const PREFIX: &'static str = "hostpci";
+}
+#[derive(Default)]
+struct NumberedIdes;
+impl crate::types::multi::NumberedItems for NumberedIdes {
+    type Item = String;
+    const PREFIX: &'static str = "ide";
+}
+#[derive(Default)]
+struct NumberedIpconfigs;
+impl crate::types::multi::NumberedItems for NumberedIpconfigs {
+    type Item = String;
+    const PREFIX: &'static str = "ipconfig";
+}
+#[derive(Default)]
+struct NumberedNets;
+impl crate::types::multi::NumberedItems for NumberedNets {
+    type Item = String;
+    const PREFIX: &'static str = "net";
+}
+#[derive(Default)]
+struct NumberedNumas;
+impl crate::types::multi::NumberedItems for NumberedNumas {
+    type Item = String;
+    const PREFIX: &'static str = "numa";
+}
+#[derive(Default)]
+struct NumberedParallels;
+impl crate::types::multi::NumberedItems for NumberedParallels {
+    type Item = String;
+    const PREFIX: &'static str = "parallel";
+}
+#[derive(Default)]
+struct NumberedSatas;
+impl crate::types::multi::NumberedItems for NumberedSatas {
+    type Item = String;
+    const PREFIX: &'static str = "sata";
+}
+#[derive(Default)]
+struct NumberedScsis;
+impl crate::types::multi::NumberedItems for NumberedScsis {
+    type Item = String;
+    const PREFIX: &'static str = "scsi";
+}
+#[derive(Default)]
+struct NumberedSerials;
+impl crate::types::multi::NumberedItems for NumberedSerials {
+    type Item = String;
+    const PREFIX: &'static str = "serial";
+}
+#[derive(Default)]
+struct NumberedUnuseds;
+impl crate::types::multi::NumberedItems for NumberedUnuseds {
+    type Item = String;
+    const PREFIX: &'static str = "unused";
+}
+#[derive(Default)]
+struct NumberedUsbs;
+impl crate::types::multi::NumberedItems for NumberedUsbs {
+    type Item = String;
+    const PREFIX: &'static str = "usb";
+}
+#[derive(Default)]
+struct NumberedVirtios;
+impl crate::types::multi::NumberedItems for NumberedVirtios {
+    type Item = String;
+    const PREFIX: &'static str = "virtio";
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PostParams {
@@ -773,10 +1001,17 @@ pub struct PostParams {
     #[doc = "Script that will be executed during various steps in the vms lifetime."]
     pub hookscript: Option<String>,
     #[serde(rename = "hostpci[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedHostpcis, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedHostpcis, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Map host PCI devices into guest."]
     #[doc = "Map host PCI devices into guest.\n\nNOTE: This option allows direct access to host hardware. So it is no longer\npossible to migrate such machines - use with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
-    pub hostpci_n: Option<String>,
+    pub hostpcis: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Selectively enable hotplug features. This is a comma separated list of hotplug features: 'network', 'disk', 'cpu', 'memory', 'usb' and 'cloudinit'. Use '0' to disable hotplug completely. Using '1' as value is an alias for the default `network,disk,usb`. USB hotplugging is possible for guests with machine version \\>= 7.1 and ostype l26 or windows \\> 7."]
     pub hotplug: Option<String>,
@@ -784,13 +1019,27 @@ pub struct PostParams {
     #[doc = "Enable/disable hugepages memory."]
     pub hugepages: Option<Hugepages>,
     #[serde(rename = "ide[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedIdes, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedIdes, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Use volume as IDE hard disk or CD-ROM (n is 0 to 3). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
-    pub ide_n: Option<String>,
+    pub ides: ::std::collections::BTreeMap<u32, String>,
     #[serde(rename = "ipconfig[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedIpconfigs, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedIpconfigs, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "cloud-init: Specify IP addresses and gateways for the corresponding interface.\n\nIP addresses use CIDR notation, gateways are optional but need an IP of the same type specified.\n\nThe special string 'dhcp' can be used for IP addresses to use DHCP, in which case no explicit\ngateway should be provided.\nFor IPv6 the special string 'auto' can be used to use stateless autoconfiguration. This requires\ncloud-init 19.4 or newer.\n\nIf cloud-init is enabled and neither an IPv4 nor an IPv6 address is specified, it defaults to using\ndhcp on IPv4.\n"]
-    pub ipconfig_n: Option<String>,
+    pub ipconfigs: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Inter-VM shared memory. Useful for direct communication between VMs, or to the host."]
     pub ivshmem: Option<String>,
@@ -848,9 +1097,16 @@ pub struct PostParams {
     #[doc = "cloud-init: Sets DNS server IP address for a container. Create will automatically use the setting from the host if neither searchdomain nor nameserver are set."]
     pub nameserver: Option<String>,
     #[serde(rename = "net[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedNets, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedNets, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Specify network devices."]
-    pub net_n: Option<String>,
+    pub nets: ::std::collections::BTreeMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -859,9 +1115,16 @@ pub struct PostParams {
     #[doc = "Enable/disable NUMA."]
     pub numa: Option<bool>,
     #[serde(rename = "numa[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedNumas, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedNumas, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "NUMA topology."]
-    pub numa_n: Option<String>,
+    pub numas: ::std::collections::BTreeMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -874,10 +1137,17 @@ pub struct PostParams {
     #[doc = "Specify guest operating system. This is used to enable special\noptimization/features for specific operating systems:\n\n[horizontal]\nother;; unspecified OS\nwxp;; Microsoft Windows XP\nw2k;; Microsoft Windows 2000\nw2k3;; Microsoft Windows 2003\nw2k8;; Microsoft Windows 2008\nwvista;; Microsoft Windows Vista\nwin7;; Microsoft Windows 7\nwin8;; Microsoft Windows 8/2012/2012r2\nwin10;; Microsoft Windows 10/2016/2019\nwin11;; Microsoft Windows 11/2022\nl24;; Linux 2.4 Kernel\nl26;; Linux 2.6 - 6.X Kernel\nsolaris;; Solaris/OpenSolaris/OpenIndiania kernel\n"]
     pub ostype: Option<Ostype>,
     #[serde(rename = "parallel[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedParallels, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedParallels, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Map host parallel devices (n is 0 to 2)."]
     #[doc = "Map host parallel devices (n is 0 to 2).\n\nNOTE: This option allows direct access to host hardware. So it is no longer possible to migrate such\nmachines - use with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
-    pub parallel_n: Option<String>,
+    pub parallels: ::std::collections::BTreeMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -899,13 +1169,27 @@ pub struct PostParams {
     #[doc = "Configure a VirtIO-based Random Number Generator."]
     pub rng0: Option<String>,
     #[serde(rename = "sata[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedSatas, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedSatas, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Use volume as SATA hard disk or CD-ROM (n is 0 to 5). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
-    pub sata_n: Option<String>,
+    pub satas: ::std::collections::BTreeMap<u32, String>,
     #[serde(rename = "scsi[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedScsis, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedScsis, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Use volume as SCSI hard disk or CD-ROM (n is 0 to 30). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
-    pub scsi_n: Option<String>,
+    pub scsis: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "SCSI controller model"]
     pub scsihw: Option<Scsihw>,
@@ -913,10 +1197,17 @@ pub struct PostParams {
     #[doc = "cloud-init: Sets DNS search domains for a container. Create will automatically use the setting from the host if neither searchdomain nor nameserver are set."]
     pub searchdomain: Option<String>,
     #[serde(rename = "serial[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedSerials, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedSerials, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Create a serial device inside the VM (n is 0 to 3)"]
     #[doc = "Create a serial device inside the VM (n is 0 to 3), and pass through a\nhost serial device (i.e. /dev/ttyS0), or create a unix socket on the\nhost side (use 'qm terminal' to open a terminal connection).\n\nNOTE: If you pass through a host serial device, it is no longer possible to migrate such machines -\nuse with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
-    pub serial_n: Option<String>,
+    pub serials: ::std::collections::BTreeMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -989,13 +1280,27 @@ pub struct PostParams {
     #[doc = "Configure a Disk for storing TPM state. The format is fixed to 'raw'. Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Note that SIZE_IN_GiB is ignored here and 4 MiB will be used instead. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
     pub tpmstate0: Option<String>,
     #[serde(rename = "unused[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedUnuseds, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedUnuseds, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Reference to unused volumes. This is used internally, and should not be modified manually."]
-    pub unused_n: Option<String>,
+    pub unuseds: ::std::collections::BTreeMap<u32, String>,
     #[serde(rename = "usb[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedUsbs, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedUsbs, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Configure an USB device (n is 0 to 4, for machine version \\>= 7.1 and ostype l26 or windows \\> 7, n can be up to 14)."]
-    pub usb_n: Option<String>,
+    pub usbs: ::std::collections::BTreeMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -1008,9 +1313,16 @@ pub struct PostParams {
     #[doc = "Configure the VGA Hardware. If you want to use high resolution modes (\\>= 1280x1024x16) you may need to increase the vga memory option. Since QEMU 2.9 the default VGA display type is 'std' for all OS types besides some Windows versions (XP and older) which use 'cirrus'. The 'qxl' option enables the SPICE display server. For win* OS you can select how many independent displays you want, Linux guests can add displays them self.\nYou can also run without any graphic card, using a serial device as terminal."]
     pub vga: Option<String>,
     #[serde(rename = "virtio[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedVirtios, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedVirtios, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Use volume as VIRTIO hard disk (n is 0 to 15). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
-    pub virtio_n: Option<String>,
+    pub virtios: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set VM Generation ID. Use '1' to autogenerate on create or update, pass '0' to disable explicitly."]
     #[doc = "The VM generation ID (vmgenid) device exposes a 128-bit integer value identifier to the guest OS. This allows to notify the guest operating system when the virtual machine is executed with a different configuration (e.g. snapshot execution or creation from a template). The guest operating system notices the change, and is then able to react as appropriate by marking its copies of distributed databases as dirty, re-initializing its random number generator, etc.\nNote that auto-creation only works when done through API/CLI create or update methods, but not when manually editing the config file."]
@@ -1038,6 +1350,78 @@ where
         let path = self.path.to_string();
         self.client.post(&path, &params)
     }
+}
+#[derive(Default)]
+struct NumberedHostpcis;
+impl crate::types::multi::NumberedItems for NumberedHostpcis {
+    type Item = String;
+    const PREFIX: &'static str = "hostpci";
+}
+#[derive(Default)]
+struct NumberedIdes;
+impl crate::types::multi::NumberedItems for NumberedIdes {
+    type Item = String;
+    const PREFIX: &'static str = "ide";
+}
+#[derive(Default)]
+struct NumberedIpconfigs;
+impl crate::types::multi::NumberedItems for NumberedIpconfigs {
+    type Item = String;
+    const PREFIX: &'static str = "ipconfig";
+}
+#[derive(Default)]
+struct NumberedNets;
+impl crate::types::multi::NumberedItems for NumberedNets {
+    type Item = String;
+    const PREFIX: &'static str = "net";
+}
+#[derive(Default)]
+struct NumberedNumas;
+impl crate::types::multi::NumberedItems for NumberedNumas {
+    type Item = String;
+    const PREFIX: &'static str = "numa";
+}
+#[derive(Default)]
+struct NumberedParallels;
+impl crate::types::multi::NumberedItems for NumberedParallels {
+    type Item = String;
+    const PREFIX: &'static str = "parallel";
+}
+#[derive(Default)]
+struct NumberedSatas;
+impl crate::types::multi::NumberedItems for NumberedSatas {
+    type Item = String;
+    const PREFIX: &'static str = "sata";
+}
+#[derive(Default)]
+struct NumberedScsis;
+impl crate::types::multi::NumberedItems for NumberedScsis {
+    type Item = String;
+    const PREFIX: &'static str = "scsi";
+}
+#[derive(Default)]
+struct NumberedSerials;
+impl crate::types::multi::NumberedItems for NumberedSerials {
+    type Item = String;
+    const PREFIX: &'static str = "serial";
+}
+#[derive(Default)]
+struct NumberedUnuseds;
+impl crate::types::multi::NumberedItems for NumberedUnuseds {
+    type Item = String;
+    const PREFIX: &'static str = "unused";
+}
+#[derive(Default)]
+struct NumberedUsbs;
+impl crate::types::multi::NumberedItems for NumberedUsbs {
+    type Item = String;
+    const PREFIX: &'static str = "usb";
+}
+#[derive(Default)]
+struct NumberedVirtios;
+impl crate::types::multi::NumberedItems for NumberedVirtios {
+    type Item = String;
+    const PREFIX: &'static str = "virtio";
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
@@ -1161,10 +1545,17 @@ pub struct PutParams {
     #[doc = "Script that will be executed during various steps in the vms lifetime."]
     pub hookscript: Option<String>,
     #[serde(rename = "hostpci[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedHostpcis, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedHostpcis, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Map host PCI devices into guest."]
     #[doc = "Map host PCI devices into guest.\n\nNOTE: This option allows direct access to host hardware. So it is no longer\npossible to migrate such machines - use with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
-    pub hostpci_n: Option<String>,
+    pub hostpcis: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Selectively enable hotplug features. This is a comma separated list of hotplug features: 'network', 'disk', 'cpu', 'memory', 'usb' and 'cloudinit'. Use '0' to disable hotplug completely. Using '1' as value is an alias for the default `network,disk,usb`. USB hotplugging is possible for guests with machine version \\>= 7.1 and ostype l26 or windows \\> 7."]
     pub hotplug: Option<String>,
@@ -1172,13 +1563,27 @@ pub struct PutParams {
     #[doc = "Enable/disable hugepages memory."]
     pub hugepages: Option<Hugepages>,
     #[serde(rename = "ide[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedIdes, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedIdes, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Use volume as IDE hard disk or CD-ROM (n is 0 to 3). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
-    pub ide_n: Option<String>,
+    pub ides: ::std::collections::BTreeMap<u32, String>,
     #[serde(rename = "ipconfig[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedIpconfigs, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedIpconfigs, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "cloud-init: Specify IP addresses and gateways for the corresponding interface.\n\nIP addresses use CIDR notation, gateways are optional but need an IP of the same type specified.\n\nThe special string 'dhcp' can be used for IP addresses to use DHCP, in which case no explicit\ngateway should be provided.\nFor IPv6 the special string 'auto' can be used to use stateless autoconfiguration. This requires\ncloud-init 19.4 or newer.\n\nIf cloud-init is enabled and neither an IPv4 nor an IPv6 address is specified, it defaults to using\ndhcp on IPv4.\n"]
-    pub ipconfig_n: Option<String>,
+    pub ipconfigs: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Inter-VM shared memory. Useful for direct communication between VMs, or to the host."]
     pub ivshmem: Option<String>,
@@ -1236,9 +1641,16 @@ pub struct PutParams {
     #[doc = "cloud-init: Sets DNS server IP address for a container. Create will automatically use the setting from the host if neither searchdomain nor nameserver are set."]
     pub nameserver: Option<String>,
     #[serde(rename = "net[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedNets, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedNets, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Specify network devices."]
-    pub net_n: Option<String>,
+    pub nets: ::std::collections::BTreeMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -1247,9 +1659,16 @@ pub struct PutParams {
     #[doc = "Enable/disable NUMA."]
     pub numa: Option<bool>,
     #[serde(rename = "numa[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedNumas, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedNumas, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "NUMA topology."]
-    pub numa_n: Option<String>,
+    pub numas: ::std::collections::BTreeMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -1262,10 +1681,17 @@ pub struct PutParams {
     #[doc = "Specify guest operating system. This is used to enable special\noptimization/features for specific operating systems:\n\n[horizontal]\nother;; unspecified OS\nwxp;; Microsoft Windows XP\nw2k;; Microsoft Windows 2000\nw2k3;; Microsoft Windows 2003\nw2k8;; Microsoft Windows 2008\nwvista;; Microsoft Windows Vista\nwin7;; Microsoft Windows 7\nwin8;; Microsoft Windows 8/2012/2012r2\nwin10;; Microsoft Windows 10/2016/2019\nwin11;; Microsoft Windows 11/2022\nl24;; Linux 2.4 Kernel\nl26;; Linux 2.6 - 6.X Kernel\nsolaris;; Solaris/OpenSolaris/OpenIndiania kernel\n"]
     pub ostype: Option<Ostype>,
     #[serde(rename = "parallel[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedParallels, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedParallels, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Map host parallel devices (n is 0 to 2)."]
     #[doc = "Map host parallel devices (n is 0 to 2).\n\nNOTE: This option allows direct access to host hardware. So it is no longer possible to migrate such\nmachines - use with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
-    pub parallel_n: Option<String>,
+    pub parallels: ::std::collections::BTreeMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -1287,13 +1713,27 @@ pub struct PutParams {
     #[doc = "Configure a VirtIO-based Random Number Generator."]
     pub rng0: Option<String>,
     #[serde(rename = "sata[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedSatas, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedSatas, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Use volume as SATA hard disk or CD-ROM (n is 0 to 5). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
-    pub sata_n: Option<String>,
+    pub satas: ::std::collections::BTreeMap<u32, String>,
     #[serde(rename = "scsi[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedScsis, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedScsis, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Use volume as SCSI hard disk or CD-ROM (n is 0 to 30). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
-    pub scsi_n: Option<String>,
+    pub scsis: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "SCSI controller model"]
     pub scsihw: Option<Scsihw>,
@@ -1301,10 +1741,17 @@ pub struct PutParams {
     #[doc = "cloud-init: Sets DNS search domains for a container. Create will automatically use the setting from the host if neither searchdomain nor nameserver are set."]
     pub searchdomain: Option<String>,
     #[serde(rename = "serial[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedSerials, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedSerials, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Create a serial device inside the VM (n is 0 to 3)"]
     #[doc = "Create a serial device inside the VM (n is 0 to 3), and pass through a\nhost serial device (i.e. /dev/ttyS0), or create a unix socket on the\nhost side (use 'qm terminal' to open a terminal connection).\n\nNOTE: If you pass through a host serial device, it is no longer possible to migrate such machines -\nuse with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
-    pub serial_n: Option<String>,
+    pub serials: ::std::collections::BTreeMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -1377,13 +1824,27 @@ pub struct PutParams {
     #[doc = "Configure a Disk for storing TPM state. The format is fixed to 'raw'. Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Note that SIZE_IN_GiB is ignored here and 4 MiB will be used instead. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
     pub tpmstate0: Option<String>,
     #[serde(rename = "unused[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedUnuseds, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedUnuseds, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Reference to unused volumes. This is used internally, and should not be modified manually."]
-    pub unused_n: Option<String>,
+    pub unuseds: ::std::collections::BTreeMap<u32, String>,
     #[serde(rename = "usb[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedUsbs, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedUsbs, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Configure an USB device (n is 0 to 4, for machine version \\>= 7.1 and ostype l26 or windows \\> 7, n can be up to 14)."]
-    pub usb_n: Option<String>,
+    pub usbs: ::std::collections::BTreeMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -1396,9 +1857,16 @@ pub struct PutParams {
     #[doc = "Configure the VGA Hardware. If you want to use high resolution modes (\\>= 1280x1024x16) you may need to increase the vga memory option. Since QEMU 2.9 the default VGA display type is 'std' for all OS types besides some Windows versions (XP and older) which use 'cirrus'. The 'qxl' option enables the SPICE display server. For win* OS you can select how many independent displays you want, Linux guests can add displays them self.\nYou can also run without any graphic card, using a serial device as terminal."]
     pub vga: Option<String>,
     #[serde(rename = "virtio[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedVirtios, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedVirtios, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Use volume as VIRTIO hard disk (n is 0 to 15). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
-    pub virtio_n: Option<String>,
+    pub virtios: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set VM Generation ID. Use '1' to autogenerate on create or update, pass '0' to disable explicitly."]
     #[doc = "The VM generation ID (vmgenid) device exposes a 128-bit integer value identifier to the guest OS. This allows to notify the guest operating system when the virtual machine is executed with a different configuration (e.g. snapshot execution or creation from a template). The guest operating system notices the change, and is then able to react as appropriate by marking its copies of distributed databases as dirty, re-initializing its random number generator, etc.\nNote that auto-creation only works when done through API/CLI create or update methods, but not when manually editing the config file."]
