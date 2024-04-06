@@ -201,7 +201,7 @@ impl PostParams {
             cpuunits: Default::default(),
             debug: Default::default(),
             description: Default::default(),
-            dev_n: Default::default(),
+            devs: Default::default(),
             features: Default::default(),
             force: Default::default(),
             hookscript: Default::default(),
@@ -209,9 +209,9 @@ impl PostParams {
             ignore_unpack_errors: Default::default(),
             lock: Default::default(),
             memory: Default::default(),
-            mp_n: Default::default(),
+            mps: Default::default(),
             nameserver: Default::default(),
-            net_n: Default::default(),
+            nets: Default::default(),
             onboot: Default::default(),
             ostype: Default::default(),
             password: Default::default(),
@@ -231,10 +231,34 @@ impl PostParams {
             tty: Default::default(),
             unique: Default::default(),
             unprivileged: Default::default(),
-            unused_n: Default::default(),
+            unuseds: Default::default(),
             additional_properties: Default::default(),
         }
     }
+}
+#[derive(Default)]
+struct NumberedDevs;
+impl crate::types::multi::NumberedItems for NumberedDevs {
+    type Item = String;
+    const PREFIX: &'static str = "dev";
+}
+#[derive(Default)]
+struct NumberedMps;
+impl crate::types::multi::NumberedItems for NumberedMps {
+    type Item = String;
+    const PREFIX: &'static str = "mp";
+}
+#[derive(Default)]
+struct NumberedNets;
+impl crate::types::multi::NumberedItems for NumberedNets {
+    type Item = String;
+    const PREFIX: &'static str = "net";
+}
+#[derive(Default)]
+struct NumberedUnuseds;
+impl crate::types::multi::NumberedItems for NumberedUnuseds {
+    type Item = String;
+    const PREFIX: &'static str = "unused";
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
@@ -283,9 +307,16 @@ pub struct PostParams {
     #[doc = "Description for the Container. Shown in the web-interface CT's summary. This is saved as comment inside the configuration file."]
     pub description: Option<String>,
     #[serde(rename = "dev[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedDevs, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedDevs, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Device to pass through to the container"]
-    pub dev_n: Option<String>,
+    pub devs: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow containers access to advanced features."]
     pub features: Option<String>,
@@ -321,16 +352,30 @@ pub struct PostParams {
     #[doc = "Amount of RAM for the container in MB."]
     pub memory: Option<u64>,
     #[serde(rename = "mp[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedMps, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedMps, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Use volume as container mount point. Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume."]
-    pub mp_n: Option<String>,
+    pub mps: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Sets DNS server IP address for a container. Create will automatically use the setting from the host if you neither set searchdomain nor nameserver."]
     pub nameserver: Option<String>,
     #[serde(rename = "net[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedNets, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedNets, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Specifies network interfaces for the container."]
-    pub net_n: Option<String>,
+    pub nets: ::std::collections::BTreeMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -428,9 +473,16 @@ pub struct PostParams {
     #[doc = "Makes the container run as unprivileged user. (Should not be modified manually.)"]
     pub unprivileged: Option<bool>,
     #[serde(rename = "unused[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedUnuseds, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedUnuseds, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Reference to unused volumes. This is used internally, and should not be modified manually."]
-    pub unused_n: Option<String>,
+    pub unuseds: ::std::collections::BTreeMap<u32, String>,
     #[doc = "The (unique) ID of the VM."]
     pub vmid: crate::types::VmId,
     #[serde(

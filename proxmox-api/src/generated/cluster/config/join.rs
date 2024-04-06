@@ -122,12 +122,18 @@ impl PostParams {
             hostname,
             password,
             force: Default::default(),
-            link_n: Default::default(),
+            links: Default::default(),
             nodeid: Default::default(),
             votes: Default::default(),
             additional_properties: Default::default(),
         }
     }
+}
+#[derive(Default)]
+struct NumberedLinks;
+impl crate::types::multi::NumberedItems for NumberedLinks {
+    type Item = String;
+    const PREFIX: &'static str = "link";
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
@@ -143,9 +149,16 @@ pub struct PostParams {
     #[doc = "Hostname (or IP) of an existing cluster member."]
     pub hostname: String,
     #[serde(rename = "link[n]")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedLinks, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedLinks, _>"
+    )]
+    #[serde(
+        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
+        default
+    )]
     #[doc = "Address and priority information of a single corosync link. (up to 8 links supported; link0..link7)"]
-    pub link_n: Option<String>,
+    pub links: ::std::collections::BTreeMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"

@@ -5,17 +5,29 @@ use proc_macro2::{Literal, TokenStream};
 use quote::{quote, ToTokens};
 use syn::{spanned::Spanned, Ident};
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct EnumDef {
-    pub name: String,
-    pub derives: Vec<String>,
-    pub values: BTreeSet<String>,
-    pub default: Option<String>,
+    name: String,
+    derives: Vec<String>,
+    values: BTreeSet<String>,
+    default: Option<String>,
 }
 
 impl EnumDef {
     pub fn has_default(&self) -> bool {
         self.default.is_some()
+    }
+
+    pub fn values(&self) -> &BTreeSet<String> {
+        &self.values
+    }
+
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
+    pub fn values_mut(&mut self) -> &mut BTreeSet<String> {
+        &mut self.values
     }
 
     pub fn new<I: AsRef<str>, T: IntoIterator<Item = I>>(
