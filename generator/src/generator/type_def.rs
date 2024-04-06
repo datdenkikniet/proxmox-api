@@ -166,6 +166,9 @@ impl TypeDef {
             KnownFormat::Ipv4 => quote!(::std::net::Ipv4Addr),
             KnownFormat::Ipv6 => quote!(::std::net::Ipv6Addr),
             KnownFormat::Ip => quote!(::std::net::IpAddr),
+            KnownFormat::MacAddr(allow_multicast) => {
+                proxmox_api(quote!(types::MacAddr<#allow_multicast>))
+            }
             _ => fallback.to_token_stream(),
         }
     }

@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::generator::{AdditionalProperties, FieldDef, PrimitiveTypeDef, TypeDef};
 
-use super::{Format, Optional};
+use super::{Format, KnownFormat, Optional};
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
 pub struct Type<'a> {
@@ -163,10 +163,19 @@ impl Type<'_> {
         if let (Some(fallback), Some(Format::Kind(format))) =
             (output_type.primitive(), &self.format)
         {
-            TypeDef::KnownType {
-                format: *format,
-                fallback,
-            }
+            let format = match format {
+                KnownFormat::MacAddr { .. } => {
+                    let allow_ig_bit = self
+                        .verbose_description
+                        .as_ref()
+                        .map(|v| !v.contains("the I/G (Individual/Group) bit not set"))
+                        .unwrap_or(true);
+                    KnownFormat::MacAddr(allow_ig_bit)
+                }
+                format => *format,
+            };
+
+            TypeDef::KnownType { format, fallback }
         } else {
             output_type
         }

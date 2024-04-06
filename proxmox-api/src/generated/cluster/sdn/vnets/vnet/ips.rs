@@ -30,7 +30,7 @@ pub struct DeleteParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Unicast MAC address."]
     #[doc = "A common MAC address with the I/G (Individual/Group) bit not set."]
-    pub mac: Option<String>,
+    pub mac: Option<crate::types::MacAddr<false>>,
     #[doc = "The SDN zone object identifier."]
     pub zone: String,
     #[serde(
@@ -67,7 +67,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Unicast MAC address."]
     #[doc = "A common MAC address with the I/G (Individual/Group) bit not set."]
-    pub mac: Option<String>,
+    pub mac: Option<crate::types::MacAddr<false>>,
     #[doc = "The SDN zone object identifier."]
     pub zone: String,
     #[serde(
@@ -105,7 +105,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Unicast MAC address."]
     #[doc = "A common MAC address with the I/G (Individual/Group) bit not set."]
-    pub mac: Option<String>,
+    pub mac: Option<crate::types::MacAddr<false>>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The (unique) ID of the VM."]
     pub vmid: Option<crate::types::VmId>,
