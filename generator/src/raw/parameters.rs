@@ -40,7 +40,12 @@ impl Parameters<'_> {
 
                 let doc = ty.doc();
                 let optional = ty.optional.get();
-                Some(FieldDef::new(name.to_string(), typedef, optional, doc))
+                let (field_def, num_items_def) =
+                    FieldDef::new(name.to_string(), typedef, optional, doc);
+
+                external_defs.extend(num_items_def.map(|v| TypeDef::NumberedItems(Box::new(v))));
+
+                Some(field_def)
             });
 
             let fields: Vec<_> = fields.collect();

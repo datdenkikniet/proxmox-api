@@ -7,7 +7,8 @@ use syn::{spanned::Spanned, Ident};
 use crate::raw::KnownFormat;
 
 use super::{
-    field_def::FieldDef, proxmox_api, struct_def::AdditionalProperties, EnumDef, StructDef,
+    field_def::FieldDef, proxmox_api, struct_def::AdditionalProperties, EnumDef, NumItemsDef,
+    StructDef,
 };
 
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -42,6 +43,7 @@ pub enum TypeDef {
     Array(Box<TypeDef>),
     Struct(StructDef),
     Enum(EnumDef),
+    NumberedItems(Box<NumItemsDef>),
 }
 
 impl TypeDef {
@@ -88,6 +90,7 @@ impl TypeDef {
     pub fn as_field_ty(&self, optional: bool) -> TokenStream {
         let ty = match self {
             TypeDef::Unit => quote!(()),
+            TypeDef::NumberedItems(_) => panic!(),
             TypeDef::Struct(strt) => {
                 let ident = Ident::new(strt.name(), quote!().span());
                 quote!(#ident)
@@ -132,6 +135,7 @@ impl ToTokens for TypeDef {
             TypeDef::Array(inner) => inner.to_tokens(tokens),
             TypeDef::Enum(def) => def.to_tokens(tokens),
             TypeDef::Struct(strt) => strt.to_tokens(tokens),
+            TypeDef::NumberedItems(strt) => strt.to_tokens(tokens),
         }
     }
 }

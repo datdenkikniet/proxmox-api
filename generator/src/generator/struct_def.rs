@@ -133,14 +133,7 @@ impl ToTokens for StructDef {
             }
         });
 
-        let mut field_level_defs = Vec::new();
-        let fields: Vec<_> = fields
-            .into_iter()
-            .map(|f| f.to_tokens(&mut field_level_defs))
-            .collect();
-
         tokens.extend(quote! {
-            #(#field_level_defs)*
             #[derive(#(#derives)*)]
             pub struct #name {
                 #(#fields)*

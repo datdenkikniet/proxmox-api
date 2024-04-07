@@ -22,6 +22,9 @@ pub(crate) use struct_def::{AdditionalProperties, StructDef};
 
 mod mod_def;
 
+mod num_items_def;
+pub(crate) use num_items_def::NumItemsDef;
+
 mod type_def;
 pub(crate) use type_def::{PrimitiveTypeDef, TypeDef};
 
@@ -226,7 +229,7 @@ impl Generator {
 
         let client = proxmox_api(quote!(client::Client));
 
-        let (structs, enums) = Self::deduplicate(type_defs.into_iter());
+        let (structs, enums, items) = Self::deduplicate(type_defs.into_iter());
 
         let definition = quote! {
             pub struct #client_name<T> {
@@ -244,6 +247,8 @@ impl Generator {
 
             #(#enums)*
 
+            #(#items)*
+
             #(#child_constructors)*
         };
 
@@ -260,14 +265,22 @@ impl Generator {
     ) -> (
         impl Iterator<Item = StructDef>,
         impl Iterator<Item = EnumDef>,
+        impl Iterator<Item = NumItemsDef>,
     ) {
         let mut enums = BTreeMap::<_, EnumDef>::new();
         let mut structs = BTreeMap::new();
+        let mut num_items = BTreeMap::<_, NumItemsDef>::new();
 
         for def in types {
             match def {
                 TypeDef::Struct(strt) => {
-                    structs.insert(strt.name().to_string(), strt);
+                    if let Some(prev_strt) = structs.get(strt.name()) {
+                        if prev_strt != &strt {
+                            panic!("Encountered structs within one module with exactly the same name that are not equal!");
+                        }
+                    } else {
+                        structs.insert(strt.name().to_string(), strt);
+                    }
                 }
                 TypeDef::Enum(en) => {
                     if let Some(previous_def) = enums.get_mut(en.name()) {
@@ -296,11 +309,24 @@ impl Generator {
                         enums.insert(en.name().to_string(), en);
                     }
                 }
+                TypeDef::NumberedItems(new_items) => {
+                    if let Some(item) = num_items.get(&new_items.name()) {
+                        if item != new_items.as_ref() {
+                            panic!("Found non-equal duplicate items definition\nNew:{new_items:?}\nExisting:{item:?}")
+                        }
+                    } else {
+                        num_items.insert(new_items.name(), *new_items);
+                    }
+                }
                 _ => {}
             }
         }
 
-        (structs.into_values(), enums.into_values())
+        (
+            structs.into_values(),
+            enums.into_values(),
+            num_items.into_values(),
+        )
     }
 
     fn make_placeholder_constructor(has_parent: bool, placeholder: &str) -> TokenStream {

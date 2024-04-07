@@ -140,12 +140,18 @@ impl Type<'_> {
                                 if inner.is_unit() && !optional {
                                     None
                                 } else {
-                                    Some(FieldDef::new(
+                                    let (field, num_items) = FieldDef::new(
                                         original_name.to_string(),
                                         inner,
                                         optional,
                                         doc,
-                                    ))
+                                    );
+
+                                    all_external.extend(
+                                        num_items.map(|v| TypeDef::NumberedItems(Box::new(v))),
+                                    );
+
+                                    Some(field)
                                 }
                             })
                             .collect();
