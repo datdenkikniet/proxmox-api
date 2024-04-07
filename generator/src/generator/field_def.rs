@@ -147,7 +147,7 @@ impl ToTokens for FieldDef {
             (
                 false,
                 Some(
-                    quote!(#[serde(skip_serializing_if = "::std::collections::BTreeMap::is_empty", default)]),
+                    quote!(#[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]),
                 ),
             )
         } else if ty.is_array() {
@@ -167,7 +167,7 @@ impl ToTokens for FieldDef {
         let ty = ty.as_field_ty(optional); // optional = !multi && !ty.is_array() && !optional
 
         let ty = if numbered_items.as_ref().is_some() {
-            quote!(::std::collections::BTreeMap<u32, #ty>)
+            quote!(::std::collections::HashMap<u32, #ty>)
         } else {
             ty
         };

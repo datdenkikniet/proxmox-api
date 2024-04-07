@@ -43,13 +43,10 @@ pub struct GetOutput {
         serialize_with = "crate::types::serialize_multi::<NumberedAcmedomains, _>",
         deserialize_with = "crate::types::deserialize_multi::<NumberedAcmedomains, _>"
     )]
-    #[serde(
-        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
-        default
-    )]
+    #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "ACME domain and validation plugin"]
-    pub acmedomains: ::std::collections::BTreeMap<u32, String>,
+    pub acmedomains: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the Node. Shown in the web-interface node notes panel. This is saved as comment inside the configuration file."]
     pub description: Option<String>,
@@ -107,13 +104,10 @@ pub struct PutParams {
         serialize_with = "crate::types::serialize_multi::<NumberedAcmedomains, _>",
         deserialize_with = "crate::types::deserialize_multi::<NumberedAcmedomains, _>"
     )]
-    #[serde(
-        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
-        default
-    )]
+    #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "ACME domain and validation plugin"]
-    pub acmedomains: ::std::collections::BTreeMap<u32, String>,
+    pub acmedomains: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of settings you want to delete."]
     pub delete: Option<String>,

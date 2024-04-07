@@ -120,13 +120,10 @@ pub struct GetOutput {
         serialize_with = "crate::types::serialize_multi::<NumberedDevs, _>",
         deserialize_with = "crate::types::deserialize_multi::<NumberedDevs, _>"
     )]
-    #[serde(
-        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
-        default
-    )]
+    #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Device to pass through to the container"]
-    pub devs: ::std::collections::BTreeMap<u32, String>,
+    pub devs: ::std::collections::HashMap<u32, String>,
     #[doc = "SHA1 digest of configuration file. This can be used to prevent concurrent modifications."]
     pub digest: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -156,13 +153,10 @@ pub struct GetOutput {
         serialize_with = "crate::types::serialize_multi::<NumberedMps, _>",
         deserialize_with = "crate::types::deserialize_multi::<NumberedMps, _>"
     )]
-    #[serde(
-        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
-        default
-    )]
+    #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Use volume as container mount point. Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume."]
-    pub mps: ::std::collections::BTreeMap<u32, String>,
+    pub mps: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Sets DNS server IP address for a container. Create will automatically use the setting from the host if you neither set searchdomain nor nameserver."]
     pub nameserver: Option<String>,
@@ -171,13 +165,10 @@ pub struct GetOutput {
         serialize_with = "crate::types::serialize_multi::<NumberedNets, _>",
         deserialize_with = "crate::types::deserialize_multi::<NumberedNets, _>"
     )]
-    #[serde(
-        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
-        default
-    )]
+    #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Specifies network interfaces for the container."]
-    pub nets: ::std::collections::BTreeMap<u32, String>,
+    pub nets: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -243,13 +234,10 @@ pub struct GetOutput {
         serialize_with = "crate::types::serialize_multi::<NumberedUnuseds, _>",
         deserialize_with = "crate::types::deserialize_multi::<NumberedUnuseds, _>"
     )]
-    #[serde(
-        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
-        default
-    )]
+    #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Reference to unused volumes. This is used internally, and should not be modified manually."]
-    pub unuseds: ::std::collections::BTreeMap<u32, String>,
+    pub unuseds: ::std::collections::HashMap<u32, String>,
     #[serde(
         flatten,
         deserialize_with = "crate::types::multi::deserialize_additional_data::<'_, GetOutput, _, _>"
@@ -344,13 +332,10 @@ pub struct PutParams {
         serialize_with = "crate::types::serialize_multi::<NumberedDevs, _>",
         deserialize_with = "crate::types::deserialize_multi::<NumberedDevs, _>"
     )]
-    #[serde(
-        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
-        default
-    )]
+    #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Device to pass through to the container"]
-    pub devs: ::std::collections::BTreeMap<u32, String>,
+    pub devs: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has different SHA1 digest. This can be used to prevent concurrent modifications."]
     pub digest: Option<String>,
@@ -378,13 +363,10 @@ pub struct PutParams {
         serialize_with = "crate::types::serialize_multi::<NumberedMps, _>",
         deserialize_with = "crate::types::deserialize_multi::<NumberedMps, _>"
     )]
-    #[serde(
-        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
-        default
-    )]
+    #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Use volume as container mount point. Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume."]
-    pub mps: ::std::collections::BTreeMap<u32, String>,
+    pub mps: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Sets DNS server IP address for a container. Create will automatically use the setting from the host if you neither set searchdomain nor nameserver."]
     pub nameserver: Option<String>,
@@ -393,13 +375,10 @@ pub struct PutParams {
         serialize_with = "crate::types::serialize_multi::<NumberedNets, _>",
         deserialize_with = "crate::types::deserialize_multi::<NumberedNets, _>"
     )]
-    #[serde(
-        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
-        default
-    )]
+    #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Specifies network interfaces for the container."]
-    pub nets: ::std::collections::BTreeMap<u32, String>,
+    pub nets: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -468,13 +447,10 @@ pub struct PutParams {
         serialize_with = "crate::types::serialize_multi::<NumberedUnuseds, _>",
         deserialize_with = "crate::types::deserialize_multi::<NumberedUnuseds, _>"
     )]
-    #[serde(
-        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
-        default
-    )]
+    #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Reference to unused volumes. This is used internally, and should not be modified manually."]
-    pub unuseds: ::std::collections::BTreeMap<u32, String>,
+    pub unuseds: ::std::collections::HashMap<u32, String>,
     #[serde(
         flatten,
         deserialize_with = "crate::types::multi::deserialize_additional_data::<'_, PutParams, _, _>"

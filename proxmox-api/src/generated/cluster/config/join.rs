@@ -148,13 +148,10 @@ pub struct PostParams {
         serialize_with = "crate::types::serialize_multi::<NumberedLinks, _>",
         deserialize_with = "crate::types::deserialize_multi::<NumberedLinks, _>"
     )]
-    #[serde(
-        skip_serializing_if = "::std::collections::BTreeMap::is_empty",
-        default
-    )]
+    #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Address and priority information of a single corosync link. (up to 8 links supported; link0..link7)"]
-    pub links: ::std::collections::BTreeMap<u32, String>,
+    pub links: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
