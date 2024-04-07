@@ -18,24 +18,6 @@ where
         }
     }
 }
-impl GetOutputItems {
-    pub fn new(id: String) -> Self {
-        Self {
-            id,
-            additional_properties: Default::default(),
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct GetOutputItems {
-    pub id: String,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
 impl<T> SdnClient<T>
 where
     T: crate::client::Client,
@@ -55,6 +37,24 @@ where
         let path = self.path.to_string();
         self.client.put(&path, &())
     }
+}
+impl GetOutputItems {
+    pub fn new(id: String) -> Self {
+        Self {
+            id,
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct GetOutputItems {
+    pub id: String,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl<T> SdnClient<T>
 where

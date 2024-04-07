@@ -13,18 +13,14 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Cmd {
-    #[serde(rename = "ceph_install")]
-    CephInstall,
-    #[serde(rename = "login")]
-    Login,
-    #[serde(rename = "upgrade")]
-    Upgrade,
-}
-impl Default for Cmd {
-    fn default() -> Self {
-        Self::Login
+impl<T> TermproxyClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Creates a VNC Shell proxy."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
@@ -43,13 +39,17 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> TermproxyClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Creates a VNC Shell proxy."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Cmd {
+    #[serde(rename = "ceph_install")]
+    CephInstall,
+    #[serde(rename = "login")]
+    Login,
+    #[serde(rename = "upgrade")]
+    Upgrade,
+}
+impl Default for Cmd {
+    fn default() -> Self {
+        Self::Login
     }
 }

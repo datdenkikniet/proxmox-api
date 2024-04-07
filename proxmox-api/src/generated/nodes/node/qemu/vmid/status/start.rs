@@ -13,12 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum MigrationType {
-    #[serde(rename = "insecure")]
-    Insecure,
-    #[serde(rename = "secure")]
-    Secure,
+impl<T> StartClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Start virtual machine."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PostParams {
@@ -39,8 +42,8 @@ pub struct PostParams {
     #[doc = "Migration traffic is encrypted using an SSH tunnel by default. On secure, completely private networks this can be disabled to increase performance."]
     pub migration_type: Option<MigrationType>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Ignore locks - only root is allowed to use this option."]
@@ -61,13 +64,10 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> StartClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Start virtual machine."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum MigrationType {
+    #[serde(rename = "insecure")]
+    Insecure,
+    #[serde(rename = "secure")]
+    Secure,
 }

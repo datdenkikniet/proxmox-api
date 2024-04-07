@@ -13,8 +13,18 @@ where
         }
     }
 }
+impl<T> CloneClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create a container clone/copy"]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 impl PostParams {
-    pub fn new(newid: crate::VmId) -> Self {
+    pub fn new(newid: crate::types::VmId) -> Self {
         Self {
             newid,
             bwlimit: Default::default(),
@@ -38,8 +48,8 @@ pub struct PostParams {
     #[doc = "Description for the new CT."]
     pub description: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Create a full copy of all disks. This is always done when you clone a normal CT. For CT templates, we try to create a linked clone by default."]
@@ -48,7 +58,7 @@ pub struct PostParams {
     #[doc = "Set a hostname for the new CT."]
     pub hostname: Option<String>,
     #[doc = "VMID for the clone."]
-    pub newid: crate::VmId,
+    pub newid: crate::types::VmId,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Add the new CT to the specified pool."]
     pub pool: Option<String>,
@@ -67,14 +77,4 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> CloneClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create a container clone/copy"]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }

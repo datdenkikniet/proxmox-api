@@ -14,35 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Log {
-    #[serde(rename = "alert")]
-    Alert,
-    #[serde(rename = "crit")]
-    Crit,
-    #[serde(rename = "debug")]
-    Debug,
-    #[serde(rename = "emerg")]
-    Emerg,
-    #[serde(rename = "err")]
-    Err,
-    #[serde(rename = "info")]
-    Info,
-    #[serde(rename = "nolog")]
-    Nolog,
-    #[serde(rename = "notice")]
-    Notice,
-    #[serde(rename = "warning")]
-    Warning,
+impl<T> RulesClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List rules."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "group")]
-    Group,
-    #[serde(rename = "in")]
-    In,
-    #[serde(rename = "out")]
-    Out,
+impl<T> RulesClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create new rule."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(pos: u64) -> Self {
@@ -55,8 +45,8 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     pub pos: u64,
     #[serde(
@@ -65,16 +55,6 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> RulesClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List rules."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl PostParams {
     pub fn new(action: String, ty: Type) -> Self {
@@ -115,8 +95,8 @@ pub struct PostParams {
     #[doc = "Restrict TCP/UDP destination port. You can use service names or simple numbers (0-65535), as defined in '/etc/services'. Port ranges can be specified with '\\d+:\\d+', for example '80:85', and you can use comma separated list to match several ports or ranges."]
     pub dport: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Flag to enable/disable a rule."]
@@ -136,8 +116,8 @@ pub struct PostParams {
     #[doc = "Use predefined standard macro."]
     pub macro_def: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Update rule at position \\<pos\\>."]
@@ -161,15 +141,35 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> RulesClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create new rule."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Log {
+    #[serde(rename = "alert")]
+    Alert,
+    #[serde(rename = "crit")]
+    Crit,
+    #[serde(rename = "debug")]
+    Debug,
+    #[serde(rename = "emerg")]
+    Emerg,
+    #[serde(rename = "err")]
+    Err,
+    #[serde(rename = "info")]
+    Info,
+    #[serde(rename = "nolog")]
+    Nolog,
+    #[serde(rename = "notice")]
+    Notice,
+    #[serde(rename = "warning")]
+    Warning,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "group")]
+    Group,
+    #[serde(rename = "in")]
+    In,
+    #[serde(rename = "out")]
+    Out,
 }
 impl<T> RulesClient<T>
 where

@@ -13,12 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Status {
-    #[serde(rename = "running")]
-    Running,
-    #[serde(rename = "stopped")]
-    Stopped,
+impl<T> StatusClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Read task status."]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
 }
 impl GetOutput {
     pub fn new(
@@ -52,13 +55,13 @@ pub struct GetOutput {
     pub id: String,
     pub node: String,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     pub pid: u64,
     #[serde(
-        serialize_with = "crate::serialize_number",
-        deserialize_with = "crate::deserialize_number"
+        serialize_with = "crate::types::serialize_number",
+        deserialize_with = "crate::types::deserialize_number"
     )]
     pub starttime: f64,
     pub status: Status,
@@ -73,13 +76,10 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> StatusClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Read task status."]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Status {
+    #[serde(rename = "running")]
+    Running,
+    #[serde(rename = "stopped")]
+    Stopped,
 }

@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> PendingClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get the virtual machine configuration with both current and pending values."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
 impl GetOutputItems {
     pub fn new(key: String) -> Self {
         Self {
@@ -27,8 +37,8 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Indicates a pending delete request if present and not 0. The value 2 indicates a force-delete request."]
@@ -47,14 +57,4 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> PendingClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get the virtual machine configuration with both current and pending values."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }

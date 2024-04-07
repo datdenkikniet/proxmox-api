@@ -14,42 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Application {
-    #[serde(rename = "cephfs")]
-    Cephfs,
-    #[serde(rename = "rbd")]
-    Rbd,
-    #[serde(rename = "rgw")]
-    Rgw,
-}
-impl Default for Application {
-    fn default() -> Self {
-        Self::Rbd
+impl<T> PoolClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List all pools and their settings (which are settable by the POST/PUT endpoints)."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum PgAutoscaleMode {
-    #[serde(rename = "off")]
-    Off,
-    #[serde(rename = "on")]
-    On,
-    #[serde(rename = "warn")]
-    Warn,
-}
-impl Default for PgAutoscaleMode {
-    fn default() -> Self {
-        Self::Warn
+impl<T> PoolClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create Ceph pool"]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
     }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "erasure")]
-    Erasure,
-    #[serde(rename = "replicated")]
-    Replicated,
-    #[serde(rename = "unknown")]
-    Unknown,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct ApplicationMetadataGetOutputItemsApplicationMetadata {
@@ -111,65 +94,65 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub autoscale_status: Option<AutoscaleStatusGetOutputItemsAutoscaleStatus>,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     pub bytes_used: u64,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     pub crush_rule: u64,
     pub crush_rule_name: String,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     pub min_size: u64,
     #[serde(
-        serialize_with = "crate::serialize_number",
-        deserialize_with = "crate::deserialize_number"
+        serialize_with = "crate::types::serialize_number",
+        deserialize_with = "crate::types::deserialize_number"
     )]
     pub percent_used: f64,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub pg_autoscale_mode: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     pub pg_num: u64,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub pg_num_final: Option<u64>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub pg_num_min: Option<u64>,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     pub pool: u64,
     pub pool_name: String,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     pub size: u64,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub target_size: Option<u64>,
     #[serde(
-        serialize_with = "crate::serialize_number_optional",
-        deserialize_with = "crate::deserialize_number_optional"
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub target_size_ratio: Option<f64>,
@@ -181,16 +164,6 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> PoolClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List all pools and their settings (which are settable by the POST/PUT endpoints)."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl PostParams {
     pub fn new(name: String) -> Self {
@@ -227,8 +200,8 @@ pub struct PostParams {
     #[doc = "Create an erasure coded pool for RBD with an accompaning replicated pool for metadata storage. With EC, the common ceph options 'size', 'min_size' and 'crush_rule' parameters will be applied to the metadata pool."]
     pub erasure_coding: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Minimum number of replicas per object"]
@@ -239,22 +212,22 @@ pub struct PostParams {
     #[doc = "The automatic PG scaling mode of the pool."]
     pub pg_autoscale_mode: Option<PgAutoscaleMode>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of placement groups."]
     pub pg_num: Option<u64>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Minimal number of placement groups."]
     pub pg_num_min: Option<u64>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of replicas per object"]
@@ -263,8 +236,8 @@ pub struct PostParams {
     #[doc = "The estimated target size of the pool for the PG autoscaler."]
     pub target_size: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_number_optional",
-        deserialize_with = "crate::deserialize_number_optional"
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The estimated target ratio of the pool for the PG autoscaler."]
@@ -276,15 +249,42 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> PoolClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create Ceph pool"]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Application {
+    #[serde(rename = "cephfs")]
+    Cephfs,
+    #[serde(rename = "rbd")]
+    Rbd,
+    #[serde(rename = "rgw")]
+    Rgw,
+}
+impl Default for Application {
+    fn default() -> Self {
+        Self::Rbd
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum PgAutoscaleMode {
+    #[serde(rename = "off")]
+    Off,
+    #[serde(rename = "on")]
+    On,
+    #[serde(rename = "warn")]
+    Warn,
+}
+impl Default for PgAutoscaleMode {
+    fn default() -> Self {
+        Self::Warn
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "erasure")]
+    Erasure,
+    #[serde(rename = "replicated")]
+    Replicated,
+    #[serde(rename = "unknown")]
+    Unknown,
 }
 impl<T> PoolClient<T>
 where

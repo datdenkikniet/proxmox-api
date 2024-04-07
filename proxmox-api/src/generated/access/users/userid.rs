@@ -26,36 +26,25 @@ where
         self.client.delete(&path, &())
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct AdditionalPropertiesGetOutputTokens {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub comment: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "API token expiration date (seconds since epoch). '0' means no expiration date."]
-    pub expire: Option<()>,
-    #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Restrict API token privileges with separate ACLs (default), or give full privileges of corresponding user."]
-    pub privsep: Option<bool>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+impl<T> UseridClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get user configuration."]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct TokensGetOutputTokens {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties:
-        ::std::collections::HashMap<String, AdditionalPropertiesGetOutputTokens>,
+impl<T> UseridClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update user configuration."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetOutput {
@@ -64,15 +53,15 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub email: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable the account (default). You can set this to '0' to disable the account"]
     pub enable: Option<bool>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Account expiration date (seconds since epoch). '0' means no expiration date."]
@@ -89,21 +78,11 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub tokens: Option<TokensGetOutputTokens>,
 }
-impl<T> UseridClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get user configuration."]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub append: Option<bool>,
@@ -112,15 +91,15 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub email: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable the account (default). You can set this to '0' to disable the account"]
     pub enable: Option<bool>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Account expiration date (seconds since epoch). '0' means no expiration date."]
@@ -141,15 +120,36 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> UseridClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update user configuration."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct AdditionalPropertiesGetOutputTokens {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub comment: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "API token expiration date (seconds since epoch). '0' means no expiration date."]
+    pub expire: Option<()>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Restrict API token privileges with separate ACLs (default), or give full privileges of corresponding user."]
+    pub privsep: Option<bool>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct TokensGetOutputTokens {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties:
+        ::std::collections::HashMap<String, AdditionalPropertiesGetOutputTokens>,
 }
 impl<T> UseridClient<T>
 where

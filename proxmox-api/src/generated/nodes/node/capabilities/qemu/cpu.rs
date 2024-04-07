@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> CpuClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List all custom and default CPU models."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
 impl GetOutputItems {
     pub fn new(custom: bool, name: String, vendor: String) -> Self {
         Self {
@@ -26,8 +36,8 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     #[doc = "True if this is a custom CPU model."]
     pub custom: bool,
@@ -41,14 +51,4 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> CpuClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List all custom and default CPU models."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }

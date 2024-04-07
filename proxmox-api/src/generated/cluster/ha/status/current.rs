@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> CurrentClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get HA manger status."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
 impl GetOutputItems {
     pub fn new(id: String, node: String, status: String) -> Self {
         Self {
@@ -39,15 +49,15 @@ pub struct GetOutputItems {
     #[doc = "Status entry ID (quorum, master, lrm:\\<node\\>, service:\\<sid\\>)."]
     pub id: String,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For type 'service'."]
     pub max_relocate: Option<u64>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For type 'service'."]
@@ -55,8 +65,8 @@ pub struct GetOutputItems {
     #[doc = "Node associated to status entry."]
     pub node: String,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For type 'quorum'. Whether the cluster is quorate or not."]
@@ -73,8 +83,8 @@ pub struct GetOutputItems {
     #[doc = "Status of the entry (value depends on type)."]
     pub status: String,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For type 'lrm','master'. Timestamp of the status information."]
@@ -85,14 +95,4 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> CurrentClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get HA manger status."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }

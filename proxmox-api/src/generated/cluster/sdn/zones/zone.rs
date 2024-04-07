@@ -13,23 +13,6 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Dhcp {
-    #[serde(rename = "dnsmasq")]
-    Dnsmasq,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum VlanProtocol {
-    #[serde(rename = "802.1ad")]
-    _8021ad,
-    #[serde(rename = "802.1q")]
-    _8021q,
-}
-impl Default for VlanProtocol {
-    fn default() -> Self {
-        Self::_8021q
-    }
-}
 impl<T> ZoneClient<T>
 where
     T: crate::client::Client,
@@ -40,18 +23,47 @@ where
         self.client.delete(&path, &())
     }
 }
+impl<T> ZoneClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Read sdn zone configuration."]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
+}
+impl<T> ZoneClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update sdn zone object configuration."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetOutput {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetParams {
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Display pending config."]
     pub pending: Option<bool>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Display running config."]
@@ -64,30 +76,11 @@ pub struct GetParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetOutput {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> ZoneClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Read sdn zone configuration."]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
     #[serde(rename = "advertise-subnets")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Advertise evpn subnets if you have silent hosts"]
@@ -96,8 +89,8 @@ pub struct PutParams {
     pub bridge: Option<String>,
     #[serde(rename = "bridge-disable-mac-learning")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Disable auto mac learning."]
@@ -116,8 +109,8 @@ pub struct PutParams {
     pub digest: Option<String>,
     #[serde(rename = "disable-arp-nd-suppression")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Disable ipv4 arp && ipv6 neighbour discovery suppression"]
@@ -130,8 +123,8 @@ pub struct PutParams {
     pub dnszone: Option<String>,
     #[serde(rename = "dp-id")]
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Faucet dataplane id"]
@@ -141,8 +134,8 @@ pub struct PutParams {
     pub exitnodes: Option<String>,
     #[serde(rename = "exitnodes-local-routing")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow exitnodes to connect to evpn guests"]
@@ -156,10 +149,10 @@ pub struct PutParams {
     pub ipam: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Anycast logical router mac address"]
-    pub mac: Option<String>,
+    pub mac: Option<crate::types::MacAddr<true>>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "MTU"]
@@ -178,8 +171,8 @@ pub struct PutParams {
     #[doc = "Route-Target import"]
     pub rt_import: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Service-VLAN Tag"]
@@ -189,16 +182,16 @@ pub struct PutParams {
     pub vlan_protocol: Option<VlanProtocol>,
     #[serde(rename = "vrf-vxlan")]
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "l3vni."]
     pub vrf_vxlan: Option<u64>,
     #[serde(rename = "vxlan-port")]
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Vxlan tunnel udp port (default 4789)."]
@@ -210,13 +203,20 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ZoneClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update sdn zone object configuration."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Dhcp {
+    #[serde(rename = "dnsmasq")]
+    Dnsmasq,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum VlanProtocol {
+    #[serde(rename = "802.1ad")]
+    _8021ad,
+    #[serde(rename = "802.1q")]
+    _8021q,
+}
+impl Default for VlanProtocol {
+    fn default() -> Self {
+        Self::_8021q
     }
 }

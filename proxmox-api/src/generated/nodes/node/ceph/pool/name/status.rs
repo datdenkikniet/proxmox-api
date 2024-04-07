@@ -13,61 +13,18 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Application {
-    #[serde(rename = "cephfs")]
-    Cephfs,
-    #[serde(rename = "rbd")]
-    Rbd,
-    #[serde(rename = "rgw")]
-    Rgw,
-}
-impl Default for Application {
-    fn default() -> Self {
-        Self::Rbd
+impl<T> StatusClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Show the current pool status."]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
     }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum PgAutoscaleMode {
-    #[serde(rename = "off")]
-    Off,
-    #[serde(rename = "on")]
-    On,
-    #[serde(rename = "warn")]
-    Warn,
-}
-impl Default for PgAutoscaleMode {
-    fn default() -> Self {
-        Self::Warn
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetParams {
-    #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "If enabled, will display additional data(eg. statistics)."]
-    pub verbose: Option<bool>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct AutoscaleStatusGetOutputAutoscaleStatus {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct StatisticsGetOutputStatistics {
     #[serde(
         flatten,
         default,
@@ -132,23 +89,23 @@ pub struct GetOutput {
     #[doc = "The rule to use for mapping object placement in the cluster."]
     pub crush_rule: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     pub fast_read: bool,
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     pub hashpspool: bool,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     pub id: u64,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Minimum number of replicas per object"]
@@ -157,55 +114,55 @@ pub struct GetOutput {
     pub name: String,
     #[serde(rename = "nodeep-scrub")]
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     pub nodeep_scrub: bool,
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     pub nodelete: bool,
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     pub nopgchange: bool,
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     pub noscrub: bool,
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     pub nosizechange: bool,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The automatic PG scaling mode of the pool."]
     pub pg_autoscale_mode: Option<PgAutoscaleMode>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of placement groups."]
     pub pg_num: Option<u64>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Minimal number of placement groups."]
     pub pg_num_min: Option<u64>,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     pub pgp_num: u64,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of replicas per object"]
@@ -216,20 +173,20 @@ pub struct GetOutput {
     #[doc = "The estimated target size of the pool for the PG autoscaler."]
     pub target_size: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_number_optional",
-        deserialize_with = "crate::deserialize_number_optional"
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The estimated target ratio of the pool for the PG autoscaler."]
     pub target_size_ratio: Option<f64>,
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     pub use_gmt_hitset: bool,
     #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
     )]
     pub write_fadvise_dontneed: bool,
     #[serde(
@@ -239,13 +196,56 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> StatusClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Show the current pool status."]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "If enabled, will display additional data(eg. statistics)."]
+    pub verbose: Option<bool>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct StatisticsGetOutputStatistics {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Application {
+    #[serde(rename = "cephfs")]
+    Cephfs,
+    #[serde(rename = "rbd")]
+    Rbd,
+    #[serde(rename = "rgw")]
+    Rgw,
+}
+impl Default for Application {
+    fn default() -> Self {
+        Self::Rbd
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum PgAutoscaleMode {
+    #[serde(rename = "off")]
+    Off,
+    #[serde(rename = "on")]
+    On,
+    #[serde(rename = "warn")]
+    Warn,
+}
+impl Default for PgAutoscaleMode {
+    fn default() -> Self {
+        Self::Warn
     }
 }

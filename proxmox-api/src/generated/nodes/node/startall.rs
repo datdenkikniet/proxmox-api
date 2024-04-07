@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> StartallClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Start all VMs and containers located on this node (by default only those with onboot=1)."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -27,14 +37,4 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> StartallClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Start all VMs and containers located on this node (by default only those with onboot=1)."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }

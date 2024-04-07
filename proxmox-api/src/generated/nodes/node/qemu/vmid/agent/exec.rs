@@ -13,6 +13,39 @@ where
         }
     }
 }
+impl<T> ExecClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Executes the given command in the vm via the guest-agent and returns an object with the pid."]
+    pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+impl PostOutput {
+    pub fn new(pid: u64) -> Self {
+        Self {
+            pid,
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct PostOutput {
+    #[serde(
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
+    )]
+    #[doc = "The PID of the process started by the guest-agent."]
+    pub pid: u64,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 impl PostParams {
     pub fn new(command: Vec<()>) -> Self {
         Self {
@@ -37,37 +70,4 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl PostOutput {
-    pub fn new(pid: u64) -> Self {
-        Self {
-            pid,
-            additional_properties: Default::default(),
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct PostOutput {
-    #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
-    )]
-    #[doc = "The PID of the process started by the guest-agent."]
-    pub pid: u64,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> ExecClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Executes the given command in the vm via the guest-agent and returns an object with the pid."]
-    pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }

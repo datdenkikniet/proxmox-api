@@ -13,46 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "lxc")]
-    Lxc,
-    #[serde(rename = "qemu")]
-    Qemu,
-    #[serde(rename = "unknown")]
-    Unknown,
-}
-impl ChildrenGetOutputChildrenItemsChildrenItems {
-    pub fn new(id: String, included: bool, name: String, reason: String) -> Self {
-        Self {
-            id,
-            included,
-            name,
-            reason,
-            additional_properties: Default::default(),
-        }
+impl<T> IncludedVolumesClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Returns included guests and the backup status of their disks. Optimized to be used in ExtJS tree views."]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
     }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct ChildrenGetOutputChildrenItemsChildrenItems {
-    #[doc = "Configuration key of the volume."]
-    pub id: String,
-    #[serde(
-        serialize_with = "crate::serialize_bool",
-        deserialize_with = "crate::deserialize_bool"
-    )]
-    #[doc = "Whether the volume is included in the backup or not."]
-    pub included: bool,
-    #[doc = "Name of the volume."]
-    pub name: String,
-    #[doc = "The reason why the volume is included (or excluded)."]
-    pub reason: String,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl ChildrenGetOutputChildrenItems {
     pub fn new(id: u64, ty: Type) -> Self {
@@ -71,8 +40,8 @@ pub struct ChildrenGetOutputChildrenItems {
     #[doc = "The volumes of the guest with the information if they will be included in backups."]
     pub children: Vec<ChildrenGetOutputChildrenItemsChildrenItems>,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "VMID of the guest."]
     pub id: u64,
@@ -82,6 +51,38 @@ pub struct ChildrenGetOutputChildrenItems {
     #[serde(rename = "type")]
     #[doc = "Type of the guest, VM, CT or unknown for removed but not purged guests."]
     pub ty: Type,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+impl ChildrenGetOutputChildrenItemsChildrenItems {
+    pub fn new(id: String, included: bool, name: String, reason: String) -> Self {
+        Self {
+            id,
+            included,
+            name,
+            reason,
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct ChildrenGetOutputChildrenItemsChildrenItems {
+    #[doc = "Configuration key of the volume."]
+    pub id: String,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
+    )]
+    #[doc = "Whether the volume is included in the backup or not."]
+    pub included: bool,
+    #[doc = "Name of the volume."]
+    pub name: String,
+    #[doc = "The reason why the volume is included (or excluded)."]
+    pub reason: String,
     #[serde(
         flatten,
         default,
@@ -108,13 +109,12 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> IncludedVolumesClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Returns included guests and the backup status of their disks. Optimized to be used in ExtJS tree views."]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "lxc")]
+    Lxc,
+    #[serde(rename = "qemu")]
+    Qemu,
+    #[serde(rename = "unknown")]
+    Unknown,
 }

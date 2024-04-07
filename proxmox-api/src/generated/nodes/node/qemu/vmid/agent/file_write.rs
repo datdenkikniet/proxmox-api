@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> FileWriteClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Writes the given file via guest agent."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 impl PostParams {
     pub fn new(content: String, file: String) -> Self {
         Self {
@@ -28,8 +38,8 @@ pub struct PostParams {
     #[doc = "The content to write into the file."]
     pub content: String,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If set, the content will be encoded as base64 (required by QEMU).Otherwise the content needs to be encoded beforehand - defaults to true."]
@@ -42,14 +52,4 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> FileWriteClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Writes the given file via guest agent."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }

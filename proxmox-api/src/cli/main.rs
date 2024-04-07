@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand};
-use proxmox_api::{access::AccessClient, ReqwestClient};
+use proxmox_api::{client::Client, ReqwestClient};
 
 #[derive(Debug, Parser)]
 pub struct Cli {
@@ -33,8 +33,23 @@ fn main() {
 
     let client = ReqwestClient::new(&cli.host, user, realm, &cli.password).unwrap();
 
-    let client = client;
+    #[cfg(feature = "nodes")]
+    nodes(&client);
+}
 
-    let access_client = AccessClient::new(&client);
-    println!("{:#?}", access_client.users().get(Default::default()));
+#[cfg(feature = "nodes")]
+fn nodes(client: &impl Client) {
+    use proxmox_api::{nodes::NodesClient, types::VmId};
+
+    let nodes_client = NodesClient::new(client);
+
+    println!(
+        "VM config: {:#?}",
+        nodes_client
+            .node("proxmox")
+            .qemu()
+            .vmid(VmId::new(118).unwrap())
+            .config()
+            .get(Default::default())
+    );
 }

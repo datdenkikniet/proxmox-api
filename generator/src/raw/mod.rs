@@ -9,6 +9,9 @@ pub use format::{Format, KnownFormat};
 mod info;
 pub use info::Info;
 
+mod output;
+pub use output::Output;
+
 mod parameters;
 pub use parameters::Parameters;
 

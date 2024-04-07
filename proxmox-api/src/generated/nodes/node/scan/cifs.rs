@@ -13,6 +13,38 @@ where
         }
     }
 }
+impl<T> CifsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Scan remote CIFS server."]
+    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
+}
+impl GetOutputItems {
+    pub fn new(description: String, share: String) -> Self {
+        Self {
+            description,
+            share,
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct GetOutputItems {
+    #[doc = "Descriptive text from server."]
+    pub description: String,
+    #[doc = "The cifs share name."]
+    pub share: String,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 impl GetParams {
     pub fn new(server: String) -> Self {
         Self {
@@ -43,36 +75,4 @@ pub struct GetParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl GetOutputItems {
-    pub fn new(description: String, share: String) -> Self {
-        Self {
-            description,
-            share,
-            additional_properties: Default::default(),
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct GetOutputItems {
-    #[doc = "Descriptive text from server."]
-    pub description: String,
-    #[doc = "The cifs share name."]
-    pub share: String,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> CifsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Scan remote CIFS server."]
-    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
 }

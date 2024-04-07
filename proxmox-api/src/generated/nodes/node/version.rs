@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> VersionClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "API version details"]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
 impl GetOutput {
     pub fn new(release: String, repoid: String, version: String) -> Self {
         Self {
@@ -37,14 +47,4 @@ pub struct GetOutput {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> VersionClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "API version details"]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }

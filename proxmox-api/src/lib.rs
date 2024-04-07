@@ -3,17 +3,13 @@ pub mod client;
 mod path;
 pub use path::{Path, PathElement};
 
-mod serde;
-pub use serde::*;
-
-mod vmid;
-pub use vmid::VmId;
+pub mod types;
 
 mod generated;
 pub use generated::*;
 
-#[cfg(feature = "reqwest")]
+#[cfg(feature = "reqwest-client")]
 mod reqwest_client;
 
-#[cfg(feature = "reqwest")]
+#[cfg(feature = "reqwest-client")]
 pub use reqwest_client::Client as ReqwestClient;

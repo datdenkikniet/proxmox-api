@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> DownloadClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Extract a file or directory (as zip archive) from a PBS backup."]
+    pub fn get(&self, params: GetParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
+}
 impl GetParams {
     pub fn new(filepath: String, volume: String) -> Self {
         Self {
@@ -28,8 +38,8 @@ pub struct GetParams {
     #[doc = "base64-path to the directory or file to download."]
     pub filepath: String,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Download dirs as 'tar.zst' instead of 'zip'."]
@@ -42,14 +52,4 @@ pub struct GetParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> DownloadClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Extract a file or directory (as zip archive) from a PBS backup."]
-    pub fn get(&self, params: GetParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
 }

@@ -13,36 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "lxc")]
-    Lxc,
-    #[serde(rename = "node")]
-    Node,
-    #[serde(rename = "openvz")]
-    Openvz,
-    #[serde(rename = "pool")]
-    Pool,
-    #[serde(rename = "qemu")]
-    Qemu,
-    #[serde(rename = "sdn")]
-    Sdn,
-    #[serde(rename = "storage")]
-    Storage,
-    #[serde(rename = "vm")]
-    Vm,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetParams {
-    #[serde(rename = "type")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub ty: Option<Type>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+impl<T> ResourcesClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Resources index (cluster wide)."]
+    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(id: String, ty: Type) -> Self {
@@ -75,8 +54,8 @@ impl GetOutputItems {
 pub struct GetOutputItems {
     #[serde(rename = "cgroup-mode")]
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The cgroup mode the node operates under (when type == node)."]
@@ -85,15 +64,15 @@ pub struct GetOutputItems {
     #[doc = "Allowed storage content types (when type == storage)."]
     pub content: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_number_optional",
-        deserialize_with = "crate::deserialize_number_optional"
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "CPU utilization (when type in node,qemu,lxc)."]
     pub cpu: Option<f64>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Used disk space in bytes (when type in storage), used root image spave for VMs (type in qemu,lxc)."]
@@ -107,29 +86,29 @@ pub struct GetOutputItems {
     #[doc = "Support level (when type == node)."]
     pub level: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_number_optional",
-        deserialize_with = "crate::deserialize_number_optional"
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of available CPUs (when type in node,qemu,lxc)."]
     pub maxcpu: Option<f64>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Storage size in bytes (when type in storage), root image size for VMs (type in qemu,lxc)."]
     pub maxdisk: Option<u64>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of available memory in bytes (when type in node,qemu,lxc)."]
     pub maxmem: Option<u64>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Used memory in bytes (when type in node,qemu,lxc)."]
@@ -156,15 +135,15 @@ pub struct GetOutputItems {
     #[doc = "Resource type."]
     pub ty: Type,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node uptime in seconds (when type in node,qemu,lxc)."]
     pub uptime: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The numerical vmid (when type in qemu,lxc)."]
-    pub vmid: Option<crate::VmId>,
+    pub vmid: Option<crate::types::VmId>,
     #[serde(
         flatten,
         default,
@@ -172,13 +151,34 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ResourcesClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Resources index (cluster wide)."]
-    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub ty: Option<Type>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "lxc")]
+    Lxc,
+    #[serde(rename = "node")]
+    Node,
+    #[serde(rename = "openvz")]
+    Openvz,
+    #[serde(rename = "pool")]
+    Pool,
+    #[serde(rename = "qemu")]
+    Qemu,
+    #[serde(rename = "sdn")]
+    Sdn,
+    #[serde(rename = "storage")]
+    Storage,
+    #[serde(rename = "vm")]
+    Vm,
 }

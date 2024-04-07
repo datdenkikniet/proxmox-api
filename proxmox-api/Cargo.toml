@@ -11,8 +11,8 @@ nodes = []
 pools = []
 storage = []
 version = []
-reqwest = [ "dep:reqwest" ]
-cli = [ "dep:clap", "dep:pretty_env_logger", "reqwest", "dep:parking_lot", "dep:log", "dep:serde_urlencoded" ]
+reqwest-client = [ "dep:reqwest", "dep:log", "dep:parking_lot", "dep:serde_urlencoded" ]
+cli = [ "dep:clap", "dep:pretty_env_logger", "reqwest-client" ]
 
 [[bin]]
 name = "proxmox-api"

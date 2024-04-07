@@ -13,17 +13,6 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "lxc")]
-    Lxc,
-    #[serde(rename = "openvz")]
-    Openvz,
-    #[serde(rename = "qemu")]
-    Qemu,
-    #[serde(rename = "storage")]
-    Storage,
-}
 impl<T> PoolidClient<T>
 where
     T: crate::client::Client,
@@ -33,6 +22,41 @@ where
         let path = self.path.to_string();
         self.client.delete(&path, &())
     }
+}
+impl<T> PoolidClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get pool configuration (deprecated, no support for nested pools, use 'GET /pools/?poolid={poolid}')."]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
+}
+impl<T> PoolidClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update pool data (deprecated, no support for nested pools - use 'PUT /pools/?poolid={poolid}' instead)."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
+impl GetOutput {
+    pub fn new(members: Vec<MembersGetOutputMembersItems>) -> Self {
+        Self {
+            members,
+            comment: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct GetOutput {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub comment: Option<String>,
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    pub members: Vec<MembersGetOutputMembersItems>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetParams {
@@ -67,8 +91,8 @@ pub struct MembersGetOutputMembersItems {
     #[serde(rename = "type")]
     pub ty: Type,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub vmid: Option<u64>,
@@ -79,37 +103,12 @@ pub struct MembersGetOutputMembersItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl GetOutput {
-    pub fn new(members: Vec<MembersGetOutputMembersItems>) -> Self {
-        Self {
-            members,
-            comment: Default::default(),
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct GetOutput {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub comment: Option<String>,
-    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
-    pub members: Vec<MembersGetOutputMembersItems>,
-}
-impl<T> PoolidClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get pool configuration (deprecated, no support for nested pools, use 'GET /pools/?poolid={poolid}')."]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
-}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
     #[serde(rename = "allow-move")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow adding a guest even if already in another pool. The guest will be removed from its current pool and added to this one."]
@@ -117,8 +116,8 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub comment: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Remove the passed VMIDs and/or storage IDs instead of adding them."]
@@ -136,13 +135,14 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> PoolidClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update pool data (deprecated, no support for nested pools - use 'PUT /pools/?poolid={poolid}' instead)."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "lxc")]
+    Lxc,
+    #[serde(rename = "openvz")]
+    Openvz,
+    #[serde(rename = "qemu")]
+    Qemu,
+    #[serde(rename = "storage")]
+    Storage,
 }

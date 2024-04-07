@@ -14,50 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Mode {
-    #[serde(rename = "ldap")]
-    Ldap,
-    #[serde(rename = "ldap+starttls")]
-    LdapStarttls,
-    #[serde(rename = "ldaps")]
-    Ldaps,
-}
-impl Default for Mode {
-    fn default() -> Self {
-        Self::Ldap
+impl<T> DomainsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Authentication domain index."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Sslversion {
-    #[serde(rename = "tlsv1")]
-    Tlsv1,
-    #[serde(rename = "tlsv1_1")]
-    Tlsv11,
-    #[serde(rename = "tlsv1_2")]
-    Tlsv12,
-    #[serde(rename = "tlsv1_3")]
-    Tlsv13,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Tfa {
-    #[serde(rename = "oath")]
-    Oath,
-    #[serde(rename = "yubico")]
-    Yubico,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "ad")]
-    Ad,
-    #[serde(rename = "ldap")]
-    Ldap,
-    #[serde(rename = "openid")]
-    Openid,
-    #[serde(rename = "pam")]
-    Pam,
-    #[serde(rename = "pve")]
-    Pve,
+impl<T> DomainsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Add an authentication server."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(realm: String, ty: String) -> Self {
@@ -87,16 +62,6 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> DomainsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Authentication domain index."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl PostParams {
     pub fn new(realm: String, ty: Type) -> Self {
@@ -150,8 +115,8 @@ pub struct PostParams {
     #[doc = "Specifies the Authentication Context Class Reference values that theAuthorization Server is being requested to use for the Auth Request."]
     pub acr_values: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Automatically create users if they do not exist."]
@@ -167,8 +132,8 @@ pub struct PostParams {
     pub capath: Option<String>,
     #[serde(rename = "case-sensitive")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "username is case-sensitive"]
@@ -181,8 +146,8 @@ pub struct PostParams {
     pub certkey: Option<String>,
     #[serde(rename = "check-connection")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Check bind connection to the server."]
@@ -199,8 +164,8 @@ pub struct PostParams {
     #[doc = "Description."]
     pub comment: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Use this as default realm"]
@@ -234,8 +199,8 @@ pub struct PostParams {
     #[doc = "LDAP bind password. Will be stored in '/etc/pve/priv/realm/\\<REALM\\>.pw'."]
     pub password: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Server port."]
@@ -249,8 +214,8 @@ pub struct PostParams {
     #[doc = "Specifies the scopes (user details) that should be authorized and returned, for example 'email' or 'profile'."]
     pub scopes: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Use secure LDAPS protocol. DEPRECATED: use 'mode' instead."]
@@ -288,8 +253,8 @@ pub struct PostParams {
     #[doc = "OpenID claim used to generate the unique username."]
     pub username_claim: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Verify the server's SSL certificate"]
@@ -301,15 +266,50 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> DomainsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Add an authentication server."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Mode {
+    #[serde(rename = "ldap")]
+    Ldap,
+    #[serde(rename = "ldap+starttls")]
+    LdapStarttls,
+    #[serde(rename = "ldaps")]
+    Ldaps,
+}
+impl Default for Mode {
+    fn default() -> Self {
+        Self::Ldap
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Sslversion {
+    #[serde(rename = "tlsv1")]
+    Tlsv1,
+    #[serde(rename = "tlsv1_1")]
+    Tlsv11,
+    #[serde(rename = "tlsv1_2")]
+    Tlsv12,
+    #[serde(rename = "tlsv1_3")]
+    Tlsv13,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Tfa {
+    #[serde(rename = "oath")]
+    Oath,
+    #[serde(rename = "yubico")]
+    Yubico,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "ad")]
+    Ad,
+    #[serde(rename = "ldap")]
+    Ldap,
+    #[serde(rename = "openid")]
+    Openid,
+    #[serde(rename = "pam")]
+    Pam,
+    #[serde(rename = "pve")]
+    Pve,
 }
 impl<T> DomainsClient<T>
 where

@@ -7,9 +7,9 @@ use serde::{Deserialize, Serialize};
 
 use crate::generator::{AdditionalProperties, FieldDef, PrimitiveTypeDef, TypeDef};
 
-use super::{Format, Optional};
+use super::{Format, KnownFormat, Optional, Output};
 
-#[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Default)]
 pub struct Type<'a> {
     #[serde(flatten, borrow, default, skip_serializing_if = "Option::is_none")]
     pub ty: Option<TypeKind<'a>>,
@@ -62,7 +62,7 @@ impl Type<'_> {
             .map(Cow::to_string)
     }
 
-    pub fn type_def(&self, field_name: &str, struct_suffix: &str) -> TypeDef {
+    pub fn type_def(&self, field_name: &str, struct_suffix: &str) -> Output {
         let output_type = if let Some(ty) = self.ty.as_ref() {
             match ty {
                 TypeKind::Null => TypeDef::Unit,
@@ -103,34 +103,61 @@ impl Type<'_> {
                 TypeKind::Integer { .. } => TypeDef::Primitive(PrimitiveTypeDef::Integer),
                 TypeKind::Boolean { .. } => TypeDef::Primitive(PrimitiveTypeDef::Boolean),
                 TypeKind::Array { items } => {
-                    let inner = items.type_def(field_name, &format!("{struct_suffix}Items"));
+                    let mut output = items.type_def(field_name, &format!("{struct_suffix}Items"));
+                    output.module_defs.push(output.def.clone());
+                    output.def = TypeDef::Array(Box::new(output.def.clone()));
 
-                    TypeDef::Array {
-                        inner: Box::new(inner),
-                    }
+                    return output;
                 }
                 TypeKind::Object {
                     properties,
                     additional_properties,
                 } => {
+                    let mut final_output = Output::new();
+
+                    if let Some(value) =
+                        properties.as_ref().map(|prop| prop.get("net[n]")).flatten()
+                    {
+                        let props =
+                            if let Format::Properties(props) = value.format.as_ref().unwrap() {
+                                props
+                            } else {
+                                panic!()
+                            };
+
+                        let kind = TypeKind::Object {
+                            properties: Some(props.clone()),
+                            additional_properties: IntOrTy::Int(0),
+                        };
+                        let mut ty = Type::default();
+                        ty.ty = Some(kind);
+
+                        let output = ty.type_def("Net", "");
+
+                        final_output.global_defs.push(output.def);
+                        final_output.global_defs.extend(output.module_defs);
+                        final_output.global_defs.extend(output.global_defs);
+                    }
+
                     let field_name = crate::name_to_ident(field_name);
                     let suffix = crate::name_to_ident(struct_suffix);
                     let struct_name = format!("{field_name}{suffix}");
+                    let mut all_external = Vec::new();
 
-                    let additional_props =
+                    let (additional_props, ext) =
                         additional_properties.as_additional_properties(struct_suffix);
 
-                    if let Some(props) = properties {
-                        let mut external_defs: Vec<TypeDef> = Vec::new();
+                    all_external.extend(ext);
 
+                    if let Some(props) = properties {
                         let fields: Vec<_> = props
                             .iter()
                             .filter_map(|(original_name, ty)| {
                                 let field_name = crate::name_to_ident(&original_name);
-                                let inner = ty
+                                let output = ty
                                     .type_def(&field_name, &format!("{struct_suffix}{field_name}"));
-
-                                external_defs.push(inner.clone());
+                                let inner = output.def.clone();
+                                final_output.absorb(output);
 
                                 let doc = ty.doc();
                                 let optional = ty.optional.get();
@@ -138,19 +165,27 @@ impl Type<'_> {
                                 if inner.is_unit() && !optional {
                                     None
                                 } else {
-                                    Some(FieldDef::new(
+                                    let (field, num_items) = FieldDef::new(
                                         original_name.to_string(),
                                         inner,
                                         optional,
                                         doc,
-                                    ))
+                                    );
+
+                                    all_external.extend(
+                                        num_items.map(|v| TypeDef::NumberedItems(Box::new(v))),
+                                    );
+
+                                    Some(field)
                                 }
                             })
                             .collect();
 
-                        TypeDef::new_struct(struct_name, fields, additional_props, external_defs)
+                        let def = TypeDef::new_struct(struct_name, fields, additional_props);
+                        final_output.def = def;
+                        return final_output;
                     } else if !additional_props.is_none() {
-                        TypeDef::new_struct(struct_name, Vec::new(), additional_props, Vec::new())
+                        TypeDef::new_struct(struct_name, Vec::new(), additional_props)
                     } else {
                         TypeDef::Unit
                     }
@@ -160,16 +195,27 @@ impl Type<'_> {
             TypeDef::Unit
         };
 
-        if let (Some(fallback), Some(Format::Kind(format))) =
+        let def = if let (Some(fallback), Some(Format::Kind(format))) =
             (output_type.primitive(), &self.format)
         {
-            TypeDef::KnownType {
-                format: *format,
-                fallback,
-            }
+            let format = match format {
+                KnownFormat::MacAddr { .. } => {
+                    let allow_ig_bit = self
+                        .verbose_description
+                        .as_ref()
+                        .map(|v| !v.contains("the I/G (Individual/Group) bit not set"))
+                        .unwrap_or(true);
+                    KnownFormat::MacAddr(allow_ig_bit)
+                }
+                format => *format,
+            };
+
+            TypeDef::KnownType { format, fallback }
         } else {
             output_type
-        }
+        };
+
+        Output::bare_def(def)
     }
 }
 
@@ -182,14 +228,20 @@ pub enum IntOrTy<'a> {
 }
 
 impl IntOrTy<'_> {
-    pub fn as_additional_properties(&self, struct_suffix: &str) -> AdditionalProperties {
+    pub fn as_additional_properties(
+        &self,
+        struct_suffix: &str,
+    ) -> (AdditionalProperties, Vec<TypeDef>) {
         match self {
-            IntOrTy::Int(1) => AdditionalProperties::Untyped,
+            IntOrTy::Int(1) => (AdditionalProperties::Untyped, Vec::new()),
             IntOrTy::Ty(ty) => {
-                let ty = ty.type_def("additional_properties", struct_suffix);
-                AdditionalProperties::Type(Box::new(ty))
+                let output = ty.type_def("additional_properties", struct_suffix);
+                (
+                    AdditionalProperties::Type(Box::new(output.def)),
+                    output.module_defs,
+                )
             }
-            _ => AdditionalProperties::None,
+            _ => (AdditionalProperties::None, Vec::new()),
         }
     }
 

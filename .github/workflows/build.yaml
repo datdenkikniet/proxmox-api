@@ -1,6 +1,9 @@
 name: Generate JSON definitions & build
 run-name: Generate JSON definitions & build
-on: [push]
+on:
+  pull_request:
+  push:
+    branches: [main]
 env:
   CONTAINER_NAME: json-container
 jobs:
@@ -62,6 +65,8 @@ jobs:
             args: "--lib"
           - name: "CLI tool"
             args: "--bin proxmox-api --features cli"
+          - name: "library with just the reqwest client"
+            args: "--lib --no-default-features --features reqwest-client"
 
     name: Build & check the ${{ matrix.definition.name }}
     runs-on: ubuntu-latest
@@ -76,5 +81,5 @@ jobs:
         run: cargo check --manifest-path proxmox-api/Cargo.toml ${{ matrix.definition.args }}
 
       # TODO: reenable this for merges to main?
-      # - name: Build the ${{ matrix.definition.name }}
-      #   run: cargo build --manifest-path proxmox-api/Cargo.toml ${{ matrix.definition.args }}
+      - name: Build the ${{ matrix.definition.name }}
+        run: cargo build --manifest-path proxmox-api/Cargo.toml ${{ matrix.definition.args }}

@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> WipediskClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Wipe a disk or partition."]
+    pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
 impl PutParams {
     pub fn new(disk: String) -> Self {
         Self {
@@ -31,14 +41,4 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> WipediskClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Wipe a disk or partition."]
-    pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
 }

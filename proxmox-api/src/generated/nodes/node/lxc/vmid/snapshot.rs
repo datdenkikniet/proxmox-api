@@ -14,6 +14,26 @@ where
         }
     }
 }
+impl<T> SnapshotClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List all snapshots."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> SnapshotClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Snapshot a container."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 impl GetOutputItems {
     pub fn new(description: String, name: String) -> Self {
         Self {
@@ -35,8 +55,8 @@ pub struct GetOutputItems {
     #[doc = "Parent snapshot identifier."]
     pub parent: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Snapshot creation time"]
@@ -47,16 +67,6 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> SnapshotClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List all snapshots."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl PostParams {
     pub fn new(snapname: String) -> Self {
@@ -80,16 +90,6 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> SnapshotClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Snapshot a container."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }
 impl<T> SnapshotClient<T>
 where

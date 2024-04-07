@@ -56,7 +56,7 @@ pub enum KnownFormat {
     PemCertificate,
     PemCertificateChain,
     PemString,
-    MacAddr,
+    MacAddr(#[serde(skip)] bool),
     MacPrefix,
     RealmSyncOptions,
     DiskSize,

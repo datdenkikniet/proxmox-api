@@ -13,32 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "block")]
-    Block,
-    #[serde(rename = "db")]
-    Db,
-    #[serde(rename = "wal")]
-    Wal,
-}
-impl Default for Type {
-    fn default() -> Self {
-        Self::Block
+impl<T> LvInfoClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get OSD volume details"]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
     }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetParams {
-    #[serde(rename = "type")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "OSD device type"]
-    pub ty: Option<Type>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl GetOutput {
     pub fn new(
@@ -69,8 +52,8 @@ pub struct GetOutput {
     #[doc = "Path to the logical volume (LV)."]
     pub lv_path: String,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Size of the logical volume (LV)."]
     pub lv_size: u64,
@@ -85,13 +68,30 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> LvInfoClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get OSD volume details"]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "OSD device type"]
+    pub ty: Option<Type>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "block")]
+    Block,
+    #[serde(rename = "db")]
+    Db,
+    #[serde(rename = "wal")]
+    Wal,
+}
+impl Default for Type {
+    fn default() -> Self {
+        Self::Block
     }
 }

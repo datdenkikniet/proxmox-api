@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> SendkeyClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Send key event to virtual machine."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
 impl PutParams {
     pub fn new(key: String) -> Self {
         Self {
@@ -27,8 +37,8 @@ pub struct PutParams {
     #[doc = "The key (qemu monitor encoding)."]
     pub key: String,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Ignore locks - only root is allowed to use this option."]
@@ -39,14 +49,4 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> SendkeyClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Send key event to virtual machine."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
 }

@@ -14,18 +14,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "recovery")]
-    Recovery,
-    #[serde(rename = "totp")]
-    Totp,
-    #[serde(rename = "u2f")]
-    U2f,
-    #[serde(rename = "webauthn")]
-    Webauthn,
-    #[serde(rename = "yubico")]
-    Yubico,
+impl<T> TfaClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List TFA configurations of users."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
 }
 impl EntriesGetOutputItemsEntriesItems {
     pub fn new(created: u64, description: String, id: String, ty: Type) -> Self {
@@ -42,16 +39,16 @@ impl EntriesGetOutputItemsEntriesItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct EntriesGetOutputItemsEntriesItems {
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Creation time of this entry as unix epoch."]
     pub created: u64,
     #[doc = "User chosen description for this entry."]
     pub description: String,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Whether this TFA entry is currently enabled."]
@@ -85,16 +82,16 @@ pub struct GetOutputItems {
     pub entries: Vec<EntriesGetOutputItemsEntriesItems>,
     #[serde(rename = "tfa-locked-until")]
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Contains a timestamp until when a user is locked out of 2nd factors."]
     pub tfa_locked_until: Option<u64>,
     #[serde(rename = "totp-locked")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "True if the user is currently locked out of TOTP factors."]
@@ -108,15 +105,18 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> TfaClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List TFA configurations of users."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "recovery")]
+    Recovery,
+    #[serde(rename = "totp")]
+    Totp,
+    #[serde(rename = "u2f")]
+    U2f,
+    #[serde(rename = "webauthn")]
+    Webauthn,
+    #[serde(rename = "yubico")]
+    Yubico,
 }
 impl<T> TfaClient<T>
 where

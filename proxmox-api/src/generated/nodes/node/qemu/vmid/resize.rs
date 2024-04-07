@@ -13,6 +13,50 @@ where
         }
     }
 }
+impl<T> ResizeClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Extend volume size."]
+    pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
+impl PutParams {
+    pub fn new(disk: Disk, size: String) -> Self {
+        Self {
+            disk,
+            size,
+            digest: Default::default(),
+            skiplock: Default::default(),
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct PutParams {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Prevent changes if current configuration file has different SHA1 digest. This can be used to prevent concurrent modifications."]
+    pub digest: Option<String>,
+    #[doc = "The disk you want to resize."]
+    pub disk: Disk,
+    #[doc = "The new size. With the `+` sign the value is added to the actual size of the volume and without it, the value is taken as an absolute one. Shrinking disk size is not supported."]
+    pub size: String,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Ignore locks - only root is allowed to use this option."]
+    pub skiplock: Option<bool>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub enum Disk {
     #[serde(rename = "efidisk0")]
@@ -133,48 +177,4 @@ pub enum Disk {
     Virtio8,
     #[serde(rename = "virtio9")]
     Virtio9,
-}
-impl PutParams {
-    pub fn new(disk: Disk, size: String) -> Self {
-        Self {
-            disk,
-            size,
-            digest: Default::default(),
-            skiplock: Default::default(),
-            additional_properties: Default::default(),
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct PutParams {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Prevent changes if current configuration file has different SHA1 digest. This can be used to prevent concurrent modifications."]
-    pub digest: Option<String>,
-    #[doc = "The disk you want to resize."]
-    pub disk: Disk,
-    #[doc = "The new size. With the `+` sign the value is added to the actual size of the volume and without it, the value is taken as an absolute one. Shrinking disk size is not supported."]
-    pub size: String,
-    #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Ignore locks - only root is allowed to use this option."]
-    pub skiplock: Option<bool>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> ResizeClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Extend volume size."]
-    pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
 }

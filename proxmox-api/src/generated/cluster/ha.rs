@@ -16,6 +16,16 @@ where
         }
     }
 }
+impl<T> HaClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Directory index."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
 impl GetOutputItems {
     pub fn new(id: String) -> Self {
         Self {
@@ -33,16 +43,6 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> HaClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Directory index."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl<T> HaClient<T>
 where

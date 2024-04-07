@@ -13,11 +13,51 @@ where
         }
     }
 }
+impl<T> VolumeClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Delete volume"]
+    pub fn delete(&self, params: DeleteParams) -> Result<Option<String>, T::Error> {
+        let path = self.path.to_string();
+        self.client.delete(&path, &params)
+    }
+}
+impl<T> VolumeClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get volume attributes"]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> VolumeClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Copy a volume. This is experimental code - do not use."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+impl<T> VolumeClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update volume attributes"]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct DeleteParams {
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Time to wait for the task to finish. We return 'null' if the task finish within that time."]
@@ -28,16 +68,6 @@ pub struct DeleteParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> VolumeClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Delete volume"]
-    pub fn delete(&self, params: DeleteParams) -> Result<Option<String>, T::Error> {
-        let path = self.path.to_string();
-        self.client.delete(&path, &params)
-    }
 }
 impl GetOutput {
     pub fn new(format: String, path: String, size: u64, used: u64) -> Self {
@@ -62,21 +92,21 @@ pub struct GetOutput {
     #[doc = "The Path"]
     pub path: String,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Protection status. Currently only supported for backups."]
     pub protected: Option<bool>,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Volume size in bytes."]
     pub size: u64,
     #[serde(
-        serialize_with = "crate::serialize_int",
-        deserialize_with = "crate::deserialize_int"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Used space. Please note that most storage plugins do not report anything useful here."]
     pub used: u64,
@@ -86,16 +116,6 @@ pub struct GetOutput {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> VolumeClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get volume attributes"]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl PostParams {
     pub fn new(target: String) -> Self {
@@ -120,24 +140,14 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> VolumeClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Copy a volume. This is experimental code - do not use."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
-}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The new notes."]
     pub notes: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Protection status. Currently only supported for backups."]
@@ -148,14 +158,4 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> VolumeClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update volume attributes"]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
 }

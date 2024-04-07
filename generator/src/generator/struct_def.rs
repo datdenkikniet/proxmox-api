@@ -1,14 +1,12 @@
-use std::collections::BTreeMap;
-
 use proc_macro2::TokenStream;
 use quote::ToTokens;
 use syn::{spanned::Spanned, Ident};
 
-use super::{EnumDef, FieldDef, TypeDef};
+use super::{proxmox_api, proxmox_api_str, FieldDef, TypeDef};
 
 use quote::quote;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum AdditionalProperties {
     None,
     Untyped,
@@ -21,11 +19,10 @@ impl AdditionalProperties {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct StructDef {
     name: String,
     fields: Vec<FieldDef>,
-    external_defs: Vec<TypeDef>,
     additional_props: AdditionalProperties,
 }
 
@@ -34,12 +31,10 @@ impl StructDef {
         name: String,
         fields: Vec<FieldDef>,
         additional_props: AdditionalProperties,
-        external_defs: Vec<TypeDef>,
     ) -> Self {
         Self {
             name,
             fields,
-            external_defs,
             additional_props,
         }
     }
@@ -51,36 +46,17 @@ impl StructDef {
     pub fn fields(&self) -> &[FieldDef] {
         &self.fields
     }
-
-    pub fn external_defs(&self) -> &[TypeDef] {
-        &self.external_defs
-    }
-
-    pub fn hoist_enum_defs(&mut self, output: &mut BTreeMap<String, EnumDef>) {
-        self.external_defs
-            .iter_mut()
-            .for_each(|v| v.hoist_enum_defs(output));
-
-        self.external_defs.retain(|v| !matches!(v, TypeDef::Unit));
-
-        if let AdditionalProperties::Type(ty) = &mut self.additional_props {
-            ty.hoist_enum_defs(output);
-        }
-    }
 }
 
 impl ToTokens for StructDef {
     fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
         let Self {
-            name,
+            name: _,
             fields,
-            external_defs,
             additional_props,
         } = self;
 
-        let name = Ident::new(name, quote!().span());
-
-        external_defs.iter().for_each(|def| def.to_tokens(tokens));
+        let name = Ident::new(self.name(), quote!().span());
 
         let additional_props_ty = match additional_props {
             AdditionalProperties::None => None,
@@ -103,20 +79,20 @@ impl ToTokens for StructDef {
 
             let default_fields = optional_fields.map(|f| {
                 let name = f.name();
-                let name = Ident::new(name, quote!().span());
+                let name = Ident::new(&name, quote!().span());
                 quote!(#name: Default::default())
             });
 
             let args = non_optional_fields.clone().map(|f| {
                 let name = f.name();
-                let name = Ident::new(name, quote!().span());
+                let name = Ident::new(&name, quote!().span());
                 let ty = f.ty();
                 quote!(#name: #ty)
             });
 
             let arg_setters = non_optional_fields.map(|f| {
                 let name = f.name();
-                let name = Ident::new(name, quote!().span());
+                let name = Ident::new(&name, quote!().span());
                 quote!(#name)
             });
 
@@ -148,14 +124,57 @@ impl ToTokens for StructDef {
                 quote! { #parsed, }
             });
 
-        let name = &name;
+        let (additional_props, test) = if let Some(additional_props) = additional_props_ty {
+            let multis: Vec<_> = fields
+                .iter()
+                .filter_map(|f| f.multi())
+                .map(|m| m.name())
+                .collect();
 
-        let additional_props = additional_props_ty.as_ref().map(|v| {
-            quote! {
-                #[serde(flatten, default, skip_serializing_if = "::std::collections::HashMap::is_empty")]
-                pub additional_properties: #v,
-            }
-        });
+            let (serde_attr, test) = if multis.is_empty() {
+                let test = None;
+                let serde = quote! {
+                    #[serde(flatten, default, skip_serializing_if = "::std::collections::HashMap::is_empty")]
+                };
+                (serde, test)
+            } else {
+                let idents = multis.into_iter().map(|v| Ident::new(&v, quote!().span()));
+                let test = proxmox_api(quote!(types::multi::Test));
+                let numbered_items = proxmox_api(quote!(types::multi::NumberedItems));
+                let test = Some(quote! {
+                    impl #test for #name {
+                        fn test_fn() -> fn(&str) -> bool {
+                            fn the_test(input: &str) -> bool {
+                                let array = [
+                                    #(<#idents as #numbered_items>::key_matches as fn(&str) -> bool,)*
+                                ];
+
+                                array.iter().any(|f| f(input))
+                            }
+
+                            the_test as _
+                        }
+                    }
+                });
+
+                let path = proxmox_api_str(format!(
+                    "types::multi::deserialize_additional_data::<'_, {name}, _, _>"
+                ));
+                let serde = quote! {
+                    #[serde(flatten, deserialize_with = #path)]
+                };
+                (serde, test)
+            };
+
+            let additional_props = quote! {
+                #serde_attr
+                pub additional_properties: #additional_props,
+            };
+
+            (Some(additional_props), test)
+        } else {
+            (None, None)
+        };
 
         tokens.extend(quote! {
             #[derive(#(#derives)*)]
@@ -163,6 +182,8 @@ impl ToTokens for StructDef {
                 #(#fields)*
                 #additional_props
             }
+
+            #test
         });
     }
 }

@@ -13,16 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Console {
-    #[serde(rename = "applet")]
-    Applet,
-    #[serde(rename = "html5")]
-    Html5,
-    #[serde(rename = "vv")]
-    Vv,
-    #[serde(rename = "xtermjs")]
-    Xtermjs,
+impl<T> VersionClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "API version details, including some parts of the global datacenter config."]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
 }
 impl GetOutput {
     pub fn new(release: String, repoid: String, version: String) -> Self {
@@ -53,13 +52,14 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> VersionClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "API version details, including some parts of the global datacenter config."]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Console {
+    #[serde(rename = "applet")]
+    Applet,
+    #[serde(rename = "html5")]
+    Html5,
+    #[serde(rename = "vv")]
+    Vv,
+    #[serde(rename = "xtermjs")]
+    Xtermjs,
 }

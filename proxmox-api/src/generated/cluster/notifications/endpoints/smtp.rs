@@ -14,28 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Mode {
-    #[serde(rename = "insecure")]
-    Insecure,
-    #[serde(rename = "starttls")]
-    Starttls,
-    #[serde(rename = "tls")]
-    Tls,
-}
-impl Default for Mode {
-    fn default() -> Self {
-        Self::Tls
+impl<T> SmtpClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Returns a list of all smtp endpoints"]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Origin {
-    #[serde(rename = "builtin")]
-    Builtin,
-    #[serde(rename = "modified-builtin")]
-    ModifiedBuiltin,
-    #[serde(rename = "user-created")]
-    UserCreated,
+impl<T> SmtpClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create a new smtp endpoint"]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(from_address: String, name: String, origin: Origin, server: String) -> Self {
@@ -65,8 +62,8 @@ pub struct GetOutputItems {
     #[doc = "Comment"]
     pub comment: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Disable this target"]
@@ -89,8 +86,8 @@ pub struct GetOutputItems {
     #[doc = "Show if this entry was created by a user or was built-in"]
     pub origin: Origin,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The port to be used. Defaults to 465 for TLS based connections, 587 for STARTTLS based connections and port 25 for insecure plain-text connections."]
@@ -106,16 +103,6 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> SmtpClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Returns a list of all smtp endpoints"]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl PostParams {
     pub fn new(from_address: String, name: String, server: String) -> Self {
@@ -145,8 +132,8 @@ pub struct PostParams {
     #[doc = "Comment"]
     pub comment: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Disable this target"]
@@ -170,8 +157,8 @@ pub struct PostParams {
     #[doc = "Password for SMTP authentication"]
     pub password: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The port to be used. Defaults to 465 for TLS based connections, 587 for STARTTLS based connections and port 25 for insecure plain-text connections."]
@@ -188,15 +175,28 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> SmtpClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create a new smtp endpoint"]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Mode {
+    #[serde(rename = "insecure")]
+    Insecure,
+    #[serde(rename = "starttls")]
+    Starttls,
+    #[serde(rename = "tls")]
+    Tls,
+}
+impl Default for Mode {
+    fn default() -> Self {
+        Self::Tls
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Origin {
+    #[serde(rename = "builtin")]
+    Builtin,
+    #[serde(rename = "modified-builtin")]
+    ModifiedBuiltin,
+    #[serde(rename = "user-created")]
+    UserCreated,
 }
 impl<T> SmtpClient<T>
 where

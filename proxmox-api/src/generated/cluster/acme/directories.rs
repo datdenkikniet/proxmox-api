@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> DirectoriesClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get named known ACME directory endpoints."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
 impl GetOutputItems {
     pub fn new(name: String, url: String) -> Self {
         Self { name, url }
@@ -23,14 +33,4 @@ pub struct GetOutputItems {
     pub name: String,
     #[doc = "URL of ACME CA directory endpoint."]
     pub url: String,
-}
-impl<T> DirectoriesClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get named known ACME directory endpoints."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }

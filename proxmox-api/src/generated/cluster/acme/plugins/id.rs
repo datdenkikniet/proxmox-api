@@ -13,6 +13,84 @@ where
         }
     }
 }
+impl<T> IdClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Delete ACME plugin configuration."]
+    pub fn delete(&self) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.delete(&path, &())
+    }
+}
+impl<T> IdClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get ACME plugin configuration."]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> IdClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update ACME plugin configuration."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetOutput {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct PutParams {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "API plugin name"]
+    pub api: Option<Api>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "DNS plugin data. (base64 encoded)"]
+    pub data: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "A list of settings you want to delete."]
+    pub delete: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
+    pub digest: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Flag to disable the config."]
+    pub disable: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "List of cluster node names."]
+    pub nodes: Option<String>,
+    #[serde(rename = "validation-delay")]
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Extra delay in seconds to wait before requesting validation. Allows to cope with a long TTL of DNS records."]
+    pub validation_delay: Option<u64>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub enum Api {
     #[serde(rename = "1984hosting")]
@@ -305,82 +383,4 @@ pub enum Api {
     Zone,
     #[serde(rename = "zonomi")]
     Zonomi,
-}
-impl<T> IdClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Delete ACME plugin configuration."]
-    pub fn delete(&self) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.delete(&path, &())
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetOutput {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> IdClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get ACME plugin configuration."]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct PutParams {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "API plugin name"]
-    pub api: Option<Api>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "DNS plugin data. (base64 encoded)"]
-    pub data: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "A list of settings you want to delete."]
-    pub delete: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
-    pub digest: Option<String>,
-    #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Flag to disable the config."]
-    pub disable: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "List of cluster node names."]
-    pub nodes: Option<String>,
-    #[serde(rename = "validation-delay")]
-    #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Extra delay in seconds to wait before requesting validation. Allows to cope with a long TTL of DNS records."]
-    pub validation_delay: Option<u64>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> IdClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update ACME plugin configuration."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
 }

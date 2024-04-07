@@ -23,6 +23,44 @@ where
         self.client.get(&path, &())
     }
 }
+impl<T> TicketClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create or verify authentication ticket."]
+    pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+impl PostOutput {
+    pub fn new(username: String) -> Self {
+        Self {
+            username,
+            csrfpreventiontoken: Default::default(),
+            clustername: Default::default(),
+            ticket: Default::default(),
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct PostOutput {
+    #[serde(rename = "CSRFPreventionToken")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub csrfpreventiontoken: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub clustername: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub ticket: Option<String>,
+    pub username: String,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 impl PostParams {
     pub fn new(password: String, username: String) -> Self {
         Self {
@@ -42,8 +80,8 @@ impl PostParams {
 pub struct PostParams {
     #[serde(rename = "new-format")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "This parameter is now ignored and assumed to be 1."]
@@ -74,42 +112,4 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl PostOutput {
-    pub fn new(username: String) -> Self {
-        Self {
-            username,
-            csrfpreventiontoken: Default::default(),
-            clustername: Default::default(),
-            ticket: Default::default(),
-            additional_properties: Default::default(),
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct PostOutput {
-    #[serde(rename = "CSRFPreventionToken")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub csrfpreventiontoken: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub clustername: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub ticket: Option<String>,
-    pub username: String,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> TicketClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create or verify authentication ticket."]
-    pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }

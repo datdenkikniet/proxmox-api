@@ -7,7 +7,7 @@ use crate::{
     Path, PathElement,
 };
 
-use super::{ty::IntOrTy, Type};
+use super::{ty::IntOrTy, Output, Type};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Parameters<'a> {
@@ -18,11 +18,11 @@ pub struct Parameters<'a> {
 }
 
 impl Parameters<'_> {
-    pub fn type_def(&self, prefix: &str, path: &Path) -> Option<TypeDef> {
+    pub fn type_def(&self, prefix: &str, path: &Path) -> Option<Output> {
         if let Some(properties) = &self.properties {
             let name = crate::name_to_ident(&format!("{prefix}Params"));
 
-            let mut external_defs = Vec::new();
+            let mut final_output = Output::new();
             let fields = properties.iter().filter_map(|(name, ty)| {
                 if path.iter().any(|p| {
                     if let PathElement::Placeholder(placeholder) = p {
@@ -34,12 +34,20 @@ impl Parameters<'_> {
                     return None;
                 }
 
-                let typedef = ty.type_def(name, "Returns");
-                external_defs.push(typedef.clone());
+                let output = ty.type_def(name, "Returns");
+                let typedef = output.def.clone();
+                final_output.absorb(output);
 
                 let doc = ty.doc();
                 let optional = ty.optional.get();
-                Some(FieldDef::new(name.to_string(), typedef, optional, doc))
+                let (field_def, num_items_def) =
+                    FieldDef::new(name.to_string(), typedef, optional, doc);
+
+                final_output
+                    .module_defs
+                    .extend(num_items_def.map(|v| TypeDef::NumberedItems(Box::new(v))));
+
+                Some(field_def)
             });
 
             let fields: Vec<_> = fields.collect();
@@ -48,14 +56,15 @@ impl Parameters<'_> {
                 return None;
             }
 
-            let additional_properties = self
+            let (additional_properties, ext) = self
                 .additional_properties
                 .as_additional_properties("Params");
+            final_output.module_defs.extend(ext);
 
-            let type_def =
-                TypeDef::new_struct(name.clone(), fields, additional_properties, external_defs);
+            let type_def = TypeDef::new_struct(name.clone(), fields, additional_properties);
+            final_output.def = type_def;
 
-            Some(type_def)
+            Some(final_output)
         } else {
             None
         }

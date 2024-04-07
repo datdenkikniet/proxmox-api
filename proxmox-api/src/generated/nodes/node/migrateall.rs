@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> MigrateallClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Migrate all VMs and Containers."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 impl PostParams {
     pub fn new(target: String) -> Self {
         Self {
@@ -27,8 +37,8 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal number of parallel migration job. If not set, uses'max_workers' from datacenter.cfg. One of both must be set!"]
@@ -40,8 +50,8 @@ pub struct PostParams {
     pub vms: Option<String>,
     #[serde(rename = "with-local-disks")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable live storage migration for local disk"]
@@ -52,14 +62,4 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> MigrateallClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Migrate all VMs and Containers."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }

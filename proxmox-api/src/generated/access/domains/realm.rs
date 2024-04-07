@@ -14,31 +14,6 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Mode {
-    #[serde(rename = "ldap")]
-    Ldap,
-    #[serde(rename = "ldap+starttls")]
-    LdapStarttls,
-    #[serde(rename = "ldaps")]
-    Ldaps,
-}
-impl Default for Mode {
-    fn default() -> Self {
-        Self::Ldap
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Sslversion {
-    #[serde(rename = "tlsv1")]
-    Tlsv1,
-    #[serde(rename = "tlsv1_1")]
-    Tlsv11,
-    #[serde(rename = "tlsv1_2")]
-    Tlsv12,
-    #[serde(rename = "tlsv1_3")]
-    Tlsv13,
-}
 impl<T> RealmClient<T>
 where
     T: crate::client::Client,
@@ -59,6 +34,16 @@ where
         self.client.get(&path, &())
     }
 }
+impl<T> RealmClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update authentication server settings."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
     #[serde(rename = "acr-values")]
@@ -66,8 +51,8 @@ pub struct PutParams {
     #[doc = "Specifies the Authentication Context Class Reference values that theAuthorization Server is being requested to use for the Auth Request."]
     pub acr_values: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Automatically create users if they do not exist."]
@@ -83,8 +68,8 @@ pub struct PutParams {
     pub capath: Option<String>,
     #[serde(rename = "case-sensitive")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "username is case-sensitive"]
@@ -97,8 +82,8 @@ pub struct PutParams {
     pub certkey: Option<String>,
     #[serde(rename = "check-connection")]
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Check bind connection to the server."]
@@ -115,8 +100,8 @@ pub struct PutParams {
     #[doc = "Description."]
     pub comment: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Use this as default realm"]
@@ -156,8 +141,8 @@ pub struct PutParams {
     #[doc = "LDAP bind password. Will be stored in '/etc/pve/priv/realm/\\<REALM\\>.pw'."]
     pub password: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_int_optional",
-        deserialize_with = "crate::deserialize_int_optional"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Server port."]
@@ -169,8 +154,8 @@ pub struct PutParams {
     #[doc = "Specifies the scopes (user details) that should be authorized and returned, for example 'email' or 'profile'."]
     pub scopes: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Use secure LDAPS protocol. DEPRECATED: use 'mode' instead."]
@@ -201,8 +186,8 @@ pub struct PutParams {
     #[doc = "The objectclasses for users."]
     pub user_classes: Option<String>,
     #[serde(
-        serialize_with = "crate::serialize_bool_optional",
-        deserialize_with = "crate::deserialize_bool_optional"
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Verify the server's SSL certificate"]
@@ -214,15 +199,30 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> RealmClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update authentication server settings."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Mode {
+    #[serde(rename = "ldap")]
+    Ldap,
+    #[serde(rename = "ldap+starttls")]
+    LdapStarttls,
+    #[serde(rename = "ldaps")]
+    Ldaps,
+}
+impl Default for Mode {
+    fn default() -> Self {
+        Self::Ldap
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Sslversion {
+    #[serde(rename = "tlsv1")]
+    Tlsv1,
+    #[serde(rename = "tlsv1_1")]
+    Tlsv11,
+    #[serde(rename = "tlsv1_2")]
+    Tlsv12,
+    #[serde(rename = "tlsv1_3")]
+    Tlsv13,
 }
 impl<T> RealmClient<T>
 where

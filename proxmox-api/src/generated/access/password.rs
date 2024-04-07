@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> PasswordClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Change user password."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
 impl PutParams {
     pub fn new(password: String, userid: String) -> Self {
         Self {
@@ -39,14 +49,4 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> PasswordClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Change user password."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
 }
