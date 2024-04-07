@@ -2,7 +2,7 @@ use proc_macro2::TokenStream;
 use quote::ToTokens;
 use syn::{spanned::Spanned, Ident};
 
-use super::{FieldDef, TypeDef};
+use super::{proxmox_api, proxmox_api_str, FieldDef, TypeDef};
 
 use quote::quote;
 
@@ -124,14 +124,57 @@ impl ToTokens for StructDef {
                 quote! { #parsed, }
             });
 
-        let name = &name;
+        let (additional_props, test) = if let Some(additional_props) = additional_props_ty {
+            let multis: Vec<_> = fields
+                .iter()
+                .filter_map(|f| f.multi())
+                .map(|m| m.name())
+                .collect();
 
-        let additional_props = additional_props_ty.as_ref().map(|v| {
-            quote! {
-                #[serde(flatten, default, skip_serializing_if = "::std::collections::HashMap::is_empty")]
-                pub additional_properties: #v,
-            }
-        });
+            let (serde_attr, test) = if multis.is_empty() {
+                let test = None;
+                let serde = quote! {
+                    #[serde(flatten, default, skip_serializing_if = "::std::collections::HashMap::is_empty")]
+                };
+                (serde, test)
+            } else {
+                let idents = multis.into_iter().map(|v| Ident::new(&v, quote!().span()));
+                let test = proxmox_api(quote!(types::multi::Test));
+                let numbered_items = proxmox_api(quote!(types::multi::NumberedItems));
+                let test = Some(quote! {
+                    impl #test for #name {
+                        fn test_fn() -> fn(&str) -> bool {
+                            fn the_test(input: &str) -> bool {
+                                let array = [
+                                    #(<#idents as #numbered_items>::key_matches as fn(&str) -> bool,)*
+                                ];
+
+                                array.iter().any(|f| f(input))
+                            }
+
+                            the_test as _
+                        }
+                    }
+                });
+
+                let path = proxmox_api_str(format!(
+                    "types::multi::deserialize_additional_data::<'_, {name}, _, _>"
+                ));
+                let serde = quote! {
+                    #[serde(flatten, deserialize_with = #path)]
+                };
+                (serde, test)
+            };
+
+            let additional_props = quote! {
+                #serde_attr
+                pub additional_properties: #additional_props,
+            };
+
+            (Some(additional_props), test)
+        } else {
+            (None, None)
+        };
 
         tokens.extend(quote! {
             #[derive(#(#derives)*)]
@@ -139,6 +182,8 @@ impl ToTokens for StructDef {
                 #(#fields)*
                 #additional_props
             }
+
+            #test
         });
     }
 }

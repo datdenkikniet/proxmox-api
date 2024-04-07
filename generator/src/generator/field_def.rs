@@ -75,6 +75,10 @@ impl FieldDef {
             )
     }
 
+    pub fn multi(&self) -> Option<&NumItemsDef> {
+        self.numbered_items.as_ref()
+    }
+
     pub fn ty(&self) -> TokenStream {
         self.ty.as_field_ty(self.optional)
     }
@@ -120,6 +124,8 @@ impl ToTokens for FieldDef {
             let des_fn = proxmox_api_str(format!("types::deserialize_{name}"));
             Some(quote! { #[serde(serialize_with = #ser_fn, deserialize_with = #des_fn )] })
         };
+
+        let flatten = numbered_items.as_ref().map(|_| quote!(#[serde(flatten)]));
 
         let serialize = if let Some(num_items) = numbered_items.as_ref() {
             let numbered_name = num_items.name();
@@ -177,6 +183,7 @@ impl ToTokens for FieldDef {
             #rename
             #serialize
             #skip_default
+            #flatten
             #(#doc)*
             pub #name: #ty,
         })
