@@ -76,5 +76,5 @@ jobs:
         run: cargo check --manifest-path proxmox-api/Cargo.toml ${{ matrix.definition.args }}
 
       # TODO: reenable this for merges to main?
-      # - name: Build the ${{ matrix.definition.name }}
-      #   run: cargo build --manifest-path proxmox-api/Cargo.toml ${{ matrix.definition.args }}
+      - name: Build the ${{ matrix.definition.name }}
+        run: cargo build --manifest-path proxmox-api/Cargo.toml ${{ matrix.definition.args }}
