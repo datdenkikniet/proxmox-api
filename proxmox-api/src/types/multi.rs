@@ -5,7 +5,7 @@
 //! Additional data also needs extra handling in this case, which this module
 //! also provides.
 
-use std::{collections::BTreeMap, marker::PhantomData};
+use std::{collections::HashMap, marker::PhantomData};
 
 use serde::{de::DeserializeOwned, ser::SerializeMap, Deserializer, Serialize, Serializer};
 
@@ -37,7 +37,7 @@ pub trait Test {
     fn test_fn() -> fn(&str) -> bool;
 }
 
-pub fn deserialize_additional_data<'de, T, O, D>(d: D) -> Result<BTreeMap<String, O>, D::Error>
+pub fn deserialize_additional_data<'de, T, O, D>(d: D) -> Result<HashMap<String, O>, D::Error>
 where
     D: Deserializer<'de>,
     T: Test,
@@ -60,7 +60,7 @@ where
         O: serde::de::Deserialize<'de>,
         T: Test,
     {
-        type Value = BTreeMap<String, O>;
+        type Value = HashMap<String, O>;
 
         fn expecting(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
             write!(f, "additional properties")
@@ -70,7 +70,7 @@ where
         where
             A: serde::de::MapAccess<'de>,
         {
-            let mut output = BTreeMap::new();
+            let mut output = HashMap::new();
 
             loop {
                 let (key, value) = match map.next_entry::<&str, O>() {
@@ -93,7 +93,7 @@ where
     d.deserialize_map(Visitor::<O, T>::default())
 }
 
-pub fn serialize_multi<V, S>(value: &BTreeMap<u32, V::Item>, s: S) -> Result<S::Ok, S::Error>
+pub fn serialize_multi<V, S>(value: &HashMap<u32, V::Item>, s: S) -> Result<S::Ok, S::Error>
 where
     S: Serializer,
     V: NumberedItems,
@@ -107,7 +107,7 @@ where
     map.end()
 }
 
-pub fn deserialize_multi<'de, V, D>(d: D) -> Result<BTreeMap<u32, V::Item>, D::Error>
+pub fn deserialize_multi<'de, V, D>(d: D) -> Result<HashMap<u32, V::Item>, D::Error>
 where
     V: NumberedItems,
     D: Deserializer<'de>,
@@ -129,7 +129,7 @@ where
         V: NumberedItems,
         D: Deserializer<'de>,
     {
-        type Value = BTreeMap<u32, V::Item>;
+        type Value = HashMap<u32, V::Item>;
 
         fn expecting(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
             write!(f, "Multi-numbered items with prefix {}", V::PREFIX)
@@ -139,7 +139,7 @@ where
         where
             A: serde::de::MapAccess<'de>,
         {
-            let mut output = BTreeMap::new();
+            let mut output = HashMap::new();
 
             while let Some(key) = map.next_key::<&str>()? {
                 let key = if let Some(idx) = V::check_key(key) {
@@ -161,7 +161,7 @@ where
 
 #[cfg(test)]
 mod test {
-    use std::collections::BTreeMap;
+    use std::collections::HashMap;
 
     use serde::{Deserialize, Serialize};
 
@@ -182,12 +182,12 @@ mod test {
             deserialize_with = "super::deserialize_multi::<'_, NumberedNames, _>",
             serialize_with = "super::serialize_multi::<NumberedNames, _>"
         )]
-        names: BTreeMap<u32, String>,
+        names: HashMap<u32, String>,
         #[serde(
             flatten,
             deserialize_with = "super::deserialize_additional_data::<'_, Names, _, _>"
         )]
-        additional_data: BTreeMap<String, String>,
+        additional_data: HashMap<String, String>,
     }
 
     impl Test for Names {
