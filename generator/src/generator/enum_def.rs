@@ -67,13 +67,13 @@ impl EnumDef {
 impl ToTokens for EnumDef {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         let Self {
-            name,
+            name: _,
             derives,
             values,
             default,
         } = self;
 
-        let name = Ident::new(name, quote!().span());
+        let name = Ident::new(self.name(), quote!().span());
 
         let derives = derives.iter().map(|v| {
             let parsed: TokenStream = v.parse().unwrap();

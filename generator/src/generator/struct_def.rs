@@ -51,12 +51,12 @@ impl StructDef {
 impl ToTokens for StructDef {
     fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
         let Self {
-            name,
+            name: _,
             fields,
             additional_props,
         } = self;
 
-        let name = Ident::new(name, quote!().span());
+        let name = Ident::new(self.name(), quote!().span());
 
         let additional_props_ty = match additional_props {
             AdditionalProperties::None => None,
