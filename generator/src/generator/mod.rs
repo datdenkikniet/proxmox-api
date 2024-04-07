@@ -21,14 +21,13 @@ mod struct_def;
 pub(crate) use struct_def::{AdditionalProperties, StructDef};
 
 mod mod_def;
+pub use self::mod_def::ClientModDef;
 
 mod num_items_def;
 pub(crate) use num_items_def::NumItemsDef;
 
 mod type_def;
 pub(crate) use type_def::{PrimitiveTypeDef, TypeDef};
-
-pub use self::mod_def::ClientModDef;
 
 pub(self) fn proxmox_api(path: TokenStream) -> TokenStream {
     quote! { crate::#path }
@@ -54,18 +53,31 @@ impl Generator {
     }
 
     fn generate(collection: &Collection) -> Vec<ClientModDef> {
-        collection
+        let mut global_defs = Vec::new();
+
+        let output = collection
             .iter()
-            .map(|n| Self::generate_client(None, n))
-            .collect()
+            .map(|n| Self::generate_client(None, n, &mut global_defs))
+            .collect();
+
+        output
     }
 
-    fn generate_client(parent: Option<&Node>, node: &Node) -> ClientModDef {
+    fn generate_client(
+        parent: Option<&Node>,
+        node: &Node,
+        global_defs: &mut Vec<TypeDef>,
+    ) -> ClientModDef {
         let path = node.value.path.iter().last().unwrap();
-        Self::generate_client_impl(parent.is_some(), node, path)
+        Self::generate_client_impl(parent.is_some(), node, path, global_defs)
     }
 
-    fn generate_client_impl(has_parent: bool, node: &Node, segment: &PathElement) -> ClientModDef {
+    fn generate_client_impl(
+        has_parent: bool,
+        node: &Node,
+        segment: &PathElement,
+        global_defs: &mut Vec<TypeDef>,
+    ) -> ClientModDef {
         let segment_no_braces = segment.as_string_without_braces();
         let segment_name = crate::name_to_underscore_name(&segment_no_braces);
         let mut client_name = crate::name_to_ident(&segment_name);
@@ -73,7 +85,7 @@ impl Generator {
 
         let client_name = Ident::new(&client_name, quote!().span());
 
-        let mut type_defs = Vec::new();
+        let mut module_defs = Vec::new();
 
         let methods: Vec<_> = node
             .value
@@ -93,10 +105,11 @@ impl Generator {
                     .map(|v| v.type_def(&method, &node.value.path))
                     .flatten();
 
-                let parameters = if let Some((params, externals)) = parameters {
-                    type_defs.push(params.clone());
-                    type_defs.extend(externals);
-                    Some(params)
+                let parameters = if let Some(output) = parameters {
+                    module_defs.push(output.def.clone());
+                    module_defs.extend(output.module_defs);
+                    global_defs.extend(output.global_defs);
+                    Some(output.def)
                 } else {
                     None
                 };
@@ -113,9 +126,11 @@ impl Generator {
                 };
 
                 let (returns, call) = if let Some(ret) = info.returns.as_ref() {
-                    let (def, additional) = ret.type_def("", &format!("{method}Output"));
-                    type_defs.push(def.clone());
-                    type_defs.extend(additional);
+                    let output = ret.type_def("", &format!("{method}Output"));
+                    let def = output.def.clone();
+                    module_defs.push(output.def);
+                    module_defs.extend(output.module_defs);
+                    global_defs.extend(output.global_defs);
 
                     let name = def.as_field_ty(ret.optional.get());
 
@@ -182,7 +197,7 @@ impl Generator {
                 crate::name_to_underscore_name(segment.as_string_without_braces());
             let mod_name = Ident::new(&segment_no_braces, quote!().span());
 
-            let child_def = Self::generate_client(Some(node), child);
+            let child_def = Self::generate_client(Some(node), child, global_defs);
 
             let child_name = Ident::new(&child_def.client_name, quote!().span());
             let defer = quote! { #mod_name::#child_name::<T> };
@@ -229,7 +244,7 @@ impl Generator {
 
         let client = proxmox_api(quote!(client::Client));
 
-        let (structs, enums, items) = Self::deduplicate(type_defs.into_iter());
+        let (structs, enums, items) = Self::deduplicate(module_defs.into_iter());
 
         let definition = quote! {
             pub struct #client_name<T> {
@@ -276,7 +291,7 @@ impl Generator {
                 TypeDef::Struct(strt) => {
                     if let Some(prev_strt) = structs.get(strt.name()) {
                         if prev_strt != &strt {
-                            panic!("Encountered structs within one module with exactly the same name that are not equal!");
+                            panic!("Encountered structs on the same level with exactly the same name that are not equal!\n{strt:#?}\n{prev_strt:#?}");
                         }
                     } else {
                         structs.insert(strt.name().to_string(), strt);
