@@ -1,7 +1,18 @@
 [package]
 name = "proxmox-api"
-version = "0.1.0"
+description = "Rust bindings for the Proxmox VE HTTP API"
+categories = [ "virtualization", "api-bindings" ]
+keywords = [ "proxmox", "proxmoxve" ]
+version = "0.1.2-pre"
 edition = "2021"
+authors = [ "Johannes Cornelis Draaijer <jcdra1@gmail.com>" ]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/datdenkikniet/proxmox-api"
+documentation = "https://docs.rs/proxmox-api/"
+
+[package.metadata.proxmox]
+debian-distro = "bookworm"
+pve-version = "8.0.1"
 
 [features]
 default = [ "access", "cluster", "nodes", "pools", "storage", "version" ]
@@ -18,10 +29,6 @@ cli = [ "dep:clap", "dep:pretty_env_logger", "reqwest-client" ]
 name = "proxmox-api"
 path = "./src/cli/main.rs"
 required-features = [ "cli" ]
-
-[package.metadata.proxmox]
-debian-distro = "bookworm"
-pve-version = "8.0.1"
 
 [dependencies]
 serde = { version = "1.0.197", features = ["derive"] }
