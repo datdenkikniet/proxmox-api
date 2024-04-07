@@ -14,16 +14,24 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Filesystem {
-    #[serde(rename = "ext4")]
-    Ext4,
-    #[serde(rename = "xfs")]
-    Xfs,
+impl<T> DirectoryClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "PVE Managed Directory storages."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
 }
-impl Default for Filesystem {
-    fn default() -> Self {
-        Self::Ext4
+impl<T> DirectoryClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create a Filesystem on an unused disk. Will be mounted under '/mnt/pve/NAME'."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
     }
 }
 impl GetOutputItems {
@@ -64,16 +72,6 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> DirectoryClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "PVE Managed Directory storages."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 impl PostParams {
     pub fn new(device: String, name: String) -> Self {
         Self {
@@ -108,14 +106,16 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> DirectoryClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create a Filesystem on an unused disk. Will be mounted under '/mnt/pve/NAME'."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Filesystem {
+    #[serde(rename = "ext4")]
+    Ext4,
+    #[serde(rename = "xfs")]
+    Xfs,
+}
+impl Default for Filesystem {
+    fn default() -> Self {
+        Self::Ext4
     }
 }
 impl<T> DirectoryClient<T>

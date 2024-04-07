@@ -14,44 +14,25 @@ where
         }
     }
 }
-impl ChildrenGetOutputChildrenItemsChildrenItems {
-    pub fn new(free: u64, leaf: bool, name: String, size: u64) -> Self {
-        Self {
-            free,
-            leaf,
-            name,
-            size,
-            additional_properties: Default::default(),
-        }
+impl<T> LvmClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List LVM Volume Groups"]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct ChildrenGetOutputChildrenItemsChildrenItems {
-    #[serde(
-        serialize_with = "crate::types::serialize_int",
-        deserialize_with = "crate::types::deserialize_int"
-    )]
-    #[doc = "The free bytes in the physical volume"]
-    pub free: u64,
-    #[serde(
-        serialize_with = "crate::types::serialize_bool",
-        deserialize_with = "crate::types::deserialize_bool"
-    )]
-    pub leaf: bool,
-    #[doc = "The name of the physical volume"]
-    pub name: String,
-    #[serde(
-        serialize_with = "crate::types::serialize_int",
-        deserialize_with = "crate::types::deserialize_int"
-    )]
-    #[doc = "The size of the physical volume in bytes"]
-    pub size: u64,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+impl<T> LvmClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create an LVM Volume Group"]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl ChildrenGetOutputChildrenItems {
     pub fn new(free: u64, leaf: bool, name: String, size: u64) -> Self {
@@ -96,6 +77,45 @@ pub struct ChildrenGetOutputChildrenItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
+impl ChildrenGetOutputChildrenItemsChildrenItems {
+    pub fn new(free: u64, leaf: bool, name: String, size: u64) -> Self {
+        Self {
+            free,
+            leaf,
+            name,
+            size,
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct ChildrenGetOutputChildrenItemsChildrenItems {
+    #[serde(
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
+    )]
+    #[doc = "The free bytes in the physical volume"]
+    pub free: u64,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
+    )]
+    pub leaf: bool,
+    #[doc = "The name of the physical volume"]
+    pub name: String,
+    #[serde(
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
+    )]
+    #[doc = "The size of the physical volume in bytes"]
+    pub size: u64,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 impl GetOutput {
     pub fn new(children: Vec<ChildrenGetOutputChildrenItems>, leaf: bool) -> Self {
         Self {
@@ -120,16 +140,6 @@ pub struct GetOutput {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> LvmClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List LVM Volume Groups"]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl PostParams {
     pub fn new(device: String, name: String) -> Self {
@@ -160,16 +170,6 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> LvmClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create an LVM Volume Group"]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }
 impl<T> LvmClient<T>
 where

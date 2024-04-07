@@ -14,43 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum State {
-    #[serde(rename = "disabled")]
-    Disabled,
-    #[serde(rename = "enabled")]
-    Enabled,
-    #[serde(rename = "ignored")]
-    Ignored,
-    #[serde(rename = "started")]
-    Started,
-    #[serde(rename = "stopped")]
-    Stopped,
-}
-impl Default for State {
-    fn default() -> Self {
-        Self::Started
+impl<T> ResourcesClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List HA resources."]
+    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "ct")]
-    Ct,
-    #[serde(rename = "vm")]
-    Vm,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetParams {
-    #[serde(rename = "type")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Only list resources of specific type"]
-    pub ty: Option<Type>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+impl<T> ResourcesClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create a new HA resource."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(sid: String) -> Self {
@@ -70,15 +52,18 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ResourcesClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List HA resources."]
-    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Only list resources of specific type"]
+    pub ty: Option<Type>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
     pub fn new(sid: String) -> Self {
@@ -133,15 +118,30 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ResourcesClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create a new HA resource."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum State {
+    #[serde(rename = "disabled")]
+    Disabled,
+    #[serde(rename = "enabled")]
+    Enabled,
+    #[serde(rename = "ignored")]
+    Ignored,
+    #[serde(rename = "started")]
+    Started,
+    #[serde(rename = "stopped")]
+    Stopped,
+}
+impl Default for State {
+    fn default() -> Self {
+        Self::Started
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "ct")]
+    Ct,
+    #[serde(rename = "vm")]
+    Vm,
 }
 impl<T> ResourcesClient<T>
 where

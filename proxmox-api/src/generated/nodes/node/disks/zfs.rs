@@ -14,48 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Compression {
-    #[serde(rename = "gzip")]
-    Gzip,
-    #[serde(rename = "lz4")]
-    Lz4,
-    #[serde(rename = "lzjb")]
-    Lzjb,
-    #[serde(rename = "off")]
-    Off,
-    #[serde(rename = "on")]
-    On,
-    #[serde(rename = "zle")]
-    Zle,
-    #[serde(rename = "zstd")]
-    Zstd,
-}
-impl Default for Compression {
-    fn default() -> Self {
-        Self::On
+impl<T> ZfsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List Zpools."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Raidlevel {
-    #[serde(rename = "draid")]
-    Draid,
-    #[serde(rename = "draid2")]
-    Draid2,
-    #[serde(rename = "draid3")]
-    Draid3,
-    #[serde(rename = "mirror")]
-    Mirror,
-    #[serde(rename = "raid10")]
-    Raid10,
-    #[serde(rename = "raidz")]
-    Raidz,
-    #[serde(rename = "raidz2")]
-    Raidz2,
-    #[serde(rename = "raidz3")]
-    Raidz3,
-    #[serde(rename = "single")]
-    Single,
+impl<T> ZfsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create a ZFS pool."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(
@@ -122,16 +99,6 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ZfsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List Zpools."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 impl PostParams {
     pub fn new(devices: String, name: String, raidlevel: Raidlevel) -> Self {
         Self {
@@ -181,15 +148,48 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ZfsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create a ZFS pool."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Compression {
+    #[serde(rename = "gzip")]
+    Gzip,
+    #[serde(rename = "lz4")]
+    Lz4,
+    #[serde(rename = "lzjb")]
+    Lzjb,
+    #[serde(rename = "off")]
+    Off,
+    #[serde(rename = "on")]
+    On,
+    #[serde(rename = "zle")]
+    Zle,
+    #[serde(rename = "zstd")]
+    Zstd,
+}
+impl Default for Compression {
+    fn default() -> Self {
+        Self::On
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Raidlevel {
+    #[serde(rename = "draid")]
+    Draid,
+    #[serde(rename = "draid2")]
+    Draid2,
+    #[serde(rename = "draid3")]
+    Draid3,
+    #[serde(rename = "mirror")]
+    Mirror,
+    #[serde(rename = "raid10")]
+    Raid10,
+    #[serde(rename = "raidz")]
+    Raidz,
+    #[serde(rename = "raidz2")]
+    Raidz2,
+    #[serde(rename = "raidz3")]
+    Raidz3,
+    #[serde(rename = "single")]
+    Single,
 }
 impl<T> ZfsClient<T>
 where

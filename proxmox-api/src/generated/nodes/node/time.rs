@@ -13,6 +13,26 @@ where
         }
     }
 }
+impl<T> TimeClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Read server time and time zone settings."]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> TimeClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Set time zone."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
 impl GetOutput {
     pub fn new(localtime: u64, time: u64, timezone: String) -> Self {
         Self {
@@ -39,16 +59,6 @@ pub struct GetOutput {
     #[doc = "Time zone"]
     pub timezone: String,
 }
-impl<T> TimeClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Read server time and time zone settings."]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 impl PutParams {
     pub fn new(timezone: String) -> Self {
         Self {
@@ -67,14 +77,4 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> TimeClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Set time zone."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
 }

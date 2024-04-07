@@ -13,18 +13,35 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "recovery")]
-    Recovery,
-    #[serde(rename = "totp")]
-    Totp,
-    #[serde(rename = "u2f")]
-    U2f,
-    #[serde(rename = "webauthn")]
-    Webauthn,
-    #[serde(rename = "yubico")]
-    Yubico,
+impl<T> IdClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Delete a TFA entry by ID."]
+    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.delete(&path, &params)
+    }
+}
+impl<T> IdClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Fetch a requested TFA entry if present."]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> IdClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Add a TFA entry for a user."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct DeleteParams {
@@ -37,16 +54,6 @@ pub struct DeleteParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> IdClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Delete a TFA entry by ID."]
-    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.delete(&path, &params)
-    }
 }
 impl GetOutput {
     pub fn new(created: u64, description: String, id: String, ty: Type) -> Self {
@@ -89,16 +96,6 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> IdClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Fetch a requested TFA entry if present."]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -121,13 +118,16 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> IdClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Add a TFA entry for a user."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "recovery")]
+    Recovery,
+    #[serde(rename = "totp")]
+    Totp,
+    #[serde(rename = "u2f")]
+    U2f,
+    #[serde(rename = "webauthn")]
+    Webauthn,
+    #[serde(rename = "yubico")]
+    Yubico,
 }

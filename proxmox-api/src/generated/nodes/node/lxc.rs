@@ -14,94 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Arch {
-    #[serde(rename = "amd64")]
-    Amd64,
-    #[serde(rename = "arm64")]
-    Arm64,
-    #[serde(rename = "armhf")]
-    Armhf,
-    #[serde(rename = "i386")]
-    I386,
-    #[serde(rename = "riscv32")]
-    Riscv32,
-    #[serde(rename = "riscv64")]
-    Riscv64,
-}
-impl Default for Arch {
-    fn default() -> Self {
-        Self::Amd64
+impl<T> LxcClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "LXC container index (per node)."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Cmode {
-    #[serde(rename = "console")]
-    Console,
-    #[serde(rename = "shell")]
-    Shell,
-    #[serde(rename = "tty")]
-    Tty,
-}
-impl Default for Cmode {
-    fn default() -> Self {
-        Self::Tty
+impl<T> LxcClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create or restore a container."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
     }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Lock {
-    #[serde(rename = "backup")]
-    Backup,
-    #[serde(rename = "create")]
-    Create,
-    #[serde(rename = "destroyed")]
-    Destroyed,
-    #[serde(rename = "disk")]
-    Disk,
-    #[serde(rename = "fstrim")]
-    Fstrim,
-    #[serde(rename = "migrate")]
-    Migrate,
-    #[serde(rename = "mounted")]
-    Mounted,
-    #[serde(rename = "rollback")]
-    Rollback,
-    #[serde(rename = "snapshot")]
-    Snapshot,
-    #[serde(rename = "snapshot-delete")]
-    SnapshotDelete,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Ostype {
-    #[serde(rename = "alpine")]
-    Alpine,
-    #[serde(rename = "archlinux")]
-    Archlinux,
-    #[serde(rename = "centos")]
-    Centos,
-    #[serde(rename = "debian")]
-    Debian,
-    #[serde(rename = "devuan")]
-    Devuan,
-    #[serde(rename = "fedora")]
-    Fedora,
-    #[serde(rename = "gentoo")]
-    Gentoo,
-    #[serde(rename = "nixos")]
-    Nixos,
-    #[serde(rename = "opensuse")]
-    Opensuse,
-    #[serde(rename = "ubuntu")]
-    Ubuntu,
-    #[serde(rename = "unmanaged")]
-    Unmanaged,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Status {
-    #[serde(rename = "running")]
-    Running,
-    #[serde(rename = "stopped")]
-    Stopped,
 }
 impl GetOutputItems {
     pub fn new(status: Status, vmid: crate::types::VmId) -> Self {
@@ -177,16 +108,6 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> LxcClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "LXC container index (per node)."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 impl PostParams {
     pub fn new(ostemplate: String, vmid: crate::types::VmId) -> Self {
         Self {
@@ -235,30 +156,6 @@ impl PostParams {
             additional_properties: Default::default(),
         }
     }
-}
-#[derive(Default)]
-struct NumberedDevs;
-impl crate::types::multi::NumberedItems for NumberedDevs {
-    type Item = String;
-    const PREFIX: &'static str = "dev";
-}
-#[derive(Default)]
-struct NumberedMps;
-impl crate::types::multi::NumberedItems for NumberedMps {
-    type Item = String;
-    const PREFIX: &'static str = "mp";
-}
-#[derive(Default)]
-struct NumberedNets;
-impl crate::types::multi::NumberedItems for NumberedNets {
-    type Item = String;
-    const PREFIX: &'static str = "net";
-}
-#[derive(Default)]
-struct NumberedUnuseds;
-impl crate::types::multi::NumberedItems for NumberedUnuseds {
-    type Item = String;
-    const PREFIX: &'static str = "unused";
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
@@ -315,6 +212,7 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::BTreeMap::is_empty",
         default
     )]
+    #[serde(flatten)]
     #[doc = "Device to pass through to the container"]
     pub devs: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -360,6 +258,7 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::BTreeMap::is_empty",
         default
     )]
+    #[serde(flatten)]
     #[doc = "Use volume as container mount point. Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume."]
     pub mps: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -374,6 +273,7 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::BTreeMap::is_empty",
         default
     )]
+    #[serde(flatten)]
     #[doc = "Specifies network interfaces for the container."]
     pub nets: ::std::collections::BTreeMap<u32, String>,
     #[serde(
@@ -481,26 +381,147 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::BTreeMap::is_empty",
         default
     )]
+    #[serde(flatten)]
     #[doc = "Reference to unused volumes. This is used internally, and should not be modified manually."]
     pub unuseds: ::std::collections::BTreeMap<u32, String>,
     #[doc = "The (unique) ID of the VM."]
     pub vmid: crate::types::VmId,
     #[serde(
         flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
+        deserialize_with = "crate::types::multi::deserialize_additional_data::<'_, PostParams, _, _>"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> LxcClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create or restore a container."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
+impl crate::types::multi::Test for PostParams {
+    fn test_fn() -> fn(&str) -> bool {
+        fn the_test(input: &str) -> bool {
+            let array = [
+                <NumberedDevs as crate::types::multi::NumberedItems>::key_matches
+                    as fn(&str) -> bool,
+                <NumberedMps as crate::types::multi::NumberedItems>::key_matches
+                    as fn(&str) -> bool,
+                <NumberedNets as crate::types::multi::NumberedItems>::key_matches
+                    as fn(&str) -> bool,
+                <NumberedUnuseds as crate::types::multi::NumberedItems>::key_matches
+                    as fn(&str) -> bool,
+            ];
+            array.iter().any(|f| f(input))
+        }
+        the_test as _
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Arch {
+    #[serde(rename = "amd64")]
+    Amd64,
+    #[serde(rename = "arm64")]
+    Arm64,
+    #[serde(rename = "armhf")]
+    Armhf,
+    #[serde(rename = "i386")]
+    I386,
+    #[serde(rename = "riscv32")]
+    Riscv32,
+    #[serde(rename = "riscv64")]
+    Riscv64,
+}
+impl Default for Arch {
+    fn default() -> Self {
+        Self::Amd64
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Cmode {
+    #[serde(rename = "console")]
+    Console,
+    #[serde(rename = "shell")]
+    Shell,
+    #[serde(rename = "tty")]
+    Tty,
+}
+impl Default for Cmode {
+    fn default() -> Self {
+        Self::Tty
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Lock {
+    #[serde(rename = "backup")]
+    Backup,
+    #[serde(rename = "create")]
+    Create,
+    #[serde(rename = "destroyed")]
+    Destroyed,
+    #[serde(rename = "disk")]
+    Disk,
+    #[serde(rename = "fstrim")]
+    Fstrim,
+    #[serde(rename = "migrate")]
+    Migrate,
+    #[serde(rename = "mounted")]
+    Mounted,
+    #[serde(rename = "rollback")]
+    Rollback,
+    #[serde(rename = "snapshot")]
+    Snapshot,
+    #[serde(rename = "snapshot-delete")]
+    SnapshotDelete,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Ostype {
+    #[serde(rename = "alpine")]
+    Alpine,
+    #[serde(rename = "archlinux")]
+    Archlinux,
+    #[serde(rename = "centos")]
+    Centos,
+    #[serde(rename = "debian")]
+    Debian,
+    #[serde(rename = "devuan")]
+    Devuan,
+    #[serde(rename = "fedora")]
+    Fedora,
+    #[serde(rename = "gentoo")]
+    Gentoo,
+    #[serde(rename = "nixos")]
+    Nixos,
+    #[serde(rename = "opensuse")]
+    Opensuse,
+    #[serde(rename = "ubuntu")]
+    Ubuntu,
+    #[serde(rename = "unmanaged")]
+    Unmanaged,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Status {
+    #[serde(rename = "running")]
+    Running,
+    #[serde(rename = "stopped")]
+    Stopped,
+}
+#[derive(Default)]
+struct NumberedDevs;
+impl crate::types::multi::NumberedItems for NumberedDevs {
+    type Item = String;
+    const PREFIX: &'static str = "dev";
+}
+#[derive(Default)]
+struct NumberedMps;
+impl crate::types::multi::NumberedItems for NumberedMps {
+    type Item = String;
+    const PREFIX: &'static str = "mp";
+}
+#[derive(Default)]
+struct NumberedNets;
+impl crate::types::multi::NumberedItems for NumberedNets {
+    type Item = String;
+    const PREFIX: &'static str = "net";
+}
+#[derive(Default)]
+struct NumberedUnuseds;
+impl crate::types::multi::NumberedItems for NumberedUnuseds {
+    type Item = String;
+    const PREFIX: &'static str = "unused";
 }
 impl<T> LxcClient<T>
 where

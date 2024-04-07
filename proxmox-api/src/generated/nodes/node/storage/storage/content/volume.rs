@@ -13,6 +13,46 @@ where
         }
     }
 }
+impl<T> VolumeClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Delete volume"]
+    pub fn delete(&self, params: DeleteParams) -> Result<Option<String>, T::Error> {
+        let path = self.path.to_string();
+        self.client.delete(&path, &params)
+    }
+}
+impl<T> VolumeClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get volume attributes"]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> VolumeClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Copy a volume. This is experimental code - do not use."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+impl<T> VolumeClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update volume attributes"]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct DeleteParams {
     #[serde(
@@ -28,16 +68,6 @@ pub struct DeleteParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> VolumeClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Delete volume"]
-    pub fn delete(&self, params: DeleteParams) -> Result<Option<String>, T::Error> {
-        let path = self.path.to_string();
-        self.client.delete(&path, &params)
-    }
 }
 impl GetOutput {
     pub fn new(format: String, path: String, size: u64, used: u64) -> Self {
@@ -87,16 +117,6 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> VolumeClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get volume attributes"]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 impl PostParams {
     pub fn new(target: String) -> Self {
         Self {
@@ -120,16 +140,6 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> VolumeClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Copy a volume. This is experimental code - do not use."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
-}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -148,14 +158,4 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> VolumeClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update volume attributes"]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
 }

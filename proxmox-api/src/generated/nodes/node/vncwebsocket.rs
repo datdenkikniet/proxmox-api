@@ -13,6 +13,34 @@ where
         }
     }
 }
+impl<T> VncwebsocketClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Opens a websocket for VNC traffic."]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
+}
+impl GetOutput {
+    pub fn new(port: String) -> Self {
+        Self {
+            port,
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct GetOutput {
+    pub port: String,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 impl GetParams {
     pub fn new(port: u64, vncticket: String) -> Self {
         Self {
@@ -38,32 +66,4 @@ pub struct GetParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl GetOutput {
-    pub fn new(port: String) -> Self {
-        Self {
-            port,
-            additional_properties: Default::default(),
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct GetOutput {
-    pub port: String,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> VncwebsocketClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Opens a websocket for VNC traffic."]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
 }

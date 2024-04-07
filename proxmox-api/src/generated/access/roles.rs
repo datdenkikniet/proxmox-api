@@ -14,6 +14,26 @@ where
         }
     }
 }
+impl<T> RolesClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Role index."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> RolesClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create new role."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 impl GetOutputItems {
     pub fn new(roleid: String) -> Self {
         Self {
@@ -42,16 +62,6 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> RolesClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Role index."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 impl PostParams {
     pub fn new(roleid: String) -> Self {
         Self {
@@ -72,16 +82,6 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> RolesClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create new role."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }
 impl<T> RolesClient<T>
 where

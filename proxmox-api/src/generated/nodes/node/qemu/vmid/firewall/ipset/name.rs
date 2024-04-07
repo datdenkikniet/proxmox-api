@@ -14,6 +14,36 @@ where
         }
     }
 }
+impl<T> NameClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Delete IPSet"]
+    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.delete(&path, &params)
+    }
+}
+impl<T> NameClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List IPSet content"]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> NameClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Add IP or Network to IPSet."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct DeleteParams {
     #[serde(
@@ -29,16 +59,6 @@ pub struct DeleteParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> NameClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Delete IPSet"]
-    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.delete(&path, &params)
-    }
 }
 impl GetOutputItems {
     pub fn new(cidr: String, digest: String) -> Self {
@@ -71,16 +91,6 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> NameClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List IPSet content"]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 impl PostParams {
     pub fn new(cidr: String) -> Self {
         Self {
@@ -109,16 +119,6 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> NameClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Add IP or Network to IPSet."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }
 impl<T> NameClient<T>
 where

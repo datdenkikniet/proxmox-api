@@ -13,89 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Compress {
-    #[serde(rename = "0")]
-    _0,
-    #[serde(rename = "1")]
-    _1,
-    #[serde(rename = "gzip")]
-    Gzip,
-    #[serde(rename = "lzo")]
-    Lzo,
-    #[serde(rename = "zstd")]
-    Zstd,
-}
-impl Default for Compress {
-    fn default() -> Self {
-        Self::_0
+impl<T> DefaultsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get the currently configured vzdump defaults."]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
     }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Mailnotification {
-    #[serde(rename = "always")]
-    Always,
-    #[serde(rename = "failure")]
-    Failure,
-}
-impl Default for Mailnotification {
-    fn default() -> Self {
-        Self::Always
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Mode {
-    #[serde(rename = "snapshot")]
-    Snapshot,
-    #[serde(rename = "stop")]
-    Stop,
-    #[serde(rename = "suspend")]
-    Suspend,
-}
-impl Default for Mode {
-    fn default() -> Self {
-        Self::Snapshot
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum NotificationMode {
-    #[serde(rename = "auto")]
-    Auto,
-    #[serde(rename = "legacy-sendmail")]
-    LegacySendmail,
-    #[serde(rename = "notification-system")]
-    NotificationSystem,
-}
-impl Default for NotificationMode {
-    fn default() -> Self {
-        Self::Auto
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum NotificationPolicy {
-    #[serde(rename = "always")]
-    Always,
-    #[serde(rename = "failure")]
-    Failure,
-    #[serde(rename = "never")]
-    Never,
-}
-impl Default for NotificationPolicy {
-    fn default() -> Self {
-        Self::Always
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetParams {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The storage identifier."]
-    pub storage: Option<String>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetOutput {
@@ -254,13 +180,87 @@ pub struct GetOutput {
     #[doc = "Zstd threads. N=0 uses half of the available cores, if N is set to a value bigger than 0, N is used as thread count."]
     pub zstd: Option<u64>,
 }
-impl<T> DefaultsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get the currently configured vzdump defaults."]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The storage identifier."]
+    pub storage: Option<String>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Compress {
+    #[serde(rename = "0")]
+    _0,
+    #[serde(rename = "1")]
+    _1,
+    #[serde(rename = "gzip")]
+    Gzip,
+    #[serde(rename = "lzo")]
+    Lzo,
+    #[serde(rename = "zstd")]
+    Zstd,
+}
+impl Default for Compress {
+    fn default() -> Self {
+        Self::_0
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Mailnotification {
+    #[serde(rename = "always")]
+    Always,
+    #[serde(rename = "failure")]
+    Failure,
+}
+impl Default for Mailnotification {
+    fn default() -> Self {
+        Self::Always
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Mode {
+    #[serde(rename = "snapshot")]
+    Snapshot,
+    #[serde(rename = "stop")]
+    Stop,
+    #[serde(rename = "suspend")]
+    Suspend,
+}
+impl Default for Mode {
+    fn default() -> Self {
+        Self::Snapshot
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum NotificationMode {
+    #[serde(rename = "auto")]
+    Auto,
+    #[serde(rename = "legacy-sendmail")]
+    LegacySendmail,
+    #[serde(rename = "notification-system")]
+    NotificationSystem,
+}
+impl Default for NotificationMode {
+    fn default() -> Self {
+        Self::Auto
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum NotificationPolicy {
+    #[serde(rename = "always")]
+    Always,
+    #[serde(rename = "failure")]
+    Failure,
+    #[serde(rename = "never")]
+    Never,
+}
+impl Default for NotificationPolicy {
+    fn default() -> Self {
+        Self::Always
     }
 }

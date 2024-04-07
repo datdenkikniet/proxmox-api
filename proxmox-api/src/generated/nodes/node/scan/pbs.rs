@@ -13,6 +13,39 @@ where
         }
     }
 }
+impl<T> PbsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Scan remote Proxmox Backup Server."]
+    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
+}
+impl GetOutputItems {
+    pub fn new(store: String) -> Self {
+        Self {
+            store,
+            comment: Default::default(),
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct GetOutputItems {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Comment from server."]
+    pub comment: Option<String>,
+    #[doc = "The datastore name."]
+    pub store: String,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 impl GetParams {
     pub fn new(password: String, server: String, username: String) -> Self {
         Self {
@@ -49,37 +82,4 @@ pub struct GetParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl GetOutputItems {
-    pub fn new(store: String) -> Self {
-        Self {
-            store,
-            comment: Default::default(),
-            additional_properties: Default::default(),
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct GetOutputItems {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Comment from server."]
-    pub comment: Option<String>,
-    #[doc = "The datastore name."]
-    pub store: String,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> PbsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Scan remote Proxmox Backup Server."]
-    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
 }

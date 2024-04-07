@@ -14,42 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Application {
-    #[serde(rename = "cephfs")]
-    Cephfs,
-    #[serde(rename = "rbd")]
-    Rbd,
-    #[serde(rename = "rgw")]
-    Rgw,
-}
-impl Default for Application {
-    fn default() -> Self {
-        Self::Rbd
+impl<T> PoolClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List all pools and their settings (which are settable by the POST/PUT endpoints)."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum PgAutoscaleMode {
-    #[serde(rename = "off")]
-    Off,
-    #[serde(rename = "on")]
-    On,
-    #[serde(rename = "warn")]
-    Warn,
-}
-impl Default for PgAutoscaleMode {
-    fn default() -> Self {
-        Self::Warn
+impl<T> PoolClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create Ceph pool"]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
     }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "erasure")]
-    Erasure,
-    #[serde(rename = "replicated")]
-    Replicated,
-    #[serde(rename = "unknown")]
-    Unknown,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct ApplicationMetadataGetOutputItemsApplicationMetadata {
@@ -182,16 +165,6 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> PoolClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List all pools and their settings (which are settable by the POST/PUT endpoints)."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 impl PostParams {
     pub fn new(name: String) -> Self {
         Self {
@@ -276,15 +249,42 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> PoolClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create Ceph pool"]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Application {
+    #[serde(rename = "cephfs")]
+    Cephfs,
+    #[serde(rename = "rbd")]
+    Rbd,
+    #[serde(rename = "rgw")]
+    Rgw,
+}
+impl Default for Application {
+    fn default() -> Self {
+        Self::Rbd
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum PgAutoscaleMode {
+    #[serde(rename = "off")]
+    Off,
+    #[serde(rename = "on")]
+    On,
+    #[serde(rename = "warn")]
+    Warn,
+}
+impl Default for PgAutoscaleMode {
+    fn default() -> Self {
+        Self::Warn
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "erasure")]
+    Erasure,
+    #[serde(rename = "replicated")]
+    Replicated,
+    #[serde(rename = "unknown")]
+    Unknown,
 }
 impl<T> PoolClient<T>
 where

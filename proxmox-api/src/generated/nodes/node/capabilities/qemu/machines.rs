@@ -13,12 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "i440fx")]
-    I440fx,
-    #[serde(rename = "q35")]
-    Q35,
+impl<T> MachinesClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get available QEMU/KVM machine types."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
 }
 impl GetOutputItems {
     pub fn new(id: String, ty: Type, version: String) -> Self {
@@ -46,13 +49,10 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> MachinesClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get available QEMU/KVM machine types."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "i440fx")]
+    I440fx,
+    #[serde(rename = "q35")]
+    Q35,
 }

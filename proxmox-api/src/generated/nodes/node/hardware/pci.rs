@@ -14,25 +14,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetParams {
-    #[serde(rename = "pci-class-blacklist")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "A list of blacklisted PCI classes, which will not be returned. Following are filtered by default: Memory Controller (05), Bridge (06) and Processor (0b)."]
-    pub pci_class_blacklist: Option<String>,
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "If disabled, does only print the PCI IDs. Otherwise, additional information like vendor and device will be returned."]
-    pub verbose: Option<bool>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+impl<T> PciClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List local PCI devices."]
+    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(class: String, device: String, id: String, iommugroup: u64, vendor: String) -> Self {
@@ -97,15 +87,25 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> PciClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List local PCI devices."]
-    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(rename = "pci-class-blacklist")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "A list of blacklisted PCI classes, which will not be returned. Following are filtered by default: Memory Controller (05), Bridge (06) and Processor (0b)."]
+    pub pci_class_blacklist: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "If disabled, does only print the PCI IDs. Otherwise, additional information like vendor and device will be returned."]
+    pub verbose: Option<bool>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl<T> PciClient<T>
 where

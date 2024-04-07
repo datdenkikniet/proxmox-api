@@ -23,15 +23,6 @@ where
         self.client.delete(&path, &())
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetOutput {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
 impl<T> DnsClient<T>
 where
     T: crate::client::Client,
@@ -41,6 +32,25 @@ where
         let path = self.path.to_string();
         self.client.get(&path, &())
     }
+}
+impl<T> DnsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update sdn dns object configuration."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetOutput {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
@@ -72,14 +82,4 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> DnsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update sdn dns object configuration."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
 }

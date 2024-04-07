@@ -13,89 +13,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum LogLevelIn {
-    #[serde(rename = "alert")]
-    Alert,
-    #[serde(rename = "crit")]
-    Crit,
-    #[serde(rename = "debug")]
-    Debug,
-    #[serde(rename = "emerg")]
-    Emerg,
-    #[serde(rename = "err")]
-    Err,
-    #[serde(rename = "info")]
-    Info,
-    #[serde(rename = "nolog")]
-    Nolog,
-    #[serde(rename = "notice")]
-    Notice,
-    #[serde(rename = "warning")]
-    Warning,
+impl<T> OptionsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get host firewall options."]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum LogLevelOut {
-    #[serde(rename = "alert")]
-    Alert,
-    #[serde(rename = "crit")]
-    Crit,
-    #[serde(rename = "debug")]
-    Debug,
-    #[serde(rename = "emerg")]
-    Emerg,
-    #[serde(rename = "err")]
-    Err,
-    #[serde(rename = "info")]
-    Info,
-    #[serde(rename = "nolog")]
-    Nolog,
-    #[serde(rename = "notice")]
-    Notice,
-    #[serde(rename = "warning")]
-    Warning,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum SmurfLogLevel {
-    #[serde(rename = "alert")]
-    Alert,
-    #[serde(rename = "crit")]
-    Crit,
-    #[serde(rename = "debug")]
-    Debug,
-    #[serde(rename = "emerg")]
-    Emerg,
-    #[serde(rename = "err")]
-    Err,
-    #[serde(rename = "info")]
-    Info,
-    #[serde(rename = "nolog")]
-    Nolog,
-    #[serde(rename = "notice")]
-    Notice,
-    #[serde(rename = "warning")]
-    Warning,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum TcpFlagsLogLevel {
-    #[serde(rename = "alert")]
-    Alert,
-    #[serde(rename = "crit")]
-    Crit,
-    #[serde(rename = "debug")]
-    Debug,
-    #[serde(rename = "emerg")]
-    Emerg,
-    #[serde(rename = "err")]
-    Err,
-    #[serde(rename = "info")]
-    Info,
-    #[serde(rename = "nolog")]
-    Nolog,
-    #[serde(rename = "notice")]
-    Notice,
-    #[serde(rename = "warning")]
-    Warning,
+impl<T> OptionsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Set Firewall options."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetOutput {
@@ -204,16 +140,6 @@ pub struct GetOutput {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> OptionsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get host firewall options."]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
@@ -329,13 +255,87 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> OptionsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Set Firewall options."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum LogLevelIn {
+    #[serde(rename = "alert")]
+    Alert,
+    #[serde(rename = "crit")]
+    Crit,
+    #[serde(rename = "debug")]
+    Debug,
+    #[serde(rename = "emerg")]
+    Emerg,
+    #[serde(rename = "err")]
+    Err,
+    #[serde(rename = "info")]
+    Info,
+    #[serde(rename = "nolog")]
+    Nolog,
+    #[serde(rename = "notice")]
+    Notice,
+    #[serde(rename = "warning")]
+    Warning,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum LogLevelOut {
+    #[serde(rename = "alert")]
+    Alert,
+    #[serde(rename = "crit")]
+    Crit,
+    #[serde(rename = "debug")]
+    Debug,
+    #[serde(rename = "emerg")]
+    Emerg,
+    #[serde(rename = "err")]
+    Err,
+    #[serde(rename = "info")]
+    Info,
+    #[serde(rename = "nolog")]
+    Nolog,
+    #[serde(rename = "notice")]
+    Notice,
+    #[serde(rename = "warning")]
+    Warning,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum SmurfLogLevel {
+    #[serde(rename = "alert")]
+    Alert,
+    #[serde(rename = "crit")]
+    Crit,
+    #[serde(rename = "debug")]
+    Debug,
+    #[serde(rename = "emerg")]
+    Emerg,
+    #[serde(rename = "err")]
+    Err,
+    #[serde(rename = "info")]
+    Info,
+    #[serde(rename = "nolog")]
+    Nolog,
+    #[serde(rename = "notice")]
+    Notice,
+    #[serde(rename = "warning")]
+    Warning,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum TcpFlagsLogLevel {
+    #[serde(rename = "alert")]
+    Alert,
+    #[serde(rename = "crit")]
+    Crit,
+    #[serde(rename = "debug")]
+    Debug,
+    #[serde(rename = "emerg")]
+    Emerg,
+    #[serde(rename = "err")]
+    Err,
+    #[serde(rename = "info")]
+    Info,
+    #[serde(rename = "nolog")]
+    Nolog,
+    #[serde(rename = "notice")]
+    Notice,
+    #[serde(rename = "warning")]
+    Warning,
 }

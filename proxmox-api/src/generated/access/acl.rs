@@ -13,14 +13,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "group")]
-    Group,
-    #[serde(rename = "token")]
-    Token,
-    #[serde(rename = "user")]
-    User,
+impl<T> AclClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get Access Control List (ACLs)."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> AclClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update Access Control List (add or remove permissions)."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(path: String, roleid: String, ty: Type, ugid: String) -> Self {
@@ -48,16 +59,6 @@ pub struct GetOutputItems {
     #[serde(rename = "type")]
     pub ty: Type,
     pub ugid: String,
-}
-impl<T> AclClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get Access Control List (ACLs)."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl PutParams {
     pub fn new(path: String, roles: String) -> Self {
@@ -109,13 +110,12 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> AclClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update Access Control List (add or remove permissions)."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "group")]
+    Group,
+    #[serde(rename = "token")]
+    Token,
+    #[serde(rename = "user")]
+    User,
 }

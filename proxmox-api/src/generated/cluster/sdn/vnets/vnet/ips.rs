@@ -13,6 +13,36 @@ where
         }
     }
 }
+impl<T> IpsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Delete IP Mappings in a VNet"]
+    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.delete(&path, &params)
+    }
+}
+impl<T> IpsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create IP Mapping in a VNet"]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+impl<T> IpsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update IP Mapping in a VNet"]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
 impl DeleteParams {
     pub fn new(ip: ::std::net::IpAddr, zone: String) -> Self {
         Self {
@@ -40,16 +70,6 @@ pub struct DeleteParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> IpsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Delete IP Mappings in a VNet"]
-    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.delete(&path, &params)
-    }
-}
 impl PostParams {
     pub fn new(ip: ::std::net::IpAddr, zone: String) -> Self {
         Self {
@@ -76,16 +96,6 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> IpsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create IP Mapping in a VNet"]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }
 impl PutParams {
     pub fn new(ip: ::std::net::IpAddr, zone: String) -> Self {
@@ -117,14 +127,4 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> IpsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update IP Mapping in a VNet"]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
 }

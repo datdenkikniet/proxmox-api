@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> ScrubClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Instruct the OSD to scrub."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PostParams {
     #[serde(
@@ -28,14 +38,4 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> ScrubClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Instruct the OSD to scrub."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }

@@ -18,6 +18,26 @@ where
         }
     }
 }
+impl<T> OsdidClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Destroy OSD"]
+    pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.delete(&path, &params)
+    }
+}
+impl<T> OsdidClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "OSD index."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct DeleteParams {
     #[serde(
@@ -34,16 +54,6 @@ pub struct DeleteParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> OsdidClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Destroy OSD"]
-    pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.delete(&path, &params)
-    }
-}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetOutputItems {
     #[serde(
@@ -52,16 +62,6 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> OsdidClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "OSD index."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl<T> OsdidClient<T>
 where

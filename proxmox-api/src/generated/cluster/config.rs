@@ -18,15 +18,6 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetOutputItems {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
 impl<T> ConfigClient<T>
 where
     T: crate::client::Client,
@@ -36,6 +27,25 @@ where
         let path = self.path.to_string();
         self.client.get(&path, &())
     }
+}
+impl<T> ConfigClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Generate new cluster configuration. If no links given, default to local IP address as link0."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetOutputItems {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
     pub fn new(clustername: String) -> Self {
@@ -47,12 +57,6 @@ impl PostParams {
             additional_properties: Default::default(),
         }
     }
-}
-#[derive(Default)]
-struct NumberedLinks;
-impl crate::types::multi::NumberedItems for NumberedLinks {
-    type Item = String;
-    const PREFIX: &'static str = "link";
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
@@ -67,6 +71,7 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::BTreeMap::is_empty",
         default
     )]
+    #[serde(flatten)]
     #[doc = "Address and priority information of a single corosync link. (up to 8 links supported; link0..link7)"]
     pub links: ::std::collections::BTreeMap<u32, String>,
     #[serde(
@@ -85,20 +90,27 @@ pub struct PostParams {
     pub votes: Option<u64>,
     #[serde(
         flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
+        deserialize_with = "crate::types::multi::deserialize_additional_data::<'_, PostParams, _, _>"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ConfigClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Generate new cluster configuration. If no links given, default to local IP address as link0."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
+impl crate::types::multi::Test for PostParams {
+    fn test_fn() -> fn(&str) -> bool {
+        fn the_test(input: &str) -> bool {
+            let array = [
+                <NumberedLinks as crate::types::multi::NumberedItems>::key_matches
+                    as fn(&str) -> bool,
+            ];
+            array.iter().any(|f| f(input))
+        }
+        the_test as _
     }
+}
+#[derive(Default)]
+struct NumberedLinks;
+impl crate::types::multi::NumberedItems for NumberedLinks {
+    type Item = String;
+    const PREFIX: &'static str = "link";
 }
 impl<T> ConfigClient<T>
 where

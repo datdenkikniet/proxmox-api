@@ -13,36 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "lxc")]
-    Lxc,
-    #[serde(rename = "node")]
-    Node,
-    #[serde(rename = "openvz")]
-    Openvz,
-    #[serde(rename = "pool")]
-    Pool,
-    #[serde(rename = "qemu")]
-    Qemu,
-    #[serde(rename = "sdn")]
-    Sdn,
-    #[serde(rename = "storage")]
-    Storage,
-    #[serde(rename = "vm")]
-    Vm,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetParams {
-    #[serde(rename = "type")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub ty: Option<Type>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+impl<T> ResourcesClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Resources index (cluster wide)."]
+    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(id: String, ty: Type) -> Self {
@@ -172,13 +151,34 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ResourcesClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Resources index (cluster wide)."]
-    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub ty: Option<Type>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "lxc")]
+    Lxc,
+    #[serde(rename = "node")]
+    Node,
+    #[serde(rename = "openvz")]
+    Openvz,
+    #[serde(rename = "pool")]
+    Pool,
+    #[serde(rename = "qemu")]
+    Qemu,
+    #[serde(rename = "sdn")]
+    Sdn,
+    #[serde(rename = "storage")]
+    Storage,
+    #[serde(rename = "vm")]
+    Vm,
 }

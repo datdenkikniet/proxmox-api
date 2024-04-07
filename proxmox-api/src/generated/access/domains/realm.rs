@@ -14,31 +14,6 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Mode {
-    #[serde(rename = "ldap")]
-    Ldap,
-    #[serde(rename = "ldap+starttls")]
-    LdapStarttls,
-    #[serde(rename = "ldaps")]
-    Ldaps,
-}
-impl Default for Mode {
-    fn default() -> Self {
-        Self::Ldap
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Sslversion {
-    #[serde(rename = "tlsv1")]
-    Tlsv1,
-    #[serde(rename = "tlsv1_1")]
-    Tlsv11,
-    #[serde(rename = "tlsv1_2")]
-    Tlsv12,
-    #[serde(rename = "tlsv1_3")]
-    Tlsv13,
-}
 impl<T> RealmClient<T>
 where
     T: crate::client::Client,
@@ -57,6 +32,16 @@ where
     pub fn get(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
+    }
+}
+impl<T> RealmClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update authentication server settings."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
@@ -214,15 +199,30 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> RealmClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update authentication server settings."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Mode {
+    #[serde(rename = "ldap")]
+    Ldap,
+    #[serde(rename = "ldap+starttls")]
+    LdapStarttls,
+    #[serde(rename = "ldaps")]
+    Ldaps,
+}
+impl Default for Mode {
+    fn default() -> Self {
+        Self::Ldap
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Sslversion {
+    #[serde(rename = "tlsv1")]
+    Tlsv1,
+    #[serde(rename = "tlsv1_1")]
+    Tlsv11,
+    #[serde(rename = "tlsv1_2")]
+    Tlsv12,
+    #[serde(rename = "tlsv1_3")]
+    Tlsv13,
 }
 impl<T> RealmClient<T>
 where

@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> ExtractconfigClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Extract configuration from vzdump backup archive."]
+    pub fn get(&self, params: GetParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
+}
 impl GetParams {
     pub fn new(volume: String) -> Self {
         Self {
@@ -31,14 +41,4 @@ pub struct GetParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> ExtractconfigClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Extract configuration from vzdump backup archive."]
-    pub fn get(&self, params: GetParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
 }

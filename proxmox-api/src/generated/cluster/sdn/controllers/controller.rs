@@ -23,6 +23,35 @@ where
         self.client.delete(&path, &())
     }
 }
+impl<T> ControllerClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Read sdn controller configuration."]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
+}
+impl<T> ControllerClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update sdn controller object configuration."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetOutput {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetParams {
     #[serde(
@@ -45,25 +74,6 @@ pub struct GetParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetOutput {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> ControllerClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Read sdn controller configuration."]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
@@ -124,14 +134,4 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> ControllerClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update sdn controller object configuration."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
 }

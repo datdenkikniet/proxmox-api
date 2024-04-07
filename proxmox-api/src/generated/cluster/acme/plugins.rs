@@ -14,6 +14,110 @@ where
         }
     }
 }
+impl<T> PluginsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "ACME plugin index."]
+    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
+}
+impl<T> PluginsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Add ACME plugin configuration."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+impl GetOutputItems {
+    pub fn new(plugin: String) -> Self {
+        Self {
+            plugin,
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct GetOutputItems {
+    #[doc = "Unique identifier for ACME plugin instance."]
+    pub plugin: String,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Only list ACME plugins of a specific type"]
+    pub ty: Option<Type>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+impl PostParams {
+    pub fn new(id: String, ty: Type) -> Self {
+        Self {
+            id,
+            ty,
+            api: Default::default(),
+            data: Default::default(),
+            disable: Default::default(),
+            nodes: Default::default(),
+            validation_delay: Default::default(),
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct PostParams {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "API plugin name"]
+    pub api: Option<Api>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "DNS plugin data. (base64 encoded)"]
+    pub data: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Flag to disable the config."]
+    pub disable: Option<bool>,
+    #[doc = "ACME Plugin ID name"]
+    pub id: String,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "List of cluster node names."]
+    pub nodes: Option<String>,
+    #[serde(rename = "type")]
+    #[doc = "ACME challenge type."]
+    pub ty: Type,
+    #[serde(rename = "validation-delay")]
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Extra delay in seconds to wait before requesting validation. Allows to cope with a long TTL of DNS records."]
+    pub validation_delay: Option<u64>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub enum Api {
     #[serde(rename = "1984hosting")]
@@ -313,110 +417,6 @@ pub enum Type {
     Dns,
     #[serde(rename = "standalone")]
     Standalone,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetParams {
-    #[serde(rename = "type")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Only list ACME plugins of a specific type"]
-    pub ty: Option<Type>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl GetOutputItems {
-    pub fn new(plugin: String) -> Self {
-        Self {
-            plugin,
-            additional_properties: Default::default(),
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct GetOutputItems {
-    #[doc = "Unique identifier for ACME plugin instance."]
-    pub plugin: String,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> PluginsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "ACME plugin index."]
-    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
-}
-impl PostParams {
-    pub fn new(id: String, ty: Type) -> Self {
-        Self {
-            id,
-            ty,
-            api: Default::default(),
-            data: Default::default(),
-            disable: Default::default(),
-            nodes: Default::default(),
-            validation_delay: Default::default(),
-            additional_properties: Default::default(),
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct PostParams {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "API plugin name"]
-    pub api: Option<Api>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "DNS plugin data. (base64 encoded)"]
-    pub data: Option<String>,
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Flag to disable the config."]
-    pub disable: Option<bool>,
-    #[doc = "ACME Plugin ID name"]
-    pub id: String,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "List of cluster node names."]
-    pub nodes: Option<String>,
-    #[serde(rename = "type")]
-    #[doc = "ACME challenge type."]
-    pub ty: Type,
-    #[serde(rename = "validation-delay")]
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Extra delay in seconds to wait before requesting validation. Allows to cope with a long TTL of DNS records."]
-    pub validation_delay: Option<u64>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> PluginsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Add ACME plugin configuration."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }
 impl<T> PluginsClient<T>
 where

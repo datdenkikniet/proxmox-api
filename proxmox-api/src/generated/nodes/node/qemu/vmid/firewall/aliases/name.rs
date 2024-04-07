@@ -13,6 +13,36 @@ where
         }
     }
 }
+impl<T> NameClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Remove IP or Network alias."]
+    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.delete(&path, &params)
+    }
+}
+impl<T> NameClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Read alias."]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> NameClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update IP or Network alias."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct DeleteParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -25,16 +55,6 @@ pub struct DeleteParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> NameClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Remove IP or Network alias."]
-    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.delete(&path, &params)
-    }
-}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetOutput {
     #[serde(
@@ -43,16 +63,6 @@ pub struct GetOutput {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> NameClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Read alias."]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl PutParams {
     pub fn new(cidr: String) -> Self {
@@ -83,14 +93,4 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> NameClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update IP or Network alias."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
 }

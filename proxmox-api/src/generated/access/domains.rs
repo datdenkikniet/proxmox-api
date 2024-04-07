@@ -14,50 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Mode {
-    #[serde(rename = "ldap")]
-    Ldap,
-    #[serde(rename = "ldap+starttls")]
-    LdapStarttls,
-    #[serde(rename = "ldaps")]
-    Ldaps,
-}
-impl Default for Mode {
-    fn default() -> Self {
-        Self::Ldap
+impl<T> DomainsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Authentication domain index."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Sslversion {
-    #[serde(rename = "tlsv1")]
-    Tlsv1,
-    #[serde(rename = "tlsv1_1")]
-    Tlsv11,
-    #[serde(rename = "tlsv1_2")]
-    Tlsv12,
-    #[serde(rename = "tlsv1_3")]
-    Tlsv13,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Tfa {
-    #[serde(rename = "oath")]
-    Oath,
-    #[serde(rename = "yubico")]
-    Yubico,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "ad")]
-    Ad,
-    #[serde(rename = "ldap")]
-    Ldap,
-    #[serde(rename = "openid")]
-    Openid,
-    #[serde(rename = "pam")]
-    Pam,
-    #[serde(rename = "pve")]
-    Pve,
+impl<T> DomainsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Add an authentication server."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(realm: String, ty: String) -> Self {
@@ -87,16 +62,6 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> DomainsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Authentication domain index."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl PostParams {
     pub fn new(realm: String, ty: Type) -> Self {
@@ -301,15 +266,50 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> DomainsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Add an authentication server."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Mode {
+    #[serde(rename = "ldap")]
+    Ldap,
+    #[serde(rename = "ldap+starttls")]
+    LdapStarttls,
+    #[serde(rename = "ldaps")]
+    Ldaps,
+}
+impl Default for Mode {
+    fn default() -> Self {
+        Self::Ldap
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Sslversion {
+    #[serde(rename = "tlsv1")]
+    Tlsv1,
+    #[serde(rename = "tlsv1_1")]
+    Tlsv11,
+    #[serde(rename = "tlsv1_2")]
+    Tlsv12,
+    #[serde(rename = "tlsv1_3")]
+    Tlsv13,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Tfa {
+    #[serde(rename = "oath")]
+    Oath,
+    #[serde(rename = "yubico")]
+    Yubico,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "ad")]
+    Ad,
+    #[serde(rename = "ldap")]
+    Ldap,
+    #[serde(rename = "openid")]
+    Openid,
+    #[serde(rename = "pam")]
+    Pam,
+    #[serde(rename = "pve")]
+    Pve,
 }
 impl<T> DomainsClient<T>
 where

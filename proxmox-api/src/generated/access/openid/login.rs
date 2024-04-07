@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> LoginClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = " Verify OpenID authorization code and create a ticket."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 impl PostParams {
     pub fn new(code: String, redirect_url: String, state: String) -> Self {
         Self {
@@ -38,14 +48,4 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> LoginClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = " Verify OpenID authorization code and create a ticket."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }

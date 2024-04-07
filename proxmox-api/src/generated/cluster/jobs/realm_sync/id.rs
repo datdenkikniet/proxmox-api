@@ -13,15 +13,6 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Scope {
-    #[serde(rename = "both")]
-    Both,
-    #[serde(rename = "groups")]
-    Groups,
-    #[serde(rename = "users")]
-    Users,
-}
 impl<T> IdClient<T>
 where
     T: crate::client::Client,
@@ -32,15 +23,6 @@ where
         self.client.delete(&path, &())
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetOutput {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
 impl<T> IdClient<T>
 where
     T: crate::client::Client,
@@ -50,6 +32,35 @@ where
         let path = self.path.to_string();
         self.client.get(&path, &())
     }
+}
+impl<T> IdClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create new realm-sync job."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+impl<T> IdClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update realm-sync job definition."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetOutput {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
     pub fn new(schedule: String) -> Self {
@@ -100,16 +111,6 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> IdClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create new realm-sync job."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
-}
 impl PutParams {
     pub fn new(schedule: String) -> Self {
         Self {
@@ -159,13 +160,12 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> IdClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update realm-sync job definition."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Scope {
+    #[serde(rename = "both")]
+    Both,
+    #[serde(rename = "groups")]
+    Groups,
+    #[serde(rename = "users")]
+    Users,
 }

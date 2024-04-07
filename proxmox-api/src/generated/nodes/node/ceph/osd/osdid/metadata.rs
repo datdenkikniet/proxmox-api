@@ -13,14 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Device {
-    #[serde(rename = "block")]
-    Block,
-    #[serde(rename = "db")]
-    Db,
-    #[serde(rename = "wal")]
-    Wal,
+impl<T> MetadataClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get OSD details"]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
 }
 impl DevicesGetOutputDevicesItems {
     pub fn new(
@@ -65,6 +66,29 @@ pub struct DevicesGetOutputDevicesItems {
     #[serde(rename = "type")]
     #[doc = "Type of device. For example, hdd or ssd"]
     pub ty: String,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+impl GetOutput {
+    pub fn new(devices: Vec<DevicesGetOutputDevicesItems>, osd: OsdGetOutputOsd) -> Self {
+        Self {
+            devices,
+            osd,
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct GetOutput {
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    #[doc = "Array containing data about devices"]
+    pub devices: Vec<DevicesGetOutputDevicesItems>,
+    #[doc = "General information about the OSD"]
+    pub osd: OsdGetOutputOsd,
     #[serde(
         flatten,
         default,
@@ -145,36 +169,12 @@ pub struct OsdGetOutputOsd {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl GetOutput {
-    pub fn new(devices: Vec<DevicesGetOutputDevicesItems>, osd: OsdGetOutputOsd) -> Self {
-        Self {
-            devices,
-            osd,
-            additional_properties: Default::default(),
-        }
-    }
-}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct GetOutput {
-    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
-    #[doc = "Array containing data about devices"]
-    pub devices: Vec<DevicesGetOutputDevicesItems>,
-    #[doc = "General information about the OSD"]
-    pub osd: OsdGetOutputOsd,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> MetadataClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get OSD details"]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
+pub enum Device {
+    #[serde(rename = "block")]
+    Block,
+    #[serde(rename = "db")]
+    Db,
+    #[serde(rename = "wal")]
+    Wal,
 }

@@ -14,18 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "recovery")]
-    Recovery,
-    #[serde(rename = "totp")]
-    Totp,
-    #[serde(rename = "u2f")]
-    U2f,
-    #[serde(rename = "webauthn")]
-    Webauthn,
-    #[serde(rename = "yubico")]
-    Yubico,
+impl<T> UseridClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List TFA configurations of users."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> UseridClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Add a TFA entry for a user."]
+    pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(created: u64, description: String, id: String, ty: Type) -> Self {
@@ -68,15 +75,32 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> UseridClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List TFA configurations of users."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
+impl PostOutput {
+    pub fn new(id: String) -> Self {
+        Self {
+            id,
+            challenge: Default::default(),
+            recovery: Default::default(),
+            additional_properties: Default::default(),
+        }
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct PostOutput {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "When adding u2f entries, this contains a challenge the user must respond to in order to finish the registration."]
+    pub challenge: Option<String>,
+    #[doc = "The id of a newly added TFA entry."]
+    pub id: String,
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    #[doc = "When adding recovery codes, this contains the list of codes to be displayed to the user"]
+    pub recovery: Vec<String>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
     pub fn new(ty: Type) -> Self {
@@ -118,42 +142,18 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl PostOutput {
-    pub fn new(id: String) -> Self {
-        Self {
-            id,
-            challenge: Default::default(),
-            recovery: Default::default(),
-            additional_properties: Default::default(),
-        }
-    }
-}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct PostOutput {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "When adding u2f entries, this contains a challenge the user must respond to in order to finish the registration."]
-    pub challenge: Option<String>,
-    #[doc = "The id of a newly added TFA entry."]
-    pub id: String,
-    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
-    #[doc = "When adding recovery codes, this contains the list of codes to be displayed to the user"]
-    pub recovery: Vec<String>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> UseridClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Add a TFA entry for a user."]
-    pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
+pub enum Type {
+    #[serde(rename = "recovery")]
+    Recovery,
+    #[serde(rename = "totp")]
+    Totp,
+    #[serde(rename = "u2f")]
+    U2f,
+    #[serde(rename = "webauthn")]
+    Webauthn,
+    #[serde(rename = "yubico")]
+    Yubico,
 }
 impl<T> UseridClient<T>
 where

@@ -13,6 +13,50 @@ where
         }
     }
 }
+impl<T> JoinClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get information needed to join this cluster over the connected node."]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
+}
+impl<T> JoinClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Joins this node into an existing cluster. If no links are given, default to IP resolved by node's hostname on single link (fallback fails for clusters with multiple links)."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+impl GetOutput {
+    pub fn new(
+        config_digest: String,
+        nodelist: Vec<NodelistGetOutputNodelistItems>,
+        preferred_node: String,
+        totem: TotemGetOutputTotem,
+    ) -> Self {
+        Self {
+            config_digest,
+            nodelist,
+            preferred_node,
+            totem,
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct GetOutput {
+    pub config_digest: String,
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    pub nodelist: Vec<NodelistGetOutputNodelistItems>,
+    #[doc = "The cluster node name."]
+    pub preferred_node: String,
+    pub totem: TotemGetOutputTotem,
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -72,49 +116,6 @@ pub struct NodelistGetOutputNodelistItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct TotemGetOutputTotem {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl GetOutput {
-    pub fn new(
-        config_digest: String,
-        nodelist: Vec<NodelistGetOutputNodelistItems>,
-        preferred_node: String,
-        totem: TotemGetOutputTotem,
-    ) -> Self {
-        Self {
-            config_digest,
-            nodelist,
-            preferred_node,
-            totem,
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct GetOutput {
-    pub config_digest: String,
-    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
-    pub nodelist: Vec<NodelistGetOutputNodelistItems>,
-    #[doc = "The cluster node name."]
-    pub preferred_node: String,
-    pub totem: TotemGetOutputTotem,
-}
-impl<T> JoinClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get information needed to join this cluster over the connected node."]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
-}
 impl PostParams {
     pub fn new(fingerprint: String, hostname: String, password: String) -> Self {
         Self {
@@ -128,12 +129,6 @@ impl PostParams {
             additional_properties: Default::default(),
         }
     }
-}
-#[derive(Default)]
-struct NumberedLinks;
-impl crate::types::multi::NumberedItems for NumberedLinks {
-    type Item = String;
-    const PREFIX: &'static str = "link";
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
@@ -157,6 +152,7 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::BTreeMap::is_empty",
         default
     )]
+    #[serde(flatten)]
     #[doc = "Address and priority information of a single corosync link. (up to 8 links supported; link0..link7)"]
     pub links: ::std::collections::BTreeMap<u32, String>,
     #[serde(
@@ -177,18 +173,34 @@ pub struct PostParams {
     pub votes: Option<u64>,
     #[serde(
         flatten,
+        deserialize_with = "crate::types::multi::deserialize_additional_data::<'_, PostParams, _, _>"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+impl crate::types::multi::Test for PostParams {
+    fn test_fn() -> fn(&str) -> bool {
+        fn the_test(input: &str) -> bool {
+            let array = [
+                <NumberedLinks as crate::types::multi::NumberedItems>::key_matches
+                    as fn(&str) -> bool,
+            ];
+            array.iter().any(|f| f(input))
+        }
+        the_test as _
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct TotemGetOutputTotem {
+    #[serde(
+        flatten,
         default,
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> JoinClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Joins this node into an existing cluster. If no links are given, default to IP resolved by node's hostname on single link (fallback fails for clusters with multiple links)."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
+#[derive(Default)]
+struct NumberedLinks;
+impl crate::types::multi::NumberedItems for NumberedLinks {
+    type Item = String;
+    const PREFIX: &'static str = "link";
 }

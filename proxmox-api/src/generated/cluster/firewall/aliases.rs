@@ -14,6 +14,26 @@ where
         }
     }
 }
+impl<T> AliasesClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List aliases"]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> AliasesClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create IP or Network Alias."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 impl GetOutputItems {
     pub fn new(cidr: String, digest: String, name: String) -> Self {
         Self {
@@ -40,16 +60,6 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> AliasesClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List aliases"]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 impl PostParams {
     pub fn new(cidr: String, name: String) -> Self {
         Self {
@@ -74,16 +84,6 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> AliasesClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create IP or Network Alias."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }
 impl<T> AliasesClient<T>
 where

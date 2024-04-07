@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> MacrosClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List available macros"]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
 impl GetOutputItems {
     pub fn new(descr: String, macro_def: String) -> Self {
         Self {
@@ -35,14 +45,4 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> MacrosClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List available macros"]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }

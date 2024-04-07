@@ -23,11 +23,38 @@ where
         self.client.delete(&path, &())
     }
 }
-#[derive(Default)]
-struct NumberedLinks;
-impl crate::types::multi::NumberedItems for NumberedLinks {
-    type Item = String;
-    const PREFIX: &'static str = "link";
+impl<T> NodeClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Adds a node to the cluster configuration. This call is for internal use."]
+    pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+impl PostOutput {
+    pub fn new(corosync_authkey: String, corosync_conf: String, warnings: Vec<String>) -> Self {
+        Self {
+            corosync_authkey,
+            corosync_conf,
+            warnings,
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct PostOutput {
+    pub corosync_authkey: String,
+    pub corosync_conf: String,
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    pub warnings: Vec<String>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PostParams {
@@ -54,6 +81,7 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::BTreeMap::is_empty",
         default
     )]
+    #[serde(flatten)]
     #[doc = "Address and priority information of a single corosync link. (up to 8 links supported; link0..link7)"]
     pub links: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -75,41 +103,25 @@ pub struct PostParams {
     pub votes: Option<u64>,
     #[serde(
         flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
+        deserialize_with = "crate::types::multi::deserialize_additional_data::<'_, PostParams, _, _>"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl PostOutput {
-    pub fn new(corosync_authkey: String, corosync_conf: String, warnings: Vec<String>) -> Self {
-        Self {
-            corosync_authkey,
-            corosync_conf,
-            warnings,
-            additional_properties: Default::default(),
+impl crate::types::multi::Test for PostParams {
+    fn test_fn() -> fn(&str) -> bool {
+        fn the_test(input: &str) -> bool {
+            let array = [
+                <NumberedLinks as crate::types::multi::NumberedItems>::key_matches
+                    as fn(&str) -> bool,
+            ];
+            array.iter().any(|f| f(input))
         }
+        the_test as _
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct PostOutput {
-    pub corosync_authkey: String,
-    pub corosync_conf: String,
-    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
-    pub warnings: Vec<String>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> NodeClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Adds a node to the cluster configuration. This call is for internal use."]
-    pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
+#[derive(Default)]
+struct NumberedLinks;
+impl crate::types::multi::NumberedItems for NumberedLinks {
+    type Item = String;
+    const PREFIX: &'static str = "link";
 }

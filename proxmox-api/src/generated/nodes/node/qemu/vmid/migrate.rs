@@ -13,33 +13,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum MigrationType {
-    #[serde(rename = "insecure")]
-    Insecure,
-    #[serde(rename = "secure")]
-    Secure,
+impl<T> MigrateClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get preconditions for migration."]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetParams {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Target node."]
-    pub target: Option<String>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct NotAllowedNodesGetOutputNotAllowedNodes {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+impl<T> MigrateClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Migrate virtual machine. Creates a new migration task."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl GetOutput {
     pub fn new(running: bool) -> Self {
@@ -71,15 +63,26 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> MigrateClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get preconditions for migration."]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Target node."]
+    pub target: Option<String>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct NotAllowedNodesGetOutputNotAllowedNodes {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
     pub fn new(target: String) -> Self {
@@ -141,13 +144,10 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> MigrateClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Migrate virtual machine. Creates a new migration task."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum MigrationType {
+    #[serde(rename = "insecure")]
+    Insecure,
+    #[serde(rename = "secure")]
+    Secure,
 }

@@ -33,6 +33,16 @@ where
         self.client.get(&path, &())
     }
 }
+impl<T> GroupClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update ha group configuration."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -69,14 +79,4 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> GroupClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update ha group configuration."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
 }

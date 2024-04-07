@@ -13,18 +13,6 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Mode {
-    #[serde(rename = "all")]
-    All,
-    #[serde(rename = "any")]
-    Any,
-}
-impl Default for Mode {
-    fn default() -> Self {
-        Self::All
-    }
-}
 impl<T> NameClient<T>
 where
     T: crate::client::Client,
@@ -33,6 +21,26 @@ where
     pub fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &())
+    }
+}
+impl<T> NameClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Return a specific matcher"]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> NameClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update existing matcher"]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
     }
 }
 impl GetOutput {
@@ -102,16 +110,6 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> NameClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Return a specific matcher"]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -163,13 +161,15 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> NameClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update existing matcher"]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Mode {
+    #[serde(rename = "all")]
+    All,
+    #[serde(rename = "any")]
+    Any,
+}
+impl Default for Mode {
+    fn default() -> Self {
+        Self::All
     }
 }

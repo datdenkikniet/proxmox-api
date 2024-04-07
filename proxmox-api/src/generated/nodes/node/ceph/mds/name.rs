@@ -23,6 +23,16 @@ where
         self.client.delete(&path, &())
     }
 }
+impl<T> NameClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create Ceph Metadata Server (MDS)"]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -34,14 +44,4 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> NameClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create Ceph Metadata Server (MDS)"]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }

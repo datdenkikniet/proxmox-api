@@ -13,21 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Status {
-    #[serde(rename = "running")]
-    Running,
-    #[serde(rename = "stopped")]
-    Stopped,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct HaGetOutputHa {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+impl<T> CurrentClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get virtual machine status."]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
 }
 impl GetOutput {
     pub fn new(ha: HaGetOutputHa, status: Status, vmid: crate::types::VmId) -> Self {
@@ -106,13 +100,19 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> CurrentClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get virtual machine status."]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct HaGetOutputHa {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Status {
+    #[serde(rename = "running")]
+    Running,
+    #[serde(rename = "stopped")]
+    Stopped,
 }

@@ -13,22 +13,6 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct DeleteParams {
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Restart pveproxy."]
-    pub restart: Option<bool>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
 impl<T> CustomClient<T>
 where
     T: crate::client::Client,
@@ -39,31 +23,18 @@ where
         self.client.delete(&path, &params)
     }
 }
-impl PostParams {
-    pub fn new(certificates: String) -> Self {
-        Self {
-            certificates,
-            force: Default::default(),
-            key: Default::default(),
-            restart: Default::default(),
-            additional_properties: Default::default(),
-        }
+impl<T> CustomClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Upload or update custom certificate chain and key."]
+    pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct PostParams {
-    #[doc = "PEM encoded certificate (chain)."]
-    pub certificates: String,
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Overwrite existing custom or ACME certificate files."]
-    pub force: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "PEM encoded private key."]
-    pub key: Option<String>,
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct DeleteParams {
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -130,13 +101,42 @@ pub struct PostOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> CustomClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Upload or update custom certificate chain and key."]
-    pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
+impl PostParams {
+    pub fn new(certificates: String) -> Self {
+        Self {
+            certificates,
+            force: Default::default(),
+            key: Default::default(),
+            restart: Default::default(),
+            additional_properties: Default::default(),
+        }
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct PostParams {
+    #[doc = "PEM encoded certificate (chain)."]
+    pub certificates: String,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Overwrite existing custom or ACME certificate files."]
+    pub force: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "PEM encoded private key."]
+    pub key: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Restart pveproxy."]
+    pub restart: Option<bool>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }

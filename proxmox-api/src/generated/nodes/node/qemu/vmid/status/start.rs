@@ -13,12 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum MigrationType {
-    #[serde(rename = "insecure")]
-    Insecure,
-    #[serde(rename = "secure")]
-    Secure,
+impl<T> StartClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Start virtual machine."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PostParams {
@@ -61,13 +64,10 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> StartClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Start virtual machine."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum MigrationType {
+    #[serde(rename = "insecure")]
+    Insecure,
+    #[serde(rename = "secure")]
+    Secure,
 }

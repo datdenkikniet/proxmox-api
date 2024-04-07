@@ -15,6 +15,26 @@ where
         }
     }
 }
+impl<T> SnapnameClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Delete a VM snapshot."]
+    pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.delete(&path, &params)
+    }
+}
+impl<T> SnapnameClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = ""]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct DeleteParams {
     #[serde(
@@ -31,16 +51,6 @@ pub struct DeleteParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> SnapnameClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Delete a VM snapshot."]
-    pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.delete(&path, &params)
-    }
-}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetOutputItems {
     #[serde(
@@ -49,16 +59,6 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> SnapnameClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = ""]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl<T> SnapnameClient<T>
 where

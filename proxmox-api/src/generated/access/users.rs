@@ -14,62 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetParams {
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Optional filter for enable property."]
-    pub enabled: Option<bool>,
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Include group and token information."]
-    pub full: Option<bool>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl TokensGetOutputItemsTokensItems {
-    pub fn new(tokenid: String) -> Self {
-        Self {
-            tokenid,
-            comment: Default::default(),
-            expire: Default::default(),
-            privsep: Default::default(),
-            additional_properties: Default::default(),
-        }
+impl<T> UsersClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "User index."]
+    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct TokensGetOutputItemsTokensItems {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub comment: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "API token expiration date (seconds since epoch). '0' means no expiration date."]
-    pub expire: Option<()>,
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Restrict API token privileges with separate ACLs (default), or give full privileges of corresponding user."]
-    pub privsep: Option<bool>,
-    #[doc = "User-specific token identifier."]
-    pub tokenid: String,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+impl<T> UsersClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create new user."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(userid: String) -> Self {
@@ -151,15 +114,28 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> UsersClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "User index."]
-    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Optional filter for enable property."]
+    pub enabled: Option<bool>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Include group and token information."]
+    pub full: Option<bool>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
     pub fn new(userid: String) -> Self {
@@ -219,15 +195,39 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> UsersClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create new user."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
+impl TokensGetOutputItemsTokensItems {
+    pub fn new(tokenid: String) -> Self {
+        Self {
+            tokenid,
+            comment: Default::default(),
+            expire: Default::default(),
+            privsep: Default::default(),
+            additional_properties: Default::default(),
+        }
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct TokensGetOutputItemsTokensItems {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub comment: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "API token expiration date (seconds since epoch). '0' means no expiration date."]
+    pub expire: Option<()>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Restrict API token privileges with separate ACLs (default), or give full privileges of corresponding user."]
+    pub privsep: Option<bool>,
+    #[doc = "User-specific token identifier."]
+    pub tokenid: String,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl<T> UsersClient<T>
 where

@@ -13,84 +13,6 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Preallocation {
-    #[serde(rename = "falloc")]
-    Falloc,
-    #[serde(rename = "full")]
-    Full,
-    #[serde(rename = "metadata")]
-    Metadata,
-    #[serde(rename = "off")]
-    Off,
-}
-impl Default for Preallocation {
-    fn default() -> Self {
-        Self::Metadata
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Smbversion {
-    #[serde(rename = "2.0")]
-    _20,
-    #[serde(rename = "2.1")]
-    _21,
-    #[serde(rename = "3")]
-    _3,
-    #[serde(rename = "3.0")]
-    _30,
-    #[serde(rename = "3.11")]
-    _311,
-    #[serde(rename = "default")]
-    Default,
-}
-impl Default for Smbversion {
-    fn default() -> Self {
-        Self::Default
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Transport {
-    #[serde(rename = "rdma")]
-    Rdma,
-    #[serde(rename = "tcp")]
-    Tcp,
-    #[serde(rename = "unix")]
-    Unix,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "btrfs")]
-    Btrfs,
-    #[serde(rename = "cephfs")]
-    Cephfs,
-    #[serde(rename = "cifs")]
-    Cifs,
-    #[serde(rename = "dir")]
-    Dir,
-    #[serde(rename = "esxi")]
-    Esxi,
-    #[serde(rename = "glusterfs")]
-    Glusterfs,
-    #[serde(rename = "iscsi")]
-    Iscsi,
-    #[serde(rename = "iscsidirect")]
-    Iscsidirect,
-    #[serde(rename = "lvm")]
-    Lvm,
-    #[serde(rename = "lvmthin")]
-    Lvmthin,
-    #[serde(rename = "nfs")]
-    Nfs,
-    #[serde(rename = "pbs")]
-    Pbs,
-    #[serde(rename = "rbd")]
-    Rbd,
-    #[serde(rename = "zfs")]
-    Zfs,
-    #[serde(rename = "zfspool")]
-    Zfspool,
-}
 impl<T> StorageClient<T>
 where
     T: crate::client::Client,
@@ -101,15 +23,6 @@ where
         self.client.delete(&path, &())
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetOutput {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
 impl<T> StorageClient<T>
 where
     T: crate::client::Client,
@@ -119,6 +32,65 @@ where
         let path = self.path.to_string();
         self.client.get(&path, &())
     }
+}
+impl<T> StorageClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update storage configuration."]
+    pub fn put(&self, params: PutParams) -> Result<PutOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct ConfigPutOutputConfig {
+    #[serde(rename = "encryption-key")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The, possible auto-generated, encryption-key."]
+    pub encryption_key: Option<String>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetOutput {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+impl PutOutput {
+    pub fn new(storage: String, ty: Type) -> Self {
+        Self {
+            storage,
+            ty,
+            config: Default::default(),
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct PutOutput {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Partial, possible server generated, configuration properties."]
+    pub config: Option<ConfigPutOutputConfig>,
+    #[doc = "The ID of the created storage."]
+    pub storage: String,
+    #[serde(rename = "type")]
+    #[doc = "The type of the created storage."]
+    pub ty: Type,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
@@ -333,53 +305,81 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct ConfigPutOutputConfig {
-    #[serde(rename = "encryption-key")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The, possible auto-generated, encryption-key."]
-    pub encryption_key: Option<String>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Preallocation {
+    #[serde(rename = "falloc")]
+    Falloc,
+    #[serde(rename = "full")]
+    Full,
+    #[serde(rename = "metadata")]
+    Metadata,
+    #[serde(rename = "off")]
+    Off,
 }
-impl PutOutput {
-    pub fn new(storage: String, ty: Type) -> Self {
-        Self {
-            storage,
-            ty,
-            config: Default::default(),
-            additional_properties: Default::default(),
-        }
+impl Default for Preallocation {
+    fn default() -> Self {
+        Self::Metadata
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct PutOutput {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Partial, possible server generated, configuration properties."]
-    pub config: Option<ConfigPutOutputConfig>,
-    #[doc = "The ID of the created storage."]
-    pub storage: String,
-    #[serde(rename = "type")]
-    #[doc = "The type of the created storage."]
-    pub ty: Type,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+pub enum Smbversion {
+    #[serde(rename = "2.0")]
+    _20,
+    #[serde(rename = "2.1")]
+    _21,
+    #[serde(rename = "3")]
+    _3,
+    #[serde(rename = "3.0")]
+    _30,
+    #[serde(rename = "3.11")]
+    _311,
+    #[serde(rename = "default")]
+    Default,
 }
-impl<T> StorageClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update storage configuration."]
-    pub fn put(&self, params: PutParams) -> Result<PutOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
+impl Default for Smbversion {
+    fn default() -> Self {
+        Self::Default
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Transport {
+    #[serde(rename = "rdma")]
+    Rdma,
+    #[serde(rename = "tcp")]
+    Tcp,
+    #[serde(rename = "unix")]
+    Unix,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "btrfs")]
+    Btrfs,
+    #[serde(rename = "cephfs")]
+    Cephfs,
+    #[serde(rename = "cifs")]
+    Cifs,
+    #[serde(rename = "dir")]
+    Dir,
+    #[serde(rename = "esxi")]
+    Esxi,
+    #[serde(rename = "glusterfs")]
+    Glusterfs,
+    #[serde(rename = "iscsi")]
+    Iscsi,
+    #[serde(rename = "iscsidirect")]
+    Iscsidirect,
+    #[serde(rename = "lvm")]
+    Lvm,
+    #[serde(rename = "lvmthin")]
+    Lvmthin,
+    #[serde(rename = "nfs")]
+    Nfs,
+    #[serde(rename = "pbs")]
+    Pbs,
+    #[serde(rename = "rbd")]
+    Rbd,
+    #[serde(rename = "zfs")]
+    Zfs,
+    #[serde(rename = "zfspool")]
+    Zfspool,
 }

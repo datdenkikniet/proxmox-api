@@ -13,24 +13,15 @@ where
         }
     }
 }
-impl GetParams {
-    pub fn new(file: String) -> Self {
-        Self {
-            file,
-            additional_properties: Default::default(),
-        }
+impl<T> FileReadClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Reads the given file via guest agent. Is limited to 16777216 bytes."]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
     }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct GetParams {
-    #[doc = "The path to the file"]
-    pub file: String,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl GetOutput {
     pub fn new(content: String) -> Self {
@@ -59,13 +50,22 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> FileReadClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Reads the given file via guest agent. Is limited to 16777216 bytes."]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
+impl GetParams {
+    pub fn new(file: String) -> Self {
+        Self {
+            file,
+            additional_properties: Default::default(),
+        }
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct GetParams {
+    #[doc = "The path to the file"]
+    pub file: String,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }

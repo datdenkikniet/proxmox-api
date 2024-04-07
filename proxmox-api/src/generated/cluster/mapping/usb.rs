@@ -14,18 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetParams {
-    #[serde(rename = "check-node")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "If given, checks the configurations on the given node for correctness, and adds relevant errors to the devices."]
-    pub check_node: Option<String>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+impl<T> UsbClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List USB Hardware Mappings"]
+    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
+}
+impl<T> UsbClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create a new hardware mapping."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(description: String, id: String, map: Vec<String>) -> Self {
@@ -53,15 +60,18 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> UsbClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List USB Hardware Mappings"]
-    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(rename = "check-node")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "If given, checks the configurations on the given node for correctness, and adds relevant errors to the devices."]
+    pub check_node: Option<String>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
     pub fn new(id: String, map: Vec<String>) -> Self {
@@ -89,16 +99,6 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> UsbClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create a new hardware mapping."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }
 impl<T> UsbClient<T>
 where

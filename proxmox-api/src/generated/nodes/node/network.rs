@@ -14,61 +14,6 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum BondMode {
-    #[serde(rename = "802.3ad")]
-    _8023ad,
-    #[serde(rename = "active-backup")]
-    ActiveBackup,
-    #[serde(rename = "balance-alb")]
-    BalanceAlb,
-    #[serde(rename = "balance-rr")]
-    BalanceRr,
-    #[serde(rename = "balance-slb")]
-    BalanceSlb,
-    #[serde(rename = "balance-tlb")]
-    BalanceTlb,
-    #[serde(rename = "balance-xor")]
-    BalanceXor,
-    #[serde(rename = "broadcast")]
-    Broadcast,
-    #[serde(rename = "lacp-balance-slb")]
-    LacpBalanceSlb,
-    #[serde(rename = "lacp-balance-tcp")]
-    LacpBalanceTcp,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum BondXmitHashPolicy {
-    #[serde(rename = "layer2")]
-    Layer2,
-    #[serde(rename = "layer2+3")]
-    Layer23,
-    #[serde(rename = "layer3+4")]
-    Layer34,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    OVSBond,
-    OVSBridge,
-    OVSIntPort,
-    OVSPort,
-    #[serde(rename = "alias")]
-    Alias,
-    #[serde(rename = "any_bridge")]
-    AnyBridge,
-    #[serde(rename = "any_local_bridge")]
-    AnyLocalBridge,
-    #[serde(rename = "bond")]
-    Bond,
-    #[serde(rename = "bridge")]
-    Bridge,
-    #[serde(rename = "eth")]
-    Eth,
-    #[serde(rename = "unknown")]
-    Unknown,
-    #[serde(rename = "vlan")]
-    Vlan,
-}
 impl<T> NetworkClient<T>
 where
     T: crate::client::Client,
@@ -78,6 +23,45 @@ where
         let path = self.path.to_string();
         self.client.delete(&path, &())
     }
+}
+impl<T> NetworkClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List available networks"]
+    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
+}
+impl<T> NetworkClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create network device configuration"]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+impl<T> NetworkClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Reload network configuration"]
+    pub fn put(&self) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &())
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetOutputItems {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetParams {
@@ -91,25 +75,6 @@ pub struct GetParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetOutputItems {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> NetworkClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List available networks"]
-    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
 }
 impl PostParams {
     pub fn new(iface: String, ty: Type) -> Self {
@@ -261,25 +226,60 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> NetworkClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create network device configuration"]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum BondMode {
+    #[serde(rename = "802.3ad")]
+    _8023ad,
+    #[serde(rename = "active-backup")]
+    ActiveBackup,
+    #[serde(rename = "balance-alb")]
+    BalanceAlb,
+    #[serde(rename = "balance-rr")]
+    BalanceRr,
+    #[serde(rename = "balance-slb")]
+    BalanceSlb,
+    #[serde(rename = "balance-tlb")]
+    BalanceTlb,
+    #[serde(rename = "balance-xor")]
+    BalanceXor,
+    #[serde(rename = "broadcast")]
+    Broadcast,
+    #[serde(rename = "lacp-balance-slb")]
+    LacpBalanceSlb,
+    #[serde(rename = "lacp-balance-tcp")]
+    LacpBalanceTcp,
 }
-impl<T> NetworkClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Reload network configuration"]
-    pub fn put(&self) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &())
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum BondXmitHashPolicy {
+    #[serde(rename = "layer2")]
+    Layer2,
+    #[serde(rename = "layer2+3")]
+    Layer23,
+    #[serde(rename = "layer3+4")]
+    Layer34,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    OVSBond,
+    OVSBridge,
+    OVSIntPort,
+    OVSPort,
+    #[serde(rename = "alias")]
+    Alias,
+    #[serde(rename = "any_bridge")]
+    AnyBridge,
+    #[serde(rename = "any_local_bridge")]
+    AnyLocalBridge,
+    #[serde(rename = "bond")]
+    Bond,
+    #[serde(rename = "bridge")]
+    Bridge,
+    #[serde(rename = "eth")]
+    Eth,
+    #[serde(rename = "unknown")]
+    Unknown,
+    #[serde(rename = "vlan")]
+    Vlan,
 }
 impl<T> NetworkClient<T>
 where

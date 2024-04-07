@@ -23,6 +23,26 @@ where
         self.client.delete(&path, &())
     }
 }
+impl<T> RoleidClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get role configuration."]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> RoleidClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update an existing role."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetOutput {
     #[serde(rename = "Datastore.Allocate")]
@@ -320,16 +340,6 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub vm_snapshot_rollback: Option<bool>,
 }
-impl<T> RoleidClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get role configuration."]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
     #[serde(
@@ -346,14 +356,4 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> RoleidClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update an existing role."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
 }

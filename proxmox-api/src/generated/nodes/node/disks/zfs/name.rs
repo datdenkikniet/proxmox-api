@@ -13,31 +13,6 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct DeleteParams {
-    #[serde(rename = "cleanup-config")]
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Marks associated storage(s) as not available on this node anymore or removes them from the configuration (if configured for this node only)."]
-    pub cleanup_config: Option<bool>,
-    #[serde(rename = "cleanup-disks")]
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Also wipe disks so they can be repurposed afterwards."]
-    pub cleanup_disks: Option<bool>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
 impl<T> NameClient<T>
 where
     T: crate::client::Client,
@@ -46,6 +21,16 @@ where
     pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params)
+    }
+}
+impl<T> NameClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get details about a zpool."]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
     }
 }
 impl ChildrenGetOutputChildrenItems {
@@ -88,6 +73,31 @@ pub struct ChildrenGetOutputChildrenItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub write: Option<f64>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct DeleteParams {
+    #[serde(rename = "cleanup-config")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Marks associated storage(s) as not available on this node anymore or removes them from the configuration (if configured for this node only)."]
+    pub cleanup_config: Option<bool>,
+    #[serde(rename = "cleanup-disks")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Also wipe disks so they can be repurposed afterwards."]
+    pub cleanup_disks: Option<bool>,
     #[serde(
         flatten,
         default,
@@ -140,14 +150,4 @@ pub struct GetOutput {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> NameClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get details about a zpool."]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }

@@ -13,61 +13,18 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Application {
-    #[serde(rename = "cephfs")]
-    Cephfs,
-    #[serde(rename = "rbd")]
-    Rbd,
-    #[serde(rename = "rgw")]
-    Rgw,
-}
-impl Default for Application {
-    fn default() -> Self {
-        Self::Rbd
+impl<T> StatusClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Show the current pool status."]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
     }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum PgAutoscaleMode {
-    #[serde(rename = "off")]
-    Off,
-    #[serde(rename = "on")]
-    On,
-    #[serde(rename = "warn")]
-    Warn,
-}
-impl Default for PgAutoscaleMode {
-    fn default() -> Self {
-        Self::Warn
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetParams {
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "If enabled, will display additional data(eg. statistics)."]
-    pub verbose: Option<bool>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct AutoscaleStatusGetOutputAutoscaleStatus {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct StatisticsGetOutputStatistics {
     #[serde(
         flatten,
         default,
@@ -239,13 +196,56 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> StatusClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Show the current pool status."]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "If enabled, will display additional data(eg. statistics)."]
+    pub verbose: Option<bool>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct StatisticsGetOutputStatistics {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Application {
+    #[serde(rename = "cephfs")]
+    Cephfs,
+    #[serde(rename = "rbd")]
+    Rbd,
+    #[serde(rename = "rgw")]
+    Rgw,
+}
+impl Default for Application {
+    fn default() -> Self {
+        Self::Rbd
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum PgAutoscaleMode {
+    #[serde(rename = "off")]
+    Off,
+    #[serde(rename = "on")]
+    On,
+    #[serde(rename = "warn")]
+    Warn,
+}
+impl Default for PgAutoscaleMode {
+    fn default() -> Self {
+        Self::Warn
     }
 }

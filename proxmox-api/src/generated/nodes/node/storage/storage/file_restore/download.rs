@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> DownloadClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Extract a file or directory (as zip archive) from a PBS backup."]
+    pub fn get(&self, params: GetParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
+}
 impl GetParams {
     pub fn new(filepath: String, volume: String) -> Self {
         Self {
@@ -42,14 +52,4 @@ pub struct GetParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> DownloadClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Extract a file or directory (as zip archive) from a PBS backup."]
-    pub fn get(&self, params: GetParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
 }

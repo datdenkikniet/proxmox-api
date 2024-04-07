@@ -13,27 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum ChecksumAlgorithm {
-    #[serde(rename = "md5")]
-    Md5,
-    #[serde(rename = "sha1")]
-    Sha1,
-    #[serde(rename = "sha224")]
-    Sha224,
-    #[serde(rename = "sha256")]
-    Sha256,
-    #[serde(rename = "sha384")]
-    Sha384,
-    #[serde(rename = "sha512")]
-    Sha512,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Content {
-    #[serde(rename = "iso")]
-    Iso,
-    #[serde(rename = "vztmpl")]
-    Vztmpl,
+impl<T> DownloadUrlClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Download templates and ISO images by using an URL."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl PostParams {
     pub fn new(content: Content, filename: String, url: String) -> Self {
@@ -82,13 +70,25 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> DownloadUrlClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Download templates and ISO images by using an URL."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum ChecksumAlgorithm {
+    #[serde(rename = "md5")]
+    Md5,
+    #[serde(rename = "sha1")]
+    Sha1,
+    #[serde(rename = "sha224")]
+    Sha224,
+    #[serde(rename = "sha256")]
+    Sha256,
+    #[serde(rename = "sha384")]
+    Sha384,
+    #[serde(rename = "sha512")]
+    Sha512,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Content {
+    #[serde(rename = "iso")]
+    Iso,
+    #[serde(rename = "vztmpl")]
+    Vztmpl,
 }

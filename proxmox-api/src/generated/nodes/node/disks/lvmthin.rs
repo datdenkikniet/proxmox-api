@@ -14,6 +14,26 @@ where
         }
     }
 }
+impl<T> LvmthinClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List LVM thinpools"]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> LvmthinClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create an LVM thinpool"]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 impl GetOutputItems {
     pub fn new(
         lv: String,
@@ -71,16 +91,6 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> LvmthinClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List LVM thinpools"]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 impl PostParams {
     pub fn new(device: String, name: String) -> Self {
         Self {
@@ -110,16 +120,6 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> LvmthinClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create an LVM thinpool"]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }
 impl<T> LvmthinClient<T>
 where

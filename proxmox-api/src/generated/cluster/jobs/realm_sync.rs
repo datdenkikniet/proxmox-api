@@ -14,14 +14,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Scope {
-    #[serde(rename = "both")]
-    Both,
-    #[serde(rename = "groups")]
-    Groups,
-    #[serde(rename = "users")]
-    Users,
+impl<T> RealmSyncClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List configured realm-sync-jobs."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
 }
 impl GetOutputItems {
     pub fn new(enabled: bool, id: String, realm: String, schedule: String) -> Self {
@@ -86,15 +87,14 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> RealmSyncClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List configured realm-sync-jobs."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Scope {
+    #[serde(rename = "both")]
+    Both,
+    #[serde(rename = "groups")]
+    Groups,
+    #[serde(rename = "users")]
+    Users,
 }
 impl<T> RealmSyncClient<T>
 where

@@ -14,21 +14,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Origin {
-    #[serde(rename = "builtin")]
-    Builtin,
-    #[serde(rename = "modified-builtin")]
-    ModifiedBuiltin,
-    #[serde(rename = "user-created")]
-    UserCreated,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "gotify")]
-    Gotify,
-    #[serde(rename = "sendmail")]
-    Sendmail,
+impl<T> TargetsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Returns a list of all entities that can be used as notification targets."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
 }
 impl GetOutputItems {
     pub fn new(name: String, origin: Origin, ty: Type) -> Self {
@@ -68,15 +62,21 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> TargetsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Returns a list of all entities that can be used as notification targets."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Origin {
+    #[serde(rename = "builtin")]
+    Builtin,
+    #[serde(rename = "modified-builtin")]
+    ModifiedBuiltin,
+    #[serde(rename = "user-created")]
+    UserCreated,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "gotify")]
+    Gotify,
+    #[serde(rename = "sendmail")]
+    Sendmail,
 }
 impl<T> TargetsClient<T>
 where

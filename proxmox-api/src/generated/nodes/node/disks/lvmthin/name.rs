@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> NameClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Remove an LVM thin pool."]
+    pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.delete(&path, &params)
+    }
+}
 impl DeleteParams {
     pub fn new(volume_group: String) -> Self {
         Self {
@@ -50,14 +60,4 @@ pub struct DeleteParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> NameClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Remove an LVM thin pool."]
-    pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.delete(&path, &params)
-    }
 }

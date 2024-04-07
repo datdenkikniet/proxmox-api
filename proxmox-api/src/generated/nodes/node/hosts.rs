@@ -13,6 +13,26 @@ where
         }
     }
 }
+impl<T> HostsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get the content of /etc/hosts."]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> HostsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Write /etc/hosts."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 impl GetOutput {
     pub fn new(data: String) -> Self {
         Self {
@@ -36,16 +56,6 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> HostsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get the content of /etc/hosts."]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 impl PostParams {
     pub fn new(data: String) -> Self {
         Self {
@@ -68,14 +78,4 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> HostsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Write /etc/hosts."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }

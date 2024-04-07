@@ -13,35 +13,35 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Log {
-    #[serde(rename = "alert")]
-    Alert,
-    #[serde(rename = "crit")]
-    Crit,
-    #[serde(rename = "debug")]
-    Debug,
-    #[serde(rename = "emerg")]
-    Emerg,
-    #[serde(rename = "err")]
-    Err,
-    #[serde(rename = "info")]
-    Info,
-    #[serde(rename = "nolog")]
-    Nolog,
-    #[serde(rename = "notice")]
-    Notice,
-    #[serde(rename = "warning")]
-    Warning,
+impl<T> PosClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Delete rule."]
+    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.delete(&path, &params)
+    }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "group")]
-    Group,
-    #[serde(rename = "in")]
-    In,
-    #[serde(rename = "out")]
-    Out,
+impl<T> PosClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get single rule data."]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> PosClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Modify rule data."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct DeleteParams {
@@ -54,16 +54,6 @@ pub struct DeleteParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> PosClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Delete rule."]
-    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.delete(&path, &params)
-    }
 }
 impl GetOutput {
     pub fn new(action: String, pos: u64, ty: String) -> Self {
@@ -139,16 +129,6 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> PosClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get single rule data."]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -217,13 +197,33 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> PosClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Modify rule data."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Log {
+    #[serde(rename = "alert")]
+    Alert,
+    #[serde(rename = "crit")]
+    Crit,
+    #[serde(rename = "debug")]
+    Debug,
+    #[serde(rename = "emerg")]
+    Emerg,
+    #[serde(rename = "err")]
+    Err,
+    #[serde(rename = "info")]
+    Info,
+    #[serde(rename = "nolog")]
+    Nolog,
+    #[serde(rename = "notice")]
+    Notice,
+    #[serde(rename = "warning")]
+    Warning,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "group")]
+    Group,
+    #[serde(rename = "in")]
+    In,
+    #[serde(rename = "out")]
+    Out,
 }

@@ -14,14 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Origin {
-    #[serde(rename = "builtin")]
-    Builtin,
-    #[serde(rename = "modified-builtin")]
-    ModifiedBuiltin,
-    #[serde(rename = "user-created")]
-    UserCreated,
+impl<T> SendmailClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Returns a list of all sendmail endpoints"]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> SendmailClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create a new sendmail endpoint"]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(name: String, origin: Origin) -> Self {
@@ -75,16 +86,6 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> SendmailClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Returns a list of all sendmail endpoints"]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 impl PostParams {
     pub fn new(name: String) -> Self {
         Self {
@@ -134,15 +135,14 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> SendmailClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create a new sendmail endpoint"]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Origin {
+    #[serde(rename = "builtin")]
+    Builtin,
+    #[serde(rename = "modified-builtin")]
+    ModifiedBuiltin,
+    #[serde(rename = "user-created")]
+    UserCreated,
 }
 impl<T> SendmailClient<T>
 where

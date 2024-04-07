@@ -13,14 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Scope {
-    #[serde(rename = "both")]
-    Both,
-    #[serde(rename = "groups")]
-    Groups,
-    #[serde(rename = "users")]
-    Users,
+impl<T> SyncClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Syncs users and/or groups from the configured LDAP to user.cfg. NOTE: Synced groups will have the name 'name-$realm', so make sure those groups do not exist to prevent overwriting."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PostParams {
@@ -64,13 +65,12 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> SyncClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Syncs users and/or groups from the configured LDAP to user.cfg. NOTE: Synced groups will have the name 'name-$realm', so make sure those groups do not exist to prevent overwriting."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Scope {
+    #[serde(rename = "both")]
+    Both,
+    #[serde(rename = "groups")]
+    Groups,
+    #[serde(rename = "users")]
+    Users,
 }

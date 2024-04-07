@@ -14,16 +14,45 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "lxc")]
-    Lxc,
-    #[serde(rename = "openvz")]
-    Openvz,
-    #[serde(rename = "qemu")]
-    Qemu,
-    #[serde(rename = "storage")]
-    Storage,
+impl<T> PoolsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Delete pool."]
+    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.delete(&path, &params)
+    }
+}
+impl<T> PoolsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List pools or get pool configuration."]
+    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
+}
+impl<T> PoolsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create new pool."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+impl<T> PoolsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update pool."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
 }
 impl DeleteParams {
     pub fn new(poolid: String) -> Self {
@@ -43,15 +72,29 @@ pub struct DeleteParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> PoolsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Delete pool."]
-    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.delete(&path, &params)
+impl GetOutputItems {
+    pub fn new(poolid: String) -> Self {
+        Self {
+            poolid,
+            comment: Default::default(),
+            members: Default::default(),
+            additional_properties: Default::default(),
+        }
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct GetOutputItems {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub comment: Option<String>,
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    pub members: Vec<MembersGetOutputItemsMembersItems>,
+    pub poolid: String,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetParams {
@@ -100,40 +143,6 @@ pub struct MembersGetOutputItemsMembersItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl GetOutputItems {
-    pub fn new(poolid: String) -> Self {
-        Self {
-            poolid,
-            comment: Default::default(),
-            members: Default::default(),
-            additional_properties: Default::default(),
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct GetOutputItems {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub comment: Option<String>,
-    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
-    pub members: Vec<MembersGetOutputItemsMembersItems>,
-    pub poolid: String,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> PoolsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List pools or get pool configuration."]
-    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
-}
 impl PostParams {
     pub fn new(poolid: String) -> Self {
         Self {
@@ -154,16 +163,6 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> PoolsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create new pool."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }
 impl PutParams {
     pub fn new(poolid: String) -> Self {
@@ -211,15 +210,16 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> PoolsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update pool."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "lxc")]
+    Lxc,
+    #[serde(rename = "openvz")]
+    Openvz,
+    #[serde(rename = "qemu")]
+    Qemu,
+    #[serde(rename = "storage")]
+    Storage,
 }
 impl<T> PoolsClient<T>
 where

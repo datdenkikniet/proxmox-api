@@ -15,19 +15,6 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum State {
-    #[serde(rename = "disabled")]
-    Disabled,
-    #[serde(rename = "enabled")]
-    Enabled,
-    #[serde(rename = "ignored")]
-    Ignored,
-    #[serde(rename = "started")]
-    Started,
-    #[serde(rename = "stopped")]
-    Stopped,
-}
 impl<T> SidClient<T>
 where
     T: crate::client::Client,
@@ -36,6 +23,26 @@ where
     pub fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &())
+    }
+}
+impl<T> SidClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Read resource configuration."]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> SidClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update resource configuration."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
     }
 }
 impl GetOutput {
@@ -92,16 +99,6 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> SidClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Read resource configuration."]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -141,15 +138,18 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> SidClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update resource configuration."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum State {
+    #[serde(rename = "disabled")]
+    Disabled,
+    #[serde(rename = "enabled")]
+    Enabled,
+    #[serde(rename = "ignored")]
+    Ignored,
+    #[serde(rename = "started")]
+    Started,
+    #[serde(rename = "stopped")]
+    Stopped,
 }
 impl<T> SidClient<T>
 where

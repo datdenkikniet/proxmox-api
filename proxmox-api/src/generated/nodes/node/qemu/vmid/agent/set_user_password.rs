@@ -13,6 +13,25 @@ where
         }
     }
 }
+impl<T> SetUserPasswordClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Sets the password for the given user to the given password"]
+    pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct PostOutput {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 impl PostParams {
     pub fn new(password: String, username: String) -> Self {
         Self {
@@ -42,23 +61,4 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct PostOutput {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> SetUserPasswordClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Sets the password for the given user to the given password"]
-    pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }

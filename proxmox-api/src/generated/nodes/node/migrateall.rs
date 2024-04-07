@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> MigrateallClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Migrate all VMs and Containers."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 impl PostParams {
     pub fn new(target: String) -> Self {
         Self {
@@ -52,14 +62,4 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> MigrateallClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Migrate all VMs and Containers."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }

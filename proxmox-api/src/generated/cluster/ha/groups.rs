@@ -14,10 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "group")]
-    Group,
+impl<T> GroupsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get HA groups."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> GroupsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create a new HA group."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(group: String) -> Self {
@@ -36,16 +51,6 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> GroupsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get HA groups."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl PostParams {
     pub fn new(group: String, nodes: String) -> Self {
@@ -96,15 +101,10 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> GroupsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create a new HA group."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "group")]
+    Group,
 }
 impl<T> GroupsClient<T>
 where

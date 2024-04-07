@@ -13,46 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Action {
-    #[serde(rename = "destroy")]
-    Destroy,
-    #[serde(rename = "stop")]
-    Stop,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Service {
-    #[serde(rename = "mds")]
-    Mds,
-    #[serde(rename = "mon")]
-    Mon,
-    #[serde(rename = "osd")]
-    Osd,
-}
-impl GetParams {
-    pub fn new(action: Action, id: String, service: Service) -> Self {
-        Self {
-            action,
-            id,
-            service,
-            additional_properties: Default::default(),
-        }
+impl<T> CmdSafetyClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Heuristical check if it is safe to perform an action."]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
     }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct GetParams {
-    #[doc = "Action to check"]
-    pub action: Action,
-    #[doc = "ID of the service"]
-    pub id: String,
-    #[doc = "Service type"]
-    pub service: Service,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl GetOutput {
     pub fn new(safe: bool) -> Self {
@@ -81,13 +50,44 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> CmdSafetyClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Heuristical check if it is safe to perform an action."]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
+impl GetParams {
+    pub fn new(action: Action, id: String, service: Service) -> Self {
+        Self {
+            action,
+            id,
+            service,
+            additional_properties: Default::default(),
+        }
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct GetParams {
+    #[doc = "Action to check"]
+    pub action: Action,
+    #[doc = "ID of the service"]
+    pub id: String,
+    #[doc = "Service type"]
+    pub service: Service,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Action {
+    #[serde(rename = "destroy")]
+    Destroy,
+    #[serde(rename = "stop")]
+    Stop,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Service {
+    #[serde(rename = "mds")]
+    Mds,
+    #[serde(rename = "mon")]
+    Mon,
+    #[serde(rename = "osd")]
+    Osd,
 }

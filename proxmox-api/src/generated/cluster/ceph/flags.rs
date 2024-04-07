@@ -14,30 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Name {
-    #[serde(rename = "nobackfill")]
-    Nobackfill,
-    #[serde(rename = "nodeep-scrub")]
-    NodeepScrub,
-    #[serde(rename = "nodown")]
-    Nodown,
-    #[serde(rename = "noin")]
-    Noin,
-    #[serde(rename = "noout")]
-    Noout,
-    #[serde(rename = "norebalance")]
-    Norebalance,
-    #[serde(rename = "norecover")]
-    Norecover,
-    #[serde(rename = "noscrub")]
-    Noscrub,
-    #[serde(rename = "notieragent")]
-    Notieragent,
-    #[serde(rename = "noup")]
-    Noup,
-    #[serde(rename = "pause")]
-    Pause,
+impl<T> FlagsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "get the status of all ceph flags"]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> FlagsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Set/Unset multiple ceph flags at once."]
+    pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(description: String, name: Name, value: bool) -> Self {
@@ -67,16 +62,6 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> FlagsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "get the status of all ceph flags"]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
@@ -165,15 +150,30 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> FlagsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Set/Unset multiple ceph flags at once."]
-    pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Name {
+    #[serde(rename = "nobackfill")]
+    Nobackfill,
+    #[serde(rename = "nodeep-scrub")]
+    NodeepScrub,
+    #[serde(rename = "nodown")]
+    Nodown,
+    #[serde(rename = "noin")]
+    Noin,
+    #[serde(rename = "noout")]
+    Noout,
+    #[serde(rename = "norebalance")]
+    Norebalance,
+    #[serde(rename = "norecover")]
+    Norecover,
+    #[serde(rename = "noscrub")]
+    Noscrub,
+    #[serde(rename = "notieragent")]
+    Notieragent,
+    #[serde(rename = "noup")]
+    Noup,
+    #[serde(rename = "pause")]
+    Pause,
 }
 impl<T> FlagsClient<T>
 where

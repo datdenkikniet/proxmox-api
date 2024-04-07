@@ -14,37 +14,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetParams {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Only list stores which support this content type."]
-    pub content: Option<String>,
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Only list stores which are enabled (not disabled in config)."]
-    pub enabled: Option<bool>,
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Include information about formats"]
-    pub format: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Only list status for  specified storage"]
-    pub storage: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "If target is different to 'node', we only lists shared storages which content is accessible on this 'node' and the specified 'target' node."]
-    pub target: Option<String>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+impl<T> StorageClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get status for all datastores."]
+    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(content: String, storage: String, ty: String) -> Self {
@@ -128,15 +106,37 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> StorageClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get status for all datastores."]
-    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Only list stores which support this content type."]
+    pub content: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Only list stores which are enabled (not disabled in config)."]
+    pub enabled: Option<bool>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Include information about formats"]
+    pub format: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Only list status for  specified storage"]
+    pub storage: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "If target is different to 'node', we only lists shared storages which content is accessible on this 'node' and the specified 'target' node."]
+    pub target: Option<String>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl<T> StorageClient<T>
 where

@@ -13,6 +13,28 @@ where
         }
     }
 }
+impl<T> TemplateClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create a Template."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct PostParams {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "If you want to convert only 1 disk to base image."]
+    pub disk: Option<Disk>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub enum Disk {
     #[serde(rename = "efidisk0")]
@@ -133,26 +155,4 @@ pub enum Disk {
     Virtio8,
     #[serde(rename = "virtio9")]
     Virtio9,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct PostParams {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "If you want to convert only 1 disk to base image."]
-    pub disk: Option<Disk>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> TemplateClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create a Template."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }

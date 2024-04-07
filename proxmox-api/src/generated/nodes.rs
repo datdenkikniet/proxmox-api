@@ -14,14 +14,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Status {
-    #[serde(rename = "offline")]
-    Offline,
-    #[serde(rename = "online")]
-    Online,
-    #[serde(rename = "unknown")]
-    Unknown,
+impl<T> NodesClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Cluster node index."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
 }
 impl GetOutputItems {
     pub fn new(node: String, status: Status) -> Self {
@@ -93,15 +94,14 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> NodesClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Cluster node index."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Status {
+    #[serde(rename = "offline")]
+    Offline,
+    #[serde(rename = "online")]
+    Online,
+    #[serde(rename = "unknown")]
+    Unknown,
 }
 impl<T> NodesClient<T>
 where

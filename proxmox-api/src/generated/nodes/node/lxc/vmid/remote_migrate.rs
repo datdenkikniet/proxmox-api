@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> RemoteMigrateClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Migrate the container to another cluster. Creates a new migration task. EXPERIMENTAL feature!"]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 impl PostParams {
     pub fn new(target_bridge: String, target_endpoint: String, target_storage: String) -> Self {
         Self {
@@ -81,14 +91,4 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> RemoteMigrateClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Migrate the container to another cluster. Creates a new migration task. EXPERIMENTAL feature!"]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }

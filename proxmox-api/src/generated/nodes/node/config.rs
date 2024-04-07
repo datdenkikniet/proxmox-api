@@ -13,46 +13,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Property {
-    #[serde(rename = "acme")]
-    Acme,
-    #[serde(rename = "acmedomain0")]
-    Acmedomain0,
-    #[serde(rename = "acmedomain1")]
-    Acmedomain1,
-    #[serde(rename = "acmedomain2")]
-    Acmedomain2,
-    #[serde(rename = "acmedomain3")]
-    Acmedomain3,
-    #[serde(rename = "acmedomain4")]
-    Acmedomain4,
-    #[serde(rename = "acmedomain5")]
-    Acmedomain5,
-    #[serde(rename = "description")]
-    Description,
-    #[serde(rename = "startall-onboot-delay")]
-    StartallOnbootDelay,
-    #[serde(rename = "wakeonlan")]
-    Wakeonlan,
+impl<T> ConfigClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get node configuration options."]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetParams {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Return only a specific property from the node configuration."]
-    pub property: Option<Property>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-#[derive(Default)]
-struct NumberedAcmedomains;
-impl crate::types::multi::NumberedItems for NumberedAcmedomains {
-    type Item = String;
-    const PREFIX: &'static str = "acmedomain";
+impl<T> ConfigClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Set node configuration options."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetOutput {
@@ -68,6 +47,7 @@ pub struct GetOutput {
         skip_serializing_if = "::std::collections::BTreeMap::is_empty",
         default
     )]
+    #[serde(flatten)]
     #[doc = "ACME domain and validation plugin"]
     pub acmedomains: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -89,26 +69,33 @@ pub struct GetOutput {
     pub wakeonlan: Option<String>,
     #[serde(
         flatten,
+        deserialize_with = "crate::types::multi::deserialize_additional_data::<'_, GetOutput, _, _>"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+impl crate::types::multi::Test for GetOutput {
+    fn test_fn() -> fn(&str) -> bool {
+        fn the_test(input: &str) -> bool {
+            let array = [
+                <NumberedAcmedomains as crate::types::multi::NumberedItems>::key_matches
+                    as fn(&str) -> bool,
+            ];
+            array.iter().any(|f| f(input))
+        }
+        the_test as _
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Return only a specific property from the node configuration."]
+    pub property: Option<Property>,
+    #[serde(
+        flatten,
         default,
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> ConfigClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get node configuration options."]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
-}
-#[derive(Default)]
-struct NumberedAcmedomains;
-impl crate::types::multi::NumberedItems for NumberedAcmedomains {
-    type Item = String;
-    const PREFIX: &'static str = "acmedomain";
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
@@ -124,6 +111,7 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::BTreeMap::is_empty",
         default
     )]
+    #[serde(flatten)]
     #[doc = "ACME domain and validation plugin"]
     pub acmedomains: ::std::collections::BTreeMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -148,18 +136,48 @@ pub struct PutParams {
     pub wakeonlan: Option<String>,
     #[serde(
         flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
+        deserialize_with = "crate::types::multi::deserialize_additional_data::<'_, PutParams, _, _>"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ConfigClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Set node configuration options."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
+impl crate::types::multi::Test for PutParams {
+    fn test_fn() -> fn(&str) -> bool {
+        fn the_test(input: &str) -> bool {
+            let array = [
+                <NumberedAcmedomains as crate::types::multi::NumberedItems>::key_matches
+                    as fn(&str) -> bool,
+            ];
+            array.iter().any(|f| f(input))
+        }
+        the_test as _
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Property {
+    #[serde(rename = "acme")]
+    Acme,
+    #[serde(rename = "acmedomain0")]
+    Acmedomain0,
+    #[serde(rename = "acmedomain1")]
+    Acmedomain1,
+    #[serde(rename = "acmedomain2")]
+    Acmedomain2,
+    #[serde(rename = "acmedomain3")]
+    Acmedomain3,
+    #[serde(rename = "acmedomain4")]
+    Acmedomain4,
+    #[serde(rename = "acmedomain5")]
+    Acmedomain5,
+    #[serde(rename = "description")]
+    Description,
+    #[serde(rename = "startall-onboot-delay")]
+    StartallOnbootDelay,
+    #[serde(rename = "wakeonlan")]
+    Wakeonlan,
+}
+#[derive(Default)]
+struct NumberedAcmedomains;
+impl crate::types::multi::NumberedItems for NumberedAcmedomains {
+    type Item = String;
+    const PREFIX: &'static str = "acmedomain";
 }

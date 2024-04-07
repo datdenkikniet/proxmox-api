@@ -13,14 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Format {
-    #[serde(rename = "qcow2")]
-    Qcow2,
-    #[serde(rename = "raw")]
-    Raw,
-    #[serde(rename = "vmdk")]
-    Vmdk,
+impl<T> CloneClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create a copy of virtual machine/template."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl PostParams {
     pub fn new(newid: crate::types::VmId) -> Self {
@@ -81,13 +82,12 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> CloneClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create a copy of virtual machine/template."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Format {
+    #[serde(rename = "qcow2")]
+    Qcow2,
+    #[serde(rename = "raw")]
+    Raw,
+    #[serde(rename = "vmdk")]
+    Vmdk,
 }

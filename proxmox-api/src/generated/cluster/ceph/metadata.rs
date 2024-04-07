@@ -13,17 +13,48 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Scope {
-    #[serde(rename = "all")]
-    All,
-    #[serde(rename = "versions")]
-    Versions,
-}
-impl Default for Scope {
-    fn default() -> Self {
-        Self::All
+impl<T> MetadataClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get ceph metadata."]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
     }
+}
+impl GetOutput {
+    pub fn new(
+        mds: MdsGetOutputMds,
+        mgr: MgrGetOutputMgr,
+        mon: MonGetOutputMon,
+        node: NodeGetOutputNode,
+    ) -> Self {
+        Self {
+            mds,
+            mgr,
+            mon,
+            node,
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct GetOutput {
+    #[doc = "Metadata servers configured in the cluster and their properties."]
+    pub mds: MdsGetOutputMds,
+    #[doc = "Managers configured in the cluster and their properties."]
+    pub mgr: MgrGetOutputMgr,
+    #[doc = "Monitors configured in the cluster and their properties."]
+    pub mon: MonGetOutputMon,
+    #[doc = "Ceph version installed on the nodes."]
+    pub node: NodeGetOutputNode,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetParams {
@@ -93,26 +124,6 @@ pub struct IdGetOutputMdsId {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl MdsGetOutputMds {
-    pub fn new(_id: IdGetOutputMdsId) -> Self {
-        Self {
-            _id,
-            additional_properties: Default::default(),
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct MdsGetOutputMds {
-    #[serde(rename = "{id}")]
-    #[doc = "Useful properties are listed, but not the full list."]
-    pub _id: IdGetOutputMdsId,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
 impl IdGetOutputMgrId {
     pub fn new(
         addr: String,
@@ -163,26 +174,6 @@ pub struct IdGetOutputMgrId {
     pub mem_total_kb: u64,
     #[doc = "Name of the service instance."]
     pub name: String,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl MgrGetOutputMgr {
-    pub fn new(_id: IdGetOutputMgrId) -> Self {
-        Self {
-            _id,
-            additional_properties: Default::default(),
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct MgrGetOutputMgr {
-    #[serde(rename = "{id}")]
-    #[doc = "Useful properties are listed, but not the full list."]
-    pub _id: IdGetOutputMgrId,
     #[serde(
         flatten,
         default,
@@ -247,6 +238,46 @@ pub struct IdGetOutputMonId {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
+impl MdsGetOutputMds {
+    pub fn new(_id: IdGetOutputMdsId) -> Self {
+        Self {
+            _id,
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct MdsGetOutputMds {
+    #[serde(rename = "{id}")]
+    #[doc = "Useful properties are listed, but not the full list."]
+    pub _id: IdGetOutputMdsId,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+impl MgrGetOutputMgr {
+    pub fn new(_id: IdGetOutputMgrId) -> Self {
+        Self {
+            _id,
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct MgrGetOutputMgr {
+    #[serde(rename = "{id}")]
+    #[doc = "Useful properties are listed, but not the full list."]
+    pub _id: IdGetOutputMgrId,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 impl MonGetOutputMon {
     pub fn new(_id: IdGetOutputMonId) -> Self {
         Self {
@@ -267,18 +298,18 @@ pub struct MonGetOutputMon {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl VersionGetOutputNodeNodeVersion {
-    pub fn new(str: String) -> Self {
+impl NodeGetOutputNode {
+    pub fn new(_node: NodeGetOutputNodeNode) -> Self {
         Self {
-            str,
+            _node,
             additional_properties: Default::default(),
         }
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct VersionGetOutputNodeNodeVersion {
-    #[doc = "Version as single string."]
-    pub str: String,
+pub struct NodeGetOutputNode {
+    #[serde(rename = "{node}")]
+    pub _node: NodeGetOutputNodeNode,
     #[serde(
         flatten,
         default,
@@ -308,18 +339,18 @@ pub struct NodeGetOutputNodeNode {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl NodeGetOutputNode {
-    pub fn new(_node: NodeGetOutputNodeNode) -> Self {
+impl VersionGetOutputNodeNodeVersion {
+    pub fn new(str: String) -> Self {
         Self {
-            _node,
+            str,
             additional_properties: Default::default(),
         }
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct NodeGetOutputNode {
-    #[serde(rename = "{node}")]
-    pub _node: NodeGetOutputNodeNode,
+pub struct VersionGetOutputNodeNodeVersion {
+    #[doc = "Version as single string."]
+    pub str: String,
     #[serde(
         flatten,
         default,
@@ -327,46 +358,15 @@ pub struct NodeGetOutputNode {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl GetOutput {
-    pub fn new(
-        mds: MdsGetOutputMds,
-        mgr: MgrGetOutputMgr,
-        mon: MonGetOutputMon,
-        node: NodeGetOutputNode,
-    ) -> Self {
-        Self {
-            mds,
-            mgr,
-            mon,
-            node,
-            additional_properties: Default::default(),
-        }
-    }
-}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct GetOutput {
-    #[doc = "Metadata servers configured in the cluster and their properties."]
-    pub mds: MdsGetOutputMds,
-    #[doc = "Managers configured in the cluster and their properties."]
-    pub mgr: MgrGetOutputMgr,
-    #[doc = "Monitors configured in the cluster and their properties."]
-    pub mon: MonGetOutputMon,
-    #[doc = "Ceph version installed on the nodes."]
-    pub node: NodeGetOutputNode,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+pub enum Scope {
+    #[serde(rename = "all")]
+    All,
+    #[serde(rename = "versions")]
+    Versions,
 }
-impl<T> MetadataClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get ceph metadata."]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
+impl Default for Scope {
+    fn default() -> Self {
+        Self::All
     }
 }

@@ -13,12 +13,35 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum RemoveJob {
-    #[serde(rename = "full")]
-    Full,
-    #[serde(rename = "local")]
-    Local,
+impl<T> IdClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Mark replication job for removal."]
+    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.delete(&path, &params)
+    }
+}
+impl<T> IdClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Read replication job configuration."]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> IdClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update replication job configuration."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct DeleteParams {
@@ -43,16 +66,6 @@ pub struct DeleteParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> IdClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Mark replication job for removal."]
-    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.delete(&path, &params)
-    }
-}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetOutput {
     #[serde(
@@ -61,16 +74,6 @@ pub struct GetOutput {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> IdClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Read replication job configuration."]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
@@ -113,13 +116,10 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> IdClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update replication job configuration."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum RemoveJob {
+    #[serde(rename = "full")]
+    Full,
+    #[serde(rename = "local")]
+    Local,
 }

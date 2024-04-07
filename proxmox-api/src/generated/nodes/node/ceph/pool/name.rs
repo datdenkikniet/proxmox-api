@@ -14,23 +14,35 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Application {
-    #[serde(rename = "cephfs")]
-    Cephfs,
-    #[serde(rename = "rbd")]
-    Rbd,
-    #[serde(rename = "rgw")]
-    Rgw,
+impl<T> NameClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Destroy pool"]
+    pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.delete(&path, &params)
+    }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum PgAutoscaleMode {
-    #[serde(rename = "off")]
-    Off,
-    #[serde(rename = "on")]
-    On,
-    #[serde(rename = "warn")]
-    Warn,
+impl<T> NameClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Pool index."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> NameClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Change POOL settings"]
+    pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct DeleteParams {
@@ -62,16 +74,6 @@ pub struct DeleteParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> NameClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Destroy pool"]
-    pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.delete(&path, &params)
-    }
-}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetOutputItems {
     #[serde(
@@ -80,16 +82,6 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> NameClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Pool index."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
@@ -147,15 +139,23 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> NameClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Change POOL settings"]
-    pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Application {
+    #[serde(rename = "cephfs")]
+    Cephfs,
+    #[serde(rename = "rbd")]
+    Rbd,
+    #[serde(rename = "rgw")]
+    Rgw,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum PgAutoscaleMode {
+    #[serde(rename = "off")]
+    Off,
+    #[serde(rename = "on")]
+    On,
+    #[serde(rename = "warn")]
+    Warn,
 }
 impl<T> NameClient<T>
 where

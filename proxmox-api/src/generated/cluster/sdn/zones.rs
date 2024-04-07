@@ -14,64 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Dhcp {
-    #[serde(rename = "dnsmasq")]
-    Dnsmasq,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "evpn")]
-    Evpn,
-    #[serde(rename = "faucet")]
-    Faucet,
-    #[serde(rename = "qinq")]
-    Qinq,
-    #[serde(rename = "simple")]
-    Simple,
-    #[serde(rename = "vlan")]
-    Vlan,
-    #[serde(rename = "vxlan")]
-    Vxlan,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum VlanProtocol {
-    #[serde(rename = "802.1ad")]
-    _8021ad,
-    #[serde(rename = "802.1q")]
-    _8021q,
-}
-impl Default for VlanProtocol {
-    fn default() -> Self {
-        Self::_8021q
+impl<T> ZonesClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "SDN zones index."]
+    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetParams {
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Display pending config."]
-    pub pending: Option<bool>,
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Display running config."]
-    pub running: Option<bool>,
-    #[serde(rename = "type")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Only list SDN zones of specific type"]
-    pub ty: Option<Type>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+impl<T> ZonesClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create a new sdn zone object."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(ty: String, zone: String) -> Self {
@@ -125,15 +86,32 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ZonesClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "SDN zones index."]
-    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Display pending config."]
+    pub pending: Option<bool>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Display running config."]
+    pub running: Option<bool>,
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Only list SDN zones of specific type"]
+    pub ty: Option<Type>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
     pub fn new(ty: Type, zone: String) -> Self {
@@ -294,14 +272,36 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ZonesClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create a new sdn zone object."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Dhcp {
+    #[serde(rename = "dnsmasq")]
+    Dnsmasq,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "evpn")]
+    Evpn,
+    #[serde(rename = "faucet")]
+    Faucet,
+    #[serde(rename = "qinq")]
+    Qinq,
+    #[serde(rename = "simple")]
+    Simple,
+    #[serde(rename = "vlan")]
+    Vlan,
+    #[serde(rename = "vxlan")]
+    Vxlan,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum VlanProtocol {
+    #[serde(rename = "802.1ad")]
+    _8021ad,
+    #[serde(rename = "802.1q")]
+    _8021q,
+}
+impl Default for VlanProtocol {
+    fn default() -> Self {
+        Self::_8021q
     }
 }
 impl<T> ZonesClient<T>

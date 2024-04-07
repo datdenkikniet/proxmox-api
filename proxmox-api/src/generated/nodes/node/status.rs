@@ -13,19 +13,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Command {
-    #[serde(rename = "reboot")]
-    Reboot,
-    #[serde(rename = "shutdown")]
-    Shutdown,
+impl<T> StatusClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Read node status"]
+    pub fn get(&self) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Mode {
-    #[serde(rename = "efi")]
-    Efi,
-    #[serde(rename = "legacy-bios")]
-    LegacyBios,
+impl<T> StatusClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Reboot or shutdown a node."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl BootInfoGetOutputBootInfo {
     pub fn new(mode: Mode) -> Self {
@@ -109,16 +115,6 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> StatusClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Read node status"]
-    pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 impl PostParams {
     pub fn new(command: Command) -> Self {
         Self {
@@ -138,13 +134,17 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> StatusClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Reboot or shutdown a node."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Command {
+    #[serde(rename = "reboot")]
+    Reboot,
+    #[serde(rename = "shutdown")]
+    Shutdown,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Mode {
+    #[serde(rename = "efi")]
+    Efi,
+    #[serde(rename = "legacy-bios")]
+    LegacyBios,
 }

@@ -13,6 +13,74 @@ where
         }
     }
 }
+impl<T> MoveDiskClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Move volume to different storage or to a different VM."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+impl PostParams {
+    pub fn new(disk: Disk) -> Self {
+        Self {
+            disk,
+            bwlimit: Default::default(),
+            delete: Default::default(),
+            digest: Default::default(),
+            format: Default::default(),
+            storage: Default::default(),
+            target_digest: Default::default(),
+            target_disk: Default::default(),
+            target_vmid: Default::default(),
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct PostParams {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Override I/O bandwidth limit (in KiB/s)."]
+    pub bwlimit: Option<()>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Delete the original disk after successful copy. By default the original disk is kept as unused disk."]
+    pub delete: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Prevent changes if current configuration file has different SHA1\"\n\t\t    .\" digest. This can be used to prevent concurrent modifications."]
+    pub digest: Option<String>,
+    #[doc = "The disk you want to move."]
+    pub disk: Disk,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Target Format."]
+    pub format: Option<Format>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Target storage."]
+    pub storage: Option<String>,
+    #[serde(rename = "target-digest")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Prevent changes if the current config file of the target VM has a\"\n\t\t    .\" different SHA1 digest. This can be used to detect concurrent modifications."]
+    pub target_digest: Option<String>,
+    #[serde(rename = "target-disk")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The config key the disk will be moved to on the target VM (for example, ide0 or scsi1). Default is the source disk key."]
+    pub target_disk: Option<TargetDisk>,
+    #[serde(rename = "target-vmid")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The (unique) ID of the VM."]
+    pub target_vmid: Option<crate::types::VmId>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub enum Disk {
     #[serde(rename = "efidisk0")]
@@ -1287,72 +1355,4 @@ pub enum TargetDisk {
     Virtio8,
     #[serde(rename = "virtio9")]
     Virtio9,
-}
-impl PostParams {
-    pub fn new(disk: Disk) -> Self {
-        Self {
-            disk,
-            bwlimit: Default::default(),
-            delete: Default::default(),
-            digest: Default::default(),
-            format: Default::default(),
-            storage: Default::default(),
-            target_digest: Default::default(),
-            target_disk: Default::default(),
-            target_vmid: Default::default(),
-            additional_properties: Default::default(),
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct PostParams {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Override I/O bandwidth limit (in KiB/s)."]
-    pub bwlimit: Option<()>,
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Delete the original disk after successful copy. By default the original disk is kept as unused disk."]
-    pub delete: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Prevent changes if current configuration file has different SHA1\"\n\t\t    .\" digest. This can be used to prevent concurrent modifications."]
-    pub digest: Option<String>,
-    #[doc = "The disk you want to move."]
-    pub disk: Disk,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Target Format."]
-    pub format: Option<Format>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Target storage."]
-    pub storage: Option<String>,
-    #[serde(rename = "target-digest")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Prevent changes if the current config file of the target VM has a\"\n\t\t    .\" different SHA1 digest. This can be used to detect concurrent modifications."]
-    pub target_digest: Option<String>,
-    #[serde(rename = "target-disk")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The config key the disk will be moved to on the target VM (for example, ide0 or scsi1). Default is the source disk key."]
-    pub target_disk: Option<TargetDisk>,
-    #[serde(rename = "target-vmid")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The (unique) ID of the VM."]
-    pub target_vmid: Option<crate::types::VmId>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> MoveDiskClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Move volume to different storage or to a different VM."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }

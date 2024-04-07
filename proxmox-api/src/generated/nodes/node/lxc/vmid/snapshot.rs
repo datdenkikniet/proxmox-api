@@ -14,6 +14,26 @@ where
         }
     }
 }
+impl<T> SnapshotClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List all snapshots."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> SnapshotClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Snapshot a container."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 impl GetOutputItems {
     pub fn new(description: String, name: String) -> Self {
         Self {
@@ -48,16 +68,6 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> SnapshotClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List all snapshots."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
 impl PostParams {
     pub fn new(snapname: String) -> Self {
         Self {
@@ -80,16 +90,6 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> SnapshotClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Snapshot a container."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }
 impl<T> SnapshotClient<T>
 where

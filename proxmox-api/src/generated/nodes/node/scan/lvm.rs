@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> LvmClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List local LVM volume groups."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
 impl GetOutputItems {
     pub fn new(vg: String) -> Self {
         Self {
@@ -31,14 +41,4 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> LvmClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List local LVM volume groups."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }

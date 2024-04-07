@@ -14,36 +14,6 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Log {
-    #[serde(rename = "alert")]
-    Alert,
-    #[serde(rename = "crit")]
-    Crit,
-    #[serde(rename = "debug")]
-    Debug,
-    #[serde(rename = "emerg")]
-    Emerg,
-    #[serde(rename = "err")]
-    Err,
-    #[serde(rename = "info")]
-    Info,
-    #[serde(rename = "nolog")]
-    Nolog,
-    #[serde(rename = "notice")]
-    Notice,
-    #[serde(rename = "warning")]
-    Warning,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "group")]
-    Group,
-    #[serde(rename = "in")]
-    In,
-    #[serde(rename = "out")]
-    Out,
-}
 impl<T> GroupClient<T>
 where
     T: crate::client::Client,
@@ -52,6 +22,26 @@ where
     pub fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &())
+    }
+}
+impl<T> GroupClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List rules."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> GroupClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create new rule."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
     }
 }
 impl GetOutputItems {
@@ -75,16 +65,6 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> GroupClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List rules."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl PostParams {
     pub fn new(action: String, ty: Type) -> Self {
@@ -171,15 +151,35 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> GroupClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create new rule."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Log {
+    #[serde(rename = "alert")]
+    Alert,
+    #[serde(rename = "crit")]
+    Crit,
+    #[serde(rename = "debug")]
+    Debug,
+    #[serde(rename = "emerg")]
+    Emerg,
+    #[serde(rename = "err")]
+    Err,
+    #[serde(rename = "info")]
+    Info,
+    #[serde(rename = "nolog")]
+    Nolog,
+    #[serde(rename = "notice")]
+    Notice,
+    #[serde(rename = "warning")]
+    Warning,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "group")]
+    Group,
+    #[serde(rename = "in")]
+    In,
+    #[serde(rename = "out")]
+    Out,
 }
 impl<T> GroupClient<T>
 where

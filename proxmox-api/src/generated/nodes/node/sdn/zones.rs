@@ -14,14 +14,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Status {
-    #[serde(rename = "available")]
-    Available,
-    #[serde(rename = "error")]
-    Error,
-    #[serde(rename = "pending")]
-    Pending,
+impl<T> ZonesClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get status for all zones."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
 }
 impl GetOutputItems {
     pub fn new(status: Status, zone: String) -> Self {
@@ -45,15 +46,14 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ZonesClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get status for all zones."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Status {
+    #[serde(rename = "available")]
+    Available,
+    #[serde(rename = "error")]
+    Error,
+    #[serde(rename = "pending")]
+    Pending,
 }
 impl<T> ZonesClient<T>
 where

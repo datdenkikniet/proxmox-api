@@ -13,27 +13,15 @@ where
         }
     }
 }
-impl GetParams {
-    pub fn new(filepath: String, volume: String) -> Self {
-        Self {
-            filepath,
-            volume,
-            additional_properties: Default::default(),
-        }
+impl<T> ListClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List files and directories for single file restore under the given path."]
+    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
     }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct GetParams {
-    #[doc = "base64-path to the directory or file being listed, or \"/\"."]
-    pub filepath: String,
-    #[doc = "Backup volume ID or name. Currently only PBS snapshots are supported."]
-    pub volume: String,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl GetOutputItems {
     pub fn new(filepath: String, leaf: bool, text: String, ty: String) -> Self {
@@ -84,13 +72,25 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ListClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List files and directories for single file restore under the given path."]
-    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
+impl GetParams {
+    pub fn new(filepath: String, volume: String) -> Self {
+        Self {
+            filepath,
+            volume,
+            additional_properties: Default::default(),
+        }
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct GetParams {
+    #[doc = "base64-path to the directory or file being listed, or \"/\"."]
+    pub filepath: String,
+    #[doc = "Backup volume ID or name. Currently only PBS snapshots are supported."]
+    pub volume: String,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }

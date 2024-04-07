@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> NameClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Unmounts the storage and removes the mount unit."]
+    pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.delete(&path, &params)
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct DeleteParams {
     #[serde(rename = "cleanup-config")]
@@ -37,14 +47,4 @@ pub struct DeleteParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> NameClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Unmounts the storage and removes the mount unit."]
-    pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.delete(&path, &params)
-    }
 }

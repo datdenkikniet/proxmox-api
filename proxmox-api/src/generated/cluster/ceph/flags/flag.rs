@@ -23,6 +23,16 @@ where
         Ok(self.client.get::<_, crate::types::Bool>(&path, &())?.get())
     }
 }
+impl<T> FlagClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Set or clear (unset) a specific ceph flag"]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
 impl PutParams {
     pub fn new(value: bool) -> Self {
         Self {
@@ -45,14 +55,4 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> FlagClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Set or clear (unset) a specific ceph flag"]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
 }

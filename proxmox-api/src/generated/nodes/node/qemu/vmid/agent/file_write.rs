@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> FileWriteClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Writes the given file via guest agent."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 impl PostParams {
     pub fn new(content: String, file: String) -> Self {
         Self {
@@ -42,14 +52,4 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> FileWriteClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Writes the given file via guest agent."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }

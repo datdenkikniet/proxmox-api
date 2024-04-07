@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> CloneClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create a container clone/copy"]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 impl PostParams {
     pub fn new(newid: crate::types::VmId) -> Self {
         Self {
@@ -67,14 +77,4 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> CloneClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create a container clone/copy"]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }

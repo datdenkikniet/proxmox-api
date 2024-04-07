@@ -14,18 +14,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "recovery")]
-    Recovery,
-    #[serde(rename = "totp")]
-    Totp,
-    #[serde(rename = "u2f")]
-    U2f,
-    #[serde(rename = "webauthn")]
-    Webauthn,
-    #[serde(rename = "yubico")]
-    Yubico,
+impl<T> TfaClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List TFA configurations of users."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
 }
 impl EntriesGetOutputItemsEntriesItems {
     pub fn new(created: u64, description: String, id: String, ty: Type) -> Self {
@@ -108,15 +105,18 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> TfaClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List TFA configurations of users."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "recovery")]
+    Recovery,
+    #[serde(rename = "totp")]
+    Totp,
+    #[serde(rename = "u2f")]
+    U2f,
+    #[serde(rename = "webauthn")]
+    Webauthn,
+    #[serde(rename = "yubico")]
+    Yubico,
 }
 impl<T> TfaClient<T>
 where

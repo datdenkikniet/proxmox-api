@@ -13,32 +13,15 @@ where
         }
     }
 }
-impl GetParams {
-    pub fn new(disk: String) -> Self {
-        Self {
-            disk,
-            healthonly: Default::default(),
-            additional_properties: Default::default(),
-        }
+impl<T> SmartClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get SMART Health of a disk."]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
     }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct GetParams {
-    #[doc = "Block device name"]
-    pub disk: String,
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "If true returns only the health status"]
-    pub healthonly: Option<bool>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl GetOutput {
     pub fn new(health: String) -> Self {
@@ -68,13 +51,30 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> SmartClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get SMART Health of a disk."]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
+impl GetParams {
+    pub fn new(disk: String) -> Self {
+        Self {
+            disk,
+            healthonly: Default::default(),
+            additional_properties: Default::default(),
+        }
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct GetParams {
+    #[doc = "Block device name"]
+    pub disk: String,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "If true returns only the health status"]
+    pub healthonly: Option<bool>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }

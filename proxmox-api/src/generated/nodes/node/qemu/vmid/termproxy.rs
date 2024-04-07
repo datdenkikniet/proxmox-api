@@ -13,16 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Serial {
-    #[serde(rename = "serial0")]
-    Serial0,
-    #[serde(rename = "serial1")]
-    Serial1,
-    #[serde(rename = "serial2")]
-    Serial2,
-    #[serde(rename = "serial3")]
-    Serial3,
+impl<T> TermproxyClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Creates a TCP proxy connections."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PostParams {
@@ -36,13 +35,14 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> TermproxyClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Creates a TCP proxy connections."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Serial {
+    #[serde(rename = "serial0")]
+    Serial0,
+    #[serde(rename = "serial1")]
+    Serial1,
+    #[serde(rename = "serial2")]
+    Serial2,
+    #[serde(rename = "serial3")]
+    Serial3,
 }

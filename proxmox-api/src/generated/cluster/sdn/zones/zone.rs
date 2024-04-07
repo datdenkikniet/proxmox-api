@@ -13,23 +13,6 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Dhcp {
-    #[serde(rename = "dnsmasq")]
-    Dnsmasq,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum VlanProtocol {
-    #[serde(rename = "802.1ad")]
-    _8021ad,
-    #[serde(rename = "802.1q")]
-    _8021q,
-}
-impl Default for VlanProtocol {
-    fn default() -> Self {
-        Self::_8021q
-    }
-}
 impl<T> ZoneClient<T>
 where
     T: crate::client::Client,
@@ -39,6 +22,35 @@ where
         let path = self.path.to_string();
         self.client.delete(&path, &())
     }
+}
+impl<T> ZoneClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Read sdn zone configuration."]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
+}
+impl<T> ZoneClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update sdn zone object configuration."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetOutput {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetParams {
@@ -62,25 +74,6 @@ pub struct GetParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetOutput {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> ZoneClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Read sdn zone configuration."]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
@@ -210,13 +203,20 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ZoneClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update sdn zone object configuration."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Dhcp {
+    #[serde(rename = "dnsmasq")]
+    Dnsmasq,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum VlanProtocol {
+    #[serde(rename = "802.1ad")]
+    _8021ad,
+    #[serde(rename = "802.1q")]
+    _8021q,
+}
+impl Default for VlanProtocol {
+    fn default() -> Self {
+        Self::_8021q
     }
 }

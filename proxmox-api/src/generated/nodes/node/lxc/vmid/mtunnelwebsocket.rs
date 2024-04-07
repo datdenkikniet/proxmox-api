@@ -13,6 +13,29 @@ where
         }
     }
 }
+impl<T> MtunnelwebsocketClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Migration tunnel endpoint for websocket upgrade - only for internal use by VM migration."]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetOutput {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub port: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub socket: Option<String>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 impl GetParams {
     pub fn new(socket: String, ticket: String) -> Self {
         Self {
@@ -34,27 +57,4 @@ pub struct GetParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetOutput {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub port: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub socket: Option<String>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> MtunnelwebsocketClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Migration tunnel endpoint for websocket upgrade - only for internal use by VM migration."]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
 }

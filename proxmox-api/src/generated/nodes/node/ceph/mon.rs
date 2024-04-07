@@ -14,6 +14,16 @@ where
         }
     }
 }
+impl<T> MonClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get Ceph monitor list."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
 impl GetOutputItems {
     pub fn new(name: String) -> Self {
         Self {
@@ -74,16 +84,6 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> MonClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get Ceph monitor list."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl<T> MonClient<T>
 where

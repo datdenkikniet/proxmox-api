@@ -14,6 +14,26 @@ where
         }
     }
 }
+impl<T> CloudinitClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get the cloudinit configuration with both current and pending values."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> CloudinitClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Regenerate and change cloudinit config drive."]
+    pub fn put(&self) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &())
+    }
+}
 impl GetOutputItems {
     pub fn new(key: String) -> Self {
         Self {
@@ -48,26 +68,6 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> CloudinitClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get the cloudinit configuration with both current and pending values."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
-impl<T> CloudinitClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Regenerate and change cloudinit config drive."]
-    pub fn put(&self) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &())
-    }
 }
 impl<T> CloudinitClient<T>
 where

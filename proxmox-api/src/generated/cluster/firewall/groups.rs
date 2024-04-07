@@ -14,6 +14,26 @@ where
         }
     }
 }
+impl<T> GroupsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List security groups."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> GroupsClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create new security group."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
 impl GetOutputItems {
     pub fn new(digest: String, group: String) -> Self {
         Self {
@@ -38,16 +58,6 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> GroupsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List security groups."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl PostParams {
     pub fn new(group: String) -> Self {
@@ -78,16 +88,6 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> GroupsClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create new security group."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }
 impl<T> GroupsClient<T>
 where

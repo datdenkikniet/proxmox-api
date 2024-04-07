@@ -38,6 +38,63 @@ where
         }
     }
 }
+impl<T> AgentClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "QEMU Guest Agent command index."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
+impl<T> AgentClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Execute QEMU Guest Agent commands."]
+    pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetOutputItems {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct PostOutput {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+impl PostParams {
+    pub fn new(command: Command) -> Self {
+        Self {
+            command,
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct PostParams {
+    #[doc = "The QGA command."]
+    pub command: Command,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub enum Command {
     #[serde(rename = "fsfreeze-freeze")]
@@ -80,63 +137,6 @@ pub enum Command {
     SuspendHybrid,
     #[serde(rename = "suspend-ram")]
     SuspendRam,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetOutputItems {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> AgentClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "QEMU Guest Agent command index."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
-}
-impl PostParams {
-    pub fn new(command: Command) -> Self {
-        Self {
-            command,
-            additional_properties: Default::default(),
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct PostParams {
-    #[doc = "The QGA command."]
-    pub command: Command,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct PostOutput {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> AgentClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Execute QEMU Guest Agent commands."]
-    pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }
 impl<T> AgentClient<T>
 where

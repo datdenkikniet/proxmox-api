@@ -13,30 +13,15 @@ where
         }
     }
 }
-impl PostParams {
-    pub fn new(command: Vec<()>) -> Self {
-        Self {
-            command,
-            input_data: Default::default(),
-            additional_properties: Default::default(),
-        }
+impl<T> ExecClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Executes the given command in the vm via the guest-agent and returns an object with the pid."]
+    pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
     }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct PostParams {
-    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
-    #[doc = "The command as a list of program + arguments."]
-    pub command: Vec<()>,
-    #[serde(rename = "input-data")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Data to pass as 'input-data' to the guest. Usually treated as STDIN to 'command'."]
-    pub input_data: Option<String>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostOutput {
     pub fn new(pid: u64) -> Self {
@@ -61,13 +46,28 @@ pub struct PostOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ExecClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Executes the given command in the vm via the guest-agent and returns an object with the pid."]
-    pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
+impl PostParams {
+    pub fn new(command: Vec<()>) -> Self {
+        Self {
+            command,
+            input_data: Default::default(),
+            additional_properties: Default::default(),
+        }
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct PostParams {
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    #[doc = "The command as a list of program + arguments."]
+    pub command: Vec<()>,
+    #[serde(rename = "input-data")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Data to pass as 'input-data' to the guest. Usually treated as STDIN to 'command'."]
+    pub input_data: Option<String>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }

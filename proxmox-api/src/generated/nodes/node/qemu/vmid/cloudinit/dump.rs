@@ -13,14 +13,15 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "meta")]
-    Meta,
-    #[serde(rename = "network")]
-    Network,
-    #[serde(rename = "user")]
-    User,
+impl<T> DumpClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Get automatically generated cloudinit config."]
+    pub fn get(&self, params: GetParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
 }
 impl GetParams {
     pub fn new(ty: Type) -> Self {
@@ -42,13 +43,12 @@ pub struct GetParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> DumpClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Get automatically generated cloudinit config."]
-    pub fn get(&self, params: GetParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "meta")]
+    Meta,
+    #[serde(rename = "network")]
+    Network,
+    #[serde(rename = "user")]
+    User,
 }

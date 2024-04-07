@@ -14,51 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Format {
-    #[serde(rename = "qcow2")]
-    Qcow2,
-    #[serde(rename = "raw")]
-    Raw,
-    #[serde(rename = "subvol")]
-    Subvol,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetParams {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Only list content of this type."]
-    pub content: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Only list images for this VM"]
-    pub vmid: Option<crate::types::VmId>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl VerificationGetOutputItemsVerification {
-    pub fn new(state: String, upid: String) -> Self {
-        Self {
-            state,
-            upid,
-            additional_properties: Default::default(),
-        }
+impl<T> ContentClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List storage content."]
+    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub struct VerificationGetOutputItemsVerification {
-    #[doc = "Last backup verification state."]
-    pub state: String,
-    #[doc = "Last backup verification UPID."]
-    pub upid: String,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+impl<T> ContentClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Allocate disk images."]
+    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(format: String, size: u64, volid: String) -> Self {
@@ -137,15 +111,20 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ContentClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List storage content."]
-    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Only list content of this type."]
+    pub content: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Only list images for this VM"]
+    pub vmid: Option<crate::types::VmId>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
     pub fn new(filename: String, size: String, vmid: crate::types::VmId) -> Self {
@@ -175,15 +154,36 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ContentClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Allocate disk images."]
-    pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
+impl VerificationGetOutputItemsVerification {
+    pub fn new(state: String, upid: String) -> Self {
+        Self {
+            state,
+            upid,
+            additional_properties: Default::default(),
+        }
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct VerificationGetOutputItemsVerification {
+    #[doc = "Last backup verification state."]
+    pub state: String,
+    #[doc = "Last backup verification UPID."]
+    pub upid: String,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Format {
+    #[serde(rename = "qcow2")]
+    Qcow2,
+    #[serde(rename = "raw")]
+    Raw,
+    #[serde(rename = "subvol")]
+    Subvol,
 }
 impl<T> ContentClient<T>
 where

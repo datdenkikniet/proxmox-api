@@ -13,34 +13,6 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Influxdbproto {
-    #[serde(rename = "http")]
-    Http,
-    #[serde(rename = "https")]
-    Https,
-    #[serde(rename = "udp")]
-    Udp,
-}
-impl Default for Influxdbproto {
-    fn default() -> Self {
-        Self::Udp
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Proto {
-    #[serde(rename = "tcp")]
-    Tcp,
-    #[serde(rename = "udp")]
-    Udp,
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "graphite")]
-    Graphite,
-    #[serde(rename = "influxdb")]
-    Influxdb,
-}
 impl<T> IdClient<T>
 where
     T: crate::client::Client,
@@ -51,15 +23,6 @@ where
         self.client.delete(&path, &())
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetOutput {
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
 impl<T> IdClient<T>
 where
     T: crate::client::Client,
@@ -69,6 +32,35 @@ where
         let path = self.path.to_string();
         self.client.get(&path, &())
     }
+}
+impl<T> IdClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create a new external metric server config"]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
+}
+impl<T> IdClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Update metric server configuration."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetOutput {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
     pub fn new(port: u64, server: String, ty: Type) -> Self {
@@ -169,16 +161,6 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> IdClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create a new external metric server config"]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
 }
 impl PutParams {
     pub fn new(port: u64, server: String) -> Self {
@@ -284,13 +266,31 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> IdClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Update metric server configuration."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Influxdbproto {
+    #[serde(rename = "http")]
+    Http,
+    #[serde(rename = "https")]
+    Https,
+    #[serde(rename = "udp")]
+    Udp,
+}
+impl Default for Influxdbproto {
+    fn default() -> Self {
+        Self::Udp
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Proto {
+    #[serde(rename = "tcp")]
+    Tcp,
+    #[serde(rename = "udp")]
+    Udp,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "graphite")]
+    Graphite,
+    #[serde(rename = "influxdb")]
+    Influxdb,
 }

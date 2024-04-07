@@ -14,43 +14,25 @@ where
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
-pub enum Type {
-    #[serde(rename = "bgp")]
-    Bgp,
-    #[serde(rename = "evpn")]
-    Evpn,
-    #[serde(rename = "faucet")]
-    Faucet,
-    #[serde(rename = "isis")]
-    Isis,
+impl<T> ControllersClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "SDN controllers index."]
+    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetParams {
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Display pending config."]
-    pub pending: Option<bool>,
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Display running config."]
-    pub running: Option<bool>,
-    #[serde(rename = "type")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Only list sdn controllers of specific type"]
-    pub ty: Option<Type>,
-    #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
-    )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+impl<T> ControllersClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Create a new sdn controller object."]
+    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.post(&path, &params)
+    }
 }
 impl GetOutputItems {
     pub fn new(controller: String, ty: String) -> Self {
@@ -79,15 +61,32 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ControllersClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "SDN controllers index."]
-    pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Display pending config."]
+    pub pending: Option<bool>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Display running config."]
+    pub running: Option<bool>,
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Only list sdn controllers of specific type"]
+    pub ty: Option<Type>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
     pub fn new(controller: String, ty: Type) -> Self {
@@ -167,15 +166,16 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> ControllersClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Create a new sdn controller object."]
-    pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.post(&path, &params)
-    }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type {
+    #[serde(rename = "bgp")]
+    Bgp,
+    #[serde(rename = "evpn")]
+    Evpn,
+    #[serde(rename = "faucet")]
+    Faucet,
+    #[serde(rename = "isis")]
+    Isis,
 }
 impl<T> ControllersClient<T>
 where

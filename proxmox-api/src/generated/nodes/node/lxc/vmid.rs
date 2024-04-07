@@ -34,6 +34,26 @@ where
         }
     }
 }
+impl<T> VmidClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Destroy the container (also delete all uses files)."]
+    pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
+        let path = self.path.to_string();
+        self.client.delete(&path, &params)
+    }
+}
+impl<T> VmidClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Directory index"]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct DeleteParams {
     #[serde(rename = "destroy-unreferenced-disks")]
@@ -65,16 +85,6 @@ pub struct DeleteParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-impl<T> VmidClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Destroy the container (also delete all uses files)."]
-    pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
-        self.client.delete(&path, &params)
-    }
-}
 impl GetOutputItems {
     pub fn new(subdir: String) -> Self {
         Self {
@@ -92,16 +102,6 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> VmidClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Directory index"]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
 impl<T> VmidClient<T>
 where

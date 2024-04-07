@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> SendkeyClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "Send key event to virtual machine."]
+    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
+        let path = self.path.to_string();
+        self.client.put(&path, &params)
+    }
+}
 impl PutParams {
     pub fn new(key: String) -> Self {
         Self {
@@ -39,14 +49,4 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> SendkeyClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "Send key event to virtual machine."]
-    pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
-        self.client.put(&path, &params)
-    }
 }

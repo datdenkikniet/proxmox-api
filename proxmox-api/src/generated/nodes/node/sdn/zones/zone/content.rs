@@ -13,6 +13,16 @@ where
         }
     }
 }
+impl<T> ContentClient<T>
+where
+    T: crate::client::Client,
+{
+    #[doc = "List zone content."]
+    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &())
+    }
+}
 impl GetOutputItems {
     pub fn new(vnet: String) -> Self {
         Self {
@@ -39,14 +49,4 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
-}
-impl<T> ContentClient<T>
-where
-    T: crate::client::Client,
-{
-    #[doc = "List zone content."]
-    pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
-        self.client.get(&path, &())
-    }
 }
