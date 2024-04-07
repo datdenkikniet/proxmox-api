@@ -1,7 +1,48 @@
+use std::str::FromStr;
+
+use serde::{de::Error, Deserializer};
+
+pub enum Output<O, I> {
+    Single(O),
+    Iter(I),
+}
+
+pub fn get_keys_or_default_value<'de, D, O, E>(
+    value: &str,
+) -> Result<Output<O, impl Iterator<Item = Result<(&str, &str), D::Error>>>, D::Error>
+where
+    O: FromStr<Err = E>,
+    D: Deserializer<'de>,
+    E: core::fmt::Display,
+{
+    // TODO: escape strings and stuff
+    let is_multi_kvs = value.split_once(',').is_some() || value.split_once('=').is_some();
+
+    let output = if !is_multi_kvs {
+        Output::Single(FromStr::from_str(value.trim()).map_err(D::Error::custom)?)
+    } else {
+        let iter = value.split(',').map(|v| {
+            let (k, v) = v
+                .split_once('=')
+                .ok_or_else(|| "missing key or value")
+                .map_err(D::Error::custom)?;
+            Ok((k.trim(), v.trim()))
+        });
+
+        Output::Iter(iter)
+    };
+
+    Ok(output)
+}
+
 #[cfg(test)]
 mod test {
 
+    use std::str::FromStr;
+
     use serde::{de::Error, Deserialize};
+
+    use super::get_keys_or_default_value;
 
     #[derive(Debug, PartialEq)]
     pub struct Test {
@@ -14,38 +55,31 @@ mod test {
             D: serde::Deserializer<'de>,
         {
             let value = <&str>::deserialize(deserializer)?;
-            let is_multi_kvs = value.split_once(',').is_some() || value.split_once('=').is_some();
+            let values = get_keys_or_default_value::<D, _, _>(value)?;
+
+            let iter = match values {
+                super::Output::Single(name) => return Ok(Test { name }),
+                super::Output::Iter(iter) => iter,
+            };
+
             let mut name = None;
 
-            if !is_multi_kvs {
-                return Ok(Test {
-                    name: value.trim().to_string(),
-                });
-            } else {
-                let values = value.split(',').map(|v| v.trim());
-
-                for value in values {
-                    let (k, v) = value
-                        .split_once('=')
-                        .ok_or(D::Error::custom("Missing key or value"))?;
-
-                    let (k, v) = (k.trim(), v.trim());
-
-                    match k {
-                        "name" => {
-                            if name.is_some() {
-                                return Err(D::Error::custom(format!("Duplicate key {k}")));
-                            }
-                            let deserialized = ::std::str::FromStr::from_str(v)
-                                .map_err(|e| D::Error::custom(format!("{e}")))?;
-                            name = Some(deserialized);
+            for value in iter {
+                let (k, v) = value.map_err(D::Error::custom)?;
+                match k {
+                    "name" => {
+                        if name.is_some() {
+                            return Err(D::Error::custom("Duplicate key 'name'"));
                         }
-                        k => return Err(D::Error::custom(format!("Unknown key {k}"))),
+                        name = Some(FromStr::from_str(v).map_err(D::Error::custom)?)
                     }
+                    key => return Err(D::Error::custom(format!("Unknown key {key}"))),
                 }
             }
 
-            let name = name.ok_or(D::Error::custom("Missing key 'name'"))?;
+            let name = name
+                .ok_or_else(|| "Missing required key 'name'")
+                .map_err(D::Error::custom)?;
 
             Ok(Test { name })
         }
