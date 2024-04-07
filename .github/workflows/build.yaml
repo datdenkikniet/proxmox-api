@@ -65,6 +65,8 @@ jobs:
             args: "--lib"
           - name: "CLI tool"
             args: "--bin proxmox-api --features cli"
+          - name: "library with just the reqwest client"
+            args: "--lib --no-default-features --features reqwest-client"
 
     name: Build & check the ${{ matrix.definition.name }}
     runs-on: ubuntu-latest
