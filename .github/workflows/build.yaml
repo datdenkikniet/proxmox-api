@@ -44,6 +44,9 @@ jobs:
       - name: Display git diff
         run: git diff
 
+      - name: Count the amount of commits modifying the generated files
+        run: git log --pretty=format:"%H" main..HEAD generated.rs generated | wc -l
+
       # TODO: validate that generated output is the same as what is being checked in
 
       - name: Upload artifacts
