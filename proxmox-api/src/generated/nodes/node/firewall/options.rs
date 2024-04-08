@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get host firewall options."]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Set Firewall options."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -41,12 +43,15 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable host firewall rules."]
+    #[doc = ""]
     pub enable: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log level for incoming traffic."]
+    #[doc = ""]
     pub log_level_in: Option<LogLevelIn>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log level for outgoing traffic."]
+    #[doc = ""]
     pub log_level_out: Option<LogLevelOut>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -54,6 +59,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable logging of conntrack information."]
+    #[doc = ""]
     pub log_nf_conntrack: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -61,6 +67,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable NDP (Neighbor Discovery Protocol)."]
+    #[doc = ""]
     pub ndp: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -68,9 +75,11 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow invalid packets on connection tracking."]
+    #[doc = ""]
     pub nf_conntrack_allow_invalid: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable conntrack helpers for specific protocols. Supported protocols: amanda, ftp, irc, netbios-ns, pptp, sane, sip, snmp, tftp"]
+    #[doc = ""]
     pub nf_conntrack_helpers: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -78,6 +87,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum number of tracked connections."]
+    #[doc = ""]
     pub nf_conntrack_max: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -85,6 +95,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Conntrack established timeout."]
+    #[doc = ""]
     pub nf_conntrack_tcp_timeout_established: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -92,6 +103,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Conntrack syn recv timeout."]
+    #[doc = ""]
     pub nf_conntrack_tcp_timeout_syn_recv: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -99,6 +111,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable SMURFS filter."]
+    #[doc = ""]
     pub nosmurfs: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -106,6 +119,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable synflood protection"]
+    #[doc = ""]
     pub protection_synflood: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -113,6 +127,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Synflood protection rate burst by ip src."]
+    #[doc = ""]
     pub protection_synflood_burst: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -120,12 +135,15 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Synflood protection rate syn/sec by ip src."]
+    #[doc = ""]
     pub protection_synflood_rate: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log level for SMURFS filter."]
+    #[doc = ""]
     pub smurf_log_level: Option<SmurfLogLevel>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log level for illegal tcp flags filter."]
+    #[doc = ""]
     pub tcp_flags_log_level: Option<TcpFlagsLogLevel>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -133,6 +151,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Filter illegal combinations of TCP flags."]
+    #[doc = ""]
     pub tcpflags: Option<bool>,
     #[serde(
         flatten,
@@ -145,9 +164,11 @@ pub struct GetOutput {
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of settings you want to delete."]
+    #[doc = ""]
     pub delete: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -155,12 +176,15 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable host firewall rules."]
+    #[doc = ""]
     pub enable: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log level for incoming traffic."]
+    #[doc = ""]
     pub log_level_in: Option<LogLevelIn>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log level for outgoing traffic."]
+    #[doc = ""]
     pub log_level_out: Option<LogLevelOut>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -168,6 +192,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable logging of conntrack information."]
+    #[doc = ""]
     pub log_nf_conntrack: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -175,6 +200,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable NDP (Neighbor Discovery Protocol)."]
+    #[doc = ""]
     pub ndp: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -182,9 +208,11 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow invalid packets on connection tracking."]
+    #[doc = ""]
     pub nf_conntrack_allow_invalid: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable conntrack helpers for specific protocols. Supported protocols: amanda, ftp, irc, netbios-ns, pptp, sane, sip, snmp, tftp"]
+    #[doc = ""]
     pub nf_conntrack_helpers: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -192,6 +220,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum number of tracked connections."]
+    #[doc = ""]
     pub nf_conntrack_max: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -199,6 +228,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Conntrack established timeout."]
+    #[doc = ""]
     pub nf_conntrack_tcp_timeout_established: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -206,6 +236,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Conntrack syn recv timeout."]
+    #[doc = ""]
     pub nf_conntrack_tcp_timeout_syn_recv: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -213,6 +244,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable SMURFS filter."]
+    #[doc = ""]
     pub nosmurfs: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -220,6 +252,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable synflood protection"]
+    #[doc = ""]
     pub protection_synflood: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -227,6 +260,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Synflood protection rate burst by ip src."]
+    #[doc = ""]
     pub protection_synflood_burst: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -234,12 +268,15 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Synflood protection rate syn/sec by ip src."]
+    #[doc = ""]
     pub protection_synflood_rate: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log level for SMURFS filter."]
+    #[doc = ""]
     pub smurf_log_level: Option<SmurfLogLevel>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log level for illegal tcp flags filter."]
+    #[doc = ""]
     pub tcp_flags_log_level: Option<TcpFlagsLogLevel>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -247,6 +284,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Filter illegal combinations of TCP flags."]
+    #[doc = ""]
     pub tcpflags: Option<bool>,
     #[serde(
         flatten,
@@ -256,6 +294,8 @@ pub struct PutParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Log level for incoming traffic."]
+#[doc = ""]
 pub enum LogLevelIn {
     #[serde(rename = "alert")]
     Alert,
@@ -277,6 +317,8 @@ pub enum LogLevelIn {
     Warning,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Log level for outgoing traffic."]
+#[doc = ""]
 pub enum LogLevelOut {
     #[serde(rename = "alert")]
     Alert,
@@ -298,6 +340,8 @@ pub enum LogLevelOut {
     Warning,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Log level for SMURFS filter."]
+#[doc = ""]
 pub enum SmurfLogLevel {
     #[serde(rename = "alert")]
     Alert,
@@ -319,6 +363,8 @@ pub enum SmurfLogLevel {
     Warning,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Log level for illegal tcp flags filter."]
+#[doc = ""]
 pub enum TcpFlagsLogLevel {
     #[serde(rename = "alert")]
     Alert,

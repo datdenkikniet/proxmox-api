@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get the virtual machine configuration with pending configuration changes applied. Set the 'current' parameter to get the current configuration instead."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Set virtual machine options (asynchrounous API)."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<Option<String>, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -38,6 +40,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Set virtual machine options (synchrounous API) - You should consider using the POST method instead for any actions involving hotplug or storage allocation."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -136,22 +139,33 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable ACPI."]
+    #[doc = ""]
     pub acpi: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of host cores used to execute guest processes, for example: 0,5,8-11"]
+    #[doc = ""]
     pub affinity: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable communication with the QEMU Guest Agent and its properties."]
+    #[doc = ""]
     pub agent: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Virtual processor architecture. Defaults to the host."]
+    #[doc = ""]
     pub arch: Option<Arch>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Arbitrary arguments passed to kvm."]
-    #[doc = "Arbitrary arguments passed to kvm, for example:\n\nargs: -no-reboot -smbios 'type=0,vendor=FOO'\n\nNOTE: this option is for experts only.\n"]
+    #[doc = ""]
+    #[doc = "Arbitrary arguments passed to kvm, for example:"]
+    #[doc = ""]
+    #[doc = "args: -no-reboot -smbios 'type=0,vendor=FOO'"]
+    #[doc = ""]
+    #[doc = "NOTE: this option is for experts only."]
+    #[doc = ""]
     pub args: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure a audio device, useful in combination with QXL/Spice."]
+    #[doc = ""]
     pub audio0: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -159,6 +173,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Automatic restart after crash (currently ignored)."]
+    #[doc = ""]
     pub autostart: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -166,27 +181,35 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of target RAM for the VM in MiB. Using zero disables the ballon driver."]
+    #[doc = ""]
     pub balloon: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Select BIOS implementation."]
+    #[doc = ""]
     pub bios: Option<Bios>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify guest boot order. Use the 'order=' sub-property as usage with no key or 'legacy=' is deprecated."]
+    #[doc = ""]
     pub boot: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable booting from specified disk. Deprecated: Use 'boot: order=foo;bar' instead."]
+    #[doc = ""]
     pub bootdisk: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "This is an alias for option -ide2"]
+    #[doc = ""]
     pub cdrom: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: Specify custom files to replace the automatically generated ones at start."]
+    #[doc = ""]
     pub cicustom: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: Password to assign the user. Using this is generally not recommended. Use ssh keys instead. Also note that older cloud-init versions do not support hashed passwords."]
+    #[doc = ""]
     pub cipassword: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specifies the cloud-init configuration format. The default depends on the configured operating system type (`ostype`. We use the `nocloud` format for Linux, and `configdrive2` for windows."]
+    #[doc = ""]
     pub citype: Option<Citype>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -194,9 +217,11 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: do an automatic package upgrade after the first boot."]
+    #[doc = ""]
     pub ciupgrade: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: User name to change ssh keys and password for instead of the image's configured default user."]
+    #[doc = ""]
     pub ciuser: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -204,9 +229,11 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of cores per socket."]
+    #[doc = ""]
     pub cores: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Emulated CPU type."]
+    #[doc = ""]
     pub cpu: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
@@ -214,19 +241,28 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Limit of CPU usage."]
-    #[doc = "Limit of CPU usage.\n\nNOTE: If the computer has 2 CPUs, it has total of '2' CPU time. Value '0' indicates no CPU limit."]
+    #[doc = ""]
+    #[doc = "Limit of CPU usage."]
+    #[doc = ""]
+    #[doc = "NOTE: If the computer has 2 CPUs, it has total of '2' CPU time. Value '0' indicates no CPU limit."]
+    #[doc = ""]
     pub cpulimit: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "CPU weight for a VM, will be clamped to [1, 10000] in cgroup v2."]
+    #[doc = "CPU weight for a VM, will be clamped to \\\\[1, 10000\\\\] in cgroup v2."]
+    #[doc = ""]
     #[doc = "CPU weight for a VM. Argument is used in the kernel fair scheduler. The larger the number is, the more CPU time this VM gets. Number is relative to weights of all the other running VMs."]
+    #[doc = ""]
     pub cpuunits: Option<()>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the VM. Shown in the web-interface VM's summary. This is saved as comment inside the configuration file."]
+    #[doc = ""]
     pub description: Option<String>,
     #[doc = "SHA1 digest of configuration file. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure a disk for storing EFI vars."]
+    #[doc = ""]
     pub efidisk0: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -234,9 +270,11 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Freeze CPU at startup (use 'c' monitor command to start execution)."]
+    #[doc = ""]
     pub freeze: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Script that will be executed during various steps in the vms lifetime."]
+    #[doc = ""]
     pub hookscript: Option<String>,
     #[serde(rename = "hostpci[n]")]
     #[serde(
@@ -246,13 +284,23 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Map host PCI devices into guest."]
-    #[doc = "Map host PCI devices into guest.\n\nNOTE: This option allows direct access to host hardware. So it is no longer\npossible to migrate such machines - use with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
+    #[doc = ""]
+    #[doc = "Map host PCI devices into guest."]
+    #[doc = ""]
+    #[doc = "NOTE: This option allows direct access to host hardware. So it is no longer"]
+    #[doc = ""]
+    #[doc = "possible to migrate such machines - use with special care."]
+    #[doc = ""]
+    #[doc = "CAUTION: Experimental! User reported problems with this option."]
+    #[doc = ""]
     pub hostpcis: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Selectively enable hotplug features. This is a comma separated list of hotplug features: 'network', 'disk', 'cpu', 'memory', 'usb' and 'cloudinit'. Use '0' to disable hotplug completely. Using '1' as value is an alias for the default `network,disk,usb`. USB hotplugging is possible for guests with machine version \\>= 7.1 and ostype l26 or windows \\> 7."]
+    #[doc = "Selectively enable hotplug features. This is a comma separated list of hotplug features: 'network', 'disk', 'cpu', 'memory', 'usb' and 'cloudinit'. Use '0' to disable hotplug completely. Using '1' as value is an alias for the default `network,disk,usb`. USB hotplugging is possible for guests with machine version \\\\>= 7.1 and ostype l26 or windows \\\\> 7."]
+    #[doc = ""]
     pub hotplug: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable hugepages memory."]
+    #[doc = ""]
     pub hugepages: Option<Hugepages>,
     #[serde(rename = "ide[n]")]
     #[serde(
@@ -262,6 +310,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Use volume as IDE hard disk or CD-ROM (n is 0 to 3)."]
+    #[doc = ""]
     pub ides: ::std::collections::HashMap<u32, String>,
     #[serde(rename = "ipconfig[n]")]
     #[serde(
@@ -270,10 +319,26 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
-    #[doc = "cloud-init: Specify IP addresses and gateways for the corresponding interface.\n\nIP addresses use CIDR notation, gateways are optional but need an IP of the same type specified.\n\nThe special string 'dhcp' can be used for IP addresses to use DHCP, in which case no explicit\ngateway should be provided.\nFor IPv6 the special string 'auto' can be used to use stateless autoconfiguration. This requires\ncloud-init 19.4 or newer.\n\nIf cloud-init is enabled and neither an IPv4 nor an IPv6 address is specified, it defaults to using\ndhcp on IPv4.\n"]
+    #[doc = "cloud-init: Specify IP addresses and gateways for the corresponding interface."]
+    #[doc = ""]
+    #[doc = "IP addresses use CIDR notation, gateways are optional but need an IP of the same type specified."]
+    #[doc = ""]
+    #[doc = "The special string 'dhcp' can be used for IP addresses to use DHCP, in which case no explicit"]
+    #[doc = ""]
+    #[doc = "gateway should be provided."]
+    #[doc = ""]
+    #[doc = "For IPv6 the special string 'auto' can be used to use stateless autoconfiguration. This requires"]
+    #[doc = ""]
+    #[doc = "cloud-init 19.4 or newer."]
+    #[doc = ""]
+    #[doc = "If cloud-init is enabled and neither an IPv4 nor an IPv6 address is specified, it defaults to using"]
+    #[doc = ""]
+    #[doc = "dhcp on IPv4."]
+    #[doc = ""]
     pub ipconfigs: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Inter-VM shared memory. Useful for direct communication between VMs, or to the host."]
+    #[doc = ""]
     pub ivshmem: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -281,9 +346,11 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Use together with hugepages. If enabled, hugepages will not not be deleted after VM shutdown and can be used for subsequent starts."]
+    #[doc = ""]
     pub keephugepages: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Keyboard layout for VNC server. This option is generally not required and is often better handled from within the guest OS."]
+    #[doc = ""]
     pub keyboard: Option<Keyboard>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -291,6 +358,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable KVM hardware virtualization."]
+    #[doc = ""]
     pub kvm: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -298,15 +366,19 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set the real time clock (RTC) to local time. This is enabled by default if the `ostype` indicates a Microsoft Windows OS."]
+    #[doc = ""]
     pub localtime: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Lock/unlock the VM."]
+    #[doc = ""]
     pub lock: Option<Lock>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specifies the QEMU machine type."]
+    #[doc = ""]
     pub machine: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Memory properties."]
+    #[doc = ""]
     pub memory: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
@@ -314,6 +386,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set maximum tolerated downtime (in seconds) for migrations."]
+    #[doc = ""]
     pub migrate_downtime: Option<f64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -321,12 +394,15 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set maximum speed (in MB/s) for migrations. Value 0 is no limit."]
+    #[doc = ""]
     pub migrate_speed: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set a name for the VM. Only used on the configuration web interface."]
+    #[doc = ""]
     pub name: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: Sets DNS server IP address for a container. Create will automatically use the setting from the host if neither searchdomain nor nameserver are set."]
+    #[doc = ""]
     pub nameserver: Option<String>,
     #[serde(rename = "net[n]")]
     #[serde(
@@ -336,6 +412,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Specify network devices."]
+    #[doc = ""]
     pub nets: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -343,6 +420,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable NUMA."]
+    #[doc = ""]
     pub numa: Option<bool>,
     #[serde(rename = "numa[n]")]
     #[serde(
@@ -352,6 +430,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "NUMA topology."]
+    #[doc = ""]
     pub numas: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -359,10 +438,43 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specifies whether a VM will be started during system bootup."]
+    #[doc = ""]
     pub onboot: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify guest operating system."]
-    #[doc = "Specify guest operating system. This is used to enable special\noptimization/features for specific operating systems:\n\n[horizontal]\nother;; unspecified OS\nwxp;; Microsoft Windows XP\nw2k;; Microsoft Windows 2000\nw2k3;; Microsoft Windows 2003\nw2k8;; Microsoft Windows 2008\nwvista;; Microsoft Windows Vista\nwin7;; Microsoft Windows 7\nwin8;; Microsoft Windows 8/2012/2012r2\nwin10;; Microsoft Windows 10/2016/2019\nwin11;; Microsoft Windows 11/2022\nl24;; Linux 2.4 Kernel\nl26;; Linux 2.6 - 6.X Kernel\nsolaris;; Solaris/OpenSolaris/OpenIndiania kernel\n"]
+    #[doc = ""]
+    #[doc = "Specify guest operating system. This is used to enable special"]
+    #[doc = ""]
+    #[doc = "optimization/features for specific operating systems:"]
+    #[doc = ""]
+    #[doc = "\\\\[horizontal\\\\]"]
+    #[doc = ""]
+    #[doc = "other;; unspecified OS"]
+    #[doc = ""]
+    #[doc = "wxp;; Microsoft Windows XP"]
+    #[doc = ""]
+    #[doc = "w2k;; Microsoft Windows 2000"]
+    #[doc = ""]
+    #[doc = "w2k3;; Microsoft Windows 2003"]
+    #[doc = ""]
+    #[doc = "w2k8;; Microsoft Windows 2008"]
+    #[doc = ""]
+    #[doc = "wvista;; Microsoft Windows Vista"]
+    #[doc = ""]
+    #[doc = "win7;; Microsoft Windows 7"]
+    #[doc = ""]
+    #[doc = "win8;; Microsoft Windows 8/2012/2012r2"]
+    #[doc = ""]
+    #[doc = "win10;; Microsoft Windows 10/2016/2019"]
+    #[doc = ""]
+    #[doc = "win11;; Microsoft Windows 11/2022"]
+    #[doc = ""]
+    #[doc = "l24;; Linux 2.4 Kernel"]
+    #[doc = ""]
+    #[doc = "l26;; Linux 2.6 - 6.X Kernel"]
+    #[doc = ""]
+    #[doc = "solaris;; Solaris/OpenSolaris/OpenIndiania kernel"]
+    #[doc = ""]
     pub ostype: Option<Ostype>,
     #[serde(rename = "parallel[n]")]
     #[serde(
@@ -372,7 +484,15 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Map host parallel devices (n is 0 to 2)."]
-    #[doc = "Map host parallel devices (n is 0 to 2).\n\nNOTE: This option allows direct access to host hardware. So it is no longer possible to migrate such\nmachines - use with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
+    #[doc = ""]
+    #[doc = "Map host parallel devices (n is 0 to 2)."]
+    #[doc = ""]
+    #[doc = "NOTE: This option allows direct access to host hardware. So it is no longer possible to migrate such"]
+    #[doc = ""]
+    #[doc = "machines - use with special care."]
+    #[doc = ""]
+    #[doc = "CAUTION: Experimental! User reported problems with this option."]
+    #[doc = ""]
     pub parallels: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -380,6 +500,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Sets the protection flag of the VM. This will disable the remove VM and remove disk operations."]
+    #[doc = ""]
     pub protection: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -387,9 +508,11 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow reboot. If set to '0' the VM exit on reboot."]
+    #[doc = ""]
     pub reboot: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure a VirtIO-based Random Number Generator."]
+    #[doc = ""]
     pub rng0: Option<String>,
     #[serde(rename = "sata[n]")]
     #[serde(
@@ -399,6 +522,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Use volume as SATA hard disk or CD-ROM (n is 0 to 5)."]
+    #[doc = ""]
     pub satas: ::std::collections::HashMap<u32, String>,
     #[serde(rename = "scsi[n]")]
     #[serde(
@@ -408,12 +532,15 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Use volume as SCSI hard disk or CD-ROM (n is 0 to 30)."]
+    #[doc = ""]
     pub scsis: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "SCSI controller model"]
+    #[doc = ""]
     pub scsihw: Option<Scsihw>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: Sets DNS search domains for a container. Create will automatically use the setting from the host if neither searchdomain nor nameserver are set."]
+    #[doc = ""]
     pub searchdomain: Option<String>,
     #[serde(rename = "serial[n]")]
     #[serde(
@@ -423,7 +550,19 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Create a serial device inside the VM (n is 0 to 3)"]
-    #[doc = "Create a serial device inside the VM (n is 0 to 3), and pass through a\nhost serial device (i.e. /dev/ttyS0), or create a unix socket on the\nhost side (use 'qm terminal' to open a terminal connection).\n\nNOTE: If you pass through a host serial device, it is no longer possible to migrate such machines -\nuse with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
+    #[doc = ""]
+    #[doc = "Create a serial device inside the VM (n is 0 to 3), and pass through a"]
+    #[doc = ""]
+    #[doc = "host serial device (i.e. /dev/ttyS0), or create a unix socket on the"]
+    #[doc = ""]
+    #[doc = "host side (use 'qm terminal' to open a terminal connection)."]
+    #[doc = ""]
+    #[doc = "NOTE: If you pass through a host serial device, it is no longer possible to migrate such machines -"]
+    #[doc = ""]
+    #[doc = "use with special care."]
+    #[doc = ""]
+    #[doc = "CAUTION: Experimental! User reported problems with this option."]
+    #[doc = ""]
     pub serials: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -431,9 +570,11 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of memory shares for auto-ballooning. The larger the number is, the more memory this VM gets. Number is relative to weights of all other running VMs. Using zero disables auto-ballooning. Auto-ballooning is done by pvestatd."]
+    #[doc = ""]
     pub shares: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify SMBIOS type 1 fields."]
+    #[doc = ""]
     pub smbios1: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -441,6 +582,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of CPUs. Please use option -sockets instead."]
+    #[doc = ""]
     pub smp: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -448,18 +590,23 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of CPU sockets."]
+    #[doc = ""]
     pub sockets: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure additional enhancements for SPICE."]
+    #[doc = ""]
     pub spice_enhancements: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: Setup public SSH keys (one key per line, OpenSSH format)."]
+    #[doc = ""]
     pub sshkeys: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set the initial date of the real time clock. Valid format for date are:'now' or '2006-06-17T16:01:21' or '2006-06-17'."]
+    #[doc = ""]
     pub startdate: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Startup and shutdown behavior. Order is a non-negative number defining the general startup order. Shutdown in done with reverse ordering. Additionally you can set the 'up' or 'down' delay in seconds, which specifies a delay to wait before the next VM is started or stopped."]
+    #[doc = ""]
     pub startup: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -467,10 +614,13 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable the USB tablet device."]
-    #[doc = "Enable/disable the USB tablet device. This device is usually needed to allow absolute mouse positioning with VNC. Else the mouse runs out of sync with normal VNC clients. If you're running lots of console-only guests on one host, you may consider disabling this to save some context switches. This is turned off by default if you use spice (`qm set \\<vmid\\> --vga qxl`)."]
+    #[doc = ""]
+    #[doc = "Enable/disable the USB tablet device. This device is usually needed to allow absolute mouse positioning with VNC. Else the mouse runs out of sync with normal VNC clients. If you're running lots of console-only guests on one host, you may consider disabling this to save some context switches. This is turned off by default if you use spice (`qm set \\\\<vmid\\\\> --vga qxl`)."]
+    #[doc = ""]
     pub tablet: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Tags of the VM. This is only meta information."]
+    #[doc = ""]
     pub tags: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -478,6 +628,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable time drift fix."]
+    #[doc = ""]
     pub tdf: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -485,9 +636,11 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable Template."]
+    #[doc = ""]
     pub template: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure a Disk for storing TPM state. The format is fixed to 'raw'."]
+    #[doc = ""]
     pub tpmstate0: Option<String>,
     #[serde(rename = "unused[n]")]
     #[serde(
@@ -497,6 +650,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Reference to unused volumes. This is used internally, and should not be modified manually."]
+    #[doc = ""]
     pub unuseds: ::std::collections::HashMap<u32, String>,
     #[serde(rename = "usb[n]")]
     #[serde(
@@ -505,7 +659,8 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
-    #[doc = "Configure an USB device (n is 0 to 4, for machine version \\>= 7.1 and ostype l26 or windows \\> 7, n can be up to 14)."]
+    #[doc = "Configure an USB device (n is 0 to 4, for machine version \\\\>= 7.1 and ostype l26 or windows \\\\> 7, n can be up to 14)."]
+    #[doc = ""]
     pub usbs: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -513,10 +668,15 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of hotplugged vcpus."]
+    #[doc = ""]
     pub vcpus: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure the VGA hardware."]
-    #[doc = "Configure the VGA Hardware. If you want to use high resolution modes (\\>= 1280x1024x16) you may need to increase the vga memory option. Since QEMU 2.9 the default VGA display type is 'std' for all OS types besides some Windows versions (XP and older) which use 'cirrus'. The 'qxl' option enables the SPICE display server. For win* OS you can select how many independent displays you want, Linux guests can add displays them self.\nYou can also run without any graphic card, using a serial device as terminal."]
+    #[doc = ""]
+    #[doc = "Configure the VGA Hardware. If you want to use high resolution modes (\\\\>= 1280x1024x16) you may need to increase the vga memory option. Since QEMU 2.9 the default VGA display type is 'std' for all OS types besides some Windows versions (XP and older) which use 'cirrus'. The 'qxl' option enables the SPICE display server. For win* OS you can select how many independent displays you want, Linux guests can add displays them self."]
+    #[doc = ""]
+    #[doc = "You can also run without any graphic card, using a serial device as terminal."]
+    #[doc = ""]
     pub vga: Option<String>,
     #[serde(rename = "virtio[n]")]
     #[serde(
@@ -526,17 +686,25 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Use volume as VIRTIO hard disk (n is 0 to 15)."]
+    #[doc = ""]
     pub virtios: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set VM Generation ID. Use '1' to autogenerate on create or update, pass '0' to disable explicitly."]
-    #[doc = "The VM generation ID (vmgenid) device exposes a 128-bit integer value identifier to the guest OS. This allows to notify the guest operating system when the virtual machine is executed with a different configuration (e.g. snapshot execution or creation from a template). The guest operating system notices the change, and is then able to react as appropriate by marking its copies of distributed databases as dirty, re-initializing its random number generator, etc.\nNote that auto-creation only works when done through API/CLI create or update methods, but not when manually editing the config file."]
+    #[doc = ""]
+    #[doc = "The VM generation ID (vmgenid) device exposes a 128-bit integer value identifier to the guest OS. This allows to notify the guest operating system when the virtual machine is executed with a different configuration (e.g. snapshot execution or creation from a template). The guest operating system notices the change, and is then able to react as appropriate by marking its copies of distributed databases as dirty, re-initializing its random number generator, etc."]
+    #[doc = ""]
+    #[doc = "Note that auto-creation only works when done through API/CLI create or update methods, but not when manually editing the config file."]
+    #[doc = ""]
     pub vmgenid: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Default storage for VM state volumes/files."]
+    #[doc = ""]
     pub vmstatestorage: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Create a virtual hardware watchdog device."]
+    #[doc = ""]
     #[doc = "Create a virtual hardware watchdog device. Once enabled (by a guest action), the watchdog must be periodically polled by an agent inside the guest or else the watchdog will reset the guest (or execute the respective action specified)"]
+    #[doc = ""]
     pub watchdog: Option<String>,
     #[serde(
         flatten,
@@ -586,9 +754,11 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Get current values (instead of pending values)."]
+    #[doc = ""]
     pub current: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Fetch config values from given snapshot."]
+    #[doc = ""]
     pub snapshot: Option<String>,
     #[serde(
         flatten,
@@ -605,22 +775,33 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable ACPI."]
+    #[doc = ""]
     pub acpi: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of host cores used to execute guest processes, for example: 0,5,8-11"]
+    #[doc = ""]
     pub affinity: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable communication with the QEMU Guest Agent and its properties."]
+    #[doc = ""]
     pub agent: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Virtual processor architecture. Defaults to the host."]
+    #[doc = ""]
     pub arch: Option<Arch>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Arbitrary arguments passed to kvm."]
-    #[doc = "Arbitrary arguments passed to kvm, for example:\n\nargs: -no-reboot -smbios 'type=0,vendor=FOO'\n\nNOTE: this option is for experts only.\n"]
+    #[doc = ""]
+    #[doc = "Arbitrary arguments passed to kvm, for example:"]
+    #[doc = ""]
+    #[doc = "args: -no-reboot -smbios 'type=0,vendor=FOO'"]
+    #[doc = ""]
+    #[doc = "NOTE: this option is for experts only."]
+    #[doc = ""]
     pub args: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure a audio device, useful in combination with QXL/Spice."]
+    #[doc = ""]
     pub audio0: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -628,6 +809,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Automatic restart after crash (currently ignored)."]
+    #[doc = ""]
     pub autostart: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -635,6 +817,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Time to wait for the task to finish. We return 'null' if the task finish within that time."]
+    #[doc = ""]
     pub background_delay: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -642,27 +825,35 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of target RAM for the VM in MiB. Using zero disables the ballon driver."]
+    #[doc = ""]
     pub balloon: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Select BIOS implementation."]
+    #[doc = ""]
     pub bios: Option<Bios>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify guest boot order. Use the 'order=' sub-property as usage with no key or 'legacy=' is deprecated."]
+    #[doc = ""]
     pub boot: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable booting from specified disk. Deprecated: Use 'boot: order=foo;bar' instead."]
+    #[doc = ""]
     pub bootdisk: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "This is an alias for option -ide2"]
+    #[doc = ""]
     pub cdrom: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: Specify custom files to replace the automatically generated ones at start."]
+    #[doc = ""]
     pub cicustom: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: Password to assign the user. Using this is generally not recommended. Use ssh keys instead. Also note that older cloud-init versions do not support hashed passwords."]
+    #[doc = ""]
     pub cipassword: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specifies the cloud-init configuration format. The default depends on the configured operating system type (`ostype`. We use the `nocloud` format for Linux, and `configdrive2` for windows."]
+    #[doc = ""]
     pub citype: Option<Citype>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -670,9 +861,11 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: do an automatic package upgrade after the first boot."]
+    #[doc = ""]
     pub ciupgrade: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: User name to change ssh keys and password for instead of the image's configured default user."]
+    #[doc = ""]
     pub ciuser: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -680,9 +873,11 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of cores per socket."]
+    #[doc = ""]
     pub cores: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Emulated CPU type."]
+    #[doc = ""]
     pub cpu: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
@@ -690,30 +885,41 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Limit of CPU usage."]
-    #[doc = "Limit of CPU usage.\n\nNOTE: If the computer has 2 CPUs, it has total of '2' CPU time. Value '0' indicates no CPU limit."]
+    #[doc = ""]
+    #[doc = "Limit of CPU usage."]
+    #[doc = ""]
+    #[doc = "NOTE: If the computer has 2 CPUs, it has total of '2' CPU time. Value '0' indicates no CPU limit."]
+    #[doc = ""]
     pub cpulimit: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "CPU weight for a VM, will be clamped to [1, 10000] in cgroup v2."]
+    #[doc = "CPU weight for a VM, will be clamped to \\\\[1, 10000\\\\] in cgroup v2."]
+    #[doc = ""]
     #[doc = "CPU weight for a VM. Argument is used in the kernel fair scheduler. The larger the number is, the more CPU time this VM gets. Number is relative to weights of all the other running VMs."]
+    #[doc = ""]
     pub cpuunits: Option<()>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of settings you want to delete."]
+    #[doc = ""]
     pub delete: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the VM. Shown in the web-interface VM's summary. This is saved as comment inside the configuration file."]
+    #[doc = ""]
     pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has different SHA1 digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure a disk for storing EFI vars. Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Note that SIZE_IN_GiB is ignored here and that the default EFI vars are copied to the volume instead. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
+    #[doc = ""]
     pub efidisk0: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Force physical removal. Without this, we simple remove the disk from the config file and create an additional configuration entry called 'unused[n]', which contains the volume ID. Unlink of unused[n] always cause physical removal."]
+    #[doc = "Force physical removal. Without this, we simple remove the disk from the config file and create an additional configuration entry called 'unused\\\\[n\\\\]', which contains the volume ID. Unlink of unused\\\\[n\\\\] always cause physical removal."]
+    #[doc = ""]
     pub force: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -721,9 +927,11 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Freeze CPU at startup (use 'c' monitor command to start execution)."]
+    #[doc = ""]
     pub freeze: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Script that will be executed during various steps in the vms lifetime."]
+    #[doc = ""]
     pub hookscript: Option<String>,
     #[serde(rename = "hostpci[n]")]
     #[serde(
@@ -733,13 +941,23 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Map host PCI devices into guest."]
-    #[doc = "Map host PCI devices into guest.\n\nNOTE: This option allows direct access to host hardware. So it is no longer\npossible to migrate such machines - use with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
+    #[doc = ""]
+    #[doc = "Map host PCI devices into guest."]
+    #[doc = ""]
+    #[doc = "NOTE: This option allows direct access to host hardware. So it is no longer"]
+    #[doc = ""]
+    #[doc = "possible to migrate such machines - use with special care."]
+    #[doc = ""]
+    #[doc = "CAUTION: Experimental! User reported problems with this option."]
+    #[doc = ""]
     pub hostpcis: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Selectively enable hotplug features. This is a comma separated list of hotplug features: 'network', 'disk', 'cpu', 'memory', 'usb' and 'cloudinit'. Use '0' to disable hotplug completely. Using '1' as value is an alias for the default `network,disk,usb`. USB hotplugging is possible for guests with machine version \\>= 7.1 and ostype l26 or windows \\> 7."]
+    #[doc = "Selectively enable hotplug features. This is a comma separated list of hotplug features: 'network', 'disk', 'cpu', 'memory', 'usb' and 'cloudinit'. Use '0' to disable hotplug completely. Using '1' as value is an alias for the default `network,disk,usb`. USB hotplugging is possible for guests with machine version \\\\>= 7.1 and ostype l26 or windows \\\\> 7."]
+    #[doc = ""]
     pub hotplug: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable hugepages memory."]
+    #[doc = ""]
     pub hugepages: Option<Hugepages>,
     #[serde(rename = "ide[n]")]
     #[serde(
@@ -749,6 +967,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Use volume as IDE hard disk or CD-ROM (n is 0 to 3). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
+    #[doc = ""]
     pub ides: ::std::collections::HashMap<u32, String>,
     #[serde(rename = "ipconfig[n]")]
     #[serde(
@@ -757,10 +976,26 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
-    #[doc = "cloud-init: Specify IP addresses and gateways for the corresponding interface.\n\nIP addresses use CIDR notation, gateways are optional but need an IP of the same type specified.\n\nThe special string 'dhcp' can be used for IP addresses to use DHCP, in which case no explicit\ngateway should be provided.\nFor IPv6 the special string 'auto' can be used to use stateless autoconfiguration. This requires\ncloud-init 19.4 or newer.\n\nIf cloud-init is enabled and neither an IPv4 nor an IPv6 address is specified, it defaults to using\ndhcp on IPv4.\n"]
+    #[doc = "cloud-init: Specify IP addresses and gateways for the corresponding interface."]
+    #[doc = ""]
+    #[doc = "IP addresses use CIDR notation, gateways are optional but need an IP of the same type specified."]
+    #[doc = ""]
+    #[doc = "The special string 'dhcp' can be used for IP addresses to use DHCP, in which case no explicit"]
+    #[doc = ""]
+    #[doc = "gateway should be provided."]
+    #[doc = ""]
+    #[doc = "For IPv6 the special string 'auto' can be used to use stateless autoconfiguration. This requires"]
+    #[doc = ""]
+    #[doc = "cloud-init 19.4 or newer."]
+    #[doc = ""]
+    #[doc = "If cloud-init is enabled and neither an IPv4 nor an IPv6 address is specified, it defaults to using"]
+    #[doc = ""]
+    #[doc = "dhcp on IPv4."]
+    #[doc = ""]
     pub ipconfigs: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Inter-VM shared memory. Useful for direct communication between VMs, or to the host."]
+    #[doc = ""]
     pub ivshmem: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -768,9 +1003,11 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Use together with hugepages. If enabled, hugepages will not not be deleted after VM shutdown and can be used for subsequent starts."]
+    #[doc = ""]
     pub keephugepages: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Keyboard layout for VNC server. This option is generally not required and is often better handled from within the guest OS."]
+    #[doc = ""]
     pub keyboard: Option<Keyboard>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -778,6 +1015,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable KVM hardware virtualization."]
+    #[doc = ""]
     pub kvm: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -785,15 +1023,19 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set the real time clock (RTC) to local time. This is enabled by default if the `ostype` indicates a Microsoft Windows OS."]
+    #[doc = ""]
     pub localtime: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Lock/unlock the VM."]
+    #[doc = ""]
     pub lock: Option<Lock>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specifies the QEMU machine type."]
+    #[doc = ""]
     pub machine: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Memory properties."]
+    #[doc = ""]
     pub memory: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
@@ -801,6 +1043,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set maximum tolerated downtime (in seconds) for migrations."]
+    #[doc = ""]
     pub migrate_downtime: Option<f64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -808,12 +1051,15 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set maximum speed (in MB/s) for migrations. Value 0 is no limit."]
+    #[doc = ""]
     pub migrate_speed: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set a name for the VM. Only used on the configuration web interface."]
+    #[doc = ""]
     pub name: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: Sets DNS server IP address for a container. Create will automatically use the setting from the host if neither searchdomain nor nameserver are set."]
+    #[doc = ""]
     pub nameserver: Option<String>,
     #[serde(rename = "net[n]")]
     #[serde(
@@ -823,6 +1069,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Specify network devices."]
+    #[doc = ""]
     pub nets: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -830,6 +1077,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable NUMA."]
+    #[doc = ""]
     pub numa: Option<bool>,
     #[serde(rename = "numa[n]")]
     #[serde(
@@ -839,6 +1087,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "NUMA topology."]
+    #[doc = ""]
     pub numas: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -846,10 +1095,43 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specifies whether a VM will be started during system bootup."]
+    #[doc = ""]
     pub onboot: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify guest operating system."]
-    #[doc = "Specify guest operating system. This is used to enable special\noptimization/features for specific operating systems:\n\n[horizontal]\nother;; unspecified OS\nwxp;; Microsoft Windows XP\nw2k;; Microsoft Windows 2000\nw2k3;; Microsoft Windows 2003\nw2k8;; Microsoft Windows 2008\nwvista;; Microsoft Windows Vista\nwin7;; Microsoft Windows 7\nwin8;; Microsoft Windows 8/2012/2012r2\nwin10;; Microsoft Windows 10/2016/2019\nwin11;; Microsoft Windows 11/2022\nl24;; Linux 2.4 Kernel\nl26;; Linux 2.6 - 6.X Kernel\nsolaris;; Solaris/OpenSolaris/OpenIndiania kernel\n"]
+    #[doc = ""]
+    #[doc = "Specify guest operating system. This is used to enable special"]
+    #[doc = ""]
+    #[doc = "optimization/features for specific operating systems:"]
+    #[doc = ""]
+    #[doc = "\\\\[horizontal\\\\]"]
+    #[doc = ""]
+    #[doc = "other;; unspecified OS"]
+    #[doc = ""]
+    #[doc = "wxp;; Microsoft Windows XP"]
+    #[doc = ""]
+    #[doc = "w2k;; Microsoft Windows 2000"]
+    #[doc = ""]
+    #[doc = "w2k3;; Microsoft Windows 2003"]
+    #[doc = ""]
+    #[doc = "w2k8;; Microsoft Windows 2008"]
+    #[doc = ""]
+    #[doc = "wvista;; Microsoft Windows Vista"]
+    #[doc = ""]
+    #[doc = "win7;; Microsoft Windows 7"]
+    #[doc = ""]
+    #[doc = "win8;; Microsoft Windows 8/2012/2012r2"]
+    #[doc = ""]
+    #[doc = "win10;; Microsoft Windows 10/2016/2019"]
+    #[doc = ""]
+    #[doc = "win11;; Microsoft Windows 11/2022"]
+    #[doc = ""]
+    #[doc = "l24;; Linux 2.4 Kernel"]
+    #[doc = ""]
+    #[doc = "l26;; Linux 2.6 - 6.X Kernel"]
+    #[doc = ""]
+    #[doc = "solaris;; Solaris/OpenSolaris/OpenIndiania kernel"]
+    #[doc = ""]
     pub ostype: Option<Ostype>,
     #[serde(rename = "parallel[n]")]
     #[serde(
@@ -859,7 +1141,15 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Map host parallel devices (n is 0 to 2)."]
-    #[doc = "Map host parallel devices (n is 0 to 2).\n\nNOTE: This option allows direct access to host hardware. So it is no longer possible to migrate such\nmachines - use with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
+    #[doc = ""]
+    #[doc = "Map host parallel devices (n is 0 to 2)."]
+    #[doc = ""]
+    #[doc = "NOTE: This option allows direct access to host hardware. So it is no longer possible to migrate such"]
+    #[doc = ""]
+    #[doc = "machines - use with special care."]
+    #[doc = ""]
+    #[doc = "CAUTION: Experimental! User reported problems with this option."]
+    #[doc = ""]
     pub parallels: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -867,6 +1157,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Sets the protection flag of the VM. This will disable the remove VM and remove disk operations."]
+    #[doc = ""]
     pub protection: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -874,12 +1165,15 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow reboot. If set to '0' the VM exit on reboot."]
+    #[doc = ""]
     pub reboot: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Revert a pending change."]
+    #[doc = ""]
     pub revert: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure a VirtIO-based Random Number Generator."]
+    #[doc = ""]
     pub rng0: Option<String>,
     #[serde(rename = "sata[n]")]
     #[serde(
@@ -889,6 +1183,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Use volume as SATA hard disk or CD-ROM (n is 0 to 5). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
+    #[doc = ""]
     pub satas: ::std::collections::HashMap<u32, String>,
     #[serde(rename = "scsi[n]")]
     #[serde(
@@ -898,12 +1193,15 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Use volume as SCSI hard disk or CD-ROM (n is 0 to 30). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
+    #[doc = ""]
     pub scsis: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "SCSI controller model"]
+    #[doc = ""]
     pub scsihw: Option<Scsihw>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: Sets DNS search domains for a container. Create will automatically use the setting from the host if neither searchdomain nor nameserver are set."]
+    #[doc = ""]
     pub searchdomain: Option<String>,
     #[serde(rename = "serial[n]")]
     #[serde(
@@ -913,7 +1211,19 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Create a serial device inside the VM (n is 0 to 3)"]
-    #[doc = "Create a serial device inside the VM (n is 0 to 3), and pass through a\nhost serial device (i.e. /dev/ttyS0), or create a unix socket on the\nhost side (use 'qm terminal' to open a terminal connection).\n\nNOTE: If you pass through a host serial device, it is no longer possible to migrate such machines -\nuse with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
+    #[doc = ""]
+    #[doc = "Create a serial device inside the VM (n is 0 to 3), and pass through a"]
+    #[doc = ""]
+    #[doc = "host serial device (i.e. /dev/ttyS0), or create a unix socket on the"]
+    #[doc = ""]
+    #[doc = "host side (use 'qm terminal' to open a terminal connection)."]
+    #[doc = ""]
+    #[doc = "NOTE: If you pass through a host serial device, it is no longer possible to migrate such machines -"]
+    #[doc = ""]
+    #[doc = "use with special care."]
+    #[doc = ""]
+    #[doc = "CAUTION: Experimental! User reported problems with this option."]
+    #[doc = ""]
     pub serials: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -921,6 +1231,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of memory shares for auto-ballooning. The larger the number is, the more memory this VM gets. Number is relative to weights of all other running VMs. Using zero disables auto-ballooning. Auto-ballooning is done by pvestatd."]
+    #[doc = ""]
     pub shares: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -928,9 +1239,11 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Ignore locks - only root is allowed to use this option."]
+    #[doc = ""]
     pub skiplock: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify SMBIOS type 1 fields."]
+    #[doc = ""]
     pub smbios1: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -938,6 +1251,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of CPUs. Please use option -sockets instead."]
+    #[doc = ""]
     pub smp: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -945,18 +1259,23 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of CPU sockets."]
+    #[doc = ""]
     pub sockets: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure additional enhancements for SPICE."]
+    #[doc = ""]
     pub spice_enhancements: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: Setup public SSH keys (one key per line, OpenSSH format)."]
+    #[doc = ""]
     pub sshkeys: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set the initial date of the real time clock. Valid format for date are:'now' or '2006-06-17T16:01:21' or '2006-06-17'."]
+    #[doc = ""]
     pub startdate: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Startup and shutdown behavior. Order is a non-negative number defining the general startup order. Shutdown in done with reverse ordering. Additionally you can set the 'up' or 'down' delay in seconds, which specifies a delay to wait before the next VM is started or stopped."]
+    #[doc = ""]
     pub startup: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -964,10 +1283,13 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable the USB tablet device."]
-    #[doc = "Enable/disable the USB tablet device. This device is usually needed to allow absolute mouse positioning with VNC. Else the mouse runs out of sync with normal VNC clients. If you're running lots of console-only guests on one host, you may consider disabling this to save some context switches. This is turned off by default if you use spice (`qm set \\<vmid\\> --vga qxl`)."]
+    #[doc = ""]
+    #[doc = "Enable/disable the USB tablet device. This device is usually needed to allow absolute mouse positioning with VNC. Else the mouse runs out of sync with normal VNC clients. If you're running lots of console-only guests on one host, you may consider disabling this to save some context switches. This is turned off by default if you use spice (`qm set \\\\<vmid\\\\> --vga qxl`)."]
+    #[doc = ""]
     pub tablet: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Tags of the VM. This is only meta information."]
+    #[doc = ""]
     pub tags: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -975,6 +1297,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable time drift fix."]
+    #[doc = ""]
     pub tdf: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -982,9 +1305,11 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable Template."]
+    #[doc = ""]
     pub template: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure a Disk for storing TPM state. The format is fixed to 'raw'. Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Note that SIZE_IN_GiB is ignored here and 4 MiB will be used instead. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
+    #[doc = ""]
     pub tpmstate0: Option<String>,
     #[serde(rename = "unused[n]")]
     #[serde(
@@ -994,6 +1319,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Reference to unused volumes. This is used internally, and should not be modified manually."]
+    #[doc = ""]
     pub unuseds: ::std::collections::HashMap<u32, String>,
     #[serde(rename = "usb[n]")]
     #[serde(
@@ -1002,7 +1328,8 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
-    #[doc = "Configure an USB device (n is 0 to 4, for machine version \\>= 7.1 and ostype l26 or windows \\> 7, n can be up to 14)."]
+    #[doc = "Configure an USB device (n is 0 to 4, for machine version \\\\>= 7.1 and ostype l26 or windows \\\\> 7, n can be up to 14)."]
+    #[doc = ""]
     pub usbs: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -1010,10 +1337,15 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of hotplugged vcpus."]
+    #[doc = ""]
     pub vcpus: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure the VGA hardware."]
-    #[doc = "Configure the VGA Hardware. If you want to use high resolution modes (\\>= 1280x1024x16) you may need to increase the vga memory option. Since QEMU 2.9 the default VGA display type is 'std' for all OS types besides some Windows versions (XP and older) which use 'cirrus'. The 'qxl' option enables the SPICE display server. For win* OS you can select how many independent displays you want, Linux guests can add displays them self.\nYou can also run without any graphic card, using a serial device as terminal."]
+    #[doc = ""]
+    #[doc = "Configure the VGA Hardware. If you want to use high resolution modes (\\\\>= 1280x1024x16) you may need to increase the vga memory option. Since QEMU 2.9 the default VGA display type is 'std' for all OS types besides some Windows versions (XP and older) which use 'cirrus'. The 'qxl' option enables the SPICE display server. For win* OS you can select how many independent displays you want, Linux guests can add displays them self."]
+    #[doc = ""]
+    #[doc = "You can also run without any graphic card, using a serial device as terminal."]
+    #[doc = ""]
     pub vga: Option<String>,
     #[serde(rename = "virtio[n]")]
     #[serde(
@@ -1023,17 +1355,25 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Use volume as VIRTIO hard disk (n is 0 to 15). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
+    #[doc = ""]
     pub virtios: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set VM Generation ID. Use '1' to autogenerate on create or update, pass '0' to disable explicitly."]
-    #[doc = "The VM generation ID (vmgenid) device exposes a 128-bit integer value identifier to the guest OS. This allows to notify the guest operating system when the virtual machine is executed with a different configuration (e.g. snapshot execution or creation from a template). The guest operating system notices the change, and is then able to react as appropriate by marking its copies of distributed databases as dirty, re-initializing its random number generator, etc.\nNote that auto-creation only works when done through API/CLI create or update methods, but not when manually editing the config file."]
+    #[doc = ""]
+    #[doc = "The VM generation ID (vmgenid) device exposes a 128-bit integer value identifier to the guest OS. This allows to notify the guest operating system when the virtual machine is executed with a different configuration (e.g. snapshot execution or creation from a template). The guest operating system notices the change, and is then able to react as appropriate by marking its copies of distributed databases as dirty, re-initializing its random number generator, etc."]
+    #[doc = ""]
+    #[doc = "Note that auto-creation only works when done through API/CLI create or update methods, but not when manually editing the config file."]
+    #[doc = ""]
     pub vmgenid: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Default storage for VM state volumes/files."]
+    #[doc = ""]
     pub vmstatestorage: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Create a virtual hardware watchdog device."]
+    #[doc = ""]
     #[doc = "Create a virtual hardware watchdog device. Once enabled (by a guest action), the watchdog must be periodically polled by an agent inside the guest or else the watchdog will reset the guest (or execute the respective action specified)"]
+    #[doc = ""]
     pub watchdog: Option<String>,
     #[serde(
         flatten,
@@ -1083,22 +1423,33 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable ACPI."]
+    #[doc = ""]
     pub acpi: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of host cores used to execute guest processes, for example: 0,5,8-11"]
+    #[doc = ""]
     pub affinity: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable communication with the QEMU Guest Agent and its properties."]
+    #[doc = ""]
     pub agent: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Virtual processor architecture. Defaults to the host."]
+    #[doc = ""]
     pub arch: Option<Arch>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Arbitrary arguments passed to kvm."]
-    #[doc = "Arbitrary arguments passed to kvm, for example:\n\nargs: -no-reboot -smbios 'type=0,vendor=FOO'\n\nNOTE: this option is for experts only.\n"]
+    #[doc = ""]
+    #[doc = "Arbitrary arguments passed to kvm, for example:"]
+    #[doc = ""]
+    #[doc = "args: -no-reboot -smbios 'type=0,vendor=FOO'"]
+    #[doc = ""]
+    #[doc = "NOTE: this option is for experts only."]
+    #[doc = ""]
     pub args: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure a audio device, useful in combination with QXL/Spice."]
+    #[doc = ""]
     pub audio0: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -1106,6 +1457,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Automatic restart after crash (currently ignored)."]
+    #[doc = ""]
     pub autostart: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -1113,27 +1465,35 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of target RAM for the VM in MiB. Using zero disables the ballon driver."]
+    #[doc = ""]
     pub balloon: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Select BIOS implementation."]
+    #[doc = ""]
     pub bios: Option<Bios>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify guest boot order. Use the 'order=' sub-property as usage with no key or 'legacy=' is deprecated."]
+    #[doc = ""]
     pub boot: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable booting from specified disk. Deprecated: Use 'boot: order=foo;bar' instead."]
+    #[doc = ""]
     pub bootdisk: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "This is an alias for option -ide2"]
+    #[doc = ""]
     pub cdrom: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: Specify custom files to replace the automatically generated ones at start."]
+    #[doc = ""]
     pub cicustom: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: Password to assign the user. Using this is generally not recommended. Use ssh keys instead. Also note that older cloud-init versions do not support hashed passwords."]
+    #[doc = ""]
     pub cipassword: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specifies the cloud-init configuration format. The default depends on the configured operating system type (`ostype`. We use the `nocloud` format for Linux, and `configdrive2` for windows."]
+    #[doc = ""]
     pub citype: Option<Citype>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -1141,9 +1501,11 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: do an automatic package upgrade after the first boot."]
+    #[doc = ""]
     pub ciupgrade: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: User name to change ssh keys and password for instead of the image's configured default user."]
+    #[doc = ""]
     pub ciuser: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -1151,9 +1513,11 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of cores per socket."]
+    #[doc = ""]
     pub cores: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Emulated CPU type."]
+    #[doc = ""]
     pub cpu: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
@@ -1161,30 +1525,41 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Limit of CPU usage."]
-    #[doc = "Limit of CPU usage.\n\nNOTE: If the computer has 2 CPUs, it has total of '2' CPU time. Value '0' indicates no CPU limit."]
+    #[doc = ""]
+    #[doc = "Limit of CPU usage."]
+    #[doc = ""]
+    #[doc = "NOTE: If the computer has 2 CPUs, it has total of '2' CPU time. Value '0' indicates no CPU limit."]
+    #[doc = ""]
     pub cpulimit: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "CPU weight for a VM, will be clamped to [1, 10000] in cgroup v2."]
+    #[doc = "CPU weight for a VM, will be clamped to \\\\[1, 10000\\\\] in cgroup v2."]
+    #[doc = ""]
     #[doc = "CPU weight for a VM. Argument is used in the kernel fair scheduler. The larger the number is, the more CPU time this VM gets. Number is relative to weights of all the other running VMs."]
+    #[doc = ""]
     pub cpuunits: Option<()>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of settings you want to delete."]
+    #[doc = ""]
     pub delete: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the VM. Shown in the web-interface VM's summary. This is saved as comment inside the configuration file."]
+    #[doc = ""]
     pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has different SHA1 digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure a disk for storing EFI vars. Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Note that SIZE_IN_GiB is ignored here and that the default EFI vars are copied to the volume instead. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
+    #[doc = ""]
     pub efidisk0: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Force physical removal. Without this, we simple remove the disk from the config file and create an additional configuration entry called 'unused[n]', which contains the volume ID. Unlink of unused[n] always cause physical removal."]
+    #[doc = "Force physical removal. Without this, we simple remove the disk from the config file and create an additional configuration entry called 'unused\\\\[n\\\\]', which contains the volume ID. Unlink of unused\\\\[n\\\\] always cause physical removal."]
+    #[doc = ""]
     pub force: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -1192,9 +1567,11 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Freeze CPU at startup (use 'c' monitor command to start execution)."]
+    #[doc = ""]
     pub freeze: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Script that will be executed during various steps in the vms lifetime."]
+    #[doc = ""]
     pub hookscript: Option<String>,
     #[serde(rename = "hostpci[n]")]
     #[serde(
@@ -1204,13 +1581,23 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Map host PCI devices into guest."]
-    #[doc = "Map host PCI devices into guest.\n\nNOTE: This option allows direct access to host hardware. So it is no longer\npossible to migrate such machines - use with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
+    #[doc = ""]
+    #[doc = "Map host PCI devices into guest."]
+    #[doc = ""]
+    #[doc = "NOTE: This option allows direct access to host hardware. So it is no longer"]
+    #[doc = ""]
+    #[doc = "possible to migrate such machines - use with special care."]
+    #[doc = ""]
+    #[doc = "CAUTION: Experimental! User reported problems with this option."]
+    #[doc = ""]
     pub hostpcis: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Selectively enable hotplug features. This is a comma separated list of hotplug features: 'network', 'disk', 'cpu', 'memory', 'usb' and 'cloudinit'. Use '0' to disable hotplug completely. Using '1' as value is an alias for the default `network,disk,usb`. USB hotplugging is possible for guests with machine version \\>= 7.1 and ostype l26 or windows \\> 7."]
+    #[doc = "Selectively enable hotplug features. This is a comma separated list of hotplug features: 'network', 'disk', 'cpu', 'memory', 'usb' and 'cloudinit'. Use '0' to disable hotplug completely. Using '1' as value is an alias for the default `network,disk,usb`. USB hotplugging is possible for guests with machine version \\\\>= 7.1 and ostype l26 or windows \\\\> 7."]
+    #[doc = ""]
     pub hotplug: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable hugepages memory."]
+    #[doc = ""]
     pub hugepages: Option<Hugepages>,
     #[serde(rename = "ide[n]")]
     #[serde(
@@ -1220,6 +1607,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Use volume as IDE hard disk or CD-ROM (n is 0 to 3). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
+    #[doc = ""]
     pub ides: ::std::collections::HashMap<u32, String>,
     #[serde(rename = "ipconfig[n]")]
     #[serde(
@@ -1228,10 +1616,26 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
-    #[doc = "cloud-init: Specify IP addresses and gateways for the corresponding interface.\n\nIP addresses use CIDR notation, gateways are optional but need an IP of the same type specified.\n\nThe special string 'dhcp' can be used for IP addresses to use DHCP, in which case no explicit\ngateway should be provided.\nFor IPv6 the special string 'auto' can be used to use stateless autoconfiguration. This requires\ncloud-init 19.4 or newer.\n\nIf cloud-init is enabled and neither an IPv4 nor an IPv6 address is specified, it defaults to using\ndhcp on IPv4.\n"]
+    #[doc = "cloud-init: Specify IP addresses and gateways for the corresponding interface."]
+    #[doc = ""]
+    #[doc = "IP addresses use CIDR notation, gateways are optional but need an IP of the same type specified."]
+    #[doc = ""]
+    #[doc = "The special string 'dhcp' can be used for IP addresses to use DHCP, in which case no explicit"]
+    #[doc = ""]
+    #[doc = "gateway should be provided."]
+    #[doc = ""]
+    #[doc = "For IPv6 the special string 'auto' can be used to use stateless autoconfiguration. This requires"]
+    #[doc = ""]
+    #[doc = "cloud-init 19.4 or newer."]
+    #[doc = ""]
+    #[doc = "If cloud-init is enabled and neither an IPv4 nor an IPv6 address is specified, it defaults to using"]
+    #[doc = ""]
+    #[doc = "dhcp on IPv4."]
+    #[doc = ""]
     pub ipconfigs: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Inter-VM shared memory. Useful for direct communication between VMs, or to the host."]
+    #[doc = ""]
     pub ivshmem: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -1239,9 +1643,11 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Use together with hugepages. If enabled, hugepages will not not be deleted after VM shutdown and can be used for subsequent starts."]
+    #[doc = ""]
     pub keephugepages: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Keyboard layout for VNC server. This option is generally not required and is often better handled from within the guest OS."]
+    #[doc = ""]
     pub keyboard: Option<Keyboard>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -1249,6 +1655,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable KVM hardware virtualization."]
+    #[doc = ""]
     pub kvm: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -1256,15 +1663,19 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set the real time clock (RTC) to local time. This is enabled by default if the `ostype` indicates a Microsoft Windows OS."]
+    #[doc = ""]
     pub localtime: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Lock/unlock the VM."]
+    #[doc = ""]
     pub lock: Option<Lock>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specifies the QEMU machine type."]
+    #[doc = ""]
     pub machine: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Memory properties."]
+    #[doc = ""]
     pub memory: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
@@ -1272,6 +1683,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set maximum tolerated downtime (in seconds) for migrations."]
+    #[doc = ""]
     pub migrate_downtime: Option<f64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -1279,12 +1691,15 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set maximum speed (in MB/s) for migrations. Value 0 is no limit."]
+    #[doc = ""]
     pub migrate_speed: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set a name for the VM. Only used on the configuration web interface."]
+    #[doc = ""]
     pub name: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: Sets DNS server IP address for a container. Create will automatically use the setting from the host if neither searchdomain nor nameserver are set."]
+    #[doc = ""]
     pub nameserver: Option<String>,
     #[serde(rename = "net[n]")]
     #[serde(
@@ -1294,6 +1709,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Specify network devices."]
+    #[doc = ""]
     pub nets: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -1301,6 +1717,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable NUMA."]
+    #[doc = ""]
     pub numa: Option<bool>,
     #[serde(rename = "numa[n]")]
     #[serde(
@@ -1310,6 +1727,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "NUMA topology."]
+    #[doc = ""]
     pub numas: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -1317,10 +1735,43 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specifies whether a VM will be started during system bootup."]
+    #[doc = ""]
     pub onboot: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify guest operating system."]
-    #[doc = "Specify guest operating system. This is used to enable special\noptimization/features for specific operating systems:\n\n[horizontal]\nother;; unspecified OS\nwxp;; Microsoft Windows XP\nw2k;; Microsoft Windows 2000\nw2k3;; Microsoft Windows 2003\nw2k8;; Microsoft Windows 2008\nwvista;; Microsoft Windows Vista\nwin7;; Microsoft Windows 7\nwin8;; Microsoft Windows 8/2012/2012r2\nwin10;; Microsoft Windows 10/2016/2019\nwin11;; Microsoft Windows 11/2022\nl24;; Linux 2.4 Kernel\nl26;; Linux 2.6 - 6.X Kernel\nsolaris;; Solaris/OpenSolaris/OpenIndiania kernel\n"]
+    #[doc = ""]
+    #[doc = "Specify guest operating system. This is used to enable special"]
+    #[doc = ""]
+    #[doc = "optimization/features for specific operating systems:"]
+    #[doc = ""]
+    #[doc = "\\\\[horizontal\\\\]"]
+    #[doc = ""]
+    #[doc = "other;; unspecified OS"]
+    #[doc = ""]
+    #[doc = "wxp;; Microsoft Windows XP"]
+    #[doc = ""]
+    #[doc = "w2k;; Microsoft Windows 2000"]
+    #[doc = ""]
+    #[doc = "w2k3;; Microsoft Windows 2003"]
+    #[doc = ""]
+    #[doc = "w2k8;; Microsoft Windows 2008"]
+    #[doc = ""]
+    #[doc = "wvista;; Microsoft Windows Vista"]
+    #[doc = ""]
+    #[doc = "win7;; Microsoft Windows 7"]
+    #[doc = ""]
+    #[doc = "win8;; Microsoft Windows 8/2012/2012r2"]
+    #[doc = ""]
+    #[doc = "win10;; Microsoft Windows 10/2016/2019"]
+    #[doc = ""]
+    #[doc = "win11;; Microsoft Windows 11/2022"]
+    #[doc = ""]
+    #[doc = "l24;; Linux 2.4 Kernel"]
+    #[doc = ""]
+    #[doc = "l26;; Linux 2.6 - 6.X Kernel"]
+    #[doc = ""]
+    #[doc = "solaris;; Solaris/OpenSolaris/OpenIndiania kernel"]
+    #[doc = ""]
     pub ostype: Option<Ostype>,
     #[serde(rename = "parallel[n]")]
     #[serde(
@@ -1330,7 +1781,15 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Map host parallel devices (n is 0 to 2)."]
-    #[doc = "Map host parallel devices (n is 0 to 2).\n\nNOTE: This option allows direct access to host hardware. So it is no longer possible to migrate such\nmachines - use with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
+    #[doc = ""]
+    #[doc = "Map host parallel devices (n is 0 to 2)."]
+    #[doc = ""]
+    #[doc = "NOTE: This option allows direct access to host hardware. So it is no longer possible to migrate such"]
+    #[doc = ""]
+    #[doc = "machines - use with special care."]
+    #[doc = ""]
+    #[doc = "CAUTION: Experimental! User reported problems with this option."]
+    #[doc = ""]
     pub parallels: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -1338,6 +1797,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Sets the protection flag of the VM. This will disable the remove VM and remove disk operations."]
+    #[doc = ""]
     pub protection: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -1345,12 +1805,15 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow reboot. If set to '0' the VM exit on reboot."]
+    #[doc = ""]
     pub reboot: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Revert a pending change."]
+    #[doc = ""]
     pub revert: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure a VirtIO-based Random Number Generator."]
+    #[doc = ""]
     pub rng0: Option<String>,
     #[serde(rename = "sata[n]")]
     #[serde(
@@ -1360,6 +1823,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Use volume as SATA hard disk or CD-ROM (n is 0 to 5). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
+    #[doc = ""]
     pub satas: ::std::collections::HashMap<u32, String>,
     #[serde(rename = "scsi[n]")]
     #[serde(
@@ -1369,12 +1833,15 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Use volume as SCSI hard disk or CD-ROM (n is 0 to 30). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
+    #[doc = ""]
     pub scsis: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "SCSI controller model"]
+    #[doc = ""]
     pub scsihw: Option<Scsihw>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: Sets DNS search domains for a container. Create will automatically use the setting from the host if neither searchdomain nor nameserver are set."]
+    #[doc = ""]
     pub searchdomain: Option<String>,
     #[serde(rename = "serial[n]")]
     #[serde(
@@ -1384,7 +1851,19 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Create a serial device inside the VM (n is 0 to 3)"]
-    #[doc = "Create a serial device inside the VM (n is 0 to 3), and pass through a\nhost serial device (i.e. /dev/ttyS0), or create a unix socket on the\nhost side (use 'qm terminal' to open a terminal connection).\n\nNOTE: If you pass through a host serial device, it is no longer possible to migrate such machines -\nuse with special care.\n\nCAUTION: Experimental! User reported problems with this option.\n"]
+    #[doc = ""]
+    #[doc = "Create a serial device inside the VM (n is 0 to 3), and pass through a"]
+    #[doc = ""]
+    #[doc = "host serial device (i.e. /dev/ttyS0), or create a unix socket on the"]
+    #[doc = ""]
+    #[doc = "host side (use 'qm terminal' to open a terminal connection)."]
+    #[doc = ""]
+    #[doc = "NOTE: If you pass through a host serial device, it is no longer possible to migrate such machines -"]
+    #[doc = ""]
+    #[doc = "use with special care."]
+    #[doc = ""]
+    #[doc = "CAUTION: Experimental! User reported problems with this option."]
+    #[doc = ""]
     pub serials: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -1392,6 +1871,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of memory shares for auto-ballooning. The larger the number is, the more memory this VM gets. Number is relative to weights of all other running VMs. Using zero disables auto-ballooning. Auto-ballooning is done by pvestatd."]
+    #[doc = ""]
     pub shares: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -1399,9 +1879,11 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Ignore locks - only root is allowed to use this option."]
+    #[doc = ""]
     pub skiplock: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify SMBIOS type 1 fields."]
+    #[doc = ""]
     pub smbios1: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -1409,6 +1891,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of CPUs. Please use option -sockets instead."]
+    #[doc = ""]
     pub smp: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -1416,18 +1899,23 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of CPU sockets."]
+    #[doc = ""]
     pub sockets: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure additional enhancements for SPICE."]
+    #[doc = ""]
     pub spice_enhancements: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "cloud-init: Setup public SSH keys (one key per line, OpenSSH format)."]
+    #[doc = ""]
     pub sshkeys: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set the initial date of the real time clock. Valid format for date are:'now' or '2006-06-17T16:01:21' or '2006-06-17'."]
+    #[doc = ""]
     pub startdate: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Startup and shutdown behavior. Order is a non-negative number defining the general startup order. Shutdown in done with reverse ordering. Additionally you can set the 'up' or 'down' delay in seconds, which specifies a delay to wait before the next VM is started or stopped."]
+    #[doc = ""]
     pub startup: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -1435,10 +1923,13 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable the USB tablet device."]
-    #[doc = "Enable/disable the USB tablet device. This device is usually needed to allow absolute mouse positioning with VNC. Else the mouse runs out of sync with normal VNC clients. If you're running lots of console-only guests on one host, you may consider disabling this to save some context switches. This is turned off by default if you use spice (`qm set \\<vmid\\> --vga qxl`)."]
+    #[doc = ""]
+    #[doc = "Enable/disable the USB tablet device. This device is usually needed to allow absolute mouse positioning with VNC. Else the mouse runs out of sync with normal VNC clients. If you're running lots of console-only guests on one host, you may consider disabling this to save some context switches. This is turned off by default if you use spice (`qm set \\\\<vmid\\\\> --vga qxl`)."]
+    #[doc = ""]
     pub tablet: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Tags of the VM. This is only meta information."]
+    #[doc = ""]
     pub tags: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -1446,6 +1937,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable time drift fix."]
+    #[doc = ""]
     pub tdf: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -1453,9 +1945,11 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable/disable Template."]
+    #[doc = ""]
     pub template: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure a Disk for storing TPM state. The format is fixed to 'raw'. Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Note that SIZE_IN_GiB is ignored here and 4 MiB will be used instead. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
+    #[doc = ""]
     pub tpmstate0: Option<String>,
     #[serde(rename = "unused[n]")]
     #[serde(
@@ -1465,6 +1959,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Reference to unused volumes. This is used internally, and should not be modified manually."]
+    #[doc = ""]
     pub unuseds: ::std::collections::HashMap<u32, String>,
     #[serde(rename = "usb[n]")]
     #[serde(
@@ -1473,7 +1968,8 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
-    #[doc = "Configure an USB device (n is 0 to 4, for machine version \\>= 7.1 and ostype l26 or windows \\> 7, n can be up to 14)."]
+    #[doc = "Configure an USB device (n is 0 to 4, for machine version \\\\>= 7.1 and ostype l26 or windows \\\\> 7, n can be up to 14)."]
+    #[doc = ""]
     pub usbs: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -1481,10 +1977,15 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of hotplugged vcpus."]
+    #[doc = ""]
     pub vcpus: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure the VGA hardware."]
-    #[doc = "Configure the VGA Hardware. If you want to use high resolution modes (\\>= 1280x1024x16) you may need to increase the vga memory option. Since QEMU 2.9 the default VGA display type is 'std' for all OS types besides some Windows versions (XP and older) which use 'cirrus'. The 'qxl' option enables the SPICE display server. For win* OS you can select how many independent displays you want, Linux guests can add displays them self.\nYou can also run without any graphic card, using a serial device as terminal."]
+    #[doc = ""]
+    #[doc = "Configure the VGA Hardware. If you want to use high resolution modes (\\\\>= 1280x1024x16) you may need to increase the vga memory option. Since QEMU 2.9 the default VGA display type is 'std' for all OS types besides some Windows versions (XP and older) which use 'cirrus'. The 'qxl' option enables the SPICE display server. For win* OS you can select how many independent displays you want, Linux guests can add displays them self."]
+    #[doc = ""]
+    #[doc = "You can also run without any graphic card, using a serial device as terminal."]
+    #[doc = ""]
     pub vga: Option<String>,
     #[serde(rename = "virtio[n]")]
     #[serde(
@@ -1494,17 +1995,25 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Use volume as VIRTIO hard disk (n is 0 to 15). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
+    #[doc = ""]
     pub virtios: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set VM Generation ID. Use '1' to autogenerate on create or update, pass '0' to disable explicitly."]
-    #[doc = "The VM generation ID (vmgenid) device exposes a 128-bit integer value identifier to the guest OS. This allows to notify the guest operating system when the virtual machine is executed with a different configuration (e.g. snapshot execution or creation from a template). The guest operating system notices the change, and is then able to react as appropriate by marking its copies of distributed databases as dirty, re-initializing its random number generator, etc.\nNote that auto-creation only works when done through API/CLI create or update methods, but not when manually editing the config file."]
+    #[doc = ""]
+    #[doc = "The VM generation ID (vmgenid) device exposes a 128-bit integer value identifier to the guest OS. This allows to notify the guest operating system when the virtual machine is executed with a different configuration (e.g. snapshot execution or creation from a template). The guest operating system notices the change, and is then able to react as appropriate by marking its copies of distributed databases as dirty, re-initializing its random number generator, etc."]
+    #[doc = ""]
+    #[doc = "Note that auto-creation only works when done through API/CLI create or update methods, but not when manually editing the config file."]
+    #[doc = ""]
     pub vmgenid: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Default storage for VM state volumes/files."]
+    #[doc = ""]
     pub vmstatestorage: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Create a virtual hardware watchdog device."]
+    #[doc = ""]
     #[doc = "Create a virtual hardware watchdog device. Once enabled (by a guest action), the watchdog must be periodically polled by an agent inside the guest or else the watchdog will reset the guest (or execute the respective action specified)"]
+    #[doc = ""]
     pub watchdog: Option<String>,
     #[serde(
         flatten,
@@ -1547,6 +2056,8 @@ impl crate::types::multi::Test for PutParams {
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Virtual processor architecture. Defaults to the host."]
+#[doc = ""]
 pub enum Arch {
     #[serde(rename = "aarch64")]
     Aarch64,
@@ -1554,6 +2065,8 @@ pub enum Arch {
     X8664,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Select BIOS implementation."]
+#[doc = ""]
 pub enum Bios {
     #[serde(rename = "ovmf")]
     Ovmf,
@@ -1566,6 +2079,8 @@ impl Default for Bios {
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Specifies the cloud-init configuration format. The default depends on the configured operating system type (`ostype`. We use the `nocloud` format for Linux, and `configdrive2` for windows."]
+#[doc = ""]
 pub enum Citype {
     #[serde(rename = "configdrive2")]
     Configdrive2,
@@ -1575,6 +2090,8 @@ pub enum Citype {
     Opennebula,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Enable/disable hugepages memory."]
+#[doc = ""]
 pub enum Hugepages {
     #[serde(rename = "1024")]
     _1024,
@@ -1584,6 +2101,8 @@ pub enum Hugepages {
     Any,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Keyboard layout for VNC server. This option is generally not required and is often better handled from within the guest OS."]
+#[doc = ""]
 pub enum Keyboard {
     #[serde(rename = "da")]
     Da,
@@ -1637,6 +2156,8 @@ pub enum Keyboard {
     Tr,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Lock/unlock the VM."]
+#[doc = ""]
 pub enum Lock {
     #[serde(rename = "backup")]
     Backup,
@@ -1658,6 +2179,40 @@ pub enum Lock {
     Suspending,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Specify guest operating system."]
+#[doc = ""]
+#[doc = "Specify guest operating system. This is used to enable special"]
+#[doc = ""]
+#[doc = "optimization/features for specific operating systems:"]
+#[doc = ""]
+#[doc = "\\[horizontal\\]"]
+#[doc = ""]
+#[doc = "other;; unspecified OS"]
+#[doc = ""]
+#[doc = "wxp;; Microsoft Windows XP"]
+#[doc = ""]
+#[doc = "w2k;; Microsoft Windows 2000"]
+#[doc = ""]
+#[doc = "w2k3;; Microsoft Windows 2003"]
+#[doc = ""]
+#[doc = "w2k8;; Microsoft Windows 2008"]
+#[doc = ""]
+#[doc = "wvista;; Microsoft Windows Vista"]
+#[doc = ""]
+#[doc = "win7;; Microsoft Windows 7"]
+#[doc = ""]
+#[doc = "win8;; Microsoft Windows 8/2012/2012r2"]
+#[doc = ""]
+#[doc = "win10;; Microsoft Windows 10/2016/2019"]
+#[doc = ""]
+#[doc = "win11;; Microsoft Windows 11/2022"]
+#[doc = ""]
+#[doc = "l24;; Linux 2.4 Kernel"]
+#[doc = ""]
+#[doc = "l26;; Linux 2.6 - 6.X Kernel"]
+#[doc = ""]
+#[doc = "solaris;; Solaris/OpenSolaris/OpenIndiania kernel"]
+#[doc = ""]
 pub enum Ostype {
     #[serde(rename = "l24")]
     L24,
@@ -1687,6 +2242,8 @@ pub enum Ostype {
     Wxp,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "SCSI controller model"]
+#[doc = ""]
 pub enum Scsihw {
     #[serde(rename = "lsi")]
     Lsi,

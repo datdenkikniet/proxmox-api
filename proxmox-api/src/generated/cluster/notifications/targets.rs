@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Returns a list of all entities that can be used as notification targets."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -40,6 +41,7 @@ impl GetOutputItems {
 pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Comment"]
+    #[doc = ""]
     pub comment: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -47,13 +49,17 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Show if this target is disabled"]
+    #[doc = ""]
     pub disable: Option<bool>,
     #[doc = "Name of the target."]
+    #[doc = ""]
     pub name: String,
     #[doc = "Show if this entry was created by a user or was built-in"]
+    #[doc = ""]
     pub origin: Origin,
     #[serde(rename = "type")]
     #[doc = "Type of the target."]
+    #[doc = ""]
     pub ty: Type,
     #[serde(
         flatten,
@@ -63,6 +69,8 @@ pub struct GetOutputItems {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Show if this entry was created by a user or was built-in"]
+#[doc = ""]
 pub enum Origin {
     #[serde(rename = "builtin")]
     Builtin,
@@ -72,6 +80,8 @@ pub enum Origin {
     UserCreated,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Type of the target."]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "gotify")]
     Gotify,

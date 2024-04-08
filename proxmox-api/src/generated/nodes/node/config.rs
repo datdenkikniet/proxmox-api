@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get node configuration options."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Set node configuration options."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -37,6 +39,7 @@ where
 pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node specific ACME settings."]
+    #[doc = ""]
     pub acme: Option<String>,
     #[serde(rename = "acmedomain[n]")]
     #[serde(
@@ -46,12 +49,15 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "ACME domain and validation plugin"]
+    #[doc = ""]
     pub acmedomains: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the Node. Shown in the web-interface node notes panel. This is saved as comment inside the configuration file."]
+    #[doc = ""]
     pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has different SHA1 digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[serde(rename = "startall-onboot-delay")]
     #[serde(
@@ -60,9 +66,11 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Initial delay in seconds, before starting all the Virtual Guests with on-boot enabled."]
+    #[doc = ""]
     pub startall_onboot_delay: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node specific wake on LAN settings."]
+    #[doc = ""]
     pub wakeonlan: Option<String>,
     #[serde(
         flatten,
@@ -86,6 +94,7 @@ impl crate::types::multi::Test for GetOutput {
 pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Return only a specific property from the node configuration."]
+    #[doc = ""]
     pub property: Option<Property>,
     #[serde(
         flatten,
@@ -98,6 +107,7 @@ pub struct GetParams {
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node specific ACME settings."]
+    #[doc = ""]
     pub acme: Option<String>,
     #[serde(rename = "acmedomain[n]")]
     #[serde(
@@ -107,15 +117,19 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "ACME domain and validation plugin"]
+    #[doc = ""]
     pub acmedomains: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of settings you want to delete."]
+    #[doc = ""]
     pub delete: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the Node. Shown in the web-interface node notes panel. This is saved as comment inside the configuration file."]
+    #[doc = ""]
     pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has different SHA1 digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[serde(rename = "startall-onboot-delay")]
     #[serde(
@@ -124,9 +138,11 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Initial delay in seconds, before starting all the Virtual Guests with on-boot enabled."]
+    #[doc = ""]
     pub startall_onboot_delay: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node specific wake on LAN settings."]
+    #[doc = ""]
     pub wakeonlan: Option<String>,
     #[serde(
         flatten,
@@ -147,6 +163,8 @@ impl crate::types::multi::Test for PutParams {
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Return only a specific property from the node configuration."]
+#[doc = ""]
 pub enum Property {
     #[serde(rename = "acme")]
     Acme,

@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Try to wake a node via 'wake on LAN' network packet."]
+    #[doc = ""]
     pub fn post(&self) -> Result<crate::types::MacAddr<true>, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &())

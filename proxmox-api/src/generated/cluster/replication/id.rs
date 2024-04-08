@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Mark replication job for removal."]
+    #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params)
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Read replication job configuration."]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -38,6 +40,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Update replication job configuration."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -51,6 +54,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Will remove the jobconfig entry, but will not cleanup."]
+    #[doc = ""]
     pub force: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -58,6 +62,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Keep replicated data at target (do not remove)."]
+    #[doc = ""]
     pub keep: Option<bool>,
     #[serde(
         flatten,
@@ -79,12 +84,15 @@ pub struct GetOutput {
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description."]
+    #[doc = ""]
     pub comment: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of settings you want to delete."]
+    #[doc = ""]
     pub delete: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -92,6 +100,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Flag to disable/deactivate the entry."]
+    #[doc = ""]
     pub disable: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
@@ -99,15 +108,19 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Rate limit in mbps (megabytes per second) as floating point number."]
+    #[doc = ""]
     pub rate: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Mark the replication job for removal. The job will remove all local replication snapshots. When set to 'full', it also tries to remove replicated volumes on the target. The job then removes itself from the configuration file."]
+    #[doc = ""]
     pub remove_job: Option<RemoveJob>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Storage replication schedule. The format is a subset of `systemd` calendar events."]
+    #[doc = ""]
     pub schedule: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For internal use, to detect if the guest was stolen."]
+    #[doc = ""]
     pub source: Option<String>,
     #[serde(
         flatten,
@@ -117,6 +130,8 @@ pub struct PutParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Mark the replication job for removal. The job will remove all local replication snapshots. When set to 'full', it also tries to remove replicated volumes on the target. The job then removes itself from the configuration file."]
+#[doc = ""]
 pub enum RemoveJob {
     #[serde(rename = "full")]
     Full,

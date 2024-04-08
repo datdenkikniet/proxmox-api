@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Execute multiple commands in order, root only."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<Vec<PostOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -43,7 +44,21 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "JSON encoded array of commands."]
-    #[doc = "JSON encoded array of commands, where each command is an object with the following properties:\n  args:      \\<object\\>\n\t     A set of parameter names and their values.\n\n  method:    (GET|POST|PUT|DELETE)\n\t     A method related to the API endpoint (GET, POST etc.).\n\n  path:      \\<string\\>\n\t     A relative path to an API endpoint on this node.\n\n"]
+    #[doc = ""]
+    #[doc = "JSON encoded array of commands, where each command is an object with the following properties:"]
+    #[doc = ""]
+    #[doc = "args:      \\\\<object\\\\>"]
+    #[doc = ""]
+    #[doc = "A set of parameter names and their values."]
+    #[doc = ""]
+    #[doc = "method:    (GET|POST|PUT|DELETE)"]
+    #[doc = ""]
+    #[doc = "A method related to the API endpoint (GET, POST etc.)."]
+    #[doc = ""]
+    #[doc = "path:      \\\\<string\\\\>"]
+    #[doc = ""]
+    #[doc = "A relative path to an API endpoint on this node."]
+    #[doc = ""]
     pub commands: String,
     #[serde(
         flatten,

@@ -5,7 +5,7 @@ use std::{
 
 use serde::{Deserialize, Serialize};
 
-use crate::generator::{AdditionalProperties, FieldDef, PrimitiveTypeDef, TypeDef};
+use crate::generator::{clean_doc, AdditionalProperties, FieldDef, PrimitiveTypeDef, TypeDef};
 
 use super::{Format, KnownFormat, Optional, Output};
 
@@ -59,7 +59,7 @@ impl Type<'_> {
             .as_ref()
             .into_iter()
             .chain(self.verbose_description.as_ref().into_iter())
-            .map(Cow::to_string)
+            .flat_map(clean_doc)
     }
 
     pub fn type_def(&self, field_name: &str, struct_suffix: &str) -> Output {
@@ -94,7 +94,7 @@ impl Type<'_> {
                             crate::name_to_ident(field_name)
                         };
 
-                        TypeDef::new_enum(name, no_derives, enum_values, default)
+                        TypeDef::new_enum(name, no_derives, enum_values, default, self.doc())
                     } else {
                         TypeDef::Primitive(PrimitiveTypeDef::String)
                     }

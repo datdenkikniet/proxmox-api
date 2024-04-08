@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get container configuration, including pending changes."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -42,14 +43,18 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Indicates a pending delete request if present and not 0."]
+    #[doc = ""]
     pub delete: Option<u64>,
     #[doc = "Configuration option name."]
+    #[doc = ""]
     pub key: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Pending value."]
+    #[doc = ""]
     pub pending: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Current value."]
+    #[doc = ""]
     pub value: Option<String>,
     #[serde(
         flatten,

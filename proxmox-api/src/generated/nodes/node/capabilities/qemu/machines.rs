@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get available QEMU/KVM machine types."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -36,11 +37,14 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "Full name of machine type and version."]
+    #[doc = ""]
     pub id: String,
     #[serde(rename = "type")]
     #[doc = "The machine type."]
+    #[doc = ""]
     pub ty: Type,
     #[doc = "The machine version."]
+    #[doc = ""]
     pub version: String,
     #[serde(
         flatten,
@@ -50,6 +54,8 @@ pub struct GetOutputItems {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "The machine type."]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "i440fx")]
     I440fx,

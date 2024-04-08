@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Scan remote iSCSI server."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -35,8 +36,10 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "The iSCSI portal name."]
+    #[doc = ""]
     pub portal: String,
     #[doc = "The iSCSI target name."]
+    #[doc = ""]
     pub target: String,
     #[serde(
         flatten,
@@ -56,6 +59,7 @@ impl GetParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetParams {
     #[doc = "The iSCSI portal (IP or DNS name with optional port)."]
+    #[doc = ""]
     pub portal: String,
     #[serde(
         flatten,

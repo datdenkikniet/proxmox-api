@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Cluster node index."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -48,9 +49,11 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "CPU utilization."]
+    #[doc = ""]
     pub cpu: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Support level."]
+    #[doc = ""]
     pub level: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -58,6 +61,7 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of available CPUs."]
+    #[doc = ""]
     pub maxcpu: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -65,6 +69,7 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of available memory in bytes."]
+    #[doc = ""]
     pub maxmem: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -72,13 +77,17 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Used memory in bytes."]
+    #[doc = ""]
     pub mem: Option<u64>,
     #[doc = "The cluster node name."]
+    #[doc = ""]
     pub node: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The SSL fingerprint for the node certificate."]
+    #[doc = ""]
     pub ssl_fingerprint: Option<String>,
     #[doc = "Node status."]
+    #[doc = ""]
     pub status: Status,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -86,6 +95,7 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node uptime in seconds."]
+    #[doc = ""]
     pub uptime: Option<u64>,
     #[serde(
         flatten,
@@ -95,6 +105,8 @@ pub struct GetOutputItems {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Node status."]
+#[doc = ""]
 pub enum Status {
     #[serde(rename = "offline")]
     Offline,

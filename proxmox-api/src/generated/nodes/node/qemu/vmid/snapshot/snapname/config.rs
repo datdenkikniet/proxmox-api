@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get snapshot configuration"]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Update snapshot metadata."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -46,6 +48,7 @@ pub struct GetOutput {
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A textual description or comment."]
+    #[doc = ""]
     pub description: Option<String>,
     #[serde(
         flatten,

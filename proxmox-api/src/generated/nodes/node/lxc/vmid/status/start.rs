@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Start the container."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -31,6 +32,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If set, enables very verbose debug log-level on start."]
+    #[doc = ""]
     pub debug: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -38,6 +40,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Ignore locks - only root is allowed to use this option."]
+    #[doc = ""]
     pub skiplock: Option<bool>,
     #[serde(
         flatten,

@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Remove IP or Network from IPSet."]
+    #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params)
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Read IP or Network settings from IPSet."]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -38,6 +40,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Update IP or Network settings"]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -47,6 +50,7 @@ where
 pub struct DeleteParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[serde(
         flatten,
@@ -70,6 +74,7 @@ pub struct PutParams {
     pub comment: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",

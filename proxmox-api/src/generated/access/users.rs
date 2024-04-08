@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "User index."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create new user."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -66,6 +68,7 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable the account (default). You can set this to '0' to disable the account"]
+    #[doc = ""]
     pub enable: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -73,6 +76,7 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Account expiration date (seconds since epoch). '0' means no expiration date."]
+    #[doc = ""]
     pub expire: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub firstname: Option<String>,
@@ -80,12 +84,14 @@ pub struct GetOutputItems {
     pub groups: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Keys for two factor auth (yubico)."]
+    #[doc = ""]
     pub keys: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub lastname: Option<String>,
     #[serde(rename = "realm-type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The type of the users realm"]
+    #[doc = ""]
     pub realm_type: Option<String>,
     #[serde(rename = "tfa-locked-until")]
     #[serde(
@@ -94,6 +100,7 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Contains a timestamp until when a user is locked out of 2nd factors."]
+    #[doc = ""]
     pub tfa_locked_until: Option<u64>,
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     pub tokens: Vec<TokensGetOutputItemsTokensItems>,
@@ -104,8 +111,10 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "True if the user is currently locked out of TOTP factors."]
+    #[doc = ""]
     pub totp_locked: Option<bool>,
     #[doc = "Full User ID, in the `name@realm` format."]
+    #[doc = ""]
     pub userid: String,
     #[serde(
         flatten,
@@ -122,6 +131,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Optional filter for enable property."]
+    #[doc = ""]
     pub enabled: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -129,6 +139,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Include group and token information."]
+    #[doc = ""]
     pub full: Option<bool>,
     #[serde(
         flatten,
@@ -166,6 +177,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable the account (default). You can set this to '0' to disable the account"]
+    #[doc = ""]
     pub enable: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -173,6 +185,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Account expiration date (seconds since epoch). '0' means no expiration date."]
+    #[doc = ""]
     pub expire: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub firstname: Option<String>,
@@ -180,13 +193,16 @@ pub struct PostParams {
     pub groups: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Keys for two factor auth (yubico)."]
+    #[doc = ""]
     pub keys: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub lastname: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Initial password."]
+    #[doc = ""]
     pub password: Option<String>,
     #[doc = "Full User ID, in the `name@realm` format."]
+    #[doc = ""]
     pub userid: String,
     #[serde(
         flatten,
@@ -212,6 +228,7 @@ pub struct TokensGetOutputItemsTokensItems {
     pub comment: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "API token expiration date (seconds since epoch). '0' means no expiration date."]
+    #[doc = ""]
     pub expire: Option<()>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -219,8 +236,10 @@ pub struct TokensGetOutputItemsTokensItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Restrict API token privileges with separate ACLs (default), or give full privileges of corresponding user."]
+    #[doc = ""]
     pub privsep: Option<bool>,
     #[doc = "User-specific token identifier."]
+    #[doc = ""]
     pub tokenid: String,
     #[serde(
         flatten,

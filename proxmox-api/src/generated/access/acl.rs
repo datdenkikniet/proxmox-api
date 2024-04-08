@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get Access Control List (ACLs)."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Update Access Control List (add or remove permissions)."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -47,6 +49,7 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "Access control path"]
+    #[doc = ""]
     pub path: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -54,6 +57,7 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow to propagate (inherit) permissions."]
+    #[doc = ""]
     pub propagate: Option<bool>,
     pub roleid: String,
     #[serde(rename = "type")]
@@ -82,11 +86,14 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Remove permissions (instead of adding it)."]
+    #[doc = ""]
     pub delete: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of groups."]
+    #[doc = ""]
     pub groups: Option<String>,
     #[doc = "Access control path"]
+    #[doc = ""]
     pub path: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -94,14 +101,18 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow to propagate (inherit) permissions."]
+    #[doc = ""]
     pub propagate: Option<bool>,
     #[doc = "List of roles."]
+    #[doc = ""]
     pub roles: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of API tokens."]
+    #[doc = ""]
     pub tokens: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of users."]
+    #[doc = ""]
     pub users: Option<String>,
     #[serde(
         flatten,

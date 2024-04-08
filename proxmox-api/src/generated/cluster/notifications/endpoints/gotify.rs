@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Returns a list of all gotify endpoints"]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create a new gotify endpoint"]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -50,6 +52,7 @@ impl GetOutputItems {
 pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Comment"]
+    #[doc = ""]
     pub comment: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -57,12 +60,16 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Disable this target"]
+    #[doc = ""]
     pub disable: Option<bool>,
     #[doc = "The name of the endpoint."]
+    #[doc = ""]
     pub name: String,
     #[doc = "Show if this entry was created by a user or was built-in"]
+    #[doc = ""]
     pub origin: Origin,
     #[doc = "Server URL"]
+    #[doc = ""]
     pub server: String,
     #[serde(
         flatten,
@@ -87,6 +94,7 @@ impl PostParams {
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Comment"]
+    #[doc = ""]
     pub comment: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -94,12 +102,16 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Disable this target"]
+    #[doc = ""]
     pub disable: Option<bool>,
     #[doc = "The name of the endpoint."]
+    #[doc = ""]
     pub name: String,
     #[doc = "Server URL"]
+    #[doc = ""]
     pub server: String,
     #[doc = "Secret token"]
+    #[doc = ""]
     pub token: String,
     #[serde(
         flatten,
@@ -109,6 +121,8 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Show if this entry was created by a user or was built-in"]
+#[doc = ""]
 pub enum Origin {
     #[serde(rename = "builtin")]
     Builtin,

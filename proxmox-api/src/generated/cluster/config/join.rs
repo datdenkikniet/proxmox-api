@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get information needed to join this cluster over the connected node."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Joins this node into an existing cluster. If no links are given, default to IP resolved by node's hostname on single link (fallback fails for clusters with multiple links)."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -54,13 +56,15 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     pub nodelist: Vec<NodelistGetOutputNodelistItems>,
     #[doc = "The cluster node name."]
+    #[doc = ""]
     pub preferred_node: String,
     pub totem: TotemGetOutputTotem,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The node for which the joinee gets the nodeinfo. "]
+    #[doc = "The node for which the joinee gets the nodeinfo."]
+    #[doc = ""]
     pub node: Option<String>,
     #[serde(
         flatten,
@@ -90,6 +94,7 @@ impl NodelistGetOutputNodelistItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct NodelistGetOutputNodelistItems {
     #[doc = "The cluster node name."]
+    #[doc = ""]
     pub name: String,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -97,9 +102,11 @@ pub struct NodelistGetOutputNodelistItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node id for this node."]
+    #[doc = ""]
     pub nodeid: Option<u64>,
     pub pve_addr: ::std::net::IpAddr,
     #[doc = "Certificate SHA 256 fingerprint."]
+    #[doc = ""]
     pub pve_fp: String,
     #[serde(
         serialize_with = "crate::types::serialize_int",
@@ -108,6 +115,7 @@ pub struct NodelistGetOutputNodelistItems {
     pub quorum_votes: u64,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Address and priority information of a single corosync link. (up to 8 links supported; link0..link7)"]
+    #[doc = ""]
     pub ring0_addr: Option<String>,
     #[serde(
         flatten,
@@ -133,6 +141,7 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "Certificate SHA 256 fingerprint."]
+    #[doc = ""]
     pub fingerprint: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -140,8 +149,10 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Do not throw error if node already exists."]
+    #[doc = ""]
     pub force: Option<bool>,
     #[doc = "Hostname (or IP) of an existing cluster member."]
+    #[doc = ""]
     pub hostname: String,
     #[serde(rename = "link[n]")]
     #[serde(
@@ -151,6 +162,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Address and priority information of a single corosync link. (up to 8 links supported; link0..link7)"]
+    #[doc = ""]
     pub links: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -158,8 +170,10 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node id for this node."]
+    #[doc = ""]
     pub nodeid: Option<u64>,
     #[doc = "Superuser (root) password of peer node."]
+    #[doc = ""]
     pub password: String,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -167,6 +181,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of votes for this node"]
+    #[doc = ""]
     pub votes: Option<u64>,
     #[serde(
         flatten,

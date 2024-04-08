@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Resume virtual machine."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -37,6 +38,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Ignore locks - only root is allowed to use this option."]
+    #[doc = ""]
     pub skiplock: Option<bool>,
     #[serde(
         flatten,

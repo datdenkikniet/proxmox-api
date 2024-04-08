@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Destroy Ceph Monitor and Manager."]
+    #[doc = ""]
     pub fn delete(&self) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &())
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create Ceph Monitor and Manager"]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -38,6 +40,7 @@ pub struct PostParams {
     #[serde(rename = "mon-address")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Overwrites autodetected monitor IP address(es). Must be in the public network(s) of Ceph."]
+    #[doc = ""]
     pub mon_address: Option<String>,
     #[serde(
         flatten,

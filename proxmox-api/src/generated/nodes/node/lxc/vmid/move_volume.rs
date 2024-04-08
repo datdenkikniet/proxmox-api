@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Move a rootfs-/mp-volume to a different storage or to a different container."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -42,6 +43,7 @@ impl PostParams {
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Override I/O bandwidth limit (in KiB/s)."]
+    #[doc = ""]
     pub bwlimit: Option<()>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -49,26 +51,39 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Delete the original volume after successful copy. By default the original is kept as an unused volume entry."]
+    #[doc = ""]
     pub delete: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Prevent changes if current configuration file has different SHA1 \" .\n\t\t    \"digest. This can be used to prevent concurrent modifications."]
+    #[doc = "Prevent changes if current configuration file has different SHA1 \" ."]
+    #[doc = ""]
+    #[doc = "digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Target Storage."]
+    #[doc = ""]
     pub storage: Option<String>,
     #[serde(rename = "target-digest")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Prevent changes if current configuration file of the target \" .\n\t\t    \"container has a different SHA1 digest. This can be used to prevent \" .\n\t\t    \"concurrent modifications."]
+    #[doc = "Prevent changes if current configuration file of the target \" ."]
+    #[doc = ""]
+    #[doc = "container has a different SHA1 digest. This can be used to prevent \" ."]
+    #[doc = ""]
+    #[doc = "concurrent modifications."]
+    #[doc = ""]
     pub target_digest: Option<String>,
     #[serde(rename = "target-vmid")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The (unique) ID of the VM."]
+    #[doc = ""]
     pub target_vmid: Option<crate::types::VmId>,
     #[serde(rename = "target-volume")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The config key the volume will be moved to. Default is the source volume key."]
+    #[doc = ""]
     pub target_volume: Option<TargetVolume>,
     #[doc = "Volume which will be moved."]
+    #[doc = ""]
     pub volume: Volume,
     #[serde(
         flatten,
@@ -78,6 +93,8 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "The config key the volume will be moved to. Default is the source volume key."]
+#[doc = ""]
 pub enum TargetVolume {
     #[serde(rename = "mp0")]
     Mp0,
@@ -1107,6 +1124,8 @@ pub enum TargetVolume {
     Unused99,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Volume which will be moved."]
+#[doc = ""]
 pub enum Volume {
     #[serde(rename = "mp0")]
     Mp0,

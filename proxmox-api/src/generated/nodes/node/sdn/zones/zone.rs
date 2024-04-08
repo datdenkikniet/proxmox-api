@@ -18,7 +18,6 @@ impl<T> ZoneClient<T>
 where
     T: crate::client::Client,
 {
-    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())

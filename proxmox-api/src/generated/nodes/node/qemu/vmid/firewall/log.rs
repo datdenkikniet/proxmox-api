@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Read firewall log"]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -39,8 +40,10 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Line number"]
+    #[doc = ""]
     pub n: u64,
     #[doc = "Line text"]
+    #[doc = ""]
     pub t: String,
     #[serde(
         flatten,
@@ -63,6 +66,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Display log since this UNIX epoch."]
+    #[doc = ""]
     pub since: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -76,6 +80,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Display log until this UNIX epoch."]
+    #[doc = ""]
     pub until: Option<u64>,
     #[serde(
         flatten,

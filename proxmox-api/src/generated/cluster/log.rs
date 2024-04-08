@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Read cluster log"]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -40,6 +41,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum number of entries."]
+    #[doc = ""]
     pub max: Option<u64>,
     #[serde(
         flatten,

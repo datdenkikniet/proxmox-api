@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Group index."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create new group."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -51,6 +53,7 @@ pub struct GetOutputItems {
     pub groupid: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "list of users which form this group"]
+    #[doc = ""]
     pub users: Option<String>,
     #[serde(
         flatten,

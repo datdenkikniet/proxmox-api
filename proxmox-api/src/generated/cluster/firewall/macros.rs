@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List available macros"]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -35,9 +36,11 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "More verbose description (if available)."]
+    #[doc = ""]
     pub descr: String,
     #[serde(rename = "macro")]
     #[doc = "Macro name."]
+    #[doc = ""]
     pub macro_def: String,
     #[serde(
         flatten,

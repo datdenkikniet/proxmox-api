@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List status of all replication jobs on this node."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -46,6 +47,7 @@ pub struct GetOutputItems {
 pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only list replication jobs for this guest."]
+    #[doc = ""]
     pub guest: Option<crate::types::VmId>,
     #[serde(
         flatten,

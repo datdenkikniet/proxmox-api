@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Destroy pool"]
+    #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params)
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Pool index."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -39,6 +41,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Change POOL settings"]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -52,6 +55,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If true, destroys pool even if in use"]
+    #[doc = ""]
     pub force: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -59,6 +63,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Remove the erasure code profile. Defaults to true, if applicable."]
+    #[doc = ""]
     pub remove_ecprofile: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -66,6 +71,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Remove all pveceph-managed storages configured for this pool"]
+    #[doc = ""]
     pub remove_storages: Option<bool>,
     #[serde(
         flatten,
@@ -87,9 +93,11 @@ pub struct GetOutputItems {
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The application of the pool."]
+    #[doc = ""]
     pub application: Option<Application>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The rule to use for mapping object placement in the cluster."]
+    #[doc = ""]
     pub crush_rule: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -97,9 +105,11 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Minimum number of replicas per object"]
+    #[doc = ""]
     pub min_size: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The automatic PG scaling mode of the pool."]
+    #[doc = ""]
     pub pg_autoscale_mode: Option<PgAutoscaleMode>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -107,6 +117,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of placement groups."]
+    #[doc = ""]
     pub pg_num: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -114,6 +125,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Minimal number of placement groups."]
+    #[doc = ""]
     pub pg_num_min: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -121,9 +133,11 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of replicas per object"]
+    #[doc = ""]
     pub size: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The estimated target size of the pool for the PG autoscaler."]
+    #[doc = ""]
     pub target_size: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
@@ -131,6 +145,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The estimated target ratio of the pool for the PG autoscaler."]
+    #[doc = ""]
     pub target_size_ratio: Option<f64>,
     #[serde(
         flatten,
@@ -140,6 +155,8 @@ pub struct PutParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "The application of the pool."]
+#[doc = ""]
 pub enum Application {
     #[serde(rename = "cephfs")]
     Cephfs,
@@ -149,6 +166,8 @@ pub enum Application {
     Rgw,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "The automatic PG scaling mode of the pool."]
+#[doc = ""]
 pub enum PgAutoscaleMode {
     #[serde(rename = "off")]
     Off,

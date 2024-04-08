@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List TFA configurations of users."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Add a TFA entry for a user."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -53,8 +55,10 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Creation time of this entry as unix epoch."]
+    #[doc = ""]
     pub created: u64,
     #[doc = "User chosen description for this entry."]
+    #[doc = ""]
     pub description: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -62,11 +66,14 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Whether this TFA entry is currently enabled."]
+    #[doc = ""]
     pub enable: Option<bool>,
     #[doc = "The id used to reference this entry."]
+    #[doc = ""]
     pub id: String,
     #[serde(rename = "type")]
     #[doc = "TFA Entry Type."]
+    #[doc = ""]
     pub ty: Type,
     #[serde(
         flatten,
@@ -89,11 +96,14 @@ impl PostOutput {
 pub struct PostOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "When adding u2f entries, this contains a challenge the user must respond to in order to finish the registration."]
+    #[doc = ""]
     pub challenge: Option<String>,
     #[doc = "The id of a newly added TFA entry."]
+    #[doc = ""]
     pub id: String,
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "When adding recovery codes, this contains the list of codes to be displayed to the user"]
+    #[doc = ""]
     pub recovery: Vec<String>,
     #[serde(
         flatten,
@@ -119,21 +129,27 @@ impl PostParams {
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "When responding to a u2f challenge: the original challenge string"]
+    #[doc = ""]
     pub challenge: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A description to distinguish multiple entries from one another"]
+    #[doc = ""]
     pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The current password of the user performing the change."]
+    #[doc = ""]
     pub password: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A totp URI."]
+    #[doc = ""]
     pub totp: Option<String>,
     #[serde(rename = "type")]
     #[doc = "TFA Entry Type."]
+    #[doc = ""]
     pub ty: Type,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The current value for the provided totp URI, or a Webauthn/U2F challenge response"]
+    #[doc = ""]
     pub value: Option<String>,
     #[serde(
         flatten,
@@ -143,6 +159,8 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "TFA Entry Type."]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "recovery")]
     Recovery,

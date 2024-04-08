@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "get the status of all ceph flags"]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Set/Unset multiple ceph flags at once."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -47,14 +49,17 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "Flag description."]
+    #[doc = ""]
     pub description: String,
     #[doc = "Flag name."]
+    #[doc = ""]
     pub name: Name,
     #[serde(
         serialize_with = "crate::types::serialize_bool",
         deserialize_with = "crate::types::deserialize_bool"
     )]
     #[doc = "Flag value."]
+    #[doc = ""]
     pub value: bool,
     #[serde(
         flatten,
@@ -71,6 +76,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Backfilling of PGs is suspended."]
+    #[doc = ""]
     pub nobackfill: Option<bool>,
     #[serde(rename = "nodeep-scrub")]
     #[serde(
@@ -79,6 +85,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Deep Scrubbing is disabled."]
+    #[doc = ""]
     pub nodeep_scrub: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -86,6 +93,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "OSD failure reports are being ignored, such that the monitors will not mark OSDs down."]
+    #[doc = ""]
     pub nodown: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -93,6 +101,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "OSDs that were previously marked out will not be marked back in when they start."]
+    #[doc = ""]
     pub noin: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -100,6 +109,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "OSDs will not automatically be marked out after the configured interval."]
+    #[doc = ""]
     pub noout: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -107,6 +117,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Rebalancing of PGs is suspended."]
+    #[doc = ""]
     pub norebalance: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -114,6 +125,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Recovery of PGs is suspended."]
+    #[doc = ""]
     pub norecover: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -121,6 +133,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Scrubbing is disabled."]
+    #[doc = ""]
     pub noscrub: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -128,6 +141,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Cache tiering activity is suspended."]
+    #[doc = ""]
     pub notieragent: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -135,6 +149,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "OSDs are not allowed to start."]
+    #[doc = ""]
     pub noup: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -142,6 +157,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Pauses read and writes."]
+    #[doc = ""]
     pub pause: Option<bool>,
     #[serde(
         flatten,
@@ -151,6 +167,8 @@ pub struct PutParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Flag name."]
+#[doc = ""]
 pub enum Name {
     #[serde(rename = "nobackfill")]
     Nobackfill,

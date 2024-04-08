@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get configured values from either the config file or config DB."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -43,7 +44,8 @@ impl GetParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetParams {
     #[serde(rename = "config-keys")]
-    #[doc = "List of \\<section\\>:\\<config key\\> items."]
+    #[doc = "List of \\\\<section\\\\>:\\\\<config key\\\\> items."]
+    #[doc = ""]
     pub config_keys: String,
     #[serde(
         flatten,

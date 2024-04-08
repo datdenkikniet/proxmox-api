@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Remove IP or Network alias."]
+    #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params)
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Read alias."]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -38,6 +40,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Update IP or Network alias."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -47,6 +50,7 @@ where
 pub struct DeleteParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[serde(
         flatten,
@@ -78,14 +82,17 @@ impl PutParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PutParams {
     #[doc = "Network/IP specification in CIDR format."]
+    #[doc = ""]
     pub cidr: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub comment: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Rename an existing alias."]
+    #[doc = ""]
     pub rename: Option<String>,
     #[serde(
         flatten,

@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Initialize Disk with GPT"]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -35,9 +36,11 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "Block device name"]
+    #[doc = ""]
     pub disk: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "UUID for the GPT table"]
+    #[doc = ""]
     pub uuid: Option<String>,
     #[serde(
         flatten,

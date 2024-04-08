@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get cluster status information."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -45,17 +46,20 @@ impl GetOutputItems {
 pub struct GetOutputItems {
     pub id: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "[node] IP of the resolved nodename."]
+    #[doc = "\\\\[node\\\\] IP of the resolved nodename."]
+    #[doc = ""]
     pub ip: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "[node] Proxmox VE Subscription level, indicates if eligible for enterprise support as well as access to the stable Proxmox VE Enterprise Repository."]
+    #[doc = "\\\\[node\\\\] Proxmox VE Subscription level, indicates if eligible for enterprise support as well as access to the stable Proxmox VE Enterprise Repository."]
+    #[doc = ""]
     pub level: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "[node] Indicates if this is the responding node."]
+    #[doc = "\\\\[node\\\\] Indicates if this is the responding node."]
+    #[doc = ""]
     pub local: Option<bool>,
     pub name: String,
     #[serde(
@@ -63,38 +67,44 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "[node] ID of the node from the corosync configuration."]
+    #[doc = "\\\\[node\\\\] ID of the node from the corosync configuration."]
+    #[doc = ""]
     pub nodeid: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "[cluster] Nodes count, including offline nodes."]
+    #[doc = "\\\\[cluster\\\\] Nodes count, including offline nodes."]
+    #[doc = ""]
     pub nodes: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "[node] Indicates if the node is online or offline."]
+    #[doc = "\\\\[node\\\\] Indicates if the node is online or offline."]
+    #[doc = ""]
     pub online: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "[cluster] Indicates if there is a majority of nodes online to make decisions"]
+    #[doc = "\\\\[cluster\\\\] Indicates if there is a majority of nodes online to make decisions"]
+    #[doc = ""]
     pub quorate: Option<bool>,
     #[serde(rename = "type")]
     #[doc = "Indicates the type, either cluster or node. The type defines the object properties e.g. quorate available for type cluster."]
+    #[doc = ""]
     pub ty: Type,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "[cluster] Current version of the corosync configuration file."]
+    #[doc = "\\\\[cluster\\\\] Current version of the corosync configuration file."]
+    #[doc = ""]
     pub version: Option<u64>,
     #[serde(
         flatten,
@@ -104,6 +114,8 @@ pub struct GetOutputItems {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Indicates the type, either cluster or node. The type defines the object properties e.g. quorate available for type cluster."]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "cluster")]
     Cluster,

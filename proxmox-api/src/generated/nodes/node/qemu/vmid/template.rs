@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create a Template."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -27,6 +28,7 @@ where
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If you want to convert only 1 disk to base image."]
+    #[doc = ""]
     pub disk: Option<Disk>,
     #[serde(
         flatten,
@@ -36,6 +38,8 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "If you want to convert only 1 disk to base image."]
+#[doc = ""]
 pub enum Disk {
     #[serde(rename = "efidisk0")]
     Efidisk0,

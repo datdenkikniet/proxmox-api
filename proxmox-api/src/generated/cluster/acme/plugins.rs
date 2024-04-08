@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "ACME plugin index."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Add ACME plugin configuration."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -45,6 +47,7 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "Unique identifier for ACME plugin instance."]
+    #[doc = ""]
     pub plugin: String,
     #[serde(
         flatten,
@@ -58,6 +61,7 @@ pub struct GetParams {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only list ACME plugins of a specific type"]
+    #[doc = ""]
     pub ty: Option<Type>,
     #[serde(
         flatten,
@@ -84,9 +88,11 @@ impl PostParams {
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "API plugin name"]
+    #[doc = ""]
     pub api: Option<Api>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "DNS plugin data. (base64 encoded)"]
+    #[doc = ""]
     pub data: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -94,14 +100,18 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Flag to disable the config."]
+    #[doc = ""]
     pub disable: Option<bool>,
     #[doc = "ACME Plugin ID name"]
+    #[doc = ""]
     pub id: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of cluster node names."]
+    #[doc = ""]
     pub nodes: Option<String>,
     #[serde(rename = "type")]
     #[doc = "ACME challenge type."]
+    #[doc = ""]
     pub ty: Type,
     #[serde(rename = "validation-delay")]
     #[serde(
@@ -110,6 +120,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Extra delay in seconds to wait before requesting validation. Allows to cope with a long TTL of DNS records."]
+    #[doc = ""]
     pub validation_delay: Option<u64>,
     #[serde(
         flatten,
@@ -119,6 +130,8 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "API plugin name"]
+#[doc = ""]
 pub enum Api {
     #[serde(rename = "1984hosting")]
     _1984hosting,
@@ -412,6 +425,8 @@ pub enum Api {
     Zonomi,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Only list ACME plugins of a specific type"]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "dns")]
     Dns,

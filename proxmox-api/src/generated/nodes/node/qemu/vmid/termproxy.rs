@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Creates a TCP proxy connections."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -27,6 +28,7 @@ where
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "opens a serial terminal (defaults to display)"]
+    #[doc = ""]
     pub serial: Option<Serial>,
     #[serde(
         flatten,
@@ -36,6 +38,8 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "opens a serial terminal (defaults to display)"]
+#[doc = ""]
 pub enum Serial {
     #[serde(rename = "serial0")]
     Serial0,

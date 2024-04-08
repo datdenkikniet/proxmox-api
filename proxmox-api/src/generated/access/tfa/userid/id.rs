@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Delete a TFA entry by ID."]
+    #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params)
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Fetch a requested TFA entry if present."]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -38,6 +40,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Add a TFA entry for a user."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -47,6 +50,7 @@ where
 pub struct DeleteParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The current password of the user performing the change."]
+    #[doc = ""]
     pub password: Option<String>,
     #[serde(
         flatten,
@@ -74,8 +78,10 @@ pub struct GetOutput {
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Creation time of this entry as unix epoch."]
+    #[doc = ""]
     pub created: u64,
     #[doc = "User chosen description for this entry."]
+    #[doc = ""]
     pub description: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -83,11 +89,14 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Whether this TFA entry is currently enabled."]
+    #[doc = ""]
     pub enable: Option<bool>,
     #[doc = "The id used to reference this entry."]
+    #[doc = ""]
     pub id: String,
     #[serde(rename = "type")]
     #[doc = "TFA Entry Type."]
+    #[doc = ""]
     pub ty: Type,
     #[serde(
         flatten,
@@ -100,6 +109,7 @@ pub struct GetOutput {
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A description to distinguish multiple entries from one another"]
+    #[doc = ""]
     pub description: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -107,9 +117,11 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Whether the entry should be enabled for login."]
+    #[doc = ""]
     pub enable: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The current password of the user performing the change."]
+    #[doc = ""]
     pub password: Option<String>,
     #[serde(
         flatten,
@@ -119,6 +131,8 @@ pub struct PutParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "TFA Entry Type."]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "recovery")]
     Recovery,

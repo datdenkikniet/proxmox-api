@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get schema of ACME challenge types."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -37,6 +38,7 @@ impl GetOutputItems {
 pub struct GetOutputItems {
     pub id: String,
     #[doc = "Human readable name, falls back to id"]
+    #[doc = ""]
     pub name: String,
     pub schema: SchemaGetOutputItemsSchema,
     #[serde(rename = "type")]

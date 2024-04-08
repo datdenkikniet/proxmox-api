@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Storage index."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create a new storage."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -39,6 +41,7 @@ pub struct ConfigPostOutputConfig {
     #[serde(rename = "encryption-key")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The, possible auto-generated, encryption-key."]
+    #[doc = ""]
     pub encryption_key: Option<String>,
     #[serde(
         flatten,
@@ -70,6 +73,7 @@ pub struct GetParams {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only list storage of specific type"]
+    #[doc = ""]
     pub ty: Option<Type>,
     #[serde(
         flatten,
@@ -92,11 +96,14 @@ impl PostOutput {
 pub struct PostOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Partial, possible server generated, configuration properties."]
+    #[doc = ""]
     pub config: Option<ConfigPostOutputConfig>,
     #[doc = "The ID of the created storage."]
+    #[doc = ""]
     pub storage: String,
     #[serde(rename = "type")]
     #[doc = "The type of the created storage."]
+    #[doc = ""]
     pub ty: Type,
     #[serde(
         flatten,
@@ -178,43 +185,57 @@ impl PostParams {
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Authsupported."]
+    #[doc = ""]
     pub authsupported: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Base volume. This volume is automatically activated."]
+    #[doc = ""]
     pub base: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "block size"]
+    #[doc = ""]
     pub blocksize: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set I/O bandwidth limit for various operations (in KiB/s)."]
+    #[doc = ""]
     pub bwlimit: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "host group for comstar views"]
+    #[doc = ""]
     pub comstar_hg: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "target group for comstar views"]
+    #[doc = ""]
     pub comstar_tg: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Allowed content types.\n\nNOTE: the value 'rootdir' is used for Containers, and value 'images' for VMs.\n"]
+    #[doc = "Allowed content types."]
+    #[doc = ""]
+    #[doc = "NOTE: the value 'rootdir' is used for Containers, and value 'images' for VMs."]
+    #[doc = ""]
     pub content: Option<String>,
     #[serde(rename = "content-dirs")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Overrides for default content type directories."]
+    #[doc = ""]
     pub content_dirs: Option<String>,
     #[serde(rename = "create-base-path")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Create the base directory if it doesn't exist."]
+    #[doc = ""]
     pub create_base_path: Option<()>,
     #[serde(rename = "create-subdirs")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Populate the directory with the default structure."]
+    #[doc = ""]
     pub create_subdirs: Option<()>,
     #[serde(rename = "data-pool")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Data Pool (for erasure coding only)"]
+    #[doc = ""]
     pub data_pool: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Proxmox Backup Server datastore name."]
+    #[doc = ""]
     pub datastore: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -222,26 +243,33 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Flag to disable the storage."]
+    #[doc = ""]
     pub disable: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "CIFS domain."]
+    #[doc = ""]
     pub domain: Option<String>,
     #[serde(rename = "encryption-key")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Encryption key. Use 'autogen' to generate one automatically without passphrase."]
+    #[doc = ""]
     pub encryption_key: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "NFS export path."]
+    #[doc = ""]
     pub export: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Certificate SHA 256 fingerprint."]
+    #[doc = ""]
     pub fingerprint: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Default image format."]
+    #[doc = ""]
     pub format: Option<String>,
     #[serde(rename = "fs-name")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The Ceph filesystem name."]
+    #[doc = ""]
     pub fs_name: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -249,15 +277,19 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Mount CephFS through FUSE."]
+    #[doc = ""]
     pub fuse: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Assume the given path is an externally managed mountpoint and consider the storage offline if it is not mounted. Using a boolean (yes/no) value serves as a shortcut to using the target path in this field."]
+    #[doc = ""]
     pub is_mountpoint: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "iscsi provider"]
+    #[doc = ""]
     pub iscsiprovider: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Client keyring contents (for external clusters)."]
+    #[doc = ""]
     pub keyring: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -265,17 +297,21 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Always access rbd through krbd kernel module."]
+    #[doc = ""]
     pub krbd: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "target portal group for Linux LIO targets"]
+    #[doc = ""]
     pub lio_tpg: Option<String>,
     #[serde(rename = "master-pubkey")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Base64-encoded, PEM-formatted public RSA key. Used to encrypt a copy of the encryption-key which will be added to each encrypted backup."]
+    #[doc = ""]
     pub master_pubkey: Option<String>,
     #[serde(rename = "max-protected-backups")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal number of protected backups per guest. Use '-1' for unlimited."]
+    #[doc = ""]
     pub max_protected_backups: Option<()>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -283,18 +319,23 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Deprecated: use 'prune-backups' instead. Maximal number of backup files per VM. Use '0' for unlimited."]
+    #[doc = ""]
     pub maxfiles: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Create the directory if it doesn't exist and populate it with default sub-dirs. NOTE: Deprecated, use the 'create-base-path' and 'create-subdirs' options instead."]
+    #[doc = ""]
     pub mkdir: Option<()>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "IP addresses of monitors (for external clusters)."]
+    #[doc = ""]
     pub monhost: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "mount point"]
+    #[doc = ""]
     pub mountpoint: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Namespace."]
+    #[doc = ""]
     pub namespace: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -302,9 +343,11 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set the NOCOW flag on files. Disables data checksumming and causes data errors to be unrecoverable from while allowing direct I/O. Only use this if data does not need to be any more safe than on a single ext4 formatted disk with no underlying raid system."]
+    #[doc = ""]
     pub nocow: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of nodes for which the storage configuration applies."]
+    #[doc = ""]
     pub nodes: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -312,18 +355,23 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "disable write caching on the target"]
+    #[doc = ""]
     pub nowritecache: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "NFS/CIFS mount options (see 'man nfs' or 'man mount.cifs')"]
+    #[doc = ""]
     pub options: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Password for accessing the share/datastore."]
+    #[doc = ""]
     pub password: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "File system path."]
+    #[doc = ""]
     pub path: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Pool."]
+    #[doc = ""]
     pub pool: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -331,16 +379,20 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For non default port."]
+    #[doc = ""]
     pub port: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "iSCSI portal (IP or DNS name with optional port)."]
+    #[doc = ""]
     pub portal: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Preallocation mode for raw and qcow2 images. Using 'metadata' on raw images results in preallocation=off."]
+    #[doc = ""]
     pub preallocation: Option<Preallocation>,
     #[serde(rename = "prune-backups")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The retention options with shorter intervals are processed first with --keep-last being the very first one. Each option covers a specific period of time. We say that backups within this period are covered by this option. The next option does not take care of already covered backups and only considers older backups."]
+    #[doc = ""]
     pub prune_backups: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -348,18 +400,23 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Zero-out data when removing LVs."]
+    #[doc = ""]
     pub saferemove: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Wipe throughput (cstream -t parameter value)."]
+    #[doc = ""]
     pub saferemove_throughput: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Server IP or DNS name."]
+    #[doc = ""]
     pub server: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Backup volfile server IP or DNS name."]
+    #[doc = ""]
     pub server2: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "CIFS share."]
+    #[doc = ""]
     pub share: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -367,13 +424,16 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Indicate that this is a single storage with the same contents on all nodes (or all listed in the 'nodes' option). It will not make the contents of a local storage automatically accessible to other nodes, it just marks an already shared storage as such!"]
+    #[doc = ""]
     pub shared: Option<bool>,
     #[serde(rename = "skip-cert-verification")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Disable TLS certificate verification, only enable on fully trusted networks!"]
+    #[doc = ""]
     pub skip_cert_verification: Option<()>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "SMB protocol version. 'default' if not set, negotiates the highest SMB2+ version supported by both the client and server."]
+    #[doc = ""]
     pub smbversion: Option<Smbversion>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -381,11 +441,14 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "use sparse volumes"]
+    #[doc = ""]
     pub sparse: Option<bool>,
     #[doc = "The storage identifier."]
+    #[doc = ""]
     pub storage: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Subdir to mount."]
+    #[doc = ""]
     pub subdir: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -393,27 +456,35 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only use logical volumes tagged with 'pve-vm-ID'."]
+    #[doc = ""]
     pub tagged_only: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "iSCSI target."]
+    #[doc = ""]
     pub target: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "LVM thin pool LV name."]
+    #[doc = ""]
     pub thinpool: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Gluster transport: tcp or rdma"]
+    #[doc = ""]
     pub transport: Option<Transport>,
     #[serde(rename = "type")]
     #[doc = "Storage type."]
+    #[doc = ""]
     pub ty: Type,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "RBD Id."]
+    #[doc = ""]
     pub username: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Volume group name."]
+    #[doc = ""]
     pub vgname: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Glusterfs Volume."]
+    #[doc = ""]
     pub volume: Option<String>,
     #[serde(
         flatten,
@@ -423,6 +494,8 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Preallocation mode for raw and qcow2 images. Using 'metadata' on raw images results in preallocation=off."]
+#[doc = ""]
 pub enum Preallocation {
     #[serde(rename = "falloc")]
     Falloc,
@@ -439,6 +512,8 @@ impl Default for Preallocation {
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "SMB protocol version. 'default' if not set, negotiates the highest SMB2+ version supported by both the client and server."]
+#[doc = ""]
 pub enum Smbversion {
     #[serde(rename = "2.0")]
     _20,
@@ -459,6 +534,8 @@ impl Default for Smbversion {
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Gluster transport: tcp or rdma"]
+#[doc = ""]
 pub enum Transport {
     #[serde(rename = "rdma")]
     Rdma,
@@ -468,6 +545,8 @@ pub enum Transport {
     Unix,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Only list storage of specific type"]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "btrfs")]
     Btrfs,

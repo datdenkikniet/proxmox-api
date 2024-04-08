@@ -11,6 +11,7 @@ pub struct EnumDef {
     derives: Vec<String>,
     values: BTreeSet<String>,
     default: Option<String>,
+    doc: Vec<String>,
 }
 
 impl EnumDef {
@@ -35,6 +36,7 @@ impl EnumDef {
         extra_derives: T,
         values: BTreeSet<String>,
         default: Option<String>,
+        doc: Vec<String>,
     ) -> Self {
         if let Some(default) = default.as_ref() {
             assert!(values.contains(default));
@@ -50,6 +52,7 @@ impl EnumDef {
                 .collect(),
             values,
             default,
+            doc,
         };
 
         me
@@ -71,9 +74,15 @@ impl ToTokens for EnumDef {
             derives,
             values,
             default,
+            doc,
         } = self;
 
         let name = Ident::new(self.name(), quote!().span());
+
+        let enum_doc = doc.iter().map(|doc| {
+            let doc = Literal::string(doc);
+            quote!(#[doc = #doc])
+        });
 
         let derives = derives.iter().map(|v| {
             let parsed: TokenStream = v.parse().unwrap();
@@ -101,6 +110,7 @@ impl ToTokens for EnumDef {
 
         tokens.extend(quote! {
             #[derive(#(#derives)*)]
+            #(#enum_doc)*
             pub enum #name {
                 #(#variants)*
             }

@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Extract a file or directory (as zip archive) from a PBS backup."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -36,6 +37,7 @@ impl GetParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetParams {
     #[doc = "base64-path to the directory or file to download."]
+    #[doc = ""]
     pub filepath: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -43,8 +45,10 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Download dirs as 'tar.zst' instead of 'zip'."]
+    #[doc = ""]
     pub tar: Option<bool>,
     #[doc = "Backup volume ID or name. Currently only PBS snapshots are supported."]
+    #[doc = ""]
     pub volume: String,
     #[serde(
         flatten,

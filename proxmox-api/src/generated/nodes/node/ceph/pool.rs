@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List all pools and their settings (which are settable by the POST/PUT endpoints)."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create Ceph pool"]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -188,16 +190,20 @@ impl PostParams {
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure VM and CT storage using the new pool."]
+    #[doc = ""]
     pub add_storages: Option<()>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The application of the pool."]
+    #[doc = ""]
     pub application: Option<Application>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The rule to use for mapping object placement in the cluster."]
+    #[doc = ""]
     pub crush_rule: Option<String>,
     #[serde(rename = "erasure-coding")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Create an erasure coded pool for RBD with an accompaning replicated pool for metadata storage. With EC, the common ceph options 'size', 'min_size' and 'crush_rule' parameters will be applied to the metadata pool."]
+    #[doc = ""]
     pub erasure_coding: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -205,11 +211,14 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Minimum number of replicas per object"]
+    #[doc = ""]
     pub min_size: Option<u64>,
     #[doc = "The name of the pool. It must be unique."]
+    #[doc = ""]
     pub name: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The automatic PG scaling mode of the pool."]
+    #[doc = ""]
     pub pg_autoscale_mode: Option<PgAutoscaleMode>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -217,6 +226,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of placement groups."]
+    #[doc = ""]
     pub pg_num: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -224,6 +234,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Minimal number of placement groups."]
+    #[doc = ""]
     pub pg_num_min: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -231,9 +242,11 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of replicas per object"]
+    #[doc = ""]
     pub size: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The estimated target size of the pool for the PG autoscaler."]
+    #[doc = ""]
     pub target_size: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
@@ -241,6 +254,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The estimated target ratio of the pool for the PG autoscaler."]
+    #[doc = ""]
     pub target_size_ratio: Option<f64>,
     #[serde(
         flatten,
@@ -250,6 +264,8 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "The application of the pool."]
+#[doc = ""]
 pub enum Application {
     #[serde(rename = "cephfs")]
     Cephfs,
@@ -264,6 +280,8 @@ impl Default for Application {
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "The automatic PG scaling mode of the pool."]
+#[doc = ""]
 pub enum PgAutoscaleMode {
     #[serde(rename = "off")]
     Off,

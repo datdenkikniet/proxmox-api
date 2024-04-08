@@ -172,8 +172,7 @@ impl ToTokens for FieldDef {
             ty
         };
 
-        let doc = doc.iter().map(|v| {
-            let v = super::clean_doc(&v);
+        let doc = doc.iter().flat_map(super::clean_doc).map(|v| {
             let doc_literal = Literal::string(&v);
             quote! {
                 #[doc = #doc_literal]

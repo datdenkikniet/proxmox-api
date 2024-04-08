@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List all snapshots."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Snapshot a container."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -48,11 +50,14 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "Snapshot description."]
+    #[doc = ""]
     pub description: String,
     #[doc = "Snapshot identifier. Value 'current' identifies the current VM."]
+    #[doc = ""]
     pub name: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Parent snapshot identifier."]
+    #[doc = ""]
     pub parent: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -60,6 +65,7 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Snapshot creation time"]
+    #[doc = ""]
     pub snaptime: Option<u64>,
     #[serde(
         flatten,
@@ -81,8 +87,10 @@ impl PostParams {
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A textual description or comment."]
+    #[doc = ""]
     pub description: Option<String>,
     #[doc = "The name of the snapshot."]
+    #[doc = ""]
     pub snapname: String,
     #[serde(
         flatten,

@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get automatically generated cloudinit config."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -35,6 +36,7 @@ impl GetParams {
 pub struct GetParams {
     #[serde(rename = "type")]
     #[doc = "Config type."]
+    #[doc = ""]
     pub ty: Type,
     #[serde(
         flatten,
@@ -44,6 +46,8 @@ pub struct GetParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Config type."]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "meta")]
     Meta,

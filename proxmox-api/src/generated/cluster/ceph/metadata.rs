@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get ceph metadata."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -42,12 +43,16 @@ impl GetOutput {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutput {
     #[doc = "Metadata servers configured in the cluster and their properties."]
+    #[doc = ""]
     pub mds: MdsGetOutputMds,
     #[doc = "Managers configured in the cluster and their properties."]
+    #[doc = ""]
     pub mgr: MgrGetOutputMgr,
     #[doc = "Monitors configured in the cluster and their properties."]
+    #[doc = ""]
     pub mon: MonGetOutputMon,
     #[doc = "Ceph version installed on the nodes."]
+    #[doc = ""]
     pub node: NodeGetOutputNode,
     #[serde(
         flatten,
@@ -94,28 +99,36 @@ impl IdGetOutputMdsId {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct IdGetOutputMdsId {
     #[doc = "Bind addresses and ports."]
+    #[doc = ""]
     pub addr: String,
     #[doc = "Ceph release codename currently used."]
+    #[doc = ""]
     pub ceph_release: String,
     #[doc = "Version info currently used by the service."]
+    #[doc = ""]
     pub ceph_version: String,
     #[doc = "Short version (numerical) info currently used by the service."]
+    #[doc = ""]
     pub ceph_version_short: String,
     #[doc = "Hostname on which the service is running."]
+    #[doc = ""]
     pub hostname: String,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Memory of the service currently in swap."]
+    #[doc = ""]
     pub mem_swap_kb: u64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Memory consumption of the service."]
+    #[doc = ""]
     pub mem_total_kb: u64,
     #[doc = "Name of the service instance."]
+    #[doc = ""]
     pub name: String,
     #[serde(
         flatten,
@@ -151,28 +164,36 @@ impl IdGetOutputMgrId {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct IdGetOutputMgrId {
     #[doc = "Bind address"]
+    #[doc = ""]
     pub addr: String,
     #[doc = "Ceph release codename currently used."]
+    #[doc = ""]
     pub ceph_release: String,
     #[doc = "Version info currently used by the service."]
+    #[doc = ""]
     pub ceph_version: String,
     #[doc = "Short version (numerical) info currently used by the service."]
+    #[doc = ""]
     pub ceph_version_short: String,
     #[doc = "Hostname on which the service is running."]
+    #[doc = ""]
     pub hostname: String,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Memory of the service currently in swap."]
+    #[doc = ""]
     pub mem_swap_kb: u64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Memory consumption of the service."]
+    #[doc = ""]
     pub mem_total_kb: u64,
     #[doc = "Name of the service instance."]
+    #[doc = ""]
     pub name: String,
     #[serde(
         flatten,
@@ -208,28 +229,36 @@ impl IdGetOutputMonId {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct IdGetOutputMonId {
     #[doc = "Bind addresses and ports."]
+    #[doc = ""]
     pub addrs: String,
     #[doc = "Ceph release codename currently used."]
+    #[doc = ""]
     pub ceph_release: String,
     #[doc = "Version info currently used by the service."]
+    #[doc = ""]
     pub ceph_version: String,
     #[doc = "Short version (numerical) info currently used by the service."]
+    #[doc = ""]
     pub ceph_version_short: String,
     #[doc = "Hostname on which the service is running."]
+    #[doc = ""]
     pub hostname: String,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Memory of the service currently in swap."]
+    #[doc = ""]
     pub mem_swap_kb: u64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Memory consumption of the service."]
+    #[doc = ""]
     pub mem_total_kb: u64,
     #[doc = "Name of the service instance."]
+    #[doc = ""]
     pub name: String,
     #[serde(
         flatten,
@@ -250,6 +279,7 @@ impl MdsGetOutputMds {
 pub struct MdsGetOutputMds {
     #[serde(rename = "{id}")]
     #[doc = "Useful properties are listed, but not the full list."]
+    #[doc = ""]
     pub _id: IdGetOutputMdsId,
     #[serde(
         flatten,
@@ -270,6 +300,7 @@ impl MgrGetOutputMgr {
 pub struct MgrGetOutputMgr {
     #[serde(rename = "{id}")]
     #[doc = "Useful properties are listed, but not the full list."]
+    #[doc = ""]
     pub _id: IdGetOutputMgrId,
     #[serde(
         flatten,
@@ -290,6 +321,7 @@ impl MonGetOutputMon {
 pub struct MonGetOutputMon {
     #[serde(rename = "{id}")]
     #[doc = "Useful properties are listed, but not the full list."]
+    #[doc = ""]
     pub _id: IdGetOutputMonId,
     #[serde(
         flatten,
@@ -329,8 +361,10 @@ impl NodeGetOutputNodeNode {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct NodeGetOutputNodeNode {
     #[doc = "GIT commit used for the build."]
+    #[doc = ""]
     pub buildcommit: String,
     #[doc = "Version info."]
+    #[doc = ""]
     pub version: VersionGetOutputNodeNodeVersion,
     #[serde(
         flatten,
@@ -350,6 +384,7 @@ impl VersionGetOutputNodeNodeVersion {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct VersionGetOutputNodeNodeVersion {
     #[doc = "Version as single string."]
+    #[doc = ""]
     pub str: String,
     #[serde(
         flatten,

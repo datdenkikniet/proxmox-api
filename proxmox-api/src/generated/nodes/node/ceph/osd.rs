@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get Ceph osd list/tree."]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create OSD"]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -63,15 +65,20 @@ pub struct PostParams {
     #[serde(rename = "crush-device-class")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set the device class of the OSD in crush."]
+    #[doc = ""]
     pub crush_device_class: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Block device name for block.db."]
+    #[doc = ""]
     pub db_dev: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Size in GiB for block.db."]
+    #[doc = ""]
     #[doc = "If a block.db is requested but the size is not given, will be automatically selected by: bluestore_block_db_size from the ceph database (osd or global section) or config (osd or global section) in that order. If this is not available, it will be sized 10% of the size of the OSD device. Fails if the available size is not enough."]
+    #[doc = ""]
     pub db_dev_size: Option<()>,
     #[doc = "Block device name."]
+    #[doc = ""]
     pub dev: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -79,17 +86,24 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enables encryption of the OSD."]
+    #[doc = ""]
     pub encrypted: Option<bool>,
     #[serde(rename = "osds-per-device")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "OSD services per physical device. Only useful for fast NVMe devices\"\n\t\t    .\" to utilize their performance better."]
+    #[doc = "OSD services per physical device. Only useful for fast NVMe devices"]
+    #[doc = ""]
+    #[doc = ".\" to utilize their performance better."]
+    #[doc = ""]
     pub osds_per_device: Option<()>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Block device name for block.wal."]
+    #[doc = ""]
     pub wal_dev: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Size in GiB for block.wal."]
+    #[doc = ""]
     #[doc = "If a block.wal is requested but the size is not given, will be automatically selected by: bluestore_block_wal_size from the ceph database (osd or global section) or config (osd or global section) in that order. If this is not available, it will be sized 1% of the size of the OSD device. Fails if the available size is not enough."]
+    #[doc = ""]
     pub wal_dev_size: Option<()>,
     #[serde(
         flatten,

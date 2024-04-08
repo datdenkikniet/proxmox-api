@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List TFA configurations of users."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -43,8 +44,10 @@ pub struct EntriesGetOutputItemsEntriesItems {
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Creation time of this entry as unix epoch."]
+    #[doc = ""]
     pub created: u64,
     #[doc = "User chosen description for this entry."]
+    #[doc = ""]
     pub description: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -52,11 +55,14 @@ pub struct EntriesGetOutputItemsEntriesItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Whether this TFA entry is currently enabled."]
+    #[doc = ""]
     pub enable: Option<bool>,
     #[doc = "The id used to reference this entry."]
+    #[doc = ""]
     pub id: String,
     #[serde(rename = "type")]
     #[doc = "TFA Entry Type."]
+    #[doc = ""]
     pub ty: Type,
     #[serde(
         flatten,
@@ -87,6 +93,7 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Contains a timestamp until when a user is locked out of 2nd factors."]
+    #[doc = ""]
     pub tfa_locked_until: Option<u64>,
     #[serde(rename = "totp-locked")]
     #[serde(
@@ -95,8 +102,10 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "True if the user is currently locked out of TOTP factors."]
+    #[doc = ""]
     pub totp_locked: Option<bool>,
     #[doc = "User this entry belongs to."]
+    #[doc = ""]
     pub userid: String,
     #[serde(
         flatten,
@@ -106,6 +115,8 @@ pub struct GetOutputItems {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "TFA Entry Type."]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "recovery")]
     Recovery,

@@ -43,6 +43,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "QEMU Guest Agent command index."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -53,6 +54,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Execute QEMU Guest Agent commands."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -87,6 +89,7 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "The QGA command."]
+    #[doc = ""]
     pub command: Command,
     #[serde(
         flatten,
@@ -96,6 +99,8 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "The QGA command."]
+#[doc = ""]
 pub enum Command {
     #[serde(rename = "fsfreeze-freeze")]
     FsfreezeFreeze,

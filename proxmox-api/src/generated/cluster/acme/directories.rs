@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get named known ACME directory endpoints."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -32,5 +33,6 @@ impl GetOutputItems {
 pub struct GetOutputItems {
     pub name: String,
     #[doc = "URL of ACME CA directory endpoint."]
+    #[doc = ""]
     pub url: String,
 }

@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "DELETE custom certificate chain and key."]
+    #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params)
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Upload or update custom certificate chain and key."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -41,6 +43,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Restart pveproxy."]
+    #[doc = ""]
     pub restart: Option<bool>,
     #[serde(
         flatten,
@@ -55,9 +58,11 @@ pub struct PostOutput {
     pub filename: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Certificate SHA 256 fingerprint."]
+    #[doc = ""]
     pub fingerprint: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Certificate issuer name."]
+    #[doc = ""]
     pub issuer: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -65,6 +70,7 @@ pub struct PostOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Certificate's notAfter timestamp (UNIX epoch)."]
+    #[doc = ""]
     pub notafter: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -72,9 +78,11 @@ pub struct PostOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Certificate's notBefore timestamp (UNIX epoch)."]
+    #[doc = ""]
     pub notbefore: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Certificate in PEM format"]
+    #[doc = ""]
     pub pem: Option<String>,
     #[serde(rename = "public-key-bits")]
     #[serde(
@@ -83,16 +91,20 @@ pub struct PostOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Certificate's public key size"]
+    #[doc = ""]
     pub public_key_bits: Option<u64>,
     #[serde(rename = "public-key-type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Certificate's public key algorithm"]
+    #[doc = ""]
     pub public_key_type: Option<String>,
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of Certificate's SubjectAlternativeName entries."]
+    #[doc = ""]
     pub san: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Certificate subject name."]
+    #[doc = ""]
     pub subject: Option<String>,
     #[serde(
         flatten,
@@ -115,6 +127,7 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "PEM encoded certificate (chain)."]
+    #[doc = ""]
     pub certificates: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -122,9 +135,11 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Overwrite existing custom or ACME certificate files."]
+    #[doc = ""]
     pub force: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "PEM encoded private key."]
+    #[doc = ""]
     pub key: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -132,6 +147,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Restart pveproxy."]
+    #[doc = ""]
     pub restart: Option<bool>,
     #[serde(
         flatten,

@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Send a test notification to a provided target."]
+    #[doc = ""]
     pub fn post(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &())

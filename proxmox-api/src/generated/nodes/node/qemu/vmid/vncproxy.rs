@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Creates a TCP VNC proxy connections."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -32,6 +33,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Generates a random password to be used as ticket instead of the API ticket."]
+    #[doc = ""]
     pub generate_password: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -39,6 +41,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prepare for websocket upgrade (only required when using serial terminal, otherwise upgrade is always possible)."]
+    #[doc = ""]
     pub websocket: Option<bool>,
     #[serde(
         flatten,

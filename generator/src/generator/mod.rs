@@ -37,8 +37,19 @@ pub(self) fn proxmox_api_str(path: String) -> Literal {
     Literal::string(&format!("crate::{path}"))
 }
 
-pub fn clean_doc(input: &str) -> String {
-    input.replace('<', "\\<").replace('>', "\\>")
+pub fn clean_doc<'a, T: AsRef<str>>(input: &'a T) -> impl Iterator<Item = String> + 'a {
+    input
+        .as_ref()
+        .split('\n')
+        .map(|v| v.trim().trim_start_matches('"').trim_end_matches('"'))
+        .filter(|v| !v.is_empty())
+        .flat_map(|v| [v, ""])
+        .map(|v| {
+            v.replace('<', "\\<")
+                .replace('>', "\\>")
+                .replace('[', "\\[")
+                .replace(']', "\\]")
+        })
 }
 
 pub struct Generator {
@@ -159,8 +170,8 @@ impl Generator {
 
                 let doc = if let Some(doc) = &info.description {
                     let doc = clean_doc(&doc);
-                    let doc = Literal::string(&doc);
-                    Some(quote! { #[doc = #doc] })
+                    let doc = doc.map(|doc| Literal::string(&doc));
+                    Some(quote! { #(#[doc = #doc])* })
                 } else {
                     None
                 };

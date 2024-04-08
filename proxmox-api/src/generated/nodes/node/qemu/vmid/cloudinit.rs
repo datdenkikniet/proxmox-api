@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get the cloudinit configuration with both current and pending values."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Regenerate and change cloudinit config drive."]
+    #[doc = ""]
     pub fn put(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &())
@@ -52,15 +54,19 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Indicates a pending delete request if present and not 0. "]
+    #[doc = "Indicates a pending delete request if present and not 0."]
+    #[doc = ""]
     pub delete: Option<u64>,
     #[doc = "Configuration option name."]
+    #[doc = ""]
     pub key: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The new pending value."]
+    #[doc = ""]
     pub pending: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Value as it was used to generate the current cloudinit image."]
+    #[doc = ""]
     pub value: Option<String>,
     #[serde(
         flatten,

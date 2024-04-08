@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Stop virtual machine. The qemu process will exit immediately. Thisis akin to pulling the power plug of a running computer and may damage the VM data"]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -32,9 +33,11 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Do not deactivate storage volumes."]
+    #[doc = ""]
     pub keepactive: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The cluster node name."]
+    #[doc = ""]
     pub migratedfrom: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -42,6 +45,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Ignore locks - only root is allowed to use this option."]
+    #[doc = ""]
     pub skiplock: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -49,6 +53,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Wait maximal timeout seconds."]
+    #[doc = ""]
     pub timeout: Option<u64>,
     #[serde(
         flatten,

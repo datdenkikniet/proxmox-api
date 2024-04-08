@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Retrieve ACME TermsOfService URL from CA. Deprecated, please use /cluster/acme/meta."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Option<String>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -27,6 +28,7 @@ where
 pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "URL of ACME CA directory endpoint."]
+    #[doc = ""]
     pub directory: Option<String>,
     #[serde(
         flatten,

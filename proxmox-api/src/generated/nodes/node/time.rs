@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Read server time and time zone settings."]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Set time zone."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -49,14 +51,17 @@ pub struct GetOutput {
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Seconds since 1970-01-01 00:00:00 (local time)"]
+    #[doc = ""]
     pub localtime: u64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Seconds since 1970-01-01 00:00:00 UTC."]
+    #[doc = ""]
     pub time: u64,
     #[doc = "Time zone"]
+    #[doc = ""]
     pub timezone: String,
 }
 impl PutParams {
@@ -70,6 +75,7 @@ impl PutParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PutParams {
     #[doc = "Time zone. The file '/usr/share/zoneinfo/zone.tab' contains the list of valid names."]
+    #[doc = ""]
     pub timezone: String,
     #[serde(
         flatten,

@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Shutdown the container. This will trigger a clean shutdown of the container, see lxc-stop(1) for details."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -32,6 +33,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Make sure the Container stops."]
+    #[doc = ""]
     pub forcestop: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -39,6 +41,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Wait maximal timeout seconds."]
+    #[doc = ""]
     pub timeout: Option<u64>,
     #[serde(
         flatten,

@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List files and directories for single file restore under the given path."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -39,12 +40,14 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "base64 path of the current entry"]
+    #[doc = ""]
     pub filepath: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool",
         deserialize_with = "crate::types::deserialize_bool"
     )]
     #[doc = "If this entry is a leaf in the directory graph."]
+    #[doc = ""]
     pub leaf: bool,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -52,6 +55,7 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Entry last-modified time (unix timestamp)."]
+    #[doc = ""]
     pub mtime: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -59,11 +63,14 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Entry file size."]
+    #[doc = ""]
     pub size: Option<u64>,
     #[doc = "Entry display text."]
+    #[doc = ""]
     pub text: String,
     #[serde(rename = "type")]
     #[doc = "Entry type."]
+    #[doc = ""]
     pub ty: String,
     #[serde(
         flatten,
@@ -84,8 +91,10 @@ impl GetParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetParams {
     #[doc = "base64-path to the directory or file being listed, or \"/\"."]
+    #[doc = ""]
     pub filepath: String,
     #[doc = "Backup volume ID or name. Currently only PBS snapshots are supported."]
+    #[doc = ""]
     pub volume: String,
     #[serde(
         flatten,

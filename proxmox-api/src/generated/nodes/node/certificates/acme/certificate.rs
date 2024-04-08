@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Revoke existing certificate from CA."]
+    #[doc = ""]
     pub fn delete(&self) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &())
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Order a new certificate from ACME-compatible CA."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -38,6 +40,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Renew existing certificate from CA."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -51,6 +54,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Overwrite existing custom certificate."]
+    #[doc = ""]
     pub force: Option<bool>,
     #[serde(
         flatten,
@@ -67,6 +71,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Force renewal even if expiry is more than 30 days away."]
+    #[doc = ""]
     pub force: Option<bool>,
     #[serde(
         flatten,

@@ -20,6 +20,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "QEMU capabilities index."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())

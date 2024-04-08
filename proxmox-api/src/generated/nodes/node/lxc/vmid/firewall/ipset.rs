@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List IPSets"]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create new IPSet"]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -49,8 +51,10 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub comment: Option<String>,
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: String,
     #[doc = "IP set name."]
+    #[doc = ""]
     pub name: String,
     #[serde(
         flatten,
@@ -76,11 +80,14 @@ pub struct PostParams {
     pub comment: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[doc = "IP set name."]
+    #[doc = ""]
     pub name: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Rename an existing IPSet. You can set 'rename' to the same value as 'name' to update the 'comment' of an existing IPSet."]
+    #[doc = ""]
     pub rename: Option<String>,
     #[serde(
         flatten,

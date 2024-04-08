@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Unlock a user's TFA authentication."]
+    #[doc = ""]
     pub fn put(&self) -> Result<bool, T::Error> {
         let path = self.path.to_string();
         Ok(self.client.put::<_, crate::types::Bool>(&path, &())?.get())

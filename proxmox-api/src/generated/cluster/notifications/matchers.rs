@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Returns a list of all matchers"]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create a new matcher"]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -55,6 +57,7 @@ impl GetOutputItems {
 pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Comment"]
+    #[doc = ""]
     pub comment: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -62,6 +65,7 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Disable this matcher"]
+    #[doc = ""]
     pub disable: Option<bool>,
     #[serde(rename = "invert-match")]
     #[serde(
@@ -70,28 +74,36 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Invert match of the whole matcher"]
+    #[doc = ""]
     pub invert_match: Option<bool>,
     #[serde(rename = "match-calendar")]
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Match notification timestamp"]
+    #[doc = ""]
     pub match_calendar: Vec<String>,
     #[serde(rename = "match-field")]
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
-    #[doc = "Metadata fields to match (regex or exact match). Must be in the form (regex|exact):\\<field\\>=\\<value\\>"]
+    #[doc = "Metadata fields to match (regex or exact match). Must be in the form (regex|exact):\\\\<field\\\\>=\\\\<value\\\\>"]
+    #[doc = ""]
     pub match_field: Vec<String>,
     #[serde(rename = "match-severity")]
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Notification severities to match"]
+    #[doc = ""]
     pub match_severity: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Choose between 'all' and 'any' for when multiple properties are specified"]
+    #[doc = ""]
     pub mode: Option<Mode>,
     #[doc = "Name of the matcher."]
+    #[doc = ""]
     pub name: String,
     #[doc = "Show if this entry was created by a user or was built-in"]
+    #[doc = ""]
     pub origin: Origin,
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Targets to notify on match"]
+    #[doc = ""]
     pub target: Vec<String>,
     #[serde(
         flatten,
@@ -120,6 +132,7 @@ impl PostParams {
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Comment"]
+    #[doc = ""]
     pub comment: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -127,6 +140,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Disable this matcher"]
+    #[doc = ""]
     pub disable: Option<bool>,
     #[serde(rename = "invert-match")]
     #[serde(
@@ -135,26 +149,33 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Invert match of the whole matcher"]
+    #[doc = ""]
     pub invert_match: Option<bool>,
     #[serde(rename = "match-calendar")]
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Match notification timestamp"]
+    #[doc = ""]
     pub match_calendar: Vec<String>,
     #[serde(rename = "match-field")]
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
-    #[doc = "Metadata fields to match (regex or exact match). Must be in the form (regex|exact):\\<field\\>=\\<value\\>"]
+    #[doc = "Metadata fields to match (regex or exact match). Must be in the form (regex|exact):\\\\<field\\\\>=\\\\<value\\\\>"]
+    #[doc = ""]
     pub match_field: Vec<String>,
     #[serde(rename = "match-severity")]
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Notification severities to match"]
+    #[doc = ""]
     pub match_severity: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Choose between 'all' and 'any' for when multiple properties are specified"]
+    #[doc = ""]
     pub mode: Option<Mode>,
     #[doc = "Name of the matcher."]
+    #[doc = ""]
     pub name: String,
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Targets to notify on match"]
+    #[doc = ""]
     pub target: Vec<String>,
     #[serde(
         flatten,
@@ -164,6 +185,8 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Choose between 'all' and 'any' for when multiple properties are specified"]
+#[doc = ""]
 pub enum Mode {
     #[serde(rename = "all")]
     All,
@@ -176,6 +199,8 @@ impl Default for Mode {
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Show if this entry was created by a user or was built-in"]
+#[doc = ""]
 pub enum Origin {
     #[serde(rename = "builtin")]
     Builtin,

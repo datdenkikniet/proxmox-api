@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "MDS directory index."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -54,8 +55,10 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If true, the standby MDS is polling the active MDS for faster recovery (hot standby)."]
+    #[doc = ""]
     pub standby_replay: Option<bool>,
     #[doc = "State of the MDS"]
+    #[doc = ""]
     pub state: String,
     #[serde(
         flatten,

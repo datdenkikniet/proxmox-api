@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Gets the status of the given pid started by the guest-agent"]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -42,6 +43,7 @@ pub struct GetOutput {
     #[serde(rename = "err-data")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "stderr of the process"]
+    #[doc = ""]
     pub err_data: Option<String>,
     #[serde(rename = "err-truncated")]
     #[serde(
@@ -50,6 +52,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "true if stderr was not fully captured"]
+    #[doc = ""]
     pub err_truncated: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -57,16 +60,19 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "process exit code if it was normally terminated."]
+    #[doc = ""]
     pub exitcode: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool",
         deserialize_with = "crate::types::deserialize_bool"
     )]
     #[doc = "Tells if the given command has exited yet."]
+    #[doc = ""]
     pub exited: bool,
     #[serde(rename = "out-data")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "stdout of the process"]
+    #[doc = ""]
     pub out_data: Option<String>,
     #[serde(rename = "out-truncated")]
     #[serde(
@@ -75,6 +81,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "true if stdout was not fully captured"]
+    #[doc = ""]
     pub out_truncated: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -82,6 +89,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "signal number or exception code if the process was abnormally terminated."]
+    #[doc = ""]
     pub signal: Option<u64>,
     #[serde(
         flatten,
@@ -105,6 +113,7 @@ pub struct GetParams {
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The PID to query"]
+    #[doc = ""]
     pub pid: u64,
     #[serde(
         flatten,

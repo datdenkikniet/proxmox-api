@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Execute QEMU monitor commands."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -34,6 +35,7 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "The monitor command."]
+    #[doc = ""]
     pub command: String,
     #[serde(
         flatten,

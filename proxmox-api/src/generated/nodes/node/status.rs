@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Read node status"]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Reboot or shutdown a node."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -45,6 +47,7 @@ impl BootInfoGetOutputBootInfo {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct BootInfoGetOutputBootInfo {
     #[doc = "Through which firmware the system got booted."]
+    #[doc = ""]
     pub mode: Mode,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -52,6 +55,7 @@ pub struct BootInfoGetOutputBootInfo {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "System is booted in secure mode, only applicable for the \"efi\" mode."]
+    #[doc = ""]
     pub secureboot: Option<bool>,
     #[serde(
         flatten,
@@ -74,12 +78,16 @@ impl CurrentKernelGetOutputCurrentKernel {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct CurrentKernelGetOutputCurrentKernel {
     #[doc = "Hardware (architecture) type"]
+    #[doc = ""]
     pub machine: String,
     #[doc = "OS kernel release (e.g., \"6.8.0\")"]
+    #[doc = ""]
     pub release: String,
     #[doc = "OS kernel name (e.g., \"Linux\")"]
+    #[doc = ""]
     pub sysname: String,
     #[doc = "OS kernel version with build info"]
+    #[doc = ""]
     pub version: String,
     #[serde(
         flatten,
@@ -104,9 +112,11 @@ impl GetOutput {
 pub struct GetOutput {
     #[serde(rename = "boot-info")]
     #[doc = "Meta-information about the boot mode."]
+    #[doc = ""]
     pub boot_info: BootInfoGetOutputBootInfo,
     #[serde(rename = "current-kernel")]
     #[doc = "The uptime of the system in seconds."]
+    #[doc = ""]
     pub current_kernel: CurrentKernelGetOutputCurrentKernel,
     #[serde(
         flatten,
@@ -126,6 +136,7 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "Specify the command."]
+    #[doc = ""]
     pub command: Command,
     #[serde(
         flatten,
@@ -135,6 +146,8 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Specify the command."]
+#[doc = ""]
 pub enum Command {
     #[serde(rename = "reboot")]
     Reboot,
@@ -142,6 +155,8 @@ pub enum Command {
     Shutdown,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Through which firmware the system got booted."]
+#[doc = ""]
 pub enum Mode {
     #[serde(rename = "efi")]
     Efi,

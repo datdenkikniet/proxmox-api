@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Query metadata of an URL: file size, file name and mime type."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -54,6 +55,7 @@ impl GetParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetParams {
     #[doc = "The URL to query the metadata from."]
+    #[doc = ""]
     pub url: String,
     #[serde(rename = "verify-certificates")]
     #[serde(
@@ -62,6 +64,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If false, no SSL/TLS certificates will be verified."]
+    #[doc = ""]
     pub verify_certificates: Option<bool>,
     #[serde(
         flatten,

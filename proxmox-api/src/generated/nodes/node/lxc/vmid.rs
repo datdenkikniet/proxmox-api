@@ -39,6 +39,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Destroy the container (also delete all uses files)."]
+    #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params)
@@ -49,6 +50,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Directory index"]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -63,6 +65,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If set, destroy additionally all disks with the VMID from all enabled storages which are not referenced in the config."]
+    #[doc = ""]
     pub destroy_unreferenced_disks: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -70,6 +73,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Force destroy, even if running."]
+    #[doc = ""]
     pub force: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -77,6 +81,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Remove container from all related configurations. For example, backup jobs, replication jobs or HA. Related ACLs and Firewall entries will *always* be removed."]
+    #[doc = ""]
     pub purge: Option<bool>,
     #[serde(
         flatten,

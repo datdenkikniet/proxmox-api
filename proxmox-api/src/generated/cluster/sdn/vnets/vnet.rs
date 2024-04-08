@@ -20,6 +20,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Delete sdn vnet object configuration."]
+    #[doc = ""]
     pub fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &())
@@ -30,6 +31,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Read sdn vnet configuration."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -40,6 +42,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Update sdn vnet object configuration."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -62,6 +65,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Display pending config."]
+    #[doc = ""]
     pub pending: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -69,6 +73,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Display running config."]
+    #[doc = ""]
     pub running: Option<bool>,
     #[serde(
         flatten,
@@ -81,12 +86,15 @@ pub struct GetParams {
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "alias name of the vnet"]
+    #[doc = ""]
     pub alias: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of settings you want to delete."]
+    #[doc = ""]
     pub delete: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -94,6 +102,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "vlan or vxlan id"]
+    #[doc = ""]
     pub tag: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -101,9 +110,11 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow vm VLANs to pass through this vnet."]
+    #[doc = ""]
     pub vlanaware: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "zone id"]
+    #[doc = ""]
     pub zone: Option<String>,
     #[serde(
         flatten,

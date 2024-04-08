@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Directory index."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -37,10 +38,13 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "The name of the data pool."]
+    #[doc = ""]
     pub data_pool: String,
     #[doc = "The name of the metadata pool."]
+    #[doc = ""]
     pub metadata_pool: String,
     #[doc = "The ceph filesystem name."]
+    #[doc = ""]
     pub name: String,
     #[serde(
         flatten,

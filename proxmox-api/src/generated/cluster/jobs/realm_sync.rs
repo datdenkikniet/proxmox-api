@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List configured realm-sync-jobs."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -44,14 +45,17 @@ impl GetOutputItems {
 pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A comment for the job."]
+    #[doc = ""]
     pub comment: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool",
         deserialize_with = "crate::types::deserialize_bool"
     )]
     #[doc = "If the job is enabled or not."]
+    #[doc = ""]
     pub enabled: bool,
     #[doc = "The ID of the entry."]
+    #[doc = ""]
     pub id: String,
     #[serde(rename = "last-run")]
     #[serde(
@@ -60,6 +64,7 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Last execution time of the job in seconds since the beginning of the UNIX epoch"]
+    #[doc = ""]
     pub last_run: Option<u64>,
     #[serde(rename = "next-run")]
     #[serde(
@@ -68,17 +73,22 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Next planned execution time of the job in seconds since the beginning of the UNIX epoch."]
+    #[doc = ""]
     pub next_run: Option<u64>,
     #[doc = "Authentication domain ID"]
+    #[doc = ""]
     pub realm: String,
     #[serde(rename = "remove-vanished")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A semicolon-seperated list of things to remove when they or the user vanishes during a sync. The following values are possible: 'entry' removes the user/group when not returned from the sync. 'properties' removes the set properties on existing user/group that do not appear in the source (even custom ones). 'acl' removes acls when the user/group is not returned from the sync. Instead of a list it also can be 'none' (the default)."]
+    #[doc = ""]
     pub remove_vanished: Option<String>,
     #[doc = "The configured sync schedule."]
+    #[doc = ""]
     pub schedule: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Select what to sync."]
+    #[doc = ""]
     pub scope: Option<Scope>,
     #[serde(
         flatten,
@@ -88,6 +98,8 @@ pub struct GetOutputItems {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Select what to sync."]
+#[doc = ""]
 pub enum Scope {
     #[serde(rename = "both")]
     Both,

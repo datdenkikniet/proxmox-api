@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Returns a list of all sendmail endpoints"]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create a new sendmail endpoint"]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -53,9 +55,11 @@ impl GetOutputItems {
 pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Author of the mail"]
+    #[doc = ""]
     pub author: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Comment"]
+    #[doc = ""]
     pub comment: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -63,21 +67,27 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Disable this target"]
+    #[doc = ""]
     pub disable: Option<bool>,
     #[serde(rename = "from-address")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "`From` address for the mail"]
+    #[doc = ""]
     pub from_address: Option<String>,
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of email recipients"]
+    #[doc = ""]
     pub mailto: Vec<String>,
     #[serde(rename = "mailto-user")]
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of users"]
+    #[doc = ""]
     pub mailto_user: Vec<String>,
     #[doc = "The name of the endpoint."]
+    #[doc = ""]
     pub name: String,
     #[doc = "Show if this entry was created by a user or was built-in"]
+    #[doc = ""]
     pub origin: Origin,
     #[serde(
         flatten,
@@ -104,9 +114,11 @@ impl PostParams {
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Author of the mail"]
+    #[doc = ""]
     pub author: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Comment"]
+    #[doc = ""]
     pub comment: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -114,19 +126,24 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Disable this target"]
+    #[doc = ""]
     pub disable: Option<bool>,
     #[serde(rename = "from-address")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "`From` address for the mail"]
+    #[doc = ""]
     pub from_address: Option<String>,
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of email recipients"]
+    #[doc = ""]
     pub mailto: Vec<String>,
     #[serde(rename = "mailto-user")]
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of users"]
+    #[doc = ""]
     pub mailto_user: Vec<String>,
     #[doc = "The name of the endpoint."]
+    #[doc = ""]
     pub name: String,
     #[serde(
         flatten,
@@ -136,6 +153,8 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Show if this entry was created by a user or was built-in"]
+#[doc = ""]
 pub enum Origin {
     #[serde(rename = "builtin")]
     Builtin,

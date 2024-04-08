@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Scan remote NFS server."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -35,8 +36,10 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "NFS export options."]
+    #[doc = ""]
     pub options: String,
     #[doc = "The exported path."]
+    #[doc = ""]
     pub path: String,
     #[serde(
         flatten,
@@ -56,6 +59,7 @@ impl GetParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetParams {
     #[doc = "The server address (name or IP)."]
+    #[doc = ""]
     pub server: String,
     #[serde(
         flatten,

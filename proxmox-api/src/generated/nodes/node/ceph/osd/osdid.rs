@@ -23,6 +23,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Destroy OSD"]
+    #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params)
@@ -33,6 +34,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "OSD index."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -46,6 +48,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If set, we remove partition table entries."]
+    #[doc = ""]
     pub cleanup: Option<bool>,
     #[serde(
         flatten,

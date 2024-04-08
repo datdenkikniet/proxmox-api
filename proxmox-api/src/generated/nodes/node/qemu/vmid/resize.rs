@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Extend volume size."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -38,10 +39,13 @@ impl PutParams {
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has different SHA1 digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[doc = "The disk you want to resize."]
+    #[doc = ""]
     pub disk: Disk,
     #[doc = "The new size. With the `+` sign the value is added to the actual size of the volume and without it, the value is taken as an absolute one. Shrinking disk size is not supported."]
+    #[doc = ""]
     pub size: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -49,6 +53,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Ignore locks - only root is allowed to use this option."]
+    #[doc = ""]
     pub skiplock: Option<bool>,
     #[serde(
         flatten,
@@ -58,6 +63,8 @@ pub struct PutParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "The disk you want to resize."]
+#[doc = ""]
 pub enum Disk {
     #[serde(rename = "efidisk0")]
     Efidisk0,

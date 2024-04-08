@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List HA resources."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create a new HA resource."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -57,6 +59,7 @@ pub struct GetParams {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only list resources of specific type"]
+    #[doc = ""]
     pub ty: Option<Type>,
     #[serde(
         flatten,
@@ -83,9 +86,11 @@ impl PostParams {
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description."]
+    #[doc = ""]
     pub comment: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The HA group identifier."]
+    #[doc = ""]
     pub group: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -93,6 +98,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal number of service relocate tries when a service failes to start."]
+    #[doc = ""]
     pub max_relocate: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -100,16 +106,61 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal number of tries to restart the service on a node after its start failed."]
+    #[doc = ""]
     pub max_restart: Option<u64>,
     #[doc = "HA resource ID. This consists of a resource type followed by a resource specific name, separated with colon (example: vm:100 / ct:100). For virtual machines and containers, you can simply use the VM or CT id as a shortcut (example: 100)."]
+    #[doc = ""]
     pub sid: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Requested resource state."]
-    #[doc = "Requested resource state. The CRM reads this state and acts accordingly.\nPlease note that `enabled` is just an alias for `started`.\n\n`started`;;\n\nThe CRM tries to start the resource. Service state is\nset to `started` after successful start. On node failures, or when start\nfails, it tries to recover the resource.  If everything fails, service\nstate it set to `error`.\n\n`stopped`;;\n\nThe CRM tries to keep the resource in `stopped` state, but it\nstill tries to relocate the resources on node failures.\n\n`disabled`;;\n\nThe CRM tries to put the resource in `stopped` state, but does not try\nto relocate the resources on node failures. The main purpose of this\nstate is error recovery, because it is the only way to move a resource out\nof the `error` state.\n\n`ignored`;;\n\nThe resource gets removed from the manager status and so the CRM and the LRM do\nnot touch the resource anymore. All {pve} API calls affecting this resource\nwill be executed, directly bypassing the HA stack. CRM commands will be thrown\naway while there source is in this state. The resource will not get relocated\non node failures.\n\n"]
+    #[doc = ""]
+    #[doc = "Requested resource state. The CRM reads this state and acts accordingly."]
+    #[doc = ""]
+    #[doc = "Please note that `enabled` is just an alias for `started`."]
+    #[doc = ""]
+    #[doc = "`started`;;"]
+    #[doc = ""]
+    #[doc = "The CRM tries to start the resource. Service state is"]
+    #[doc = ""]
+    #[doc = "set to `started` after successful start. On node failures, or when start"]
+    #[doc = ""]
+    #[doc = "fails, it tries to recover the resource.  If everything fails, service"]
+    #[doc = ""]
+    #[doc = "state it set to `error`."]
+    #[doc = ""]
+    #[doc = "`stopped`;;"]
+    #[doc = ""]
+    #[doc = "The CRM tries to keep the resource in `stopped` state, but it"]
+    #[doc = ""]
+    #[doc = "still tries to relocate the resources on node failures."]
+    #[doc = ""]
+    #[doc = "`disabled`;;"]
+    #[doc = ""]
+    #[doc = "The CRM tries to put the resource in `stopped` state, but does not try"]
+    #[doc = ""]
+    #[doc = "to relocate the resources on node failures. The main purpose of this"]
+    #[doc = ""]
+    #[doc = "state is error recovery, because it is the only way to move a resource out"]
+    #[doc = ""]
+    #[doc = "of the `error` state."]
+    #[doc = ""]
+    #[doc = "`ignored`;;"]
+    #[doc = ""]
+    #[doc = "The resource gets removed from the manager status and so the CRM and the LRM do"]
+    #[doc = ""]
+    #[doc = "not touch the resource anymore. All {pve} API calls affecting this resource"]
+    #[doc = ""]
+    #[doc = "will be executed, directly bypassing the HA stack. CRM commands will be thrown"]
+    #[doc = ""]
+    #[doc = "away while there source is in this state. The resource will not get relocated"]
+    #[doc = ""]
+    #[doc = "on node failures."]
+    #[doc = ""]
     pub state: Option<State>,
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Resource type."]
+    #[doc = ""]
     pub ty: Option<Type>,
     #[serde(
         flatten,
@@ -119,6 +170,50 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Requested resource state."]
+#[doc = ""]
+#[doc = "Requested resource state. The CRM reads this state and acts accordingly."]
+#[doc = ""]
+#[doc = "Please note that `enabled` is just an alias for `started`."]
+#[doc = ""]
+#[doc = "`started`;;"]
+#[doc = ""]
+#[doc = "The CRM tries to start the resource. Service state is"]
+#[doc = ""]
+#[doc = "set to `started` after successful start. On node failures, or when start"]
+#[doc = ""]
+#[doc = "fails, it tries to recover the resource.  If everything fails, service"]
+#[doc = ""]
+#[doc = "state it set to `error`."]
+#[doc = ""]
+#[doc = "`stopped`;;"]
+#[doc = ""]
+#[doc = "The CRM tries to keep the resource in `stopped` state, but it"]
+#[doc = ""]
+#[doc = "still tries to relocate the resources on node failures."]
+#[doc = ""]
+#[doc = "`disabled`;;"]
+#[doc = ""]
+#[doc = "The CRM tries to put the resource in `stopped` state, but does not try"]
+#[doc = ""]
+#[doc = "to relocate the resources on node failures. The main purpose of this"]
+#[doc = ""]
+#[doc = "state is error recovery, because it is the only way to move a resource out"]
+#[doc = ""]
+#[doc = "of the `error` state."]
+#[doc = ""]
+#[doc = "`ignored`;;"]
+#[doc = ""]
+#[doc = "The resource gets removed from the manager status and so the CRM and the LRM do"]
+#[doc = ""]
+#[doc = "not touch the resource anymore. All {pve} API calls affecting this resource"]
+#[doc = ""]
+#[doc = "will be executed, directly bypassing the HA stack. CRM commands will be thrown"]
+#[doc = ""]
+#[doc = "away while there source is in this state. The resource will not get relocated"]
+#[doc = ""]
+#[doc = "on node failures."]
+#[doc = ""]
 pub enum State {
     #[serde(rename = "disabled")]
     Disabled,
@@ -137,6 +232,8 @@ impl Default for State {
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Only list resources of specific type"]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "ct")]
     Ct,

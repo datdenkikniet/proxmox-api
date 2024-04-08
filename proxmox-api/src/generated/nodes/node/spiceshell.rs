@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Creates a SPICE shell."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -27,13 +28,16 @@ where
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Run specific command or default to login (requires 'root@pam')"]
+    #[doc = ""]
     pub cmd: Option<Cmd>,
     #[serde(rename = "cmd-opts")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Add parameters to a command. Encoded as null terminated strings."]
+    #[doc = ""]
     pub cmd_opts: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "SPICE proxy server. This can be used by the client to specify the proxy server. All nodes in a cluster runs 'spiceproxy', so it is up to the client to choose one. By default, we return the node where the VM is currently running. As reasonable setting is to use same node you use to connect to the API (This is window.location.hostname for the JS GUI)."]
+    #[doc = ""]
     pub proxy: Option<String>,
     #[serde(
         flatten,
@@ -43,6 +47,8 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Run specific command or default to login (requires 'root@pam')"]
+#[doc = ""]
 pub enum Cmd {
     #[serde(rename = "ceph_install")]
     CephInstall,
