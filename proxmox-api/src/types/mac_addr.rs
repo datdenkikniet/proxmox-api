@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 /// If `B` is `false`, this is a unicast address. If `B` is `true` this is address
 /// may represent either a unicast _or_ a multicast address.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
-#[serde(try_from = "String", into = "String")]
+#[serde(try_from = "&str", into = "String")]
 pub struct MacAddr<const B: bool>([u8; 6]);
 
 impl MacAddr<false> {
@@ -55,19 +55,26 @@ impl<const B: bool> MacAddr<B> {
     }
 }
 
-impl<const B: bool> From<MacAddr<B>> for String {
-    fn from(value: MacAddr<B>) -> Self {
-        format!(
+impl<const B: bool> std::fmt::Display for MacAddr<B> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
             "{:02X}:{:02X}:{:02X}:{:02X}:{:02X}:{:02X}",
-            value.0[0], value.0[1], value.0[2], value.0[3], value.0[4], value.0[5]
+            self.0[0], self.0[1], self.0[2], self.0[3], self.0[4], self.0[5]
         )
     }
 }
 
-impl<const B: bool> TryFrom<String> for MacAddr<B> {
+impl<const B: bool> From<MacAddr<B>> for String {
+    fn from(value: MacAddr<B>) -> Self {
+        format!("{value}")
+    }
+}
+
+impl<const B: bool> TryFrom<&str> for MacAddr<B> {
     type Error = String;
 
-    fn try_from(value: String) -> Result<Self, Self::Error> {
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
         let (count, addr) =
             value
                 .split(':')
