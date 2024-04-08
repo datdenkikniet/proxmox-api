@@ -194,6 +194,18 @@ pub enum Type {
     #[serde(rename = "isis")]
     Isis,
 }
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "bgp" => Ok(Self::Bgp),
+            "evpn" => Ok(Self::Evpn),
+            "faucet" => Ok(Self::Faucet),
+            "isis" => Ok(Self::Isis),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl<T> ControllersClient<T>
 where
     T: crate::client::Client,

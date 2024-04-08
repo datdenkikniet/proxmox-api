@@ -920,6 +920,16 @@ pub enum Arch {
     #[serde(rename = "x86_64")]
     X8664,
 }
+impl TryFrom<&str> for Arch {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "aarch64" => Ok(Self::Aarch64),
+            "x86_64" => Ok(Self::X8664),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Select BIOS implementation."]
 #[doc = ""]
@@ -928,6 +938,16 @@ pub enum Bios {
     Ovmf,
     #[serde(rename = "seabios")]
     Seabios,
+}
+impl TryFrom<&str> for Bios {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "ovmf" => Ok(Self::Ovmf),
+            "seabios" => Ok(Self::Seabios),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl Default for Bios {
     fn default() -> Self {
@@ -945,6 +965,17 @@ pub enum Citype {
     #[serde(rename = "opennebula")]
     Opennebula,
 }
+impl TryFrom<&str> for Citype {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "configdrive2" => Ok(Self::Configdrive2),
+            "nocloud" => Ok(Self::Nocloud),
+            "opennebula" => Ok(Self::Opennebula),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Enable/disable hugepages memory."]
 #[doc = ""]
@@ -955,6 +986,17 @@ pub enum Hugepages {
     _2,
     #[serde(rename = "any")]
     Any,
+}
+impl TryFrom<&str> for Hugepages {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "1024" => Ok(Self::_1024),
+            "2" => Ok(Self::_2),
+            "any" => Ok(Self::Any),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Keyboard layout for VNC server. This option is generally not required and is often better handled from within the guest OS."]
@@ -1011,6 +1053,39 @@ pub enum Keyboard {
     #[serde(rename = "tr")]
     Tr,
 }
+impl TryFrom<&str> for Keyboard {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "da" => Ok(Self::Da),
+            "de" => Ok(Self::De),
+            "de-ch" => Ok(Self::DeCh),
+            "en-gb" => Ok(Self::EnGb),
+            "en-us" => Ok(Self::EnUs),
+            "es" => Ok(Self::Es),
+            "fi" => Ok(Self::Fi),
+            "fr" => Ok(Self::Fr),
+            "fr-be" => Ok(Self::FrBe),
+            "fr-ca" => Ok(Self::FrCa),
+            "fr-ch" => Ok(Self::FrCh),
+            "hu" => Ok(Self::Hu),
+            "is" => Ok(Self::Is),
+            "it" => Ok(Self::It),
+            "ja" => Ok(Self::Ja),
+            "lt" => Ok(Self::Lt),
+            "mk" => Ok(Self::Mk),
+            "nl" => Ok(Self::Nl),
+            "no" => Ok(Self::No),
+            "pl" => Ok(Self::Pl),
+            "pt" => Ok(Self::Pt),
+            "pt-br" => Ok(Self::PtBr),
+            "sl" => Ok(Self::Sl),
+            "sv" => Ok(Self::Sv),
+            "tr" => Ok(Self::Tr),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Lock/unlock the VM."]
 #[doc = ""]
@@ -1033,6 +1108,23 @@ pub enum Lock {
     Suspended,
     #[serde(rename = "suspending")]
     Suspending,
+}
+impl TryFrom<&str> for Lock {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "backup" => Ok(Self::Backup),
+            "clone" => Ok(Self::Clone),
+            "create" => Ok(Self::Create),
+            "migrate" => Ok(Self::Migrate),
+            "rollback" => Ok(Self::Rollback),
+            "snapshot" => Ok(Self::Snapshot),
+            "snapshot-delete" => Ok(Self::SnapshotDelete),
+            "suspended" => Ok(Self::Suspended),
+            "suspending" => Ok(Self::Suspending),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Specify guest operating system."]
@@ -1097,6 +1189,27 @@ pub enum Ostype {
     #[serde(rename = "wxp")]
     Wxp,
 }
+impl TryFrom<&str> for Ostype {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "l24" => Ok(Self::L24),
+            "l26" => Ok(Self::L26),
+            "other" => Ok(Self::Other),
+            "solaris" => Ok(Self::Solaris),
+            "w2k" => Ok(Self::W2k),
+            "w2k3" => Ok(Self::W2k3),
+            "w2k8" => Ok(Self::W2k8),
+            "win10" => Ok(Self::Win10),
+            "win11" => Ok(Self::Win11),
+            "win7" => Ok(Self::Win7),
+            "win8" => Ok(Self::Win8),
+            "wvista" => Ok(Self::Wvista),
+            "wxp" => Ok(Self::Wxp),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "SCSI controller model"]
 #[doc = ""]
@@ -1114,6 +1227,20 @@ pub enum Scsihw {
     #[serde(rename = "virtio-scsi-single")]
     VirtioScsiSingle,
 }
+impl TryFrom<&str> for Scsihw {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "lsi" => Ok(Self::Lsi),
+            "lsi53c810" => Ok(Self::Lsi53c810),
+            "megasas" => Ok(Self::Megasas),
+            "pvscsi" => Ok(Self::Pvscsi),
+            "virtio-scsi-pci" => Ok(Self::VirtioScsiPci),
+            "virtio-scsi-single" => Ok(Self::VirtioScsiSingle),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for Scsihw {
     fn default() -> Self {
         Self::Lsi
@@ -1127,6 +1254,16 @@ pub enum Status {
     Running,
     #[serde(rename = "stopped")]
     Stopped,
+}
+impl TryFrom<&str> for Status {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "running" => Ok(Self::Running),
+            "stopped" => Ok(Self::Stopped),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 #[derive(Default)]
 struct NumberedHostpcis;

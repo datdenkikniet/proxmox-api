@@ -377,6 +377,18 @@ pub enum Preallocation {
     #[serde(rename = "off")]
     Off,
 }
+impl TryFrom<&str> for Preallocation {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "falloc" => Ok(Self::Falloc),
+            "full" => Ok(Self::Full),
+            "metadata" => Ok(Self::Metadata),
+            "off" => Ok(Self::Off),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for Preallocation {
     fn default() -> Self {
         Self::Metadata
@@ -399,6 +411,20 @@ pub enum Smbversion {
     #[serde(rename = "default")]
     Default,
 }
+impl TryFrom<&str> for Smbversion {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "2.0" => Ok(Self::_20),
+            "2.1" => Ok(Self::_21),
+            "3" => Ok(Self::_3),
+            "3.0" => Ok(Self::_30),
+            "3.11" => Ok(Self::_311),
+            "default" => Ok(Self::Default),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for Smbversion {
     fn default() -> Self {
         Self::Default
@@ -414,6 +440,17 @@ pub enum Transport {
     Tcp,
     #[serde(rename = "unix")]
     Unix,
+}
+impl TryFrom<&str> for Transport {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "rdma" => Ok(Self::Rdma),
+            "tcp" => Ok(Self::Tcp),
+            "unix" => Ok(Self::Unix),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "The type of the created storage."]
@@ -449,4 +486,27 @@ pub enum Type {
     Zfs,
     #[serde(rename = "zfspool")]
     Zfspool,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "btrfs" => Ok(Self::Btrfs),
+            "cephfs" => Ok(Self::Cephfs),
+            "cifs" => Ok(Self::Cifs),
+            "dir" => Ok(Self::Dir),
+            "esxi" => Ok(Self::Esxi),
+            "glusterfs" => Ok(Self::Glusterfs),
+            "iscsi" => Ok(Self::Iscsi),
+            "iscsidirect" => Ok(Self::Iscsidirect),
+            "lvm" => Ok(Self::Lvm),
+            "lvmthin" => Ok(Self::Lvmthin),
+            "nfs" => Ok(Self::Nfs),
+            "pbs" => Ok(Self::Pbs),
+            "rbd" => Ok(Self::Rbd),
+            "zfs" => Ok(Self::Zfs),
+            "zfspool" => Ok(Self::Zfspool),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

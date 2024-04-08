@@ -211,6 +211,17 @@ pub enum Mode {
     #[serde(rename = "tls")]
     Tls,
 }
+impl TryFrom<&str> for Mode {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "insecure" => Ok(Self::Insecure),
+            "starttls" => Ok(Self::Starttls),
+            "tls" => Ok(Self::Tls),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for Mode {
     fn default() -> Self {
         Self::Tls

@@ -166,3 +166,13 @@ pub enum MigrationType {
     #[serde(rename = "secure")]
     Secure,
 }
+impl TryFrom<&str> for MigrationType {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "insecure" => Ok(Self::Insecure),
+            "secure" => Ok(Self::Secure),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}

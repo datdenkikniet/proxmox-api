@@ -226,6 +226,19 @@ pub enum State {
     #[serde(rename = "stopped")]
     Stopped,
 }
+impl TryFrom<&str> for State {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "disabled" => Ok(Self::Disabled),
+            "enabled" => Ok(Self::Enabled),
+            "ignored" => Ok(Self::Ignored),
+            "started" => Ok(Self::Started),
+            "stopped" => Ok(Self::Stopped),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for State {
     fn default() -> Self {
         Self::Started
@@ -239,6 +252,16 @@ pub enum Type {
     Ct,
     #[serde(rename = "vm")]
     Vm,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "ct" => Ok(Self::Ct),
+            "vm" => Ok(Self::Vm),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> ResourcesClient<T>
 where

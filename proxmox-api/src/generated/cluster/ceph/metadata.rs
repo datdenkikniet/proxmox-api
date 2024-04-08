@@ -400,6 +400,16 @@ pub enum Scope {
     #[serde(rename = "versions")]
     Versions,
 }
+impl TryFrom<&str> for Scope {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "all" => Ok(Self::All),
+            "versions" => Ok(Self::Versions),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for Scope {
     fn default() -> Self {
         Self::All

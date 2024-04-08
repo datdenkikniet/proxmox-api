@@ -56,3 +56,14 @@ pub enum Type {
     #[serde(rename = "user")]
     User,
 }
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "meta" => Ok(Self::Meta),
+            "network" => Ok(Self::Network),
+            "user" => Ok(Self::User),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}

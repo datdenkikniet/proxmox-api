@@ -240,6 +240,19 @@ pub enum Compress {
     #[serde(rename = "zstd")]
     Zstd,
 }
+impl TryFrom<&str> for Compress {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "0" => Ok(Self::_0),
+            "1" => Ok(Self::_1),
+            "gzip" => Ok(Self::Gzip),
+            "lzo" => Ok(Self::Lzo),
+            "zstd" => Ok(Self::Zstd),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for Compress {
     fn default() -> Self {
         Self::_0
@@ -253,6 +266,16 @@ pub enum Mailnotification {
     Always,
     #[serde(rename = "failure")]
     Failure,
+}
+impl TryFrom<&str> for Mailnotification {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "always" => Ok(Self::Always),
+            "failure" => Ok(Self::Failure),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl Default for Mailnotification {
     fn default() -> Self {
@@ -270,6 +293,17 @@ pub enum Mode {
     #[serde(rename = "suspend")]
     Suspend,
 }
+impl TryFrom<&str> for Mode {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "snapshot" => Ok(Self::Snapshot),
+            "stop" => Ok(Self::Stop),
+            "suspend" => Ok(Self::Suspend),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for Mode {
     fn default() -> Self {
         Self::Snapshot
@@ -286,6 +320,17 @@ pub enum NotificationMode {
     #[serde(rename = "notification-system")]
     NotificationSystem,
 }
+impl TryFrom<&str> for NotificationMode {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "auto" => Ok(Self::Auto),
+            "legacy-sendmail" => Ok(Self::LegacySendmail),
+            "notification-system" => Ok(Self::NotificationSystem),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for NotificationMode {
     fn default() -> Self {
         Self::Auto
@@ -301,6 +346,17 @@ pub enum NotificationPolicy {
     Failure,
     #[serde(rename = "never")]
     Never,
+}
+impl TryFrom<&str> for NotificationPolicy {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "always" => Ok(Self::Always),
+            "failure" => Ok(Self::Failure),
+            "never" => Ok(Self::Never),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl Default for NotificationPolicy {
     fn default() -> Self {

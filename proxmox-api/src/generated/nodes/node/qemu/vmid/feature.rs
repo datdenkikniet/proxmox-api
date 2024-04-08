@@ -86,3 +86,14 @@ pub enum Feature {
     #[serde(rename = "snapshot")]
     Snapshot,
 }
+impl TryFrom<&str> for Feature {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "clone" => Ok(Self::Clone),
+            "copy" => Ok(Self::Copy),
+            "snapshot" => Ok(Self::Snapshot),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}

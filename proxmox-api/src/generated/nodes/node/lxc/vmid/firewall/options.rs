@@ -212,6 +212,23 @@ pub enum LogLevelIn {
     #[serde(rename = "warning")]
     Warning,
 }
+impl TryFrom<&str> for LogLevelIn {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "alert" => Ok(Self::Alert),
+            "crit" => Ok(Self::Crit),
+            "debug" => Ok(Self::Debug),
+            "emerg" => Ok(Self::Emerg),
+            "err" => Ok(Self::Err),
+            "info" => Ok(Self::Info),
+            "nolog" => Ok(Self::Nolog),
+            "notice" => Ok(Self::Notice),
+            "warning" => Ok(Self::Warning),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Log level for outgoing traffic."]
 #[doc = ""]
@@ -235,6 +252,23 @@ pub enum LogLevelOut {
     #[serde(rename = "warning")]
     Warning,
 }
+impl TryFrom<&str> for LogLevelOut {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "alert" => Ok(Self::Alert),
+            "crit" => Ok(Self::Crit),
+            "debug" => Ok(Self::Debug),
+            "emerg" => Ok(Self::Emerg),
+            "err" => Ok(Self::Err),
+            "info" => Ok(Self::Info),
+            "nolog" => Ok(Self::Nolog),
+            "notice" => Ok(Self::Notice),
+            "warning" => Ok(Self::Warning),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Input policy."]
 #[doc = ""]
@@ -243,6 +277,17 @@ pub enum PolicyIn {
     DROP,
     REJECT,
 }
+impl TryFrom<&str> for PolicyIn {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "ACCEPT" => Ok(Self::ACCEPT),
+            "DROP" => Ok(Self::DROP),
+            "REJECT" => Ok(Self::REJECT),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Output policy."]
 #[doc = ""]
@@ -250,4 +295,15 @@ pub enum PolicyOut {
     ACCEPT,
     DROP,
     REJECT,
+}
+impl TryFrom<&str> for PolicyOut {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "ACCEPT" => Ok(Self::ACCEPT),
+            "DROP" => Ok(Self::DROP),
+            "REJECT" => Ok(Self::REJECT),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

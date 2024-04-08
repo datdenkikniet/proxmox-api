@@ -187,6 +187,24 @@ pub enum Property {
     #[serde(rename = "wakeonlan")]
     Wakeonlan,
 }
+impl TryFrom<&str> for Property {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "acme" => Ok(Self::Acme),
+            "acmedomain0" => Ok(Self::Acmedomain0),
+            "acmedomain1" => Ok(Self::Acmedomain1),
+            "acmedomain2" => Ok(Self::Acmedomain2),
+            "acmedomain3" => Ok(Self::Acmedomain3),
+            "acmedomain4" => Ok(Self::Acmedomain4),
+            "acmedomain5" => Ok(Self::Acmedomain5),
+            "description" => Ok(Self::Description),
+            "startall-onboot-delay" => Ok(Self::StartallOnbootDelay),
+            "wakeonlan" => Ok(Self::Wakeonlan),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Default)]
 struct NumberedAcmedomains;
 impl crate::types::multi::NumberedItems for NumberedAcmedomains {

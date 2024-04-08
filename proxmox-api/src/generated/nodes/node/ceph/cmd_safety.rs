@@ -90,6 +90,16 @@ pub enum Action {
     #[serde(rename = "stop")]
     Stop,
 }
+impl TryFrom<&str> for Action {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "destroy" => Ok(Self::Destroy),
+            "stop" => Ok(Self::Stop),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Service type"]
 #[doc = ""]
@@ -100,4 +110,15 @@ pub enum Service {
     Mon,
     #[serde(rename = "osd")]
     Osd,
+}
+impl TryFrom<&str> for Service {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "mds" => Ok(Self::Mds),
+            "mon" => Ok(Self::Mon),
+            "osd" => Ok(Self::Osd),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

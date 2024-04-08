@@ -229,6 +229,18 @@ pub enum Type {
     #[serde(rename = "storage")]
     Storage,
 }
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "lxc" => Ok(Self::Lxc),
+            "openvz" => Ok(Self::Openvz),
+            "qemu" => Ok(Self::Qemu),
+            "storage" => Ok(Self::Storage),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl<T> PoolsClient<T>
 where
     T: crate::client::Client,

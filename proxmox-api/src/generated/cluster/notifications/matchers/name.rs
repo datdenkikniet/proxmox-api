@@ -193,6 +193,16 @@ pub enum Mode {
     #[serde(rename = "any")]
     Any,
 }
+impl TryFrom<&str> for Mode {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "all" => Ok(Self::All),
+            "any" => Ok(Self::Any),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for Mode {
     fn default() -> Self {
         Self::All

@@ -274,6 +274,17 @@ pub enum Application {
     #[serde(rename = "rgw")]
     Rgw,
 }
+impl TryFrom<&str> for Application {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "cephfs" => Ok(Self::Cephfs),
+            "rbd" => Ok(Self::Rbd),
+            "rgw" => Ok(Self::Rgw),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for Application {
     fn default() -> Self {
         Self::Rbd
@@ -290,6 +301,17 @@ pub enum PgAutoscaleMode {
     #[serde(rename = "warn")]
     Warn,
 }
+impl TryFrom<&str> for PgAutoscaleMode {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "off" => Ok(Self::Off),
+            "on" => Ok(Self::On),
+            "warn" => Ok(Self::Warn),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for PgAutoscaleMode {
     fn default() -> Self {
         Self::Warn
@@ -303,6 +325,17 @@ pub enum Type {
     Replicated,
     #[serde(rename = "unknown")]
     Unknown,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "erasure" => Ok(Self::Erasure),
+            "replicated" => Ok(Self::Replicated),
+            "unknown" => Ok(Self::Unknown),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> PoolClient<T>
 where

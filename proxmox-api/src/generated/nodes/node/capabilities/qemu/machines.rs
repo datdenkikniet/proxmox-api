@@ -62,3 +62,13 @@ pub enum Type {
     #[serde(rename = "q35")]
     Q35,
 }
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "i440fx" => Ok(Self::I440fx),
+            "q35" => Ok(Self::Q35),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}

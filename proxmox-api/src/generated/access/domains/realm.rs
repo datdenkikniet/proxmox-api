@@ -250,6 +250,17 @@ pub enum Mode {
     #[serde(rename = "ldaps")]
     Ldaps,
 }
+impl TryFrom<&str> for Mode {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "ldap" => Ok(Self::Ldap),
+            "ldap+starttls" => Ok(Self::LdapStarttls),
+            "ldaps" => Ok(Self::Ldaps),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for Mode {
     fn default() -> Self {
         Self::Ldap
@@ -267,6 +278,18 @@ pub enum Sslversion {
     Tlsv12,
     #[serde(rename = "tlsv1_3")]
     Tlsv13,
+}
+impl TryFrom<&str> for Sslversion {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "tlsv1" => Ok(Self::Tlsv1),
+            "tlsv1_1" => Ok(Self::Tlsv11),
+            "tlsv1_2" => Ok(Self::Tlsv12),
+            "tlsv1_3" => Ok(Self::Tlsv13),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> RealmClient<T>
 where

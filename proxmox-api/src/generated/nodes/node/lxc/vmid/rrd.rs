@@ -78,6 +78,16 @@ pub enum Cf {
     AVERAGE,
     MAX,
 }
+impl TryFrom<&str> for Cf {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "AVERAGE" => Ok(Self::AVERAGE),
+            "MAX" => Ok(Self::MAX),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Specify the time frame you are interested in."]
 #[doc = ""]
@@ -92,4 +102,17 @@ pub enum Timeframe {
     Week,
     #[serde(rename = "year")]
     Year,
+}
+impl TryFrom<&str> for Timeframe {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "day" => Ok(Self::Day),
+            "hour" => Ok(Self::Hour),
+            "month" => Ok(Self::Month),
+            "week" => Ok(Self::Week),
+            "year" => Ok(Self::Year),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

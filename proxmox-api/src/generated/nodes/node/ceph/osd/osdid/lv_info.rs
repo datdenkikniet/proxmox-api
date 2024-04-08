@@ -100,6 +100,17 @@ pub enum Type {
     #[serde(rename = "wal")]
     Wal,
 }
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "block" => Ok(Self::Block),
+            "db" => Ok(Self::Db),
+            "wal" => Ok(Self::Wal),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for Type {
     fn default() -> Self {
         Self::Block

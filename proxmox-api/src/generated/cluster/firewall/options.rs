@@ -125,6 +125,17 @@ pub enum PolicyIn {
     DROP,
     REJECT,
 }
+impl TryFrom<&str> for PolicyIn {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "ACCEPT" => Ok(Self::ACCEPT),
+            "DROP" => Ok(Self::DROP),
+            "REJECT" => Ok(Self::REJECT),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Output policy."]
 #[doc = ""]
@@ -132,4 +143,15 @@ pub enum PolicyOut {
     ACCEPT,
     DROP,
     REJECT,
+}
+impl TryFrom<&str> for PolicyOut {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "ACCEPT" => Ok(Self::ACCEPT),
+            "DROP" => Ok(Self::DROP),
+            "REJECT" => Ok(Self::REJECT),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

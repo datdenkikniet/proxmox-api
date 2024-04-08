@@ -193,6 +193,25 @@ pub enum Name {
     #[serde(rename = "pause")]
     Pause,
 }
+impl TryFrom<&str> for Name {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "nobackfill" => Ok(Self::Nobackfill),
+            "nodeep-scrub" => Ok(Self::NodeepScrub),
+            "nodown" => Ok(Self::Nodown),
+            "noin" => Ok(Self::Noin),
+            "noout" => Ok(Self::Noout),
+            "norebalance" => Ok(Self::Norebalance),
+            "norecover" => Ok(Self::Norecover),
+            "noscrub" => Ok(Self::Noscrub),
+            "notieragent" => Ok(Self::Notieragent),
+            "noup" => Ok(Self::Noup),
+            "pause" => Ok(Self::Pause),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl<T> FlagsClient<T>
 where
     T: crate::client::Client,

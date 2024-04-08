@@ -147,12 +147,30 @@ pub enum Source {
     #[serde(rename = "esxi")]
     Esxi,
 }
+impl TryFrom<&str> for Source {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "esxi" => Ok(Self::Esxi),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "The type of guest this is going to produce."]
 #[doc = ""]
 pub enum Type {
     #[serde(rename = "vm")]
     Vm,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "vm" => Ok(Self::Vm),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "What this warning is about."]
@@ -170,4 +188,18 @@ pub enum WarningType {
     OvmfWithLsiUnsupported,
     #[serde(rename = "serial-port-socket-only")]
     SerialPortSocketOnly,
+}
+impl TryFrom<&str> for WarningType {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "cdrom-image-ignored" => Ok(Self::CdromImageIgnored),
+            "efi-state-lost" => Ok(Self::EfiStateLost),
+            "guest-is-running" => Ok(Self::GuestIsRunning),
+            "nvme-unsupported" => Ok(Self::NvmeUnsupported),
+            "ovmf-with-lsi-unsupported" => Ok(Self::OvmfWithLsiUnsupported),
+            "serial-port-socket-only" => Ok(Self::SerialPortSocketOnly),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

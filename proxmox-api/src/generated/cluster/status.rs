@@ -122,3 +122,13 @@ pub enum Type {
     #[serde(rename = "node")]
     Node,
 }
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "cluster" => Ok(Self::Cluster),
+            "node" => Ok(Self::Node),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}

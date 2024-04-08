@@ -308,6 +308,17 @@ pub enum Influxdbproto {
     #[serde(rename = "udp")]
     Udp,
 }
+impl TryFrom<&str> for Influxdbproto {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "http" => Ok(Self::Http),
+            "https" => Ok(Self::Https),
+            "udp" => Ok(Self::Udp),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for Influxdbproto {
     fn default() -> Self {
         Self::Udp
@@ -322,6 +333,16 @@ pub enum Proto {
     #[serde(rename = "udp")]
     Udp,
 }
+impl TryFrom<&str> for Proto {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "tcp" => Ok(Self::Tcp),
+            "udp" => Ok(Self::Udp),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Plugin type."]
 #[doc = ""]
@@ -330,4 +351,14 @@ pub enum Type {
     Graphite,
     #[serde(rename = "influxdb")]
     Influxdb,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "graphite" => Ok(Self::Graphite),
+            "influxdb" => Ok(Self::Influxdb),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

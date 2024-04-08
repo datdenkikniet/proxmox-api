@@ -128,6 +128,15 @@ pub enum Type {
     #[serde(rename = "powerdns")]
     Powerdns,
 }
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "powerdns" => Ok(Self::Powerdns),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl<T> DnsClient<T>
 where
     T: crate::client::Client,

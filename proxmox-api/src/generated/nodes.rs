@@ -115,6 +115,17 @@ pub enum Status {
     #[serde(rename = "unknown")]
     Unknown,
 }
+impl TryFrom<&str> for Status {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "offline" => Ok(Self::Offline),
+            "online" => Ok(Self::Online),
+            "unknown" => Ok(Self::Unknown),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl<T> NodesClient<T>
 where
     T: crate::client::Client,

@@ -131,6 +131,17 @@ pub enum Origin {
     #[serde(rename = "user-created")]
     UserCreated,
 }
+impl TryFrom<&str> for Origin {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "builtin" => Ok(Self::Builtin),
+            "modified-builtin" => Ok(Self::ModifiedBuiltin),
+            "user-created" => Ok(Self::UserCreated),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl<T> GotifyClient<T>
 where
     T: crate::client::Client,

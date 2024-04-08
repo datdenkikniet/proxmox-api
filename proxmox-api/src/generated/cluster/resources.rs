@@ -203,3 +203,19 @@ pub enum Type {
     #[serde(rename = "vm")]
     Vm,
 }
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "lxc" => Ok(Self::Lxc),
+            "node" => Ok(Self::Node),
+            "openvz" => Ok(Self::Openvz),
+            "pool" => Ok(Self::Pool),
+            "qemu" => Ok(Self::Qemu),
+            "sdn" => Ok(Self::Sdn),
+            "storage" => Ok(Self::Storage),
+            "vm" => Ok(Self::Vm),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}

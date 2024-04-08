@@ -567,6 +567,20 @@ pub enum Arch {
     #[serde(rename = "riscv64")]
     Riscv64,
 }
+impl TryFrom<&str> for Arch {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "amd64" => Ok(Self::Amd64),
+            "arm64" => Ok(Self::Arm64),
+            "armhf" => Ok(Self::Armhf),
+            "i386" => Ok(Self::I386),
+            "riscv32" => Ok(Self::Riscv32),
+            "riscv64" => Ok(Self::Riscv64),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for Arch {
     fn default() -> Self {
         Self::Amd64
@@ -582,6 +596,17 @@ pub enum Cmode {
     Shell,
     #[serde(rename = "tty")]
     Tty,
+}
+impl TryFrom<&str> for Cmode {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "console" => Ok(Self::Console),
+            "shell" => Ok(Self::Shell),
+            "tty" => Ok(Self::Tty),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl Default for Cmode {
     fn default() -> Self {
@@ -613,6 +638,24 @@ pub enum Lock {
     #[serde(rename = "snapshot-delete")]
     SnapshotDelete,
 }
+impl TryFrom<&str> for Lock {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "backup" => Ok(Self::Backup),
+            "create" => Ok(Self::Create),
+            "destroyed" => Ok(Self::Destroyed),
+            "disk" => Ok(Self::Disk),
+            "fstrim" => Ok(Self::Fstrim),
+            "migrate" => Ok(Self::Migrate),
+            "mounted" => Ok(Self::Mounted),
+            "rollback" => Ok(Self::Rollback),
+            "snapshot" => Ok(Self::Snapshot),
+            "snapshot-delete" => Ok(Self::SnapshotDelete),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "OS type. This is used to setup configuration inside the container, and corresponds to lxc setup scripts in /usr/share/lxc/config/\\<ostype\\>.common.conf. Value 'unmanaged' can be used to skip and OS specific setup."]
 #[doc = ""]
@@ -639,6 +682,25 @@ pub enum Ostype {
     Ubuntu,
     #[serde(rename = "unmanaged")]
     Unmanaged,
+}
+impl TryFrom<&str> for Ostype {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "alpine" => Ok(Self::Alpine),
+            "archlinux" => Ok(Self::Archlinux),
+            "centos" => Ok(Self::Centos),
+            "debian" => Ok(Self::Debian),
+            "devuan" => Ok(Self::Devuan),
+            "fedora" => Ok(Self::Fedora),
+            "gentoo" => Ok(Self::Gentoo),
+            "nixos" => Ok(Self::Nixos),
+            "opensuse" => Ok(Self::Opensuse),
+            "ubuntu" => Ok(Self::Ubuntu),
+            "unmanaged" => Ok(Self::Unmanaged),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 #[derive(Default)]
 struct NumberedDevs;

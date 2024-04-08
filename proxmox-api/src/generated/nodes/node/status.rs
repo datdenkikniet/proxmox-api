@@ -154,6 +154,16 @@ pub enum Command {
     #[serde(rename = "shutdown")]
     Shutdown,
 }
+impl TryFrom<&str> for Command {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "reboot" => Ok(Self::Reboot),
+            "shutdown" => Ok(Self::Shutdown),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Through which firmware the system got booted."]
 #[doc = ""]
@@ -162,4 +172,14 @@ pub enum Mode {
     Efi,
     #[serde(rename = "legacy-bios")]
     LegacyBios,
+}
+impl TryFrom<&str> for Mode {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "efi" => Ok(Self::Efi),
+            "legacy-bios" => Ok(Self::LegacyBios),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

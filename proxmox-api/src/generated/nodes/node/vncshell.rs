@@ -77,6 +77,17 @@ pub enum Cmd {
     #[serde(rename = "upgrade")]
     Upgrade,
 }
+impl TryFrom<&str> for Cmd {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "ceph_install" => Ok(Self::CephInstall),
+            "login" => Ok(Self::Login),
+            "upgrade" => Ok(Self::Upgrade),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for Cmd {
     fn default() -> Self {
         Self::Login

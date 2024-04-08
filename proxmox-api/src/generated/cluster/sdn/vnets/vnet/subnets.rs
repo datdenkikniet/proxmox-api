@@ -129,6 +129,15 @@ pub enum Type {
     #[serde(rename = "subnet")]
     Subnet,
 }
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "subnet" => Ok(Self::Subnet),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl<T> SubnetsClient<T>
 where
     T: crate::client::Client,

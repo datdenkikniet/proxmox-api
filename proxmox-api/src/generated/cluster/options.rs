@@ -176,6 +176,18 @@ pub enum Console {
     #[serde(rename = "xtermjs")]
     Xtermjs,
 }
+impl TryFrom<&str> for Console {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "applet" => Ok(Self::Applet),
+            "html5" => Ok(Self::Html5),
+            "vv" => Ok(Self::Vv),
+            "xtermjs" => Ok(Self::Xtermjs),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Set the fencing mode of the HA cluster. Hardware mode needs a valid configuration of fence devices in /etc/pve/ha/fence.cfg. With both all two modes are used."]
 #[doc = ""]
@@ -188,6 +200,17 @@ pub enum Fencing {
     Hardware,
     #[serde(rename = "watchdog")]
     Watchdog,
+}
+impl TryFrom<&str> for Fencing {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "both" => Ok(Self::Both),
+            "hardware" => Ok(Self::Hardware),
+            "watchdog" => Ok(Self::Watchdog),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl Default for Fencing {
     fn default() -> Self {
@@ -249,6 +272,39 @@ pub enum Keyboard {
     #[serde(rename = "tr")]
     Tr,
 }
+impl TryFrom<&str> for Keyboard {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "da" => Ok(Self::Da),
+            "de" => Ok(Self::De),
+            "de-ch" => Ok(Self::DeCh),
+            "en-gb" => Ok(Self::EnGb),
+            "en-us" => Ok(Self::EnUs),
+            "es" => Ok(Self::Es),
+            "fi" => Ok(Self::Fi),
+            "fr" => Ok(Self::Fr),
+            "fr-be" => Ok(Self::FrBe),
+            "fr-ca" => Ok(Self::FrCa),
+            "fr-ch" => Ok(Self::FrCh),
+            "hu" => Ok(Self::Hu),
+            "is" => Ok(Self::Is),
+            "it" => Ok(Self::It),
+            "ja" => Ok(Self::Ja),
+            "lt" => Ok(Self::Lt),
+            "mk" => Ok(Self::Mk),
+            "nl" => Ok(Self::Nl),
+            "no" => Ok(Self::No),
+            "pl" => Ok(Self::Pl),
+            "pt" => Ok(Self::Pt),
+            "pt-br" => Ok(Self::PtBr),
+            "sl" => Ok(Self::Sl),
+            "sv" => Ok(Self::Sv),
+            "tr" => Ok(Self::Tr),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Default GUI language."]
 #[doc = ""]
@@ -307,4 +363,39 @@ pub enum Language {
     ZhCN,
     #[serde(rename = "zh_TW")]
     ZhTW,
+}
+impl TryFrom<&str> for Language {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "ar" => Ok(Self::Ar),
+            "ca" => Ok(Self::Ca),
+            "da" => Ok(Self::Da),
+            "de" => Ok(Self::De),
+            "en" => Ok(Self::En),
+            "es" => Ok(Self::Es),
+            "eu" => Ok(Self::Eu),
+            "fa" => Ok(Self::Fa),
+            "fr" => Ok(Self::Fr),
+            "he" => Ok(Self::He),
+            "hr" => Ok(Self::Hr),
+            "it" => Ok(Self::It),
+            "ja" => Ok(Self::Ja),
+            "ka" => Ok(Self::Ka),
+            "kr" => Ok(Self::Kr),
+            "nb" => Ok(Self::Nb),
+            "nl" => Ok(Self::Nl),
+            "nn" => Ok(Self::Nn),
+            "pl" => Ok(Self::Pl),
+            "pt_BR" => Ok(Self::PtBR),
+            "ru" => Ok(Self::Ru),
+            "sl" => Ok(Self::Sl),
+            "sv" => Ok(Self::Sv),
+            "tr" => Ok(Self::Tr),
+            "ukr" => Ok(Self::Ukr),
+            "zh_CN" => Ok(Self::ZhCN),
+            "zh_TW" => Ok(Self::ZhTW),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

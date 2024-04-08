@@ -138,3 +138,13 @@ pub enum RemoveJob {
     #[serde(rename = "local")]
     Local,
 }
+impl TryFrom<&str> for RemoveJob {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "full" => Ok(Self::Full),
+            "local" => Ok(Self::Local),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}

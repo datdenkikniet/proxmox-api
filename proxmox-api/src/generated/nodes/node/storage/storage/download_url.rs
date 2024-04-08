@@ -95,6 +95,20 @@ pub enum ChecksumAlgorithm {
     #[serde(rename = "sha512")]
     Sha512,
 }
+impl TryFrom<&str> for ChecksumAlgorithm {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "md5" => Ok(Self::Md5),
+            "sha1" => Ok(Self::Sha1),
+            "sha224" => Ok(Self::Sha224),
+            "sha256" => Ok(Self::Sha256),
+            "sha384" => Ok(Self::Sha384),
+            "sha512" => Ok(Self::Sha512),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Content type."]
 #[doc = ""]
@@ -103,4 +117,14 @@ pub enum Content {
     Iso,
     #[serde(rename = "vztmpl")]
     Vztmpl,
+}
+impl TryFrom<&str> for Content {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "iso" => Ok(Self::Iso),
+            "vztmpl" => Ok(Self::Vztmpl),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

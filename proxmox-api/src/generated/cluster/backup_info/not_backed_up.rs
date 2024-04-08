@@ -67,3 +67,13 @@ pub enum Type {
     #[serde(rename = "qemu")]
     Qemu,
 }
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "lxc" => Ok(Self::Lxc),
+            "qemu" => Ok(Self::Qemu),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}

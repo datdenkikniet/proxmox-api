@@ -130,3 +130,14 @@ pub enum Type {
     #[serde(rename = "user")]
     User,
 }
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "group" => Ok(Self::Group),
+            "token" => Ok(Self::Token),
+            "user" => Ok(Self::User),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}

@@ -70,3 +70,15 @@ pub enum Console {
     #[serde(rename = "xtermjs")]
     Xtermjs,
 }
+impl TryFrom<&str> for Console {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "applet" => Ok(Self::Applet),
+            "html5" => Ok(Self::Html5),
+            "vv" => Ok(Self::Vv),
+            "xtermjs" => Ok(Self::Xtermjs),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}

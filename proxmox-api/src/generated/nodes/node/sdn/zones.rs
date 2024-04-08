@@ -60,6 +60,17 @@ pub enum Status {
     #[serde(rename = "pending")]
     Pending,
 }
+impl TryFrom<&str> for Status {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "available" => Ok(Self::Available),
+            "error" => Ok(Self::Error),
+            "pending" => Ok(Self::Pending),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl<T> ZonesClient<T>
 where
     T: crate::client::Client,

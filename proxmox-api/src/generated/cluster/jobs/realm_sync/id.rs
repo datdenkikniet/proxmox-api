@@ -189,3 +189,14 @@ pub enum Scope {
     #[serde(rename = "users")]
     Users,
 }
+impl TryFrom<&str> for Scope {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "both" => Ok(Self::Both),
+            "groups" => Ok(Self::Groups),
+            "users" => Ok(Self::Users),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}

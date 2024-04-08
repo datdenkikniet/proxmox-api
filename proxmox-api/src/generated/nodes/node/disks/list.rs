@@ -142,3 +142,13 @@ pub enum Type {
     #[serde(rename = "unused")]
     Unused,
 }
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "journal_disks" => Ok(Self::JournalDisks),
+            "unused" => Ok(Self::Unused),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}

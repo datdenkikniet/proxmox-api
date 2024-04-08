@@ -316,6 +316,23 @@ pub enum LogLevelIn {
     #[serde(rename = "warning")]
     Warning,
 }
+impl TryFrom<&str> for LogLevelIn {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "alert" => Ok(Self::Alert),
+            "crit" => Ok(Self::Crit),
+            "debug" => Ok(Self::Debug),
+            "emerg" => Ok(Self::Emerg),
+            "err" => Ok(Self::Err),
+            "info" => Ok(Self::Info),
+            "nolog" => Ok(Self::Nolog),
+            "notice" => Ok(Self::Notice),
+            "warning" => Ok(Self::Warning),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Log level for outgoing traffic."]
 #[doc = ""]
@@ -338,6 +355,23 @@ pub enum LogLevelOut {
     Notice,
     #[serde(rename = "warning")]
     Warning,
+}
+impl TryFrom<&str> for LogLevelOut {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "alert" => Ok(Self::Alert),
+            "crit" => Ok(Self::Crit),
+            "debug" => Ok(Self::Debug),
+            "emerg" => Ok(Self::Emerg),
+            "err" => Ok(Self::Err),
+            "info" => Ok(Self::Info),
+            "nolog" => Ok(Self::Nolog),
+            "notice" => Ok(Self::Notice),
+            "warning" => Ok(Self::Warning),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Log level for SMURFS filter."]
@@ -362,6 +396,23 @@ pub enum SmurfLogLevel {
     #[serde(rename = "warning")]
     Warning,
 }
+impl TryFrom<&str> for SmurfLogLevel {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "alert" => Ok(Self::Alert),
+            "crit" => Ok(Self::Crit),
+            "debug" => Ok(Self::Debug),
+            "emerg" => Ok(Self::Emerg),
+            "err" => Ok(Self::Err),
+            "info" => Ok(Self::Info),
+            "nolog" => Ok(Self::Nolog),
+            "notice" => Ok(Self::Notice),
+            "warning" => Ok(Self::Warning),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Log level for illegal tcp flags filter."]
 #[doc = ""]
@@ -384,4 +435,21 @@ pub enum TcpFlagsLogLevel {
     Notice,
     #[serde(rename = "warning")]
     Warning,
+}
+impl TryFrom<&str> for TcpFlagsLogLevel {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "alert" => Ok(Self::Alert),
+            "crit" => Ok(Self::Crit),
+            "debug" => Ok(Self::Debug),
+            "emerg" => Ok(Self::Emerg),
+            "err" => Ok(Self::Err),
+            "info" => Ok(Self::Info),
+            "nolog" => Ok(Self::Nolog),
+            "notice" => Ok(Self::Notice),
+            "warning" => Ok(Self::Warning),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

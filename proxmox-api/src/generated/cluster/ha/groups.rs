@@ -118,6 +118,15 @@ pub enum Type {
     #[serde(rename = "group")]
     Group,
 }
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "group" => Ok(Self::Group),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl<T> GroupsClient<T>
 where
     T: crate::client::Client,

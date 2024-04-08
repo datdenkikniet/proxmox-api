@@ -200,3 +200,14 @@ pub enum Device {
     #[serde(rename = "wal")]
     Wal,
 }
+impl TryFrom<&str> for Device {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "block" => Ok(Self::Block),
+            "db" => Ok(Self::Db),
+            "wal" => Ok(Self::Wal),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}

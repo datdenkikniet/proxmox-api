@@ -65,6 +65,16 @@ pub enum Realm {
     #[serde(rename = "yubico")]
     Yubico,
 }
+impl TryFrom<&str> for Realm {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "oath" => Ok(Self::Oath),
+            "yubico" => Ok(Self::Yubico),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "A TFA type."]
 #[doc = ""]
@@ -80,6 +90,19 @@ pub enum Types {
     #[serde(rename = "yubico")]
     Yubico,
 }
+impl TryFrom<&str> for Types {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "recovedry" => Ok(Self::Recovedry),
+            "totp" => Ok(Self::Totp),
+            "u2f" => Ok(Self::U2f),
+            "webauthn" => Ok(Self::Webauthn),
+            "yubico" => Ok(Self::Yubico),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "The type of TFA the user has set, if any. Only set if 'multiple' was not passed."]
 #[doc = ""]
@@ -88,4 +111,14 @@ pub enum User {
     Oath,
     #[serde(rename = "u2f")]
     U2f,
+}
+impl TryFrom<&str> for User {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "oath" => Ok(Self::Oath),
+            "u2f" => Ok(Self::U2f),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

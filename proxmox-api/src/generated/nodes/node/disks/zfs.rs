@@ -168,6 +168,21 @@ pub enum Compression {
     #[serde(rename = "zstd")]
     Zstd,
 }
+impl TryFrom<&str> for Compression {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "gzip" => Ok(Self::Gzip),
+            "lz4" => Ok(Self::Lz4),
+            "lzjb" => Ok(Self::Lzjb),
+            "off" => Ok(Self::Off),
+            "on" => Ok(Self::On),
+            "zle" => Ok(Self::Zle),
+            "zstd" => Ok(Self::Zstd),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for Compression {
     fn default() -> Self {
         Self::On
@@ -195,6 +210,23 @@ pub enum Raidlevel {
     Raidz3,
     #[serde(rename = "single")]
     Single,
+}
+impl TryFrom<&str> for Raidlevel {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "draid" => Ok(Self::Draid),
+            "draid2" => Ok(Self::Draid2),
+            "draid3" => Ok(Self::Draid3),
+            "mirror" => Ok(Self::Mirror),
+            "raid10" => Ok(Self::Raid10),
+            "raidz" => Ok(Self::Raidz),
+            "raidz2" => Ok(Self::Raidz2),
+            "raidz3" => Ok(Self::Raidz3),
+            "single" => Ok(Self::Single),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> ZfsClient<T>
 where

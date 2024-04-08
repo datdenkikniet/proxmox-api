@@ -154,6 +154,16 @@ pub enum Severity {
     #[serde(rename = "warning")]
     Warning,
 }
+impl TryFrom<&str> for Severity {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "error" => Ok(Self::Error),
+            "warning" => Ok(Self::Warning),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl<T> PciClient<T>
 where
     T: crate::client::Client,

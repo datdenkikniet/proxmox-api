@@ -58,12 +58,14 @@ impl EnumDef {
         me
     }
 
-    fn fix_name(name: &str) -> String {
-        if name.chars().next().unwrap().is_numeric() {
+    fn to_variant(name: &String) -> String {
+        let name = if name.chars().next().unwrap().is_numeric() {
             format!("_{name}")
         } else {
             name.to_string()
-        }
+        };
+
+        crate::name_to_ident(&name)
     }
 }
 
@@ -90,8 +92,7 @@ impl ToTokens for EnumDef {
         });
 
         let variants = values.iter().map(|orig| {
-            let v = Self::fix_name(orig);
-            let v = crate::name_to_ident(&v);
+            let v = Self::to_variant(orig);
 
             let rename = if orig != &v {
                 let orig = Literal::string(&orig);
@@ -116,9 +117,26 @@ impl ToTokens for EnumDef {
             }
         });
 
+        let variants = values
+            .iter()
+            .map(Self::to_variant)
+            .map(|v| Ident::new(&v, quote!().span()));
+        let values_iter = values.iter().map(|v| Literal::string(v));
+        tokens.extend(quote! {
+            impl TryFrom<&str> for #name {
+                type Error = String;
+
+                fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+                    match value {
+                        #(#values_iter => Ok(Self::#variants),)*
+                        v => Err(format!("Unknown variant {v}"))
+                    }
+                }
+            }
+        });
+
         if let Some(default) = default {
-            let default = Self::fix_name(default);
-            let default = crate::name_to_ident(&default);
+            let default = Self::to_variant(default);
             let default_ident = Ident::new(&default, quote!().span());
 
             tokens.extend(quote! {

@@ -126,6 +126,16 @@ pub enum Filesystem {
     #[serde(rename = "xfs")]
     Xfs,
 }
+impl TryFrom<&str> for Filesystem {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "ext4" => Ok(Self::Ext4),
+            "xfs" => Ok(Self::Xfs),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for Filesystem {
     fn default() -> Self {
         Self::Ext4

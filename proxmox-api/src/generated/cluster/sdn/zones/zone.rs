@@ -238,12 +238,31 @@ pub enum Dhcp {
     #[serde(rename = "dnsmasq")]
     Dnsmasq,
 }
+impl TryFrom<&str> for Dhcp {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "dnsmasq" => Ok(Self::Dnsmasq),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub enum VlanProtocol {
     #[serde(rename = "802.1ad")]
     _8021ad,
     #[serde(rename = "802.1q")]
     _8021q,
+}
+impl TryFrom<&str> for VlanProtocol {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "802.1ad" => Ok(Self::_8021ad),
+            "802.1q" => Ok(Self::_8021q),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl Default for VlanProtocol {
     fn default() -> Self {

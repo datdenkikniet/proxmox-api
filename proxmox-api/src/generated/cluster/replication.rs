@@ -121,12 +121,31 @@ pub enum RemoveJob {
     #[serde(rename = "local")]
     Local,
 }
+impl TryFrom<&str> for RemoveJob {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "full" => Ok(Self::Full),
+            "local" => Ok(Self::Local),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Section type."]
 #[doc = ""]
 pub enum Type {
     #[serde(rename = "local")]
     Local,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "local" => Ok(Self::Local),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> ReplicationClient<T>
 where

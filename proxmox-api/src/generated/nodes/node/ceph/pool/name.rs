@@ -165,6 +165,17 @@ pub enum Application {
     #[serde(rename = "rgw")]
     Rgw,
 }
+impl TryFrom<&str> for Application {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "cephfs" => Ok(Self::Cephfs),
+            "rbd" => Ok(Self::Rbd),
+            "rgw" => Ok(Self::Rgw),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "The automatic PG scaling mode of the pool."]
 #[doc = ""]
@@ -175,6 +186,17 @@ pub enum PgAutoscaleMode {
     On,
     #[serde(rename = "warn")]
     Warn,
+}
+impl TryFrom<&str> for PgAutoscaleMode {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "off" => Ok(Self::Off),
+            "on" => Ok(Self::On),
+            "warn" => Ok(Self::Warn),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> NameClient<T>
 where

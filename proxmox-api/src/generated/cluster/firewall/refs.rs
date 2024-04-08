@@ -76,3 +76,13 @@ pub enum Type {
     #[serde(rename = "ipset")]
     Ipset,
 }
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "alias" => Ok(Self::Alias),
+            "ipset" => Ok(Self::Ipset),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}

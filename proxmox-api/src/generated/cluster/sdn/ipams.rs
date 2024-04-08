@@ -120,6 +120,17 @@ pub enum Type {
     #[serde(rename = "pve")]
     Pve,
 }
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "netbox" => Ok(Self::Netbox),
+            "phpipam" => Ok(Self::Phpipam),
+            "pve" => Ok(Self::Pve),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl<T> IpamsClient<T>
 where
     T: crate::client::Client,

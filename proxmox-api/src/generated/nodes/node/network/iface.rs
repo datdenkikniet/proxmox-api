@@ -270,6 +270,24 @@ pub enum BondMode {
     #[serde(rename = "lacp-balance-tcp")]
     LacpBalanceTcp,
 }
+impl TryFrom<&str> for BondMode {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "802.3ad" => Ok(Self::_8023ad),
+            "active-backup" => Ok(Self::ActiveBackup),
+            "balance-alb" => Ok(Self::BalanceAlb),
+            "balance-rr" => Ok(Self::BalanceRr),
+            "balance-slb" => Ok(Self::BalanceSlb),
+            "balance-tlb" => Ok(Self::BalanceTlb),
+            "balance-xor" => Ok(Self::BalanceXor),
+            "broadcast" => Ok(Self::Broadcast),
+            "lacp-balance-slb" => Ok(Self::LacpBalanceSlb),
+            "lacp-balance-tcp" => Ok(Self::LacpBalanceTcp),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Selects the transmit hash policy to use for slave selection in balance-xor and 802.3ad modes."]
 #[doc = ""]
@@ -280,6 +298,17 @@ pub enum BondXmitHashPolicy {
     Layer23,
     #[serde(rename = "layer3+4")]
     Layer34,
+}
+impl TryFrom<&str> for BondXmitHashPolicy {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "layer2" => Ok(Self::Layer2),
+            "layer2+3" => Ok(Self::Layer23),
+            "layer3+4" => Ok(Self::Layer34),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Network interface type"]
@@ -301,4 +330,22 @@ pub enum Type {
     Unknown,
     #[serde(rename = "vlan")]
     Vlan,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "OVSBond" => Ok(Self::OVSBond),
+            "OVSBridge" => Ok(Self::OVSBridge),
+            "OVSIntPort" => Ok(Self::OVSIntPort),
+            "OVSPort" => Ok(Self::OVSPort),
+            "alias" => Ok(Self::Alias),
+            "bond" => Ok(Self::Bond),
+            "bridge" => Ok(Self::Bridge),
+            "eth" => Ok(Self::Eth),
+            "unknown" => Ok(Self::Unknown),
+            "vlan" => Ok(Self::Vlan),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

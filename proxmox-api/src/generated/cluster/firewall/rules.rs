@@ -181,6 +181,23 @@ pub enum Log {
     #[serde(rename = "warning")]
     Warning,
 }
+impl TryFrom<&str> for Log {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "alert" => Ok(Self::Alert),
+            "crit" => Ok(Self::Crit),
+            "debug" => Ok(Self::Debug),
+            "emerg" => Ok(Self::Emerg),
+            "err" => Ok(Self::Err),
+            "info" => Ok(Self::Info),
+            "nolog" => Ok(Self::Nolog),
+            "notice" => Ok(Self::Notice),
+            "warning" => Ok(Self::Warning),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Rule type."]
 #[doc = ""]
@@ -191,6 +208,17 @@ pub enum Type {
     In,
     #[serde(rename = "out")]
     Out,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "group" => Ok(Self::Group),
+            "in" => Ok(Self::In),
+            "out" => Ok(Self::Out),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> RulesClient<T>
 where

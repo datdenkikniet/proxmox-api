@@ -50,3 +50,15 @@ pub enum Serial {
     #[serde(rename = "serial3")]
     Serial3,
 }
+impl TryFrom<&str> for Serial {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "serial0" => Ok(Self::Serial0),
+            "serial1" => Ok(Self::Serial1),
+            "serial2" => Ok(Self::Serial2),
+            "serial3" => Ok(Self::Serial3),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}

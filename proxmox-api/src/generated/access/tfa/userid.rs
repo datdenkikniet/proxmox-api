@@ -173,6 +173,19 @@ pub enum Type {
     #[serde(rename = "yubico")]
     Yubico,
 }
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "recovery" => Ok(Self::Recovery),
+            "totp" => Ok(Self::Totp),
+            "u2f" => Ok(Self::U2f),
+            "webauthn" => Ok(Self::Webauthn),
+            "yubico" => Ok(Self::Yubico),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl<T> UseridClient<T>
 where
     T: crate::client::Client,

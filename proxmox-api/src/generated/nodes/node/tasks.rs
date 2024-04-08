@@ -169,6 +169,17 @@ pub enum Source {
     #[serde(rename = "archive")]
     Archive,
 }
+impl TryFrom<&str> for Source {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "active" => Ok(Self::Active),
+            "all" => Ok(Self::All),
+            "archive" => Ok(Self::Archive),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl Default for Source {
     fn default() -> Self {
         Self::Archive

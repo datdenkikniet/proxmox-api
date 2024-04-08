@@ -398,10 +398,30 @@ pub enum FileType {
     #[serde(rename = "sources")]
     Sources,
 }
+impl TryFrom<&str> for FileType {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "list" => Ok(Self::List),
+            "sources" => Ok(Self::Sources),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub enum Types {
     #[serde(rename = "deb")]
     Deb,
     #[serde(rename = "deb-src")]
     DebSrc,
+}
+impl TryFrom<&str> for Types {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "deb" => Ok(Self::Deb),
+            "deb-src" => Ok(Self::DebSrc),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

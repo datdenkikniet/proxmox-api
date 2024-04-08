@@ -140,6 +140,18 @@ pub enum Mark {
     #[serde(rename = "renamed")]
     Renamed,
 }
+impl TryFrom<&str> for Mark {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "keep" => Ok(Self::Keep),
+            "protected" => Ok(Self::Protected),
+            "remove" => Ok(Self::Remove),
+            "renamed" => Ok(Self::Renamed),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Either 'qemu' or 'lxc'. Only consider backups for guests of this type."]
 #[doc = ""]
@@ -148,4 +160,14 @@ pub enum Type {
     Lxc,
     #[serde(rename = "qemu")]
     Qemu,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "lxc" => Ok(Self::Lxc),
+            "qemu" => Ok(Self::Qemu),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

@@ -79,6 +79,17 @@ pub enum Origin {
     #[serde(rename = "user-created")]
     UserCreated,
 }
+impl TryFrom<&str> for Origin {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "builtin" => Ok(Self::Builtin),
+            "modified-builtin" => Ok(Self::ModifiedBuiltin),
+            "user-created" => Ok(Self::UserCreated),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 #[doc = "Type of the target."]
 #[doc = ""]
@@ -87,6 +98,16 @@ pub enum Type {
     Gotify,
     #[serde(rename = "sendmail")]
     Sendmail,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "gotify" => Ok(Self::Gotify),
+            "sendmail" => Ok(Self::Sendmail),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> TargetsClient<T>
 where

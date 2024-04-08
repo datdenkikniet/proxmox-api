@@ -212,6 +212,19 @@ pub enum State {
     #[serde(rename = "stopped")]
     Stopped,
 }
+impl TryFrom<&str> for State {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "disabled" => Ok(Self::Disabled),
+            "enabled" => Ok(Self::Enabled),
+            "ignored" => Ok(Self::Ignored),
+            "started" => Ok(Self::Started),
+            "stopped" => Ok(Self::Stopped),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl<T> SidClient<T>
 where
     T: crate::client::Client,

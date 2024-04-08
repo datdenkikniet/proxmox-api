@@ -205,6 +205,17 @@ pub enum Format {
     #[serde(rename = "subvol")]
     Subvol,
 }
+impl TryFrom<&str> for Format {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "qcow2" => Ok(Self::Qcow2),
+            "raw" => Ok(Self::Raw),
+            "subvol" => Ok(Self::Subvol),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 impl<T> ContentClient<T>
 where
     T: crate::client::Client,
