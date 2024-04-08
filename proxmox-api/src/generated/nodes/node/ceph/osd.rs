@@ -71,12 +71,16 @@ pub struct PostParams {
     #[doc = "Block device name for block.db."]
     #[doc = ""]
     pub db_dev: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Size in GiB for block.db."]
     #[doc = ""]
     #[doc = "If a block.db is requested but the size is not given, will be automatically selected by: bluestore_block_db_size from the ceph database (osd or global section) or config (osd or global section) in that order. If this is not available, it will be sized 10% of the size of the OSD device. Fails if the available size is not enough."]
     #[doc = ""]
-    pub db_dev_size: Option<()>,
+    pub db_dev_size: Option<f64>,
     #[doc = "Block device name."]
     #[doc = ""]
     pub dev: String,
@@ -89,22 +93,30 @@ pub struct PostParams {
     #[doc = ""]
     pub encrypted: Option<bool>,
     #[serde(rename = "osds-per-device")]
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "OSD services per physical device. Only useful for fast NVMe devices"]
     #[doc = ""]
     #[doc = ".\" to utilize their performance better."]
     #[doc = ""]
-    pub osds_per_device: Option<()>,
+    pub osds_per_device: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Block device name for block.wal."]
     #[doc = ""]
     pub wal_dev: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Size in GiB for block.wal."]
     #[doc = ""]
     #[doc = "If a block.wal is requested but the size is not given, will be automatically selected by: bluestore_block_wal_size from the ceph database (osd or global section) or config (osd or global section) in that order. If this is not available, it will be sized 1% of the size of the OSD device. Fails if the available size is not enough."]
     #[doc = ""]
-    pub wal_dev_size: Option<()>,
+    pub wal_dev_size: Option<f64>,
     #[serde(
         flatten,
         default,

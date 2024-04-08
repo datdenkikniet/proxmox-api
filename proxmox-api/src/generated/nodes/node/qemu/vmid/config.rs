@@ -247,12 +247,16 @@ pub struct GetOutput {
     #[doc = "NOTE: If the computer has 2 CPUs, it has total of '2' CPU time. Value '0' indicates no CPU limit."]
     #[doc = ""]
     pub cpulimit: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "CPU weight for a VM, will be clamped to \\\\[1, 10000\\\\] in cgroup v2."]
     #[doc = ""]
     #[doc = "CPU weight for a VM. Argument is used in the kernel fair scheduler. The larger the number is, the more CPU time this VM gets. Number is relative to weights of all the other running VMs."]
     #[doc = ""]
-    pub cpuunits: Option<()>,
+    pub cpuunits: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the VM. Shown in the web-interface VM's summary. This is saved as comment inside the configuration file."]
     #[doc = ""]
@@ -891,12 +895,16 @@ pub struct PostParams {
     #[doc = "NOTE: If the computer has 2 CPUs, it has total of '2' CPU time. Value '0' indicates no CPU limit."]
     #[doc = ""]
     pub cpulimit: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "CPU weight for a VM, will be clamped to \\\\[1, 10000\\\\] in cgroup v2."]
     #[doc = ""]
     #[doc = "CPU weight for a VM. Argument is used in the kernel fair scheduler. The larger the number is, the more CPU time this VM gets. Number is relative to weights of all the other running VMs."]
     #[doc = ""]
-    pub cpuunits: Option<()>,
+    pub cpuunits: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of settings you want to delete."]
     #[doc = ""]
@@ -1531,12 +1539,16 @@ pub struct PutParams {
     #[doc = "NOTE: If the computer has 2 CPUs, it has total of '2' CPU time. Value '0' indicates no CPU limit."]
     #[doc = ""]
     pub cpulimit: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "CPU weight for a VM, will be clamped to \\\\[1, 10000\\\\] in cgroup v2."]
     #[doc = ""]
     #[doc = "CPU weight for a VM. Argument is used in the kernel fair scheduler. The larger the number is, the more CPU time this VM gets. Number is relative to weights of all the other running VMs."]
     #[doc = ""]
-    pub cpuunits: Option<()>,
+    pub cpuunits: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of settings you want to delete."]
     #[doc = ""]

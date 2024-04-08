@@ -278,17 +278,19 @@ pub enum TypeKind<'a> {
         #[serde(default, alias = "min", skip_serializing_if = "Option::is_none")]
         minimum: Option<serde_json::Value>,
         #[serde(default, alias = "max", skip_serializing_if = "Option::is_none")]
-        maximum: Option<f32>,
+        maximum: Option<serde_json::Value>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        default: Option<f32>,
+        default: Option<serde_json::Value>,
     },
     Integer {
+        // Is sometimes a string containing a u32
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        minimum: Option<u32>,
+        minimum: Option<serde_json::Value>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        maximum: Option<u32>,
+        maximum: Option<serde_json::Value>,
+        // Is sometimes a string description
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        default: Option<u32>,
+        default: Option<serde_json::Value>,
     },
     Boolean {
         #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -63,10 +63,14 @@ pub struct PostParams {
     #[doc = "Mapping from source to target storages. Providing only a single storage ID maps all source storages to that storage. Providing the special value '1' will map each source storage to itself."]
     #[doc = ""]
     pub targetstorage: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Wait maximal timeout seconds."]
     #[doc = ""]
-    pub timeout: Option<()>,
+    pub timeout: Option<u64>,
     #[serde(
         flatten,
         default,

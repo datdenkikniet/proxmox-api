@@ -215,10 +215,14 @@ pub struct PutParams {
     #[doc = ""]
     pub master_pubkey: Option<String>,
     #[serde(rename = "max-protected-backups")]
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal number of protected backups per guest. Use '-1' for unlimited."]
     #[doc = ""]
-    pub max_protected_backups: Option<()>,
+    pub max_protected_backups: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"

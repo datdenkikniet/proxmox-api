@@ -315,10 +315,14 @@ pub struct PostParams {
     #[doc = "Enable booting from specified disk. Deprecated: Use 'boot: order=foo;bar' instead."]
     #[doc = ""]
     pub bootdisk: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Override I/O bandwidth limit (in KiB/s)."]
     #[doc = ""]
-    pub bwlimit: Option<()>,
+    pub bwlimit: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "This is an alias for option -ide2"]
     #[doc = ""]
@@ -371,12 +375,16 @@ pub struct PostParams {
     #[doc = "NOTE: If the computer has 2 CPUs, it has total of '2' CPU time. Value '0' indicates no CPU limit."]
     #[doc = ""]
     pub cpulimit: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "CPU weight for a VM, will be clamped to \\\\[1, 10000\\\\] in cgroup v2."]
     #[doc = ""]
     #[doc = "CPU weight for a VM. Argument is used in the kernel fair scheduler. The larger the number is, the more CPU time this VM gets. Number is relative to weights of all the other running VMs."]
     #[doc = ""]
-    pub cpuunits: Option<()>,
+    pub cpuunits: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the VM. Shown in the web-interface VM's summary. This is saved as comment inside the configuration file."]
     #[doc = ""]

@@ -82,10 +82,14 @@ pub struct GetParams {
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "autonomous system number"]
     #[doc = ""]
-    pub asn: Option<()>,
+    pub asn: Option<u64>,
     #[serde(rename = "bgp-multipath-as-path-relax")]
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
