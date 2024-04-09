@@ -28,10 +28,7 @@ enum Kind {
         fields: Vec<FieldDef>,
         additional_props: AdditionalProperties,
     },
-    FormattedString {
-        default_field: Box<FieldDef>,
-        fields: Vec<FieldDef>,
-    },
+    FormattedString(Vec<FieldDef>),
 }
 
 #[derive(Clone, Debug)]
@@ -61,17 +58,19 @@ impl StructDef {
         }
     }
 
+    pub fn new_formatted_string(name: String, fields: Vec<FieldDef>) -> Self {
+        Self {
+            name: Arc::new(Mutex::new(name)),
+            kind: Kind::FormattedString(fields),
+        }
+    }
+
     pub fn name(&self) -> String {
         self.name.lock().to_string()
     }
 
-    fn formatted_string_to_tokens(
-        name: Ident,
-        default_field: &FieldDef,
-        fields: &[FieldDef],
-        tokens: &mut TokenStream,
-    ) {
-    }
+    #[allow(unused)]
+    fn formatted_string_to_tokens(name: Ident, fields: &[FieldDef], tokens: &mut TokenStream) {}
 
     fn normal_to_tokens(
         name: Ident,
@@ -219,10 +218,7 @@ impl ToTokens for StructDef {
                 fields,
                 additional_props,
             } => Self::normal_to_tokens(name, fields, additional_props, tokens),
-            Kind::FormattedString {
-                default_field,
-                fields,
-            } => Self::formatted_string_to_tokens(name, default_field, fields, tokens),
+            Kind::FormattedString(fields) => Self::formatted_string_to_tokens(name, fields, tokens),
         };
     }
 }
