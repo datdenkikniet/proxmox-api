@@ -66,7 +66,7 @@ impl ToTokens for StructDef {
             AdditionalProperties::Type(ty) => {
                 ty.to_tokens(tokens);
 
-                let ty = ty.as_field_ty(false);
+                let (_, ty) = ty.as_field_ty(false);
                 Some(quote! (::std::collections::HashMap<String, #ty>))
             }
         };
@@ -127,7 +127,7 @@ impl ToTokens for StructDef {
         let (additional_props, test) = if let Some(additional_props) = additional_props_ty {
             let multis: Vec<_> = fields
                 .iter()
-                .filter_map(|f| f.multi())
+                .filter_map(|f| f.numbered_items())
                 .map(|m| m.name())
                 .collect();
 

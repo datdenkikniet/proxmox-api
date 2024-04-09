@@ -21,6 +21,10 @@ impl NumItemsDef {
     pub fn name(&self) -> String {
         crate::name_to_ident(&format!("numbered_{}s", self.prefix))
     }
+
+    pub fn ty(&self) -> &TypeDef {
+        &self.ty
+    }
 }
 
 impl ToTokens for NumItemsDef {
@@ -31,7 +35,7 @@ impl ToTokens for NumItemsDef {
         let name = self.name();
         let name = Ident::new(&name, quote!().span());
         let prefix = Literal::string(&prefix);
-        let ty = ty.as_field_ty(false);
+        let (_, ty) = ty.as_field_ty(false);
 
         tokens.extend(quote! {
             #[derive(Default)]

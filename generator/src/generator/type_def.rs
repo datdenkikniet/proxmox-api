@@ -65,6 +65,14 @@ impl TypeDef {
         }
     }
 
+    pub fn numbered_items(&self) -> Option<&NumItemsDef> {
+        if let Self::NumberedItems(n) = &self {
+            Some(n)
+        } else {
+            None
+        }
+    }
+
     pub fn new_enum<I: AsRef<str>, T: IntoIterator<Item = I>>(
         name: String,
         extra_derives: T,
@@ -89,9 +97,14 @@ impl TypeDef {
         Self::Struct(StructDef::new(name, fields, additional_props))
     }
 
-    pub fn as_field_ty(&self, optional: bool) -> TokenStream {
+    pub fn as_field_ty(&self, optional: bool) -> (Option<&str>, TokenStream) {
         let ty = match self {
-            TypeDef::NumberedItems(_) => panic!(),
+            TypeDef::NumberedItems(inner) => {
+                let empty_check = "::std::collections::HashMap::is_empty";
+                let (_, ty) = inner.ty().as_field_ty(false);
+                let def = quote!(::std::collections::HashMap<u32, #ty>);
+                return (Some(empty_check), def);
+            }
             TypeDef::Struct(strt) => {
                 let ident = Ident::new(strt.name(), quote!().span());
                 quote!(#ident)
@@ -99,8 +112,10 @@ impl TypeDef {
             TypeDef::KnownType { format, fallback } => Self::known_type(format, fallback),
             TypeDef::Primitive(name) => name.to_token_stream(),
             TypeDef::Array(inner) => {
-                let inner = inner.as_field_ty(false);
-                quote!(Vec<#inner>)
+                let (_, inner) = inner.as_field_ty(false);
+                let empty_check = "::std::vec::Vec::is_empty";
+                let def = quote!(Vec<#inner>);
+                return (Some(empty_check), def);
             }
             TypeDef::Enum(en) => {
                 let ident = Ident::new(en.name(), quote!().span());
@@ -108,11 +123,9 @@ impl TypeDef {
             }
         };
 
-        if optional {
-            quote!(Option<#ty>)
-        } else {
-            ty
-        }
+        let ty = if optional { quote!(Option<#ty>) } else { ty };
+        let empty_check = optional.then_some("Option::is_none");
+        (empty_check, ty)
     }
 
     fn known_type(known: &KnownFormat, fallback: &PrimitiveTypeDef) -> TokenStream {

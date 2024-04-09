@@ -145,7 +145,7 @@ impl Generator {
                         module_defs.extend(output.module_defs);
                         global_defs.extend(output.global_defs);
 
-                        let name = def.as_field_ty(ret.optional.get());
+                        let (_, name) = def.as_field_ty(ret.optional.get());
 
                         let call = match def.primitive() {
                             Some(PrimitiveTypeDef::Integer) => {

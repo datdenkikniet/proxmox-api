@@ -172,11 +172,14 @@ impl Type<'_> {
                                 let doc = ty.doc();
                                 let optional = ty.optional.get();
 
-                                let (field, num_items) =
+                                let field =
                                     FieldDef::new(original_name.to_string(), inner, optional, doc);
 
-                                all_external
-                                    .extend(num_items.map(|v| TypeDef::NumberedItems(Box::new(v))));
+                                if let Some(numbered_items) = field.numbered_items() {
+                                    final_output.module_defs.push(TypeDef::NumberedItems(
+                                        Box::new(numbered_items.clone()),
+                                    ));
+                                }
 
                                 Some(field)
                             })
