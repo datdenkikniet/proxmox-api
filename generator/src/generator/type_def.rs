@@ -34,6 +34,8 @@ impl ToTokens for PrimitiveTypeDef {
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum TypeDef {
+    // TODO: get rid of TypeDef::Unit. It means nothing,
+    // and is mostly here to make life slightly easier
     Unit,
     Primitive(PrimitiveTypeDef),
     KnownType {
