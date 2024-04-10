@@ -34,9 +34,6 @@ impl ToTokens for PrimitiveTypeDef {
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum TypeDef {
-    // TODO: get rid of TypeDef::Unit. It means nothing,
-    // and is mostly here to make life slightly easier
-    Unit,
     Primitive(PrimitiveTypeDef),
     KnownType {
         format: KnownFormat,
@@ -55,10 +52,6 @@ impl TypeDef {
         "::serde::Serialize",
         "::serde::Deserialize",
     ];
-
-    pub fn is_unit(&self) -> bool {
-        matches!(self, TypeDef::Unit)
-    }
 
     pub fn is_array(&self) -> bool {
         matches!(self, TypeDef::Array(..))
@@ -98,7 +91,6 @@ impl TypeDef {
 
     pub fn as_field_ty(&self, optional: bool) -> TokenStream {
         let ty = match self {
-            TypeDef::Unit => quote!(()),
             TypeDef::NumberedItems(_) => panic!(),
             TypeDef::Struct(strt) => {
                 let ident = Ident::new(strt.name(), quote!().span());
@@ -140,7 +132,7 @@ impl TypeDef {
 impl ToTokens for TypeDef {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         match self {
-            TypeDef::Primitive(_) | TypeDef::Unit | TypeDef::KnownType { .. } => {}
+            TypeDef::Primitive(_) | TypeDef::KnownType { .. } => {}
             TypeDef::Array(inner) => inner.to_tokens(tokens),
             TypeDef::Enum(def) => def.to_tokens(tokens),
             TypeDef::Struct(strt) => strt.to_tokens(tokens),

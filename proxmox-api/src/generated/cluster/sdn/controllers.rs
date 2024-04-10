@@ -41,7 +41,6 @@ impl GetOutputItems {
         Self {
             controller,
             ty,
-            pending: Default::default(),
             state: Default::default(),
             additional_properties: Default::default(),
         }
@@ -50,8 +49,6 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     pub controller: String,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub pending: Option<()>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub state: Option<String>,
     #[serde(rename = "type")]

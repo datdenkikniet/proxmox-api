@@ -39,7 +39,6 @@ impl GetOutput {
     pub fn new(running: bool) -> Self {
         Self {
             running,
-            allowed_nodes: Default::default(),
             not_allowed_nodes: Default::default(),
             additional_properties: Default::default(),
         }
@@ -47,10 +46,6 @@ impl GetOutput {
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutput {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "List nodes allowed for offline migration, only passed if VM is offline"]
-    #[doc = ""]
-    pub allowed_nodes: Option<()>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List not allowed nodes with additional informations, only passed if VM is offline"]
     #[doc = ""]
