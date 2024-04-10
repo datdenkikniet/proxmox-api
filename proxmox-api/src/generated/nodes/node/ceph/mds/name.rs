@@ -37,10 +37,14 @@ where
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PostParams {
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Determines whether a ceph-mds daemon should poll and replay the log of an active MDS. Faster switch on MDS failure, but needs more idle resources."]
     #[doc = ""]
-    pub hotstandby: Option<()>,
+    pub hotstandby: Option<bool>,
     #[serde(
         flatten,
         default,

@@ -294,7 +294,7 @@ pub enum TypeKind<'a> {
     },
     Boolean {
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        default: Option<u32>,
+        default: Option<serde_json::Value>,
     },
     Array {
         items: Box<Type<'a>>,
