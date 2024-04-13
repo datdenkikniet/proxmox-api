@@ -82,7 +82,7 @@ pub struct GetParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
-    pub fn new(iface: String, ty: Type) -> Self {
+    pub fn new(iface: String, ty: Type2) -> Self {
         Self {
             iface,
             ty,
@@ -236,7 +236,7 @@ pub struct PostParams {
     #[serde(rename = "type")]
     #[doc = "Network interface type"]
     #[doc = ""]
-    pub ty: Type,
+    pub ty: Type2,
     #[serde(rename = "vlan-id")]
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -343,8 +343,6 @@ pub enum Type {
     Bridge,
     #[serde(rename = "eth")]
     Eth,
-    #[serde(rename = "unknown")]
-    Unknown,
     #[serde(rename = "vlan")]
     Vlan,
 }
@@ -359,6 +357,44 @@ impl TryFrom<&str> for Type {
             "alias" => Ok(Self::Alias),
             "any_bridge" => Ok(Self::AnyBridge),
             "any_local_bridge" => Ok(Self::AnyLocalBridge),
+            "bond" => Ok(Self::Bond),
+            "bridge" => Ok(Self::Bridge),
+            "eth" => Ok(Self::Eth),
+            "vlan" => Ok(Self::Vlan),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Network interface type"]
+#[doc = ""]
+pub enum Type2 {
+    OVSBond,
+    OVSBridge,
+    OVSIntPort,
+    OVSPort,
+    #[serde(rename = "alias")]
+    Alias,
+    #[serde(rename = "bond")]
+    Bond,
+    #[serde(rename = "bridge")]
+    Bridge,
+    #[serde(rename = "eth")]
+    Eth,
+    #[serde(rename = "unknown")]
+    Unknown,
+    #[serde(rename = "vlan")]
+    Vlan,
+}
+impl TryFrom<&str> for Type2 {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "OVSBond" => Ok(Self::OVSBond),
+            "OVSBridge" => Ok(Self::OVSBridge),
+            "OVSIntPort" => Ok(Self::OVSIntPort),
+            "OVSPort" => Ok(Self::OVSPort),
+            "alias" => Ok(Self::Alias),
             "bond" => Ok(Self::Bond),
             "bridge" => Ok(Self::Bridge),
             "eth" => Ok(Self::Eth),

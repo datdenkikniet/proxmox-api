@@ -1,5 +1,6 @@
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 
+use parking_lot::Mutex;
 use proc_macro2::Literal;
 use quote::{quote, ToTokens};
 use syn::{spanned::Spanned, Ident};
@@ -17,7 +18,7 @@ impl PartialEq for NumItemsDef {
     fn eq(&self, other: &Self) -> bool {
         self.prefix == other.prefix
             && self.ty == other.ty
-            && *self.name.lock().unwrap() == *other.name.lock().unwrap()
+            && *self.name.lock() == *other.name.lock()
     }
 }
 
@@ -33,11 +34,11 @@ impl NumItemsDef {
     }
 
     pub fn name(&self) -> String {
-        self.name.lock().unwrap().clone()
+        self.name.lock().clone()
     }
 
-    pub fn set_name(&self, name: &str) {
-        let mut my_name = self.name.lock().unwrap();
+    pub fn set_name(&mut self, name: &str) {
+        let mut my_name = self.name.lock();
 
         if *my_name != name {
             *my_name = name.to_string();
@@ -54,7 +55,7 @@ impl ToTokens for NumItemsDef {
         let Self { prefix, ty, name } = self;
 
         let num_items = proxmox_api(quote!(types::multi::NumberedItems));
-        let name = Ident::new(&name.lock().unwrap(), quote!().span());
+        let name = Ident::new(&name.lock(), quote!().span());
         let prefix = Literal::string(&prefix);
         let (_, ty) = ty.as_field_ty(false);
 

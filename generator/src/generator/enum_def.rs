@@ -1,17 +1,33 @@
-use std::collections::BTreeSet;
+use std::{collections::BTreeSet, sync::Arc};
 
+use parking_lot::Mutex;
 use proc_macro2::{Literal, TokenStream};
 
 use quote::{quote, ToTokens};
 use syn::{spanned::Spanned, Ident};
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug)]
 pub struct EnumDef {
-    name: String,
+    name: Arc<Mutex<String>>,
     derives: Vec<String>,
     values: BTreeSet<String>,
     default: Option<String>,
     doc: Vec<String>,
+}
+
+impl PartialEq for EnumDef {
+    fn eq(&self, other: &Self) -> bool {
+        let equal = *self.name.lock() == *other.name.lock()
+            && self.derives == other.derives
+            && self.values == other.values
+            && self.default == other.default;
+
+        if equal && other.doc != self.doc {
+            eprintln!("Found enums that were equal besides on docs.");
+        }
+
+        equal
+    }
 }
 
 impl EnumDef {
@@ -23,8 +39,16 @@ impl EnumDef {
         &self.values
     }
 
-    pub fn name(&self) -> &str {
-        &self.name
+    pub fn name(&self) -> String {
+        self.name.lock().to_string()
+    }
+
+    pub fn set_name(&mut self, name: &str) {
+        let mut my_name = self.name.lock();
+
+        if *my_name != name {
+            *my_name = name.to_string();
+        }
     }
 
     pub fn values_mut(&mut self) -> &mut BTreeSet<String> {
@@ -43,7 +67,7 @@ impl EnumDef {
         }
 
         let me = EnumDef {
-            name,
+            name: Arc::new(Mutex::new(name)),
             derives: super::TypeDef::DEFAULT_DERIVES
                 .into_iter()
                 .map(str::to_string)
@@ -79,7 +103,7 @@ impl ToTokens for EnumDef {
             doc,
         } = self;
 
-        let name = Ident::new(self.name(), quote!().span());
+        let name = Ident::new(&self.name(), quote!().span());
 
         let enum_doc = doc.iter().map(|doc| {
             let doc = Literal::string(doc);

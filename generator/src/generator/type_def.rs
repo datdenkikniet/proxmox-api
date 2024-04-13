@@ -106,7 +106,7 @@ impl TypeDef {
                 return (Some(empty_check), def);
             }
             TypeDef::Struct(strt) => {
-                let ident = Ident::new(strt.name(), quote!().span());
+                let ident = Ident::new(&strt.name(), quote!().span());
                 quote!(#ident)
             }
             TypeDef::KnownType { format, fallback } => Self::known_type(format, fallback),
@@ -118,7 +118,7 @@ impl TypeDef {
                 return (Some(empty_check), def);
             }
             TypeDef::Enum(en) => {
-                let ident = Ident::new(en.name(), quote!().span());
+                let ident = Ident::new(&en.name(), quote!().span());
                 quote!(#ident)
             }
         };

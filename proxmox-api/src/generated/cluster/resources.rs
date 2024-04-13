@@ -25,7 +25,7 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(id: String, ty: Type) -> Self {
+    pub fn new(id: String, ty: Type2) -> Self {
         Self {
             id,
             ty,
@@ -152,7 +152,7 @@ pub struct GetOutputItems {
     #[serde(rename = "type")]
     #[doc = "Resource type."]
     #[doc = ""]
-    pub ty: Type,
+    pub ty: Type2,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -186,6 +186,31 @@ pub struct GetParams {
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub enum Type {
+    #[serde(rename = "node")]
+    Node,
+    #[serde(rename = "sdn")]
+    Sdn,
+    #[serde(rename = "storage")]
+    Storage,
+    #[serde(rename = "vm")]
+    Vm,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "node" => Ok(Self::Node),
+            "sdn" => Ok(Self::Sdn),
+            "storage" => Ok(Self::Storage),
+            "vm" => Ok(Self::Vm),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Resource type."]
+#[doc = ""]
+pub enum Type2 {
     #[serde(rename = "lxc")]
     Lxc,
     #[serde(rename = "node")]
@@ -200,10 +225,8 @@ pub enum Type {
     Sdn,
     #[serde(rename = "storage")]
     Storage,
-    #[serde(rename = "vm")]
-    Vm,
 }
-impl TryFrom<&str> for Type {
+impl TryFrom<&str> for Type2 {
     type Error = String;
     fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
         match value {
@@ -214,7 +237,6 @@ impl TryFrom<&str> for Type {
             "qemu" => Ok(Self::Qemu),
             "sdn" => Ok(Self::Sdn),
             "storage" => Ok(Self::Storage),
-            "vm" => Ok(Self::Vm),
             v => Err(format!("Unknown variant {v}")),
         }
     }

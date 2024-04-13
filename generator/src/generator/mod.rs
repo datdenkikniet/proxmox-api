@@ -130,7 +130,7 @@ impl Generator {
 
                 let (signature, defer_signature) = if let Some(TypeDef::Struct(strt)) = &parameters
                 {
-                    let name = Ident::new(strt.name(), quote! {}.span());
+                    let name = Ident::new(&strt.name(), quote! {}.span());
                     (quote!(&self, params: #name), quote!(&path, &params))
                 } else {
                     (quote!(&self), quote!(&path, &()))
@@ -305,7 +305,7 @@ impl Generator {
         for def in types {
             match def {
                 TypeDef::Struct(strt) => {
-                    if let Some(prev_strt) = structs.get(strt.name()) {
+                    if let Some(prev_strt) = structs.get(&strt.name()) {
                         if prev_strt != &strt {
                             panic!("Encountered structs on the same level with exactly the same name that are not equal!\n{strt:#?}\n{prev_strt:#?}");
                         }
@@ -313,34 +313,28 @@ impl Generator {
                         structs.insert(strt.name().to_string(), strt);
                     }
                 }
-                TypeDef::Enum(en) => {
-                    if let Some(previous_def) = enums.get_mut(en.name()) {
-                        if previous_def.values() != en.values() {
-                            eprintln!(
-                                "The previous definition of enum '{}' has a different set of enum variants.",
-                                en.name()
-                            );
+                TypeDef::Enum(mut en) => {
+                    let original_name = en.name();
+                    let mut name = original_name.clone();
+                    let mut counter = 2;
+                    let mut found_duplicate = false;
 
-                            let mut prev: Vec<_> = previous_def.values().iter().collect();
-                            prev.sort();
-
-                            let mut now: Vec<_> = en.values().iter().collect();
-                            now.sort();
-
-                            eprintln!("S1: {prev:?}");
-                            eprintln!("S2: {now:?}");
-
-                            eprintln!("Updating S1 with missing values from S2...");
-
-                            en.values().iter().for_each(|v| {
-                                previous_def.values_mut().insert(v.clone());
-                            });
+                    while let Some(previous_def) = enums.get(&name) {
+                        if previous_def == &en {
+                            found_duplicate = true;
+                            break;
+                        } else {
+                            name = format!("{original_name}{counter}");
+                            counter += 1;
                         }
-                    } else {
+                    }
+
+                    if !found_duplicate {
+                        en.set_name(&name);
                         enums.insert(en.name().to_string(), en);
                     }
                 }
-                TypeDef::NumberedItems(new_items) => {
+                TypeDef::NumberedItems(mut new_items) => {
                     let original_name = new_items.name();
                     let mut name = original_name.clone();
                     let mut counter = 2;

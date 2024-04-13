@@ -115,7 +115,7 @@ pub struct GetParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl MembersGetOutputItemsMembersItems {
-    pub fn new(id: String, node: String, ty: Type) -> Self {
+    pub fn new(id: String, node: String, ty: Type2) -> Self {
         Self {
             id,
             node,
@@ -133,7 +133,7 @@ pub struct MembersGetOutputItemsMembersItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub storage: Option<String>,
     #[serde(rename = "type")]
-    pub ty: Type,
+    pub ty: Type2,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -222,6 +222,26 @@ pub struct PutParams {
 pub enum Type {
     #[serde(rename = "lxc")]
     Lxc,
+    #[serde(rename = "qemu")]
+    Qemu,
+    #[serde(rename = "storage")]
+    Storage,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "lxc" => Ok(Self::Lxc),
+            "qemu" => Ok(Self::Qemu),
+            "storage" => Ok(Self::Storage),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub enum Type2 {
+    #[serde(rename = "lxc")]
+    Lxc,
     #[serde(rename = "openvz")]
     Openvz,
     #[serde(rename = "qemu")]
@@ -229,7 +249,7 @@ pub enum Type {
     #[serde(rename = "storage")]
     Storage,
 }
-impl TryFrom<&str> for Type {
+impl TryFrom<&str> for Type2 {
     type Error = String;
     fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
         match value {
