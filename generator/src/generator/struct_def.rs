@@ -1,8 +1,8 @@
 use std::{ops::Deref, sync::Arc};
 
 use parking_lot::Mutex;
-use proc_macro2::TokenStream;
-use quote::ToTokens;
+use proc_macro2::{Punct, TokenStream};
+use quote::{ToTokens, TokenStreamExt};
 use syn::{spanned::Spanned, Ident};
 
 use super::{proxmox_api, proxmox_api_str, FieldDef, TypeDef};
@@ -198,13 +198,20 @@ impl StructDef {
 
         tokens.extend(quote! {
             #[derive(#(#derives)*)]
-            pub struct #name {
-                #(#fields)*
-                #additional_props
-            }
-
-            #test
+            pub struct #name
         });
+
+        tokens.append(Punct::new('{', proc_macro2::Spacing::Alone));
+
+        fields.iter().for_each(|f| {
+            f.to_tokens(tokens, true);
+        });
+
+        tokens.extend(additional_props);
+
+        tokens.append(Punct::new('}', proc_macro2::Spacing::Alone));
+
+        tokens.extend(test);
     }
 }
 
