@@ -97,7 +97,7 @@ impl TypeDef {
         Self::Struct(StructDef::new(name, fields, additional_props))
     }
 
-    pub fn new_string_struct(name: String, fields: Vec<FieldDef>) -> Self {
+    pub fn new_formatted_string(name: String, fields: Vec<FieldDef>) -> Self {
         Self::Struct(StructDef::new_formatted_string(name, fields))
     }
 
