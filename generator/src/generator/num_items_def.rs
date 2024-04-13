@@ -1,25 +1,47 @@
+use std::sync::{Arc, Mutex};
+
 use proc_macro2::Literal;
 use quote::{quote, ToTokens};
 use syn::{spanned::Spanned, Ident};
 
 use super::{proxmox_api, TypeDef};
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug)]
 pub struct NumItemsDef {
     prefix: String,
     ty: TypeDef,
+    name: Arc<Mutex<String>>,
+}
+
+impl PartialEq for NumItemsDef {
+    fn eq(&self, other: &Self) -> bool {
+        self.prefix == other.prefix
+            && self.ty == other.ty
+            && *self.name.lock().unwrap() == *other.name.lock().unwrap()
+    }
 }
 
 impl NumItemsDef {
     pub fn new(prefix: &str, ty: TypeDef) -> Self {
+        let name = crate::name_to_ident(&format!("numbered_{}s", prefix));
+
         Self {
             prefix: prefix.to_string(),
             ty,
+            name: Arc::new(Mutex::new(name)),
         }
     }
 
     pub fn name(&self) -> String {
-        crate::name_to_ident(&format!("numbered_{}s", self.prefix))
+        self.name.lock().unwrap().clone()
+    }
+
+    pub fn set_name(&self, name: &str) {
+        let mut my_name = self.name.lock().unwrap();
+
+        if *my_name != name {
+            *my_name = name.to_string();
+        }
     }
 
     pub fn ty(&self) -> &TypeDef {
@@ -29,11 +51,10 @@ impl NumItemsDef {
 
 impl ToTokens for NumItemsDef {
     fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-        let Self { prefix, ty } = self;
+        let Self { prefix, ty, name } = self;
 
         let num_items = proxmox_api(quote!(types::multi::NumberedItems));
-        let name = self.name();
-        let name = Ident::new(&name, quote!().span());
+        let name = Ident::new(&name.lock().unwrap(), quote!().span());
         let prefix = Literal::string(&prefix);
         let (_, ty) = ty.as_field_ty(false);
 

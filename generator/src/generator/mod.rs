@@ -341,12 +341,23 @@ impl Generator {
                     }
                 }
                 TypeDef::NumberedItems(new_items) => {
-                    if let Some(item) = num_items.get(&new_items.name()) {
-                        if item != new_items.as_ref() {
-                            panic!("Found non-equal duplicate items definition\nNew:{new_items:?}\nExisting:{item:?}")
+                    let original_name = new_items.name();
+                    let mut name = original_name.clone();
+                    let mut counter = 2;
+                    let mut found_duplicate = false;
+
+                    while let Some(value) = num_items.get(&name) {
+                        if value == new_items.as_ref() {
+                            found_duplicate = true;
+                            break;
+                        } else {
+                            name = format!("{original_name}{counter}");
+                            counter += 1;
                         }
-                    } else {
-                        num_items.insert(new_items.name(), *new_items);
+                    }
+                    if !found_duplicate {
+                        new_items.set_name(&name);
+                        num_items.insert(name, *new_items);
                     }
                 }
                 _ => {}
