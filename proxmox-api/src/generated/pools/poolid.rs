@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Delete pool (deprecated, no support for nested pools, use 'DELETE /pools/?poolid={poolid}')."]
+    #[doc = ""]
     pub fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &())
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get pool configuration (deprecated, no support for nested pools, use 'GET /pools/?poolid={poolid}')."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -38,6 +40,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Update pool data (deprecated, no support for nested pools - use 'PUT /pools/?poolid={poolid}' instead)."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -112,6 +115,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow adding a guest even if already in another pool. The guest will be removed from its current pool and added to this one."]
+    #[doc = ""]
     pub allow_move: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub comment: Option<String>,
@@ -121,12 +125,15 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Remove the passed VMIDs and/or storage IDs instead of adding them."]
+    #[doc = ""]
     pub delete: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of storage IDs to add or remove from this pool."]
+    #[doc = ""]
     pub storage: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of guest VMIDs to add or remove from this pool."]
+    #[doc = ""]
     pub vms: Option<String>,
     #[serde(
         flatten,
@@ -145,4 +152,16 @@ pub enum Type {
     Qemu,
     #[serde(rename = "storage")]
     Storage,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "lxc" => Ok(Self::Lxc),
+            "openvz" => Ok(Self::Openvz),
+            "qemu" => Ok(Self::Qemu),
+            "storage" => Ok(Self::Storage),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

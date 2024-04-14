@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List PVE IPAM Entries"]
+    #[doc = ""]
     pub fn get(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())

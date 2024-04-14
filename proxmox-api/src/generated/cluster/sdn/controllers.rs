@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "SDN controllers index."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create a new sdn controller object."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -69,6 +71,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Display pending config."]
+    #[doc = ""]
     pub pending: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -76,10 +79,12 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Display running config."]
+    #[doc = ""]
     pub running: Option<bool>,
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only list sdn controllers of specific type"]
+    #[doc = ""]
     pub ty: Option<Type>,
     #[serde(
         flatten,
@@ -109,9 +114,14 @@ impl PostParams {
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "autonomous system number"]
-    pub asn: Option<()>,
+    #[doc = ""]
+    pub asn: Option<u64>,
     #[serde(rename = "bgp-multipath-as-path-relax")]
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -120,6 +130,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub bgp_multipath_as_path_relax: Option<bool>,
     #[doc = "The SDN controller object identifier."]
+    #[doc = ""]
     pub controller: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -127,6 +138,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable ebgp. (remote-as external)"]
+    #[doc = ""]
     pub ebgp: Option<bool>,
     #[serde(rename = "ebgp-multihop")]
     #[serde(
@@ -138,26 +150,33 @@ pub struct PostParams {
     #[serde(rename = "isis-domain")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "ISIS domain."]
+    #[doc = ""]
     pub isis_domain: Option<String>,
     #[serde(rename = "isis-ifaces")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "ISIS interface."]
+    #[doc = ""]
     pub isis_ifaces: Option<String>,
     #[serde(rename = "isis-net")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "ISIS network entity title."]
+    #[doc = ""]
     pub isis_net: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "source loopback interface."]
+    #[doc = ""]
     pub loopback: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The cluster node name."]
+    #[doc = ""]
     pub node: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "peers address list."]
+    #[doc = ""]
     pub peers: Option<String>,
     #[serde(rename = "type")]
     #[doc = "Plugin type."]
+    #[doc = ""]
     pub ty: Type,
     #[serde(
         flatten,
@@ -167,6 +186,8 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Only list sdn controllers of specific type"]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "bgp")]
     Bgp,
@@ -176,6 +197,18 @@ pub enum Type {
     Faucet,
     #[serde(rename = "isis")]
     Isis,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "bgp" => Ok(Self::Bgp),
+            "evpn" => Ok(Self::Evpn),
+            "faucet" => Ok(Self::Faucet),
+            "isis" => Ok(Self::Isis),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> ControllersClient<T>
 where

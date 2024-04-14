@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List local disks."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -53,6 +54,7 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "The device path"]
+    #[doc = ""]
     pub devpath: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool",
@@ -78,6 +80,7 @@ pub struct GetOutputItems {
     pub osdid_list: Vec<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For partitions only. The device path of the disk the partition resides on."]
+    #[doc = ""]
     pub parent: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub serial: Option<String>,
@@ -108,6 +111,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Also include partitions."]
+    #[doc = ""]
     pub include_partitions: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -115,10 +119,12 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Skip smart checks."]
+    #[doc = ""]
     pub skipsmart: Option<bool>,
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only list specific types of disks."]
+    #[doc = ""]
     pub ty: Option<Type>,
     #[serde(
         flatten,
@@ -128,9 +134,21 @@ pub struct GetParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Only list specific types of disks."]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "journal_disks")]
     JournalDisks,
     #[serde(rename = "unused")]
     Unused,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "journal_disks" => Ok(Self::JournalDisks),
+            "unused" => Ok(Self::Unused),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

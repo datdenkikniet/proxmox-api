@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get SMART Health of a disk."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -63,6 +64,7 @@ impl GetParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetParams {
     #[doc = "Block device name"]
+    #[doc = ""]
     pub disk: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -70,6 +72,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If true returns only the health status"]
+    #[doc = ""]
     pub healthonly: Option<bool>,
     #[serde(
         flatten,

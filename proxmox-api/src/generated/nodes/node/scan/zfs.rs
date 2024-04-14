@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Scan zfs pool list on local node."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -34,6 +35,7 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "ZFS pool name."]
+    #[doc = ""]
     pub pool: String,
     #[serde(
         flatten,

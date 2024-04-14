@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Reads the given file via guest agent. Is limited to 16777216 bytes."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -35,6 +36,7 @@ impl GetOutput {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutput {
     #[doc = "The content of the file, maximum 16777216"]
+    #[doc = ""]
     pub content: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -42,6 +44,7 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If set to 1, the output is truncated and not complete"]
+    #[doc = ""]
     pub truncated: Option<bool>,
     #[serde(
         flatten,
@@ -61,6 +64,7 @@ impl GetParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetParams {
     #[doc = "The path to the file"]
+    #[doc = ""]
     pub file: String,
     #[serde(
         flatten,

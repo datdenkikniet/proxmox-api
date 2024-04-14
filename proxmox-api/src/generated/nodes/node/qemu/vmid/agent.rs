@@ -43,6 +43,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "QEMU Guest Agent command index."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -53,6 +54,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Execute QEMU Guest Agent commands."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -87,6 +89,7 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "The QGA command."]
+    #[doc = ""]
     pub command: Command,
     #[serde(
         flatten,
@@ -96,6 +99,8 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "The QGA command."]
+#[doc = ""]
 pub enum Command {
     #[serde(rename = "fsfreeze-freeze")]
     FsfreezeFreeze,
@@ -137,6 +142,34 @@ pub enum Command {
     SuspendHybrid,
     #[serde(rename = "suspend-ram")]
     SuspendRam,
+}
+impl TryFrom<&str> for Command {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "fsfreeze-freeze" => Ok(Self::FsfreezeFreeze),
+            "fsfreeze-status" => Ok(Self::FsfreezeStatus),
+            "fsfreeze-thaw" => Ok(Self::FsfreezeThaw),
+            "fstrim" => Ok(Self::Fstrim),
+            "get-fsinfo" => Ok(Self::GetFsinfo),
+            "get-host-name" => Ok(Self::GetHostName),
+            "get-memory-block-info" => Ok(Self::GetMemoryBlockInfo),
+            "get-memory-blocks" => Ok(Self::GetMemoryBlocks),
+            "get-osinfo" => Ok(Self::GetOsinfo),
+            "get-time" => Ok(Self::GetTime),
+            "get-timezone" => Ok(Self::GetTimezone),
+            "get-users" => Ok(Self::GetUsers),
+            "get-vcpus" => Ok(Self::GetVcpus),
+            "info" => Ok(Self::Info),
+            "network-get-interfaces" => Ok(Self::NetworkGetInterfaces),
+            "ping" => Ok(Self::Ping),
+            "shutdown" => Ok(Self::Shutdown),
+            "suspend-disk" => Ok(Self::SuspendDisk),
+            "suspend-hybrid" => Ok(Self::SuspendHybrid),
+            "suspend-ram" => Ok(Self::SuspendRam),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> AgentClient<T>
 where

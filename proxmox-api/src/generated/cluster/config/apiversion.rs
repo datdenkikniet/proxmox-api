@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Return the version of the cluster join API available on this node."]
+    #[doc = ""]
     pub fn get(&self) -> Result<u64, T::Error> {
         let path = self.path.to_string();
         Ok(self

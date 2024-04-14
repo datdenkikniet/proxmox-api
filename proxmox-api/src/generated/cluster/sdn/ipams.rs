@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "SDN ipams index."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create a new sdn ipam object."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -60,6 +62,7 @@ pub struct GetParams {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only list sdn ipams of specific type"]
+    #[doc = ""]
     pub ty: Option<Type>,
     #[serde(
         flatten,
@@ -83,6 +86,7 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "The SDN ipam object identifier."]
+    #[doc = ""]
     pub ipam: String,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -94,6 +98,7 @@ pub struct PostParams {
     pub token: Option<String>,
     #[serde(rename = "type")]
     #[doc = "Plugin type."]
+    #[doc = ""]
     pub ty: Type,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub url: Option<String>,
@@ -105,6 +110,8 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Only list sdn ipams of specific type"]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "netbox")]
     Netbox,
@@ -112,6 +119,17 @@ pub enum Type {
     Phpipam,
     #[serde(rename = "pve")]
     Pve,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "netbox" => Ok(Self::Netbox),
+            "phpipam" => Ok(Self::Phpipam),
+            "pve" => Ok(Self::Pve),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> IpamsClient<T>
 where

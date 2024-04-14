@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Remove sendmail endpoint"]
+    #[doc = ""]
     pub fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &())
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Return a specific sendmail endpoint"]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -38,6 +40,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Update existing sendmail endpoint"]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -62,12 +65,15 @@ impl GetOutput {
 pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Author of the mail"]
+    #[doc = ""]
     pub author: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Comment"]
+    #[doc = ""]
     pub comment: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -75,19 +81,24 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Disable this target"]
+    #[doc = ""]
     pub disable: Option<bool>,
     #[serde(rename = "from-address")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "`From` address for the mail"]
+    #[doc = ""]
     pub from_address: Option<String>,
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of email recipients"]
+    #[doc = ""]
     pub mailto: Vec<String>,
     #[serde(rename = "mailto-user")]
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of users"]
+    #[doc = ""]
     pub mailto_user: Vec<String>,
     #[doc = "The name of the endpoint."]
+    #[doc = ""]
     pub name: String,
     #[serde(
         flatten,
@@ -100,15 +111,19 @@ pub struct GetOutput {
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Author of the mail"]
+    #[doc = ""]
     pub author: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Comment"]
+    #[doc = ""]
     pub comment: Option<String>,
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "A list of settings you want to delete."]
+    #[doc = ""]
     pub delete: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -116,17 +131,21 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Disable this target"]
+    #[doc = ""]
     pub disable: Option<bool>,
     #[serde(rename = "from-address")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "`From` address for the mail"]
+    #[doc = ""]
     pub from_address: Option<String>,
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of email recipients"]
+    #[doc = ""]
     pub mailto: Vec<String>,
     #[serde(rename = "mailto-user")]
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of users"]
+    #[doc = ""]
     pub mailto_user: Vec<String>,
     #[serde(
         flatten,

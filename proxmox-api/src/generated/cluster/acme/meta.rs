@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Retrieve ACME Directory Meta Information"]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -28,6 +29,7 @@ pub struct GetOutput {
     #[serde(rename = "caaIdentities")]
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Hostnames referring to the ACME servers."]
+    #[doc = ""]
     pub caaidentities: Vec<String>,
     #[serde(rename = "externalAccountRequired")]
     #[serde(
@@ -36,13 +38,16 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "EAB Required"]
+    #[doc = ""]
     pub externalaccountrequired: Option<bool>,
     #[serde(rename = "termsOfService")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "ACME TermsOfService URL."]
+    #[doc = ""]
     pub termsofservice: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "URL to more information about the ACME server."]
+    #[doc = ""]
     pub website: Option<String>,
     #[serde(
         flatten,
@@ -55,6 +60,7 @@ pub struct GetOutput {
 pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "URL of ACME CA directory endpoint."]
+    #[doc = ""]
     pub directory: Option<String>,
     #[serde(
         flatten,

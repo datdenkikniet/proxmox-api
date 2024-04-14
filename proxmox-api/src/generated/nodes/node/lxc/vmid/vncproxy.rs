@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Creates a TCP VNC proxy connections."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -31,6 +32,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "sets the height of the console in pixels."]
+    #[doc = ""]
     pub height: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -38,6 +40,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "use websocket instead of standard VNC."]
+    #[doc = ""]
     pub websocket: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -45,6 +48,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "sets the width of the console in pixels."]
+    #[doc = ""]
     pub width: Option<u64>,
     #[serde(
         flatten,

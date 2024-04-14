@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Instruct the OSD to scrub."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -31,6 +32,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If set, instructs a deep scrub instead of a normal one."]
+    #[doc = ""]
     pub deep: Option<bool>,
     #[serde(
         flatten,

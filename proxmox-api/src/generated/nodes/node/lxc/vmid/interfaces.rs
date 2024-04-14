@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get IP addresses of the specified container interface."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -37,14 +38,18 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "The MAC address of the interface"]
+    #[doc = ""]
     pub hwaddr: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The IPv4 address of the interface"]
+    #[doc = ""]
     pub inet: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The IPv6 address of the interface"]
+    #[doc = ""]
     pub inet6: Option<String>,
     #[doc = "The name of the interface"]
+    #[doc = ""]
     pub name: String,
     #[serde(
         flatten,

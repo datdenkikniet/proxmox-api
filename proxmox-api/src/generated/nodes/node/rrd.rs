@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Read node RRD statistics (returns PNG)"]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -55,10 +56,13 @@ impl GetParams {
 pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The RRD consolidation function"]
+    #[doc = ""]
     pub cf: Option<Cf>,
     #[doc = "The list of datasources you want to display."]
+    #[doc = ""]
     pub ds: String,
     #[doc = "Specify the time frame you are interested in."]
+    #[doc = ""]
     pub timeframe: Timeframe,
     #[serde(
         flatten,
@@ -68,11 +72,25 @@ pub struct GetParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "The RRD consolidation function"]
+#[doc = ""]
 pub enum Cf {
     AVERAGE,
     MAX,
 }
+impl TryFrom<&str> for Cf {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "AVERAGE" => Ok(Self::AVERAGE),
+            "MAX" => Ok(Self::MAX),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Specify the time frame you are interested in."]
+#[doc = ""]
 pub enum Timeframe {
     #[serde(rename = "day")]
     Day,
@@ -84,4 +102,17 @@ pub enum Timeframe {
     Week,
     #[serde(rename = "year")]
     Year,
+}
+impl TryFrom<&str> for Timeframe {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "day" => Ok(Self::Day),
+            "hour" => Ok(Self::Hour),
+            "month" => Ok(Self::Month),
+            "week" => Ok(Self::Week),
+            "year" => Ok(Self::Year),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

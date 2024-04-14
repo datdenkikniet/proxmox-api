@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Gather various systems information about a node"]
+    #[doc = ""]
     pub fn get(&self) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())

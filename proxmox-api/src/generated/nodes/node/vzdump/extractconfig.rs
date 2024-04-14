@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Extract configuration from vzdump backup archive."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -34,6 +35,7 @@ impl GetParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetParams {
     #[doc = "Volume identifier"]
+    #[doc = ""]
     pub volume: String,
     #[serde(
         flatten,

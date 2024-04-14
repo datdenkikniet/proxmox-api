@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Scan remote CIFS server."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -35,8 +36,10 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "Descriptive text from server."]
+    #[doc = ""]
     pub description: String,
     #[doc = "The cifs share name."]
+    #[doc = ""]
     pub share: String,
     #[serde(
         flatten,
@@ -60,14 +63,18 @@ impl GetParams {
 pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "SMB domain (Workgroup)."]
+    #[doc = ""]
     pub domain: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "User password."]
+    #[doc = ""]
     pub password: Option<String>,
     #[doc = "The server address (name or IP)."]
+    #[doc = ""]
     pub server: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "User name."]
+    #[doc = ""]
     pub username: Option<String>,
     #[serde(
         flatten,

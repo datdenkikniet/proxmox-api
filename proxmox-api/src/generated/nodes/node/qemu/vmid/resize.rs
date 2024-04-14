@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Extend volume size."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -38,10 +39,13 @@ impl PutParams {
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has different SHA1 digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[doc = "The disk you want to resize."]
+    #[doc = ""]
     pub disk: Disk,
     #[doc = "The new size. With the `+` sign the value is added to the actual size of the volume and without it, the value is taken as an absolute one. Shrinking disk size is not supported."]
+    #[doc = ""]
     pub size: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -49,6 +53,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Ignore locks - only root is allowed to use this option."]
+    #[doc = ""]
     pub skiplock: Option<bool>,
     #[serde(
         flatten,
@@ -58,6 +63,8 @@ pub struct PutParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "The disk you want to resize."]
+#[doc = ""]
 pub enum Disk {
     #[serde(rename = "efidisk0")]
     Efidisk0,
@@ -177,4 +184,71 @@ pub enum Disk {
     Virtio8,
     #[serde(rename = "virtio9")]
     Virtio9,
+}
+impl TryFrom<&str> for Disk {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "efidisk0" => Ok(Self::Efidisk0),
+            "ide0" => Ok(Self::Ide0),
+            "ide1" => Ok(Self::Ide1),
+            "ide2" => Ok(Self::Ide2),
+            "ide3" => Ok(Self::Ide3),
+            "sata0" => Ok(Self::Sata0),
+            "sata1" => Ok(Self::Sata1),
+            "sata2" => Ok(Self::Sata2),
+            "sata3" => Ok(Self::Sata3),
+            "sata4" => Ok(Self::Sata4),
+            "sata5" => Ok(Self::Sata5),
+            "scsi0" => Ok(Self::Scsi0),
+            "scsi1" => Ok(Self::Scsi1),
+            "scsi10" => Ok(Self::Scsi10),
+            "scsi11" => Ok(Self::Scsi11),
+            "scsi12" => Ok(Self::Scsi12),
+            "scsi13" => Ok(Self::Scsi13),
+            "scsi14" => Ok(Self::Scsi14),
+            "scsi15" => Ok(Self::Scsi15),
+            "scsi16" => Ok(Self::Scsi16),
+            "scsi17" => Ok(Self::Scsi17),
+            "scsi18" => Ok(Self::Scsi18),
+            "scsi19" => Ok(Self::Scsi19),
+            "scsi2" => Ok(Self::Scsi2),
+            "scsi20" => Ok(Self::Scsi20),
+            "scsi21" => Ok(Self::Scsi21),
+            "scsi22" => Ok(Self::Scsi22),
+            "scsi23" => Ok(Self::Scsi23),
+            "scsi24" => Ok(Self::Scsi24),
+            "scsi25" => Ok(Self::Scsi25),
+            "scsi26" => Ok(Self::Scsi26),
+            "scsi27" => Ok(Self::Scsi27),
+            "scsi28" => Ok(Self::Scsi28),
+            "scsi29" => Ok(Self::Scsi29),
+            "scsi3" => Ok(Self::Scsi3),
+            "scsi30" => Ok(Self::Scsi30),
+            "scsi4" => Ok(Self::Scsi4),
+            "scsi5" => Ok(Self::Scsi5),
+            "scsi6" => Ok(Self::Scsi6),
+            "scsi7" => Ok(Self::Scsi7),
+            "scsi8" => Ok(Self::Scsi8),
+            "scsi9" => Ok(Self::Scsi9),
+            "tpmstate0" => Ok(Self::Tpmstate0),
+            "virtio0" => Ok(Self::Virtio0),
+            "virtio1" => Ok(Self::Virtio1),
+            "virtio10" => Ok(Self::Virtio10),
+            "virtio11" => Ok(Self::Virtio11),
+            "virtio12" => Ok(Self::Virtio12),
+            "virtio13" => Ok(Self::Virtio13),
+            "virtio14" => Ok(Self::Virtio14),
+            "virtio15" => Ok(Self::Virtio15),
+            "virtio2" => Ok(Self::Virtio2),
+            "virtio3" => Ok(Self::Virtio3),
+            "virtio4" => Ok(Self::Virtio4),
+            "virtio5" => Ok(Self::Virtio5),
+            "virtio6" => Ok(Self::Virtio6),
+            "virtio7" => Ok(Self::Virtio7),
+            "virtio8" => Ok(Self::Virtio8),
+            "virtio9" => Ok(Self::Virtio9),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Lists possible IPSet/Alias reference which are allowed in source/dest properties."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -57,6 +58,7 @@ pub struct GetParams {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only list references of specified type."]
+    #[doc = ""]
     pub ty: Option<Type>,
     #[serde(
         flatten,
@@ -66,9 +68,21 @@ pub struct GetParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Only list references of specified type."]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "alias")]
     Alias,
     #[serde(rename = "ipset")]
     Ipset,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "alias" => Ok(Self::Alias),
+            "ipset" => Ok(Self::Ipset),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

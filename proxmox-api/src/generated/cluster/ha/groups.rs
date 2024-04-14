@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get HA groups."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create a new HA group."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -69,11 +71,15 @@ impl PostParams {
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description."]
+    #[doc = ""]
     pub comment: Option<String>,
     #[doc = "The HA group identifier."]
+    #[doc = ""]
     pub group: String,
     #[doc = "List of cluster node names with optional priority."]
+    #[doc = ""]
     #[doc = "List of cluster node members, where a priority can be given to each node. A resource bound to a group will run on the available nodes with the highest priority. If there are more nodes in the highest priority class, the services will get distributed to those nodes. The priorities have a relative meaning only."]
+    #[doc = ""]
     pub nodes: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -81,6 +87,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The CRM tries to run services on the node with the highest priority. If a node with higher priority comes online, the CRM migrates the service to that node. Enabling nofailback prevents that behavior."]
+    #[doc = ""]
     pub nofailback: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -88,11 +95,14 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Resources bound to restricted groups may only run on nodes defined by the group."]
+    #[doc = ""]
     #[doc = "Resources bound to restricted groups may only run on nodes defined by the group. The resource will be placed in the stopped state if no group node member is online. Resources on unrestricted groups may run on any cluster node if all group members are offline, but they will migrate back as soon as a group member comes online. One can implement a 'preferred node' behavior using an unrestricted group with only one member."]
+    #[doc = ""]
     pub restricted: Option<bool>,
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Group type."]
+    #[doc = ""]
     pub ty: Option<Type>,
     #[serde(
         flatten,
@@ -102,9 +112,20 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Group type."]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "group")]
     Group,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "group" => Ok(Self::Group),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> GroupsClient<T>
 where

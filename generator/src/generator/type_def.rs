@@ -75,8 +75,15 @@ impl TypeDef {
         extra_derives: T,
         values: BTreeSet<String>,
         default: Option<String>,
+        doc: impl Iterator<Item = String>,
     ) -> Self {
-        Self::Enum(EnumDef::new(name, extra_derives, values, default))
+        Self::Enum(EnumDef::new(
+            name,
+            extra_derives,
+            values,
+            default,
+            doc.collect(),
+        ))
     }
 
     pub fn new_struct(

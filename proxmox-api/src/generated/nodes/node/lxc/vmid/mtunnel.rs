@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Migration tunnel endpoint - only for internal use by CT migration."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -27,9 +28,11 @@ where
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of network bridges to check availability. Will be checked again for actually used bridges during migration."]
+    #[doc = ""]
     pub bridges: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of storages to check permission and availability. Will be checked again for all actually used storages during migration."]
+    #[doc = ""]
     pub storages: Option<String>,
     #[serde(
         flatten,

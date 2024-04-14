@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Delete pool."]
+    #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params)
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List pools or get pool configuration."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -39,6 +41,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create new pool."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -49,6 +52,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Update pool."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -186,6 +190,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow adding a guest even if already in another pool. The guest will be removed from its current pool and added to this one."]
+    #[doc = ""]
     pub allow_move: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub comment: Option<String>,
@@ -195,13 +200,16 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Remove the passed VMIDs and/or storage IDs instead of adding them."]
+    #[doc = ""]
     pub delete: Option<bool>,
     pub poolid: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of storage IDs to add or remove from this pool."]
+    #[doc = ""]
     pub storage: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of guest VMIDs to add or remove from this pool."]
+    #[doc = ""]
     pub vms: Option<String>,
     #[serde(
         flatten,
@@ -220,6 +228,18 @@ pub enum Type {
     Qemu,
     #[serde(rename = "storage")]
     Storage,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "lxc" => Ok(Self::Lxc),
+            "openvz" => Ok(Self::Openvz),
+            "qemu" => Ok(Self::Qemu),
+            "storage" => Ok(Self::Storage),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> PoolsClient<T>
 where

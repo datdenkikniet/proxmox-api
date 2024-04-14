@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List mediated device types for given PCI device."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -40,10 +41,12 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The number of still available instances of this type."]
+    #[doc = ""]
     pub available: u64,
     pub description: String,
     #[serde(rename = "type")]
     #[doc = "The name of the mdev type."]
+    #[doc = ""]
     pub ty: String,
     #[serde(
         flatten,

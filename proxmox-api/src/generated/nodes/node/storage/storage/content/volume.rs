@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Delete volume"]
+    #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<Option<String>, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params)
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get volume attributes"]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -38,6 +40,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Copy a volume. This is experimental code - do not use."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -48,6 +51,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Update volume attributes"]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -61,6 +65,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Time to wait for the task to finish. We return 'null' if the task finish within that time."]
+    #[doc = ""]
     pub delay: Option<u64>,
     #[serde(
         flatten,
@@ -85,11 +90,14 @@ impl GetOutput {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutput {
     #[doc = "Format identifier ('raw', 'qcow2', 'subvol', 'iso', 'tgz' ...)"]
+    #[doc = ""]
     pub format: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Optional notes."]
+    #[doc = ""]
     pub notes: Option<String>,
     #[doc = "The Path"]
+    #[doc = ""]
     pub path: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -97,18 +105,21 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Protection status. Currently only supported for backups."]
+    #[doc = ""]
     pub protected: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Volume size in bytes."]
+    #[doc = ""]
     pub size: u64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Used space. Please note that most storage plugins do not report anything useful here."]
+    #[doc = ""]
     pub used: u64,
     #[serde(
         flatten,
@@ -129,9 +140,11 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "Target volume identifier"]
+    #[doc = ""]
     pub target: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Target node. Default is local node."]
+    #[doc = ""]
     pub target_node: Option<String>,
     #[serde(
         flatten,
@@ -144,6 +157,7 @@ pub struct PostParams {
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The new notes."]
+    #[doc = ""]
     pub notes: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -151,6 +165,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Protection status. Currently only supported for backups."]
+    #[doc = ""]
     pub protected: Option<bool>,
     #[serde(
         flatten,

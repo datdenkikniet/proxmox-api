@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Delete IPSet"]
+    #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params)
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List IPSet content"]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -39,6 +41,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Add IP or Network to IPSet."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -52,6 +55,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Delete all members of the IPSet, if there are any."]
+    #[doc = ""]
     pub force: Option<bool>,
     #[serde(
         flatten,
@@ -77,6 +81,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub comment: Option<String>,
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -104,6 +109,7 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "Network/IP specification in CIDR format."]
+    #[doc = ""]
     pub cidr: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub comment: Option<String>,

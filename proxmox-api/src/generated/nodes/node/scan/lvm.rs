@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List local LVM volume groups."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -34,6 +35,7 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "The LVM logical volume group name."]
+    #[doc = ""]
     pub vg: String,
     #[serde(
         flatten,

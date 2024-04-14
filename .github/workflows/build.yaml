@@ -42,9 +42,7 @@ jobs:
         run: cargo fmt --manifest-path ./proxmox-api/Cargo.toml -- ./proxmox-api/src/generated.rs
 
       - name: Display git diff
-        run: git diff
-
-      # TODO: validate that generated output is the same as what is being checked in
+        run: ./ci/assert-empty-git-diff.sh
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

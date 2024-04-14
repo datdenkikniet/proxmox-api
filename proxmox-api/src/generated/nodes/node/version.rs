@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "API version details"]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -36,10 +37,13 @@ impl GetOutput {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutput {
     #[doc = "The current installed Proxmox VE Release"]
+    #[doc = ""]
     pub release: String,
     #[doc = "The short git commit hash ID from which this version was build"]
+    #[doc = ""]
     pub repoid: String,
     #[doc = "The current installed pve-manager package version"]
+    #[doc = ""]
     pub version: String,
     #[serde(
         flatten,

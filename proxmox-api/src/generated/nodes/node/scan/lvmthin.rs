@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List local LVM Thin Pools."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -34,6 +35,7 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "The LVM Thin Pool name (LVM logical volume)."]
+    #[doc = ""]
     pub lv: String,
     #[serde(
         flatten,

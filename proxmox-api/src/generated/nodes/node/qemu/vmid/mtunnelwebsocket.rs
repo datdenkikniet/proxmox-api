@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Migration tunnel endpoint for websocket upgrade - only for internal use by VM migration."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -48,8 +49,10 @@ impl GetParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetParams {
     #[doc = "unix socket to forward to"]
+    #[doc = ""]
     pub socket: String,
     #[doc = "ticket return by initial 'mtunnel' API call, or retrieved via 'ticket' tunnel command"]
+    #[doc = ""]
     pub ticket: String,
     #[serde(
         flatten,

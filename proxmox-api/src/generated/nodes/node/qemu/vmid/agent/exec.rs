@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Executes the given command in the vm via the guest-agent and returns an object with the pid."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -38,6 +39,7 @@ pub struct PostOutput {
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The PID of the process started by the guest-agent."]
+    #[doc = ""]
     pub pid: u64,
     #[serde(
         flatten,
@@ -59,10 +61,12 @@ impl PostParams {
 pub struct PostParams {
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "The command as a list of program + arguments."]
+    #[doc = ""]
     pub command: Vec<()>,
     #[serde(rename = "input-data")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Data to pass as 'input-data' to the guest. Usually treated as STDIN to 'command'."]
+    #[doc = ""]
     pub input_data: Option<String>,
     #[serde(
         flatten,

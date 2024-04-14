@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get the status of a specific ceph flag."]
+    #[doc = ""]
     pub fn get(&self) -> Result<bool, T::Error> {
         let path = self.path.to_string();
         Ok(self.client.get::<_, crate::types::Bool>(&path, &())?.get())
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Set or clear (unset) a specific ceph flag"]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -48,6 +50,7 @@ pub struct PutParams {
         deserialize_with = "crate::types::deserialize_bool"
     )]
     #[doc = "The new value of the flag"]
+    #[doc = ""]
     pub value: bool,
     #[serde(
         flatten,

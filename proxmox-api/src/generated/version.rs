@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "API version details, including some parts of the global datacenter config."]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -38,12 +39,16 @@ impl GetOutput {
 pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The default console viewer to use."]
+    #[doc = ""]
     pub console: Option<Console>,
     #[doc = "The current Proxmox VE point release in `x.y` format."]
+    #[doc = ""]
     pub release: String,
     #[doc = "The short git revision from which this version was build."]
+    #[doc = ""]
     pub repoid: String,
     #[doc = "The full pve-manager package version of this node."]
+    #[doc = ""]
     pub version: String,
     #[serde(
         flatten,
@@ -53,6 +58,8 @@ pub struct GetOutput {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "The default console viewer to use."]
+#[doc = ""]
 pub enum Console {
     #[serde(rename = "applet")]
     Applet,
@@ -62,4 +69,16 @@ pub enum Console {
     Vv,
     #[serde(rename = "xtermjs")]
     Xtermjs,
+}
+impl TryFrom<&str> for Console {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "applet" => Ok(Self::Applet),
+            "html5" => Ok(Self::Html5),
+            "vv" => Ok(Self::Vv),
+            "xtermjs" => Ok(Self::Xtermjs),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

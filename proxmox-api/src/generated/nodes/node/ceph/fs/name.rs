@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create a Ceph filesystem"]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -32,6 +33,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure the created CephFS as storage for this cluster."]
+    #[doc = ""]
     pub add_storage: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -39,6 +41,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of placement groups for the backing data pool. The metadata pool will use a quarter of this."]
+    #[doc = ""]
     pub pg_num: Option<u64>,
     #[serde(
         flatten,

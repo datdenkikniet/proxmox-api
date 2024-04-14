@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Send key event to virtual machine."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -35,6 +36,7 @@ impl PutParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PutParams {
     #[doc = "The key (qemu monitor encoding)."]
+    #[doc = ""]
     pub key: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -42,6 +44,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Ignore locks - only root is allowed to use this option."]
+    #[doc = ""]
     pub skiplock: Option<bool>,
     #[serde(
         flatten,

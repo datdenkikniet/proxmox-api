@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Delete sdn controller object configuration."]
+    #[doc = ""]
     pub fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &())
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Read sdn controller configuration."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -38,6 +40,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Update sdn controller object configuration."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -60,6 +63,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Display pending config."]
+    #[doc = ""]
     pub pending: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -67,6 +71,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Display running config."]
+    #[doc = ""]
     pub running: Option<bool>,
     #[serde(
         flatten,
@@ -77,9 +82,14 @@ pub struct GetParams {
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PutParams {
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "autonomous system number"]
-    pub asn: Option<()>,
+    #[doc = ""]
+    pub asn: Option<u64>,
     #[serde(rename = "bgp-multipath-as-path-relax")]
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -89,9 +99,11 @@ pub struct PutParams {
     pub bgp_multipath_as_path_relax: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of settings you want to delete."]
+    #[doc = ""]
     pub delete: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -99,6 +111,7 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable ebgp. (remote-as external)"]
+    #[doc = ""]
     pub ebgp: Option<bool>,
     #[serde(rename = "ebgp-multihop")]
     #[serde(
@@ -110,23 +123,29 @@ pub struct PutParams {
     #[serde(rename = "isis-domain")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "ISIS domain."]
+    #[doc = ""]
     pub isis_domain: Option<String>,
     #[serde(rename = "isis-ifaces")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "ISIS interface."]
+    #[doc = ""]
     pub isis_ifaces: Option<String>,
     #[serde(rename = "isis-net")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "ISIS network entity title."]
+    #[doc = ""]
     pub isis_net: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "source loopback interface."]
+    #[doc = ""]
     pub loopback: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The cluster node name."]
+    #[doc = ""]
     pub node: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "peers address list."]
+    #[doc = ""]
     pub peers: Option<String>,
     #[serde(
         flatten,

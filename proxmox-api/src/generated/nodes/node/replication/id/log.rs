@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Read replication job log."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -39,8 +40,10 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Line number"]
+    #[doc = ""]
     pub n: u64,
     #[doc = "Line text"]
+    #[doc = ""]
     pub t: String,
     #[serde(
         flatten,

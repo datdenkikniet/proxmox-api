@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List configured metric servers."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -43,19 +44,24 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_bool"
     )]
     #[doc = "Flag to disable the plugin."]
+    #[doc = ""]
     pub disable: bool,
     #[doc = "The ID of the entry."]
+    #[doc = ""]
     pub id: String,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Server network port"]
+    #[doc = ""]
     pub port: u64,
     #[doc = "Server dns name or IP address"]
+    #[doc = ""]
     pub server: String,
     #[serde(rename = "type")]
     #[doc = "Plugin type."]
+    #[doc = ""]
     pub ty: String,
     #[serde(
         flatten,

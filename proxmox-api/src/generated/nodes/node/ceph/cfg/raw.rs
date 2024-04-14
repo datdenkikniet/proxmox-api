@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get the Ceph configuration file."]
+    #[doc = ""]
     pub fn get(&self) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())

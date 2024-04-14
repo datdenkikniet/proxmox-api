@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "MGR directory index."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -41,6 +42,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub host: Option<String>,
     #[doc = "State of the MGR"]
+    #[doc = ""]
     pub state: String,
     #[serde(
         flatten,

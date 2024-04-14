@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Suspend virtual machine."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -31,9 +32,11 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Ignore locks - only root is allowed to use this option."]
+    #[doc = ""]
     pub skiplock: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The storage for the VM state"]
+    #[doc = ""]
     pub statestorage: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -41,6 +44,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If set, suspends the VM to disk. Will be resumed on next VM start."]
+    #[doc = ""]
     pub todisk: Option<bool>,
     #[serde(
         flatten,

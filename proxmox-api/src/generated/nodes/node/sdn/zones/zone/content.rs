@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List zone content."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -37,11 +38,14 @@ impl GetOutputItems {
 pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Status."]
+    #[doc = ""]
     pub status: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Status details"]
+    #[doc = ""]
     pub statusmsg: Option<String>,
     #[doc = "Vnet identifier."]
+    #[doc = ""]
     pub vnet: String,
     #[serde(
         flatten,

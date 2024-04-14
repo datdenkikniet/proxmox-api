@@ -23,6 +23,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Directory index."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -33,6 +34,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Generate new cluster configuration. If no links given, default to local IP address as link0."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -61,6 +63,7 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "The name of the cluster."]
+    #[doc = ""]
     pub clustername: String,
     #[serde(rename = "link[n]")]
     #[serde(
@@ -70,6 +73,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Address and priority information of a single corosync link. (up to 8 links supported; link0..link7)"]
+    #[doc = ""]
     pub links: ::std::collections::HashMap<u32, String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -77,6 +81,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node id for this node."]
+    #[doc = ""]
     pub nodeid: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -84,6 +89,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of votes for this node."]
+    #[doc = ""]
     pub votes: Option<u64>,
     #[serde(
         flatten,

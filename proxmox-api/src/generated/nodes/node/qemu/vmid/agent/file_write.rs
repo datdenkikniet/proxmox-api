@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Writes the given file via guest agent."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -36,6 +37,7 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "The content to write into the file."]
+    #[doc = ""]
     pub content: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -43,8 +45,10 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If set, the content will be encoded as base64 (required by QEMU).Otherwise the content needs to be encoded beforehand - defaults to true."]
+    #[doc = ""]
     pub encode: Option<bool>,
     #[doc = "The path to the file."]
+    #[doc = ""]
     pub file: String,
     #[serde(
         flatten,

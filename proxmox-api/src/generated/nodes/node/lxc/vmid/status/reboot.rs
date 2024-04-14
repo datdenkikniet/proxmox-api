@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Reboot the container by shutting it down, and starting it again. Applies pending changes."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -31,6 +32,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Wait maximal timeout seconds for the shutdown."]
+    #[doc = ""]
     pub timeout: Option<u64>,
     #[serde(
         flatten,

@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List available updates."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "This is used to resynchronize the package index files from their sources (apt-get update)."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -50,6 +52,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Send notification about new packages."]
+    #[doc = ""]
     pub notify: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -57,6 +60,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only produces output suitable for logging, omitting progress indicators."]
+    #[doc = ""]
     pub quiet: Option<bool>,
     #[serde(
         flatten,

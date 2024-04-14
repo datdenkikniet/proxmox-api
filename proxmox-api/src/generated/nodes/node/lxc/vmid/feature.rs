@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Check if feature for virtual machine is available."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -58,9 +59,11 @@ impl GetParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetParams {
     #[doc = "Feature to check."]
+    #[doc = ""]
     pub feature: Feature,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The name of the snapshot."]
+    #[doc = ""]
     pub snapname: Option<String>,
     #[serde(
         flatten,
@@ -70,6 +73,8 @@ pub struct GetParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Feature to check."]
+#[doc = ""]
 pub enum Feature {
     #[serde(rename = "clone")]
     Clone,
@@ -77,4 +82,15 @@ pub enum Feature {
     Copy,
     #[serde(rename = "snapshot")]
     Snapshot,
+}
+impl TryFrom<&str> for Feature {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "clone" => Ok(Self::Clone),
+            "copy" => Ok(Self::Copy),
+            "snapshot" => Ok(Self::Snapshot),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

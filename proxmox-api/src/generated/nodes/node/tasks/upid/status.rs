@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Read task status."]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -82,4 +83,14 @@ pub enum Status {
     Running,
     #[serde(rename = "stopped")]
     Stopped,
+}
+impl TryFrom<&str> for Status {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "running" => Ok(Self::Running),
+            "stopped" => Ok(Self::Stopped),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

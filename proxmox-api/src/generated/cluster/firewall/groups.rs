@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List security groups."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create new security group."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -49,8 +51,10 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub comment: Option<String>,
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: String,
     #[doc = "Security Group name."]
+    #[doc = ""]
     pub group: String,
     #[serde(
         flatten,
@@ -76,11 +80,14 @@ pub struct PostParams {
     pub comment: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
     pub digest: Option<String>,
     #[doc = "Security Group name."]
+    #[doc = ""]
     pub group: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Rename/update an existing security group. You can set 'rename' to the same value as 'name' to update the 'comment' of an existing group."]
+    #[doc = ""]
     pub rename: Option<String>,
     #[serde(
         flatten,

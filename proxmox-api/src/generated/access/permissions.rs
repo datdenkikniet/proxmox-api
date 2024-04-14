@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Retrieve effective permissions of given user/token."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -36,9 +37,11 @@ pub struct GetOutput {
 pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only dump this specific path, not the whole tree."]
+    #[doc = ""]
     pub path: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "User ID or full API token ID"]
+    #[doc = ""]
     pub userid: Option<String>,
     #[serde(
         flatten,

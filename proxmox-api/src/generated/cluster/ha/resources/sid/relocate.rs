@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Request resource relocatzion to another node. This stops the service on the old node, and restarts it on the target node."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -34,6 +35,7 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "Target node."]
+    #[doc = ""]
     pub node: String,
     #[serde(
         flatten,

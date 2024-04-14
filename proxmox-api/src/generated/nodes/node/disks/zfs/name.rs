@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Destroy a ZFS pool."]
+    #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params)
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get details about a zpool."]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -55,8 +57,10 @@ pub struct ChildrenGetOutputChildrenItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub cksum: Option<f64>,
     #[doc = "An optional message about the vdev."]
+    #[doc = ""]
     pub msg: String,
     #[doc = "The name of the vdev or section."]
+    #[doc = ""]
     pub name: String,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
@@ -66,6 +70,7 @@ pub struct ChildrenGetOutputChildrenItems {
     pub read: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The state of the vdev."]
+    #[doc = ""]
     pub state: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
@@ -89,6 +94,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Marks associated storage(s) as not available on this node anymore or removes them from the configuration (if configured for this node only)."]
+    #[doc = ""]
     pub cleanup_config: Option<bool>,
     #[serde(rename = "cleanup-disks")]
     #[serde(
@@ -97,6 +103,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Also wipe disks so they can be repurposed afterwards."]
+    #[doc = ""]
     pub cleanup_disks: Option<bool>,
     #[serde(
         flatten,
@@ -128,21 +135,28 @@ impl GetOutput {
 pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Information about the recommended action to fix the state."]
+    #[doc = ""]
     pub action: Option<String>,
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "The pool configuration information, including the vdevs for each section (e.g. spares, cache), may be nested."]
+    #[doc = ""]
     pub children: Vec<ChildrenGetOutputChildrenItems>,
     #[doc = "Information about the errors on the zpool."]
+    #[doc = ""]
     pub errors: String,
     #[doc = "The name of the zpool."]
+    #[doc = ""]
     pub name: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Information about the last/current scrub."]
+    #[doc = ""]
     pub scan: Option<String>,
     #[doc = "The state of the zpool."]
+    #[doc = ""]
     pub state: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Information about the state of the zpool."]
+    #[doc = ""]
     pub status: Option<String>,
     #[serde(
         flatten,

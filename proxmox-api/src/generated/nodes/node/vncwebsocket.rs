@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Opens a websocket for VNC traffic."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -57,8 +58,10 @@ pub struct GetParams {
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Port number returned by previous vncproxy call."]
+    #[doc = ""]
     pub port: u64,
     #[doc = "Ticket from previous call to vncproxy."]
+    #[doc = ""]
     pub vncticket: String,
     #[serde(
         flatten,

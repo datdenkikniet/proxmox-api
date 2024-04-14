@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get status for all zones."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -36,8 +37,10 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "Status of zone"]
+    #[doc = ""]
     pub status: Status,
     #[doc = "The SDN zone object identifier."]
+    #[doc = ""]
     pub zone: String,
     #[serde(
         flatten,
@@ -47,6 +50,8 @@ pub struct GetOutputItems {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Status of zone"]
+#[doc = ""]
 pub enum Status {
     #[serde(rename = "available")]
     Available,
@@ -54,6 +59,17 @@ pub enum Status {
     Error,
     #[serde(rename = "pending")]
     Pending,
+}
+impl TryFrom<&str> for Status {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "available" => Ok(Self::Available),
+            "error" => Ok(Self::Error),
+            "pending" => Ok(Self::Pending),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> ZonesClient<T>
 where

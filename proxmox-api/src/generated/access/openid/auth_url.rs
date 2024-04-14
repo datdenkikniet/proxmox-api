@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get the OpenId Authorization Url for the specified realm."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -35,9 +36,11 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "Authentication domain ID"]
+    #[doc = ""]
     pub realm: String,
     #[serde(rename = "redirect-url")]
     #[doc = "Redirection Url. The client should set this to the used server url (location.origin)."]
+    #[doc = ""]
     pub redirect_url: String,
     #[serde(
         flatten,

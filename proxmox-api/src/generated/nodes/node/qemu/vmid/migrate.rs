@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get preconditions for migration."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Migrate virtual machine. Creates a new migration task."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -47,9 +49,11 @@ impl GetOutput {
 pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List nodes allowed for offline migration, only passed if VM is offline"]
+    #[doc = ""]
     pub allowed_nodes: Option<()>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List not allowed nodes with additional informations, only passed if VM is offline"]
+    #[doc = ""]
     pub not_allowed_nodes: Option<NotAllowedNodesGetOutputNotAllowedNodes>,
     #[serde(
         serialize_with = "crate::types::serialize_bool",
@@ -67,6 +71,7 @@ pub struct GetOutput {
 pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Target node."]
+    #[doc = ""]
     pub target: Option<String>,
     #[serde(
         flatten,
@@ -101,21 +106,29 @@ impl PostParams {
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Override I/O bandwidth limit (in KiB/s)."]
-    pub bwlimit: Option<()>,
+    #[doc = ""]
+    pub bwlimit: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow to migrate VMs which use local devices. Only root may use this option."]
+    #[doc = ""]
     pub force: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "CIDR of the (sub) network that is used for migration."]
+    #[doc = ""]
     pub migration_network: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Migration traffic is encrypted using an SSH tunnel by default. On secure, completely private networks this can be disabled to increase performance."]
+    #[doc = ""]
     pub migration_type: Option<MigrationType>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -123,11 +136,14 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Use online/live migration if VM is running. Ignored if VM is stopped."]
+    #[doc = ""]
     pub online: Option<bool>,
     #[doc = "Target node."]
+    #[doc = ""]
     pub target: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Mapping from source to target storages. Providing only a single storage ID maps all source storages to that storage. Providing the special value '1' will map each source storage to itself."]
+    #[doc = ""]
     pub targetstorage: Option<String>,
     #[serde(rename = "with-local-disks")]
     #[serde(
@@ -136,6 +152,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable live storage migration for local disk"]
+    #[doc = ""]
     pub with_local_disks: Option<bool>,
     #[serde(
         flatten,
@@ -145,9 +162,21 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Migration traffic is encrypted using an SSH tunnel by default. On secure, completely private networks this can be disabled to increase performance."]
+#[doc = ""]
 pub enum MigrationType {
     #[serde(rename = "insecure")]
     Insecure,
     #[serde(rename = "secure")]
     Secure,
+}
+impl TryFrom<&str> for MigrationType {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "insecure" => Ok(Self::Insecure),
+            "secure" => Ok(Self::Secure),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Creates a TCP proxy connections."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -27,6 +28,7 @@ where
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "opens a serial terminal (defaults to display)"]
+    #[doc = ""]
     pub serial: Option<Serial>,
     #[serde(
         flatten,
@@ -36,6 +38,8 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "opens a serial terminal (defaults to display)"]
+#[doc = ""]
 pub enum Serial {
     #[serde(rename = "serial0")]
     Serial0,
@@ -45,4 +49,16 @@ pub enum Serial {
     Serial2,
     #[serde(rename = "serial3")]
     Serial3,
+}
+impl TryFrom<&str> for Serial {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "serial0" => Ok(Self::Serial0),
+            "serial1" => Ok(Self::Serial1),
+            "serial2" => Ok(Self::Serial2),
+            "serial3" => Ok(Self::Serial3),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

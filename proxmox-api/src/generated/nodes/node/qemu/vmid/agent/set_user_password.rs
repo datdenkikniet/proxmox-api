@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Sets the password for the given user to the given password"]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -50,10 +51,13 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "set to 1 if the password has already been passed through crypt()"]
+    #[doc = ""]
     pub crypted: Option<bool>,
     #[doc = "The new password."]
+    #[doc = ""]
     pub password: String,
     #[doc = "The user to set the password for."]
+    #[doc = ""]
     pub username: String,
     #[serde(
         flatten,

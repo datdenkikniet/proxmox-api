@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get HA manger status."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -45,8 +46,10 @@ impl GetOutputItems {
 pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For type 'service'. Service state as seen by the CRM."]
+    #[doc = ""]
     pub crm_state: Option<String>,
-    #[doc = "Status entry ID (quorum, master, lrm:\\<node\\>, service:\\<sid\\>)."]
+    #[doc = "Status entry ID (quorum, master, lrm:\\\\<node\\\\>, service:\\\\<sid\\\\>)."]
+    #[doc = ""]
     pub id: String,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -54,6 +57,7 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For type 'service'."]
+    #[doc = ""]
     pub max_relocate: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -61,8 +65,10 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For type 'service'."]
+    #[doc = ""]
     pub max_restart: Option<u64>,
     #[doc = "Node associated to status entry."]
+    #[doc = ""]
     pub node: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -70,17 +76,22 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For type 'quorum'. Whether the cluster is quorate or not."]
+    #[doc = ""]
     pub quorate: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For type 'service'. Requested service state."]
+    #[doc = ""]
     pub request_state: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For type 'service'. Service ID."]
+    #[doc = ""]
     pub sid: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For type 'service'. Verbose service state."]
+    #[doc = ""]
     pub state: Option<String>,
     #[doc = "Status of the entry (value depends on type)."]
+    #[doc = ""]
     pub status: String,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -88,6 +99,7 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For type 'lrm','master'. Timestamp of the status information."]
+    #[doc = ""]
     pub timestamp: Option<u64>,
     #[serde(
         flatten,

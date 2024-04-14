@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Deactivate existing ACME account at CA."]
+    #[doc = ""]
     pub fn delete(&self) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &())
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Return existing ACME account information."]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -38,6 +40,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Update existing ACME account information with CA. Note: not specifying any new account information triggers a refresh."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -58,6 +61,7 @@ pub struct GetOutput {
     pub account: Option<AccountGetOutputAccount>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "URL of ACME CA directory endpoint."]
+    #[doc = ""]
     pub directory: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub location: Option<String>,
@@ -68,6 +72,7 @@ pub struct GetOutput {
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Contact email addresses."]
+    #[doc = ""]
     pub contact: Option<String>,
     #[serde(
         flatten,

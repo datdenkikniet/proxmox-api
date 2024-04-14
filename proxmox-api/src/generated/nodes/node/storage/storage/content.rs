@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List storage content."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Allocate disk images."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -60,17 +62,22 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Creation time (seconds since the UNIX Epoch)."]
+    #[doc = ""]
     pub ctime: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If whole backup is encrypted, value is the fingerprint or '1'  if encrypted. Only useful for the Proxmox Backup Server storage type."]
+    #[doc = ""]
     pub encrypted: Option<String>,
     #[doc = "Format identifier ('raw', 'qcow2', 'subvol', 'iso', 'tgz' ...)"]
+    #[doc = ""]
     pub format: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Optional notes. If they contain multiple lines, only the first one is returned here."]
+    #[doc = ""]
     pub notes: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Volume identifier of parent (for linked cloned)."]
+    #[doc = ""]
     pub parent: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -78,12 +85,14 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Protection status. Currently only supported for backups."]
+    #[doc = ""]
     pub protected: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Volume size in bytes."]
+    #[doc = ""]
     pub size: u64,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -91,9 +100,11 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Used space. Please note that most storage plugins do not report anything useful here."]
+    #[doc = ""]
     pub used: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Last backup verification result, only useful for PBS storages."]
+    #[doc = ""]
     pub verification: Option<VerificationGetOutputItemsVerification>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -101,8 +112,10 @@ pub struct GetOutputItems {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Associated Owner VMID."]
+    #[doc = ""]
     pub vmid: Option<u64>,
     #[doc = "Volume identifier."]
+    #[doc = ""]
     pub volid: String,
     #[serde(
         flatten,
@@ -115,9 +128,11 @@ pub struct GetOutputItems {
 pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only list content of this type."]
+    #[doc = ""]
     pub content: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only list images for this VM"]
+    #[doc = ""]
     pub vmid: Option<crate::types::VmId>,
     #[serde(
         flatten,
@@ -140,12 +155,15 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "The name of the file to create."]
+    #[doc = ""]
     pub filename: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub format: Option<Format>,
     #[doc = "Size in kilobyte (1024 bytes). Optional suffixes 'M' (megabyte, 1024K) and 'G' (gigabyte, 1024M)"]
+    #[doc = ""]
     pub size: String,
     #[doc = "Specify owner VM"]
+    #[doc = ""]
     pub vmid: crate::types::VmId,
     #[serde(
         flatten,
@@ -166,8 +184,10 @@ impl VerificationGetOutputItemsVerification {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct VerificationGetOutputItemsVerification {
     #[doc = "Last backup verification state."]
+    #[doc = ""]
     pub state: String,
     #[doc = "Last backup verification UPID."]
+    #[doc = ""]
     pub upid: String,
     #[serde(
         flatten,
@@ -184,6 +204,17 @@ pub enum Format {
     Raw,
     #[serde(rename = "subvol")]
     Subvol,
+}
+impl TryFrom<&str> for Format {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "qcow2" => Ok(Self::Qcow2),
+            "raw" => Ok(Self::Raw),
+            "subvol" => Ok(Self::Subvol),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> ContentClient<T>
 where

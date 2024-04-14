@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Request resource migration (online) to another node."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -34,6 +35,7 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "Target node."]
+    #[doc = ""]
     pub node: String,
     #[serde(
         flatten,

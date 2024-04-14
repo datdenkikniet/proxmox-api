@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "SDN subnets index."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create a new sdn subnet object."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -51,6 +53,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Display pending config."]
+    #[doc = ""]
     pub pending: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -58,6 +61,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Display running config."]
+    #[doc = ""]
     pub running: Option<bool>,
     #[serde(
         flatten,
@@ -85,16 +89,20 @@ pub struct PostParams {
     #[serde(rename = "dhcp-dns-server")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "IP address for the DNS server"]
+    #[doc = ""]
     pub dhcp_dns_server: Option<::std::net::IpAddr>,
     #[serde(rename = "dhcp-range")]
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "A list of DHCP ranges for this subnet"]
+    #[doc = ""]
     pub dhcp_range: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "dns domain zone prefix  ex: 'adm' -\\> \\<hostname\\>.adm.mydomain.com"]
+    #[doc = "dns domain zone prefix  ex: 'adm' -\\\\> \\\\<hostname\\\\>.adm.mydomain.com"]
+    #[doc = ""]
     pub dnszoneprefix: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Subnet Gateway: Will be assign on vnet for layer3 zones"]
+    #[doc = ""]
     pub gateway: Option<::std::net::IpAddr>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -102,8 +110,10 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "enable masquerade for this subnet if pve-firewall"]
+    #[doc = ""]
     pub snat: Option<bool>,
     #[doc = "The SDN subnet object identifier."]
+    #[doc = ""]
     pub subnet: String,
     #[serde(rename = "type")]
     pub ty: Type,
@@ -118,6 +128,15 @@ pub struct PostParams {
 pub enum Type {
     #[serde(rename = "subnet")]
     Subnet,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "subnet" => Ok(Self::Subnet),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> SubnetsClient<T>
 where

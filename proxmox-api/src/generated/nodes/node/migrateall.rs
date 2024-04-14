@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Migrate all VMs and Containers."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -42,11 +43,14 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal number of parallel migration job. If not set, uses'max_workers' from datacenter.cfg. One of both must be set!"]
+    #[doc = ""]
     pub maxworkers: Option<u64>,
     #[doc = "Target node."]
+    #[doc = ""]
     pub target: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only consider Guests with these IDs."]
+    #[doc = ""]
     pub vms: Option<String>,
     #[serde(rename = "with-local-disks")]
     #[serde(
@@ -55,6 +59,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable live storage migration for local disk"]
+    #[doc = ""]
     pub with_local_disks: Option<bool>,
     #[serde(
         flatten,

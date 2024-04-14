@@ -5,7 +5,7 @@ use std::{
 
 use serde::{Deserialize, Serialize};
 
-use crate::generator::{AdditionalProperties, FieldDef, PrimitiveTypeDef, TypeDef};
+use crate::generator::{clean_doc, AdditionalProperties, FieldDef, PrimitiveTypeDef, TypeDef};
 
 use super::{Format, KnownFormat, Optional, Output};
 
@@ -59,7 +59,7 @@ impl Type<'_> {
             .as_ref()
             .into_iter()
             .chain(self.verbose_description.as_ref().into_iter())
-            .map(Cow::to_string)
+            .flat_map(clean_doc)
     }
 
     pub fn type_def(&self, field_name: &str, struct_suffix: &str) -> Output {
@@ -94,7 +94,7 @@ impl Type<'_> {
                             crate::name_to_ident(field_name)
                         };
 
-                        TypeDef::new_enum(name, no_derives, enum_values, default)
+                        TypeDef::new_enum(name, no_derives, enum_values, default, self.doc())
                     } else {
                         TypeDef::Primitive(PrimitiveTypeDef::String)
                     }
@@ -278,17 +278,19 @@ pub enum TypeKind<'a> {
         #[serde(default, alias = "min", skip_serializing_if = "Option::is_none")]
         minimum: Option<serde_json::Value>,
         #[serde(default, alias = "max", skip_serializing_if = "Option::is_none")]
-        maximum: Option<f32>,
+        maximum: Option<serde_json::Value>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        default: Option<f32>,
+        default: Option<serde_json::Value>,
     },
     Integer {
+        // Is sometimes a string containing a u32
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        minimum: Option<u32>,
+        minimum: Option<serde_json::Value>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        maximum: Option<u32>,
+        maximum: Option<serde_json::Value>,
+        // Is sometimes a string description
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        default: Option<u32>,
+        default: Option<serde_json::Value>,
     },
     Boolean {
         #[serde(default, skip_serializing_if = "Option::is_none")]

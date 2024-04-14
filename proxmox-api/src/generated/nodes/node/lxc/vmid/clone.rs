@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create a container clone/copy"]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -41,11 +42,17 @@ impl PostParams {
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Override I/O bandwidth limit (in KiB/s)."]
-    pub bwlimit: Option<()>,
+    #[doc = ""]
+    pub bwlimit: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the new CT."]
+    #[doc = ""]
     pub description: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -53,23 +60,30 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Create a full copy of all disks. This is always done when you clone a normal CT. For CT templates, we try to create a linked clone by default."]
+    #[doc = ""]
     pub full: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set a hostname for the new CT."]
+    #[doc = ""]
     pub hostname: Option<String>,
     #[doc = "VMID for the clone."]
+    #[doc = ""]
     pub newid: crate::types::VmId,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Add the new CT to the specified pool."]
+    #[doc = ""]
     pub pool: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The name of the snapshot."]
+    #[doc = ""]
     pub snapname: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Target storage for full clone."]
+    #[doc = ""]
     pub storage: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Target node. Only allowed if the original VM is on shared storage."]
+    #[doc = ""]
     pub target: Option<String>,
     #[serde(
         flatten,

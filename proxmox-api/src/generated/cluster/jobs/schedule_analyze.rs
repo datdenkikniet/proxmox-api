@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Returns a list of future schedule runtimes."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -39,8 +40,10 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "UNIX timestamp for the run."]
+    #[doc = ""]
     pub timestamp: u64,
     #[doc = "UTC timestamp for the run."]
+    #[doc = ""]
     pub utc: String,
     #[serde(
         flatten,
@@ -67,8 +70,10 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of event-iteration to simulate and return."]
+    #[doc = ""]
     pub iterations: Option<u64>,
     #[doc = "Job schedule. The format is a subset of `systemd` calendar events."]
+    #[doc = ""]
     pub schedule: String,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -76,6 +81,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "UNIX timestamp to start the calculation from. Defaults to the current time."]
+    #[doc = ""]
     pub starttime: Option<u64>,
     #[serde(
         flatten,

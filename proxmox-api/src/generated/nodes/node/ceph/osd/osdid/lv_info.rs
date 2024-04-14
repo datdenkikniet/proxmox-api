@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get OSD volume details"]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -46,20 +47,26 @@ impl GetOutput {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutput {
     #[doc = "Creation time as reported by `lvs`."]
+    #[doc = ""]
     pub creation_time: String,
     #[doc = "Name of the logical volume (LV)."]
+    #[doc = ""]
     pub lv_name: String,
     #[doc = "Path to the logical volume (LV)."]
+    #[doc = ""]
     pub lv_path: String,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Size of the logical volume (LV)."]
+    #[doc = ""]
     pub lv_size: u64,
     #[doc = "UUID of the logical volume (LV)."]
+    #[doc = ""]
     pub lv_uuid: String,
     #[doc = "Name of the volume group (VG)."]
+    #[doc = ""]
     pub vg_name: String,
     #[serde(
         flatten,
@@ -73,6 +80,7 @@ pub struct GetParams {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "OSD device type"]
+    #[doc = ""]
     pub ty: Option<Type>,
     #[serde(
         flatten,
@@ -82,6 +90,8 @@ pub struct GetParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "OSD device type"]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "block")]
     Block,
@@ -89,6 +99,17 @@ pub enum Type {
     Db,
     #[serde(rename = "wal")]
     Wal,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "block" => Ok(Self::Block),
+            "db" => Ok(Self::Db),
+            "wal" => Ok(Self::Wal),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl Default for Type {
     fn default() -> Self {

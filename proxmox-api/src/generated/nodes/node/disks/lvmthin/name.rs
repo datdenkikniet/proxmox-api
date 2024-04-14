@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Remove an LVM thin pool."]
+    #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params)
@@ -42,6 +43,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Marks associated storage(s) as not available on this node anymore or removes them from the configuration (if configured for this node only)."]
+    #[doc = ""]
     pub cleanup_config: Option<bool>,
     #[serde(rename = "cleanup-disks")]
     #[serde(
@@ -50,9 +52,11 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Also wipe disks so they can be repurposed afterwards."]
+    #[doc = ""]
     pub cleanup_disks: Option<bool>,
     #[serde(rename = "volume-group")]
     #[doc = "The storage identifier."]
+    #[doc = ""]
     pub volume_group: String,
     #[serde(
         flatten,

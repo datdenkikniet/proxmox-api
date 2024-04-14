@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Start service."]
+    #[doc = ""]
     pub fn post(&self) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &())

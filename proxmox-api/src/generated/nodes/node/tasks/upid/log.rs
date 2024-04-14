@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Read task log."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -39,8 +40,10 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Line number"]
+    #[doc = ""]
     pub n: u64,
     #[doc = "Line text"]
+    #[doc = ""]
     pub t: String,
     #[serde(
         flatten,
@@ -57,6 +60,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Whether the tasklog file should be downloaded. This parameter can't be used in conjunction with other parameters"]
+    #[doc = ""]
     pub download: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -64,6 +68,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The amount of lines to read from the tasklog."]
+    #[doc = ""]
     pub limit: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -71,6 +76,7 @@ pub struct GetParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Start at this line when reading the tasklog"]
+    #[doc = ""]
     pub start: Option<u64>,
     #[serde(
         flatten,

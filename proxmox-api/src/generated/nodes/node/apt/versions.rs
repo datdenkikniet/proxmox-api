@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Get package information for important Proxmox packages."]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())

@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Delete IP Mappings in a VNet"]
+    #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params)
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create IP Mapping in a VNet"]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -38,6 +40,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Update IP Mapping in a VNet"]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -56,12 +59,16 @@ impl DeleteParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct DeleteParams {
     #[doc = "The IP address to delete"]
+    #[doc = ""]
     pub ip: ::std::net::IpAddr,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Unicast MAC address."]
+    #[doc = ""]
     #[doc = "A common MAC address with the I/G (Individual/Group) bit not set."]
+    #[doc = ""]
     pub mac: Option<crate::types::MacAddr<false>>,
     #[doc = "The SDN zone object identifier."]
+    #[doc = ""]
     pub zone: String,
     #[serde(
         flatten,
@@ -83,12 +90,16 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "The IP address to associate with the given MAC address"]
+    #[doc = ""]
     pub ip: ::std::net::IpAddr,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Unicast MAC address."]
+    #[doc = ""]
     #[doc = "A common MAC address with the I/G (Individual/Group) bit not set."]
+    #[doc = ""]
     pub mac: Option<crate::types::MacAddr<false>>,
     #[doc = "The SDN zone object identifier."]
+    #[doc = ""]
     pub zone: String,
     #[serde(
         flatten,
@@ -111,15 +122,20 @@ impl PutParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PutParams {
     #[doc = "The IP address to associate with the given MAC address"]
+    #[doc = ""]
     pub ip: ::std::net::IpAddr,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Unicast MAC address."]
+    #[doc = ""]
     #[doc = "A common MAC address with the I/G (Individual/Group) bit not set."]
+    #[doc = ""]
     pub mac: Option<crate::types::MacAddr<false>>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The (unique) ID of the VM."]
+    #[doc = ""]
     pub vmid: Option<crate::types::VmId>,
     #[doc = "The SDN zone object identifier."]
+    #[doc = ""]
     pub zone: String,
     #[serde(
         flatten,

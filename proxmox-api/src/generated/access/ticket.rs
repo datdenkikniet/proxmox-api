@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Dummy. Useful for formatters which want to provide a login page."]
+    #[doc = ""]
     pub fn get(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create or verify authentication ticket."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -85,26 +87,34 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "This parameter is now ignored and assumed to be 1."]
+    #[doc = ""]
     pub new_format: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "One-time password for Two-factor authentication."]
+    #[doc = ""]
     pub otp: Option<String>,
     #[doc = "The secret password. This can also be a valid ticket."]
+    #[doc = ""]
     pub password: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Verify ticket, and check if user have access 'privs' on 'path'"]
+    #[doc = ""]
     pub path: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Verify ticket, and check if user have access 'privs' on 'path'"]
+    #[doc = ""]
     pub privs: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "You can optionally pass the realm using this parameter. Normally the realm is simply added to the username \\<username\\>@\\<relam\\>."]
+    #[doc = "You can optionally pass the realm using this parameter. Normally the realm is simply added to the username \\\\<username\\\\>@\\\\<relam\\\\>."]
+    #[doc = ""]
     pub realm: Option<String>,
     #[serde(rename = "tfa-challenge")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The signed TFA challenge string the user wants to respond to."]
+    #[doc = ""]
     pub tfa_challenge: Option<String>,
     #[doc = "User name"]
+    #[doc = ""]
     pub username: String,
     #[serde(
         flatten,

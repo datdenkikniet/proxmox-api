@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Delete realm-sync job definition."]
+    #[doc = ""]
     pub fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &())
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Read realm-sync job definition."]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -38,6 +40,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create new realm-sync job."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -48,6 +51,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Update realm-sync job definition."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -80,10 +84,12 @@ impl PostParams {
 pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the Job."]
+    #[doc = ""]
     pub comment: Option<String>,
     #[serde(rename = "enable-new")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable newly synced users immediately."]
+    #[doc = ""]
     pub enable_new: Option<()>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -91,18 +97,23 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Determines if the job is enabled."]
+    #[doc = ""]
     pub enabled: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Authentication domain ID"]
+    #[doc = ""]
     pub realm: Option<String>,
     #[serde(rename = "remove-vanished")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A semicolon-seperated list of things to remove when they or the user vanishes during a sync. The following values are possible: 'entry' removes the user/group when not returned from the sync. 'properties' removes the set properties on existing user/group that do not appear in the source (even custom ones). 'acl' removes acls when the user/group is not returned from the sync. Instead of a list it also can be 'none' (the default)."]
+    #[doc = ""]
     pub remove_vanished: Option<String>,
     #[doc = "Backup schedule. The format is a subset of `systemd` calendar events."]
+    #[doc = ""]
     pub schedule: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Select what to sync."]
+    #[doc = ""]
     pub scope: Option<Scope>,
     #[serde(
         flatten,
@@ -129,13 +140,16 @@ impl PutParams {
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the Job."]
+    #[doc = ""]
     pub comment: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of settings you want to delete."]
+    #[doc = ""]
     pub delete: Option<String>,
     #[serde(rename = "enable-new")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable newly synced users immediately."]
+    #[doc = ""]
     pub enable_new: Option<()>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -143,15 +157,19 @@ pub struct PutParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Determines if the job is enabled."]
+    #[doc = ""]
     pub enabled: Option<bool>,
     #[serde(rename = "remove-vanished")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A semicolon-seperated list of things to remove when they or the user vanishes during a sync. The following values are possible: 'entry' removes the user/group when not returned from the sync. 'properties' removes the set properties on existing user/group that do not appear in the source (even custom ones). 'acl' removes acls when the user/group is not returned from the sync. Instead of a list it also can be 'none' (the default)."]
+    #[doc = ""]
     pub remove_vanished: Option<String>,
     #[doc = "Backup schedule. The format is a subset of `systemd` calendar events."]
+    #[doc = ""]
     pub schedule: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Select what to sync."]
+    #[doc = ""]
     pub scope: Option<Scope>,
     #[serde(
         flatten,
@@ -161,6 +179,8 @@ pub struct PutParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Select what to sync."]
+#[doc = ""]
 pub enum Scope {
     #[serde(rename = "both")]
     Both,
@@ -168,4 +188,15 @@ pub enum Scope {
     Groups,
     #[serde(rename = "users")]
     Users,
+}
+impl TryFrom<&str> for Scope {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "both" => Ok(Self::Both),
+            "groups" => Ok(Self::Groups),
+            "users" => Ok(Self::Users),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

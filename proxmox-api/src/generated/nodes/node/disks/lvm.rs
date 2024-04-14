@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List LVM Volume Groups"]
+    #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create an LVM Volume Group"]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -50,12 +52,14 @@ impl ChildrenGetOutputChildrenItems {
 pub struct ChildrenGetOutputChildrenItems {
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "The underlying physical volumes"]
+    #[doc = ""]
     pub children: Vec<ChildrenGetOutputChildrenItemsChildrenItems>,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The free bytes in the volume group"]
+    #[doc = ""]
     pub free: u64,
     #[serde(
         serialize_with = "crate::types::serialize_bool",
@@ -63,12 +67,14 @@ pub struct ChildrenGetOutputChildrenItems {
     )]
     pub leaf: bool,
     #[doc = "The name of the volume group"]
+    #[doc = ""]
     pub name: String,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The size of the volume group in bytes"]
+    #[doc = ""]
     pub size: u64,
     #[serde(
         flatten,
@@ -95,6 +101,7 @@ pub struct ChildrenGetOutputChildrenItemsChildrenItems {
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The free bytes in the physical volume"]
+    #[doc = ""]
     pub free: u64,
     #[serde(
         serialize_with = "crate::types::serialize_bool",
@@ -102,12 +109,14 @@ pub struct ChildrenGetOutputChildrenItemsChildrenItems {
     )]
     pub leaf: bool,
     #[doc = "The name of the physical volume"]
+    #[doc = ""]
     pub name: String,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The size of the physical volume in bytes"]
+    #[doc = ""]
     pub size: u64,
     #[serde(
         flatten,
@@ -159,10 +168,13 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure storage using the Volume Group"]
+    #[doc = ""]
     pub add_storage: Option<bool>,
     #[doc = "The block device you want to create the volume group on"]
+    #[doc = ""]
     pub device: String,
     #[doc = "The storage identifier."]
+    #[doc = ""]
     pub name: String,
     #[serde(
         flatten,

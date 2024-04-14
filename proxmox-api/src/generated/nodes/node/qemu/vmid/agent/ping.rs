@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Execute ping."]
+    #[doc = ""]
     pub fn post(&self) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &())

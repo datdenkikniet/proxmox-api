@@ -5,7 +5,10 @@
 //! Additional data also needs extra handling in this case, which this module
 //! also provides.
 
-use std::{collections::HashMap, marker::PhantomData};
+use std::{
+    collections::{BTreeMap, HashMap},
+    marker::PhantomData,
+};
 
 use serde::{de::DeserializeOwned, ser::SerializeMap, Deserializer, Serialize, Serializer};
 
@@ -93,75 +96,86 @@ where
     d.deserialize_map(Visitor::<O, T>::default())
 }
 
-pub fn serialize_multi<V, S>(value: &HashMap<u32, V::Item>, s: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-    V: NumberedItems,
-{
-    let mut map = s.serialize_map(Some(value.len()))?;
+macro_rules! define_multi_fns {
+    ($([$type:ident, $ser:ident, $des:ident]),*) => {
+        $(
+            pub fn $ser<V, S>(value: &$type<u32, V::Item>, s: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+                V: NumberedItems,
+            {
+                let mut map = s.serialize_map(Some(value.len()))?;
 
-    for (key, value) in value.iter() {
-        map.serialize_entry(&V::make_key(key), value)?;
-    }
+                for (key, value) in value.iter() {
+                    map.serialize_entry(&V::make_key(key), value)?;
+                }
 
-    map.end()
-}
-
-pub fn deserialize_multi<'de, V, D>(d: D) -> Result<HashMap<u32, V::Item>, D::Error>
-where
-    V: NumberedItems,
-    D: Deserializer<'de>,
-{
-    struct InternalVisitor<V, D> {
-        _phantom: PhantomData<(D, V)>,
-    }
-
-    impl<V, D> Default for InternalVisitor<V, D> {
-        fn default() -> Self {
-            Self {
-                _phantom: Default::default(),
-            }
-        }
-    }
-
-    impl<'de, V, D> serde::de::Visitor<'de> for InternalVisitor<V, D>
-    where
-        V: NumberedItems,
-        D: Deserializer<'de>,
-    {
-        type Value = HashMap<u32, V::Item>;
-
-        fn expecting(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-            write!(f, "Multi-numbered items with prefix {}", V::PREFIX)
-        }
-
-        fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-        where
-            A: serde::de::MapAccess<'de>,
-        {
-            let mut output = HashMap::new();
-
-            while let Some(key) = map.next_key::<&str>()? {
-                let key = if let Some(idx) = V::check_key(key) {
-                    idx
-                } else {
-                    continue;
-                };
-
-                let value = map.next_value::<V::Item>()?;
-                output.insert(key, value);
+                map.end()
             }
 
-            Ok(output)
-        }
-    }
+            pub fn $des<'de, V, D>(d: D) -> Result<$type<u32, V::Item>, D::Error>
+            where
+                V: NumberedItems,
+                D: Deserializer<'de>,
+            {
+                struct InternalVisitor<V, D> {
+                    _phantom: PhantomData<(D, V)>,
+                }
 
-    d.deserialize_map(InternalVisitor::<V, D>::default())
+                impl<V, D> Default for InternalVisitor<V, D> {
+                    fn default() -> Self {
+                        Self {
+                            _phantom: Default::default(),
+                        }
+                    }
+                }
+
+                impl<'de, V, D> serde::de::Visitor<'de> for InternalVisitor<V, D>
+                where
+                    V: NumberedItems,
+                    D: Deserializer<'de>,
+                {
+                    type Value = $type<u32, V::Item>;
+
+                    fn expecting(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+                        write!(f, "Multi-numbered items with prefix {}", V::PREFIX)
+                    }
+
+                    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
+                    where
+                        A: serde::de::MapAccess<'de>,
+                    {
+                        let mut output = $type::new();
+
+                        while let Some(key) = map.next_key::<&str>()? {
+                            let key = if let Some(idx) = V::check_key(key) {
+                                idx
+                            } else {
+                                continue;
+                            };
+
+                            let value = map.next_value::<V::Item>()?;
+                            output.insert(key, value);
+                        }
+
+                        Ok(output)
+                    }
+                }
+
+                d.deserialize_map(InternalVisitor::<V, D>::default())
+            }
+        )*
+    };
 }
+
+define_multi_fns!(
+    [HashMap, serialize_multi, deserialize_multi],
+    [BTreeMap, serialize_multi_btree, deserialize_multi_btree]
+);
 
 #[cfg(test)]
 mod test {
-    use std::collections::HashMap;
+    use std::collections::{BTreeMap, HashMap};
 
     use serde::{Deserialize, Serialize};
 
@@ -179,10 +193,10 @@ mod test {
     struct Names {
         #[serde(
             flatten,
-            deserialize_with = "super::deserialize_multi::<'_, NumberedNames, _>",
-            serialize_with = "super::serialize_multi::<NumberedNames, _>"
+            deserialize_with = "super::deserialize_multi_btree::<'_, NumberedNames, _>",
+            serialize_with = "super::serialize_multi_btree::<NumberedNames, _>"
         )]
-        names: HashMap<u32, String>,
+        names: BTreeMap<u32, String>,
         #[serde(
             flatten,
             deserialize_with = "super::deserialize_additional_data::<'_, Names, _, _>"

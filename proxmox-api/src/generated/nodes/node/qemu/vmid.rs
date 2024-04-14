@@ -43,6 +43,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Destroy the VM and  all used/owned volumes. Removes any VM specific permissions and firewall rules"]
+    #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params)
@@ -53,6 +54,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Directory index"]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -67,6 +69,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If set, destroy additionally all disks not referenced in the config but with a matching VMID from all enabled storages."]
+    #[doc = ""]
     pub destroy_unreferenced_disks: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -74,6 +77,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Remove VMID from configurations, like backup & replication jobs and HA."]
+    #[doc = ""]
     pub purge: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -81,6 +85,7 @@ pub struct DeleteParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Ignore locks - only root is allowed to use this option."]
+    #[doc = ""]
     pub skiplock: Option<bool>,
     #[serde(
         flatten,

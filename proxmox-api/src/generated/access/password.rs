@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Change user password."]
+    #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params)
@@ -38,10 +39,13 @@ pub struct PutParams {
     #[serde(rename = "confirmation-password")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The current password of the user performing the change."]
+    #[doc = ""]
     pub confirmation_password: Option<String>,
     #[doc = "The new password."]
+    #[doc = ""]
     pub password: String,
     #[doc = "Full User ID, in the `name@realm` format."]
+    #[doc = ""]
     pub userid: String,
     #[serde(
         flatten,

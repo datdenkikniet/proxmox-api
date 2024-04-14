@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "SDN dns index."]
+    #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create a new sdn dns object."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -60,6 +62,7 @@ pub struct GetParams {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only list sdn dns of specific type"]
+    #[doc = ""]
     pub ty: Option<Type>,
     #[serde(
         flatten,
@@ -85,6 +88,7 @@ impl PostParams {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
     #[doc = "The SDN dns object identifier."]
+    #[doc = ""]
     pub dns: String,
     pub key: String,
     #[serde(
@@ -107,6 +111,7 @@ pub struct PostParams {
     pub ttl: Option<u64>,
     #[serde(rename = "type")]
     #[doc = "Plugin type."]
+    #[doc = ""]
     pub ty: Type,
     pub url: String,
     #[serde(
@@ -117,9 +122,20 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Only list sdn dns of specific type"]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "powerdns")]
     Powerdns,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "powerdns" => Ok(Self::Powerdns),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> DnsClient<T>
 where

@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Destroy Ceph Manager."]
+    #[doc = ""]
     pub fn delete(&self) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &())
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create Ceph Manager"]
+    #[doc = ""]
     pub fn post(&self) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &())

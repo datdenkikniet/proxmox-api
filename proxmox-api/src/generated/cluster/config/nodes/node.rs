@@ -18,6 +18,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Removes a node from the cluster configuration."]
+    #[doc = ""]
     pub fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &())
@@ -28,6 +29,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Adds a node to the cluster configuration. This call is for internal use."]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -64,6 +66,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The JOIN_API_VERSION of the new node."]
+    #[doc = ""]
     pub apiversion: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -71,6 +74,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Do not throw error if node already exists."]
+    #[doc = ""]
     pub force: Option<bool>,
     #[serde(rename = "link[n]")]
     #[serde(
@@ -80,9 +84,11 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
     #[serde(flatten)]
     #[doc = "Address and priority information of a single corosync link. (up to 8 links supported; link0..link7)"]
+    #[doc = ""]
     pub links: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "IP Address of node to add. Used as fallback if no links are given."]
+    #[doc = ""]
     pub new_node_ip: Option<::std::net::IpAddr>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -90,6 +96,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node id for this node."]
+    #[doc = ""]
     pub nodeid: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -97,6 +104,7 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of votes for this node"]
+    #[doc = ""]
     pub votes: Option<u64>,
     #[serde(
         flatten,

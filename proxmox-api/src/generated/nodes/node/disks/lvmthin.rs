@@ -19,6 +19,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "List LVM thinpools"]
+    #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &())
@@ -29,6 +30,7 @@ where
     T: crate::client::Client,
 {
     #[doc = "Create an LVM thinpool"]
+    #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params)
@@ -57,32 +59,38 @@ impl GetOutputItems {
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
     #[doc = "The name of the thinpool."]
+    #[doc = ""]
     pub lv: String,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The size of the thinpool in bytes."]
+    #[doc = ""]
     pub lv_size: u64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The size of the metadata lv in bytes."]
+    #[doc = ""]
     pub metadata_size: u64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The used bytes of the metadata lv."]
+    #[doc = ""]
     pub metadata_used: u64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The used bytes of the thinpool."]
+    #[doc = ""]
     pub used: u64,
     #[doc = "The associated volume group."]
+    #[doc = ""]
     pub vg: String,
     #[serde(
         flatten,
@@ -109,10 +117,13 @@ pub struct PostParams {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure storage using the thinpool."]
+    #[doc = ""]
     pub add_storage: Option<bool>,
     #[doc = "The block device you want to create the thinpool on."]
+    #[doc = ""]
     pub device: String,
     #[doc = "The storage identifier."]
+    #[doc = ""]
     pub name: String,
     #[serde(
         flatten,
