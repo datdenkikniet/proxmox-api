@@ -96,7 +96,7 @@ impl ToTokens for FieldDef {
         let name = Ident::new(&name, quote!().span());
 
         let rename = if let Some(rename) = rename {
-            let renamed = Literal::string(&rename);
+            let renamed = Literal::string(rename);
             Some(quote!(#[serde(rename = #renamed)]))
         } else {
             None

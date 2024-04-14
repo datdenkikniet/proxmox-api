@@ -30,15 +30,15 @@ pub(crate) use num_items_def::NumItemsDef;
 mod type_def;
 pub(crate) use type_def::{PrimitiveTypeDef, TypeDef};
 
-pub(self) fn proxmox_api(path: TokenStream) -> TokenStream {
+pub fn proxmox_api(path: TokenStream) -> TokenStream {
     quote! { crate::#path }
 }
 
-pub(self) fn proxmox_api_str(path: String) -> Literal {
+pub fn proxmox_api_str(path: String) -> Literal {
     Literal::string(&format!("crate::{path}"))
 }
 
-pub fn clean_doc<'a, T: AsRef<str>>(input: &'a T) -> impl Iterator<Item = String> + 'a {
+pub fn clean_doc<T: AsRef<str>>(input: &T) -> impl Iterator<Item = String> + '_ {
     input
         .as_ref()
         .split('\n')
@@ -60,7 +60,7 @@ pub struct Generator {
 impl Generator {
     pub fn new(collection: &Collection) -> Self {
         Self {
-            mods: Self::generate(&collection),
+            mods: Self::generate(collection),
         }
     }
 
@@ -91,7 +91,7 @@ impl Generator {
         global_defs: &mut Vec<TypeDef>,
     ) -> ClientModDef {
         let segment_no_braces = segment.as_string_without_braces();
-        let segment_name = crate::name_to_underscore_name(&segment_no_braces);
+        let segment_name = crate::name_to_underscore_name(segment_no_braces);
         let mut client_name = crate::name_to_ident(&segment_name);
         client_name.push_str("Client");
 
@@ -103,7 +103,7 @@ impl Generator {
             .value
             .info
             .values()
-            .filter_map(|info| {
+            .map(|info| {
                 let method: String = info
                     .method
                     .chars()
@@ -114,8 +114,7 @@ impl Generator {
                 let parameters = info
                     .parameters
                     .as_ref()
-                    .map(|v| v.type_def(&method, &node.value.path))
-                    .flatten();
+                    .and_then(|v| v.type_def(&method, &node.value.path));
 
                 let parameters = if let Some(output) = parameters {
                     module_defs.extend(output.def.clone());
@@ -148,27 +147,14 @@ impl Generator {
 
                         let (_, name) = def.as_field_ty(ret.optional.get());
 
-                        let call = match def.primitive() {
-                            Some(PrimitiveTypeDef::Integer) => {
-                                let int = proxmox_api(quote!(types::Integer));
-                                quote!(Ok(self.client.#fn_name::<_, #int>(#defer_signature)?.get()))
-                            }
-                            Some(PrimitiveTypeDef::Number) => {
-                                let num_ty = proxmox_api(quote!(types::Number));
-                                quote!(Ok(self.client.#fn_name::<_, #num_ty>(#defer_signature)?.get()))
-                            }
-                            Some(PrimitiveTypeDef::Boolean) => {
-                                let bool_ty = proxmox_api(quote!(types::Bool));
-                                quote!(Ok(self.client.#fn_name::<_, #bool_ty>(#defer_signature)?.get()))
-                            }
-                            Some(PrimitiveTypeDef::String) | None => {
-                                quote!(self.client.#fn_name(#defer_signature))
-                            }
-                        };
+                        let call = Self::to_call(def.primitive(), &fn_name, defer_signature);
 
                         (quote! { -> Result<#name, T::Error> }, call)
                     } else {
-                        (quote!( -> Result<(), T::Error> ), quote!(self.client.#fn_name(#defer_signature)))
+                        (
+                            quote!( -> Result<(), T::Error> ),
+                            quote!(self.client.#fn_name(#defer_signature)),
+                        )
                     }
                 } else {
                     (quote!(), quote!(self.client.#fn_name(#defer_signature)))
@@ -198,7 +184,7 @@ impl Generator {
                     }
                 };
 
-                Some(block)
+                block
             })
             .collect();
 
@@ -283,6 +269,32 @@ impl Generator {
             name: segment_name.to_string(),
             client_tokens: definition,
             children: child_defs,
+        }
+    }
+
+    // This is a separate method because cargo fmt breaks if the tokens in this
+    // function are too far to the right, for some reason...
+    fn to_call(
+        def: Option<PrimitiveTypeDef>,
+        fn_name: &Ident,
+        defer_signature: TokenStream,
+    ) -> TokenStream {
+        match def {
+            Some(PrimitiveTypeDef::Integer) => {
+                let int = proxmox_api(quote!(types::Integer));
+                quote!(Ok(self.client.#fn_name::<_, #int>(#defer_signature)?.get()))
+            }
+            Some(PrimitiveTypeDef::Number) => {
+                let num_ty = proxmox_api(quote!(types::Number));
+                quote!(Ok(self.client.#fn_name::<_, #num_ty>(#defer_signature)?.get()))
+            }
+            Some(PrimitiveTypeDef::Boolean) => {
+                let bool_ty = proxmox_api(quote!(types::Bool));
+                quote!(Ok(self.client.#fn_name::<_, #bool_ty>(#defer_signature)?.get()))
+            }
+            Some(PrimitiveTypeDef::String) | None => {
+                quote!(self.client.#fn_name(#defer_signature))
+            }
         }
     }
 

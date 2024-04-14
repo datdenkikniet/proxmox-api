@@ -11,7 +11,7 @@ pub use generator::{ClientModDef, Generator};
 use clap::Parser;
 use raw::{flattened::Collection, TreeNode};
 
-const RENAME_MAP: &'static [(&'static str, &'static str)] = &[
+const RENAME_MAP: &[(&str, &str)] = &[
     ("type", "ty"),
     ("macro", "macro_def"),
     ("in", "in_name"),
@@ -51,7 +51,7 @@ pub(crate) fn name_to_ident(name: &str) -> String {
     let mut chars = name.chars();
     let mut new_name = String::new();
 
-    while let Some(char) = chars.next() {
+    for char in chars.by_ref() {
         if char == '.'
             || char == '{'
             || char == '}'
@@ -77,10 +77,15 @@ pub(crate) fn name_to_ident(name: &str) -> String {
     for char in chars {
         if char == '}' || char == ']' {
             continue;
-        } else if char == '-' || char == '_' || char == '{' || char == '[' {
+        } else if char == '-'
+            || char == '_'
+            || char == '{'
+            || char == '['
+            || char == '+'
+            || char == '.'
+        {
             prev_was_dash = true;
-        } else if char == '+' || char == '.' {
-            prev_was_dash = true;
+            continue;
         } else {
             if prev_was_dash {
                 new_name.push(char.to_ascii_uppercase());

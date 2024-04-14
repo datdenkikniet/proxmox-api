@@ -6,7 +6,7 @@ pub use path::{Path, PathElement};
 mod generator;
 pub use generator::{ClientModDef, Generator};
 
-const RENAME_MAP: &'static [(&'static str, &'static str)] = &[
+const RENAME_MAP: &[(&str, &str)] = &[
     ("type", "ty"),
     ("macro", "macro_def"),
     ("in", "in_name"),
@@ -46,7 +46,7 @@ pub(crate) fn name_to_ident(name: &str) -> String {
     let mut chars = name.chars();
     let mut new_name = String::new();
 
-    while let Some(char) = chars.next() {
+    for char in chars.by_ref() {
         if char == '.'
             || char == '{'
             || char == '}'

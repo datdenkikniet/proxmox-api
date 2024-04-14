@@ -56,7 +56,7 @@ impl ToTokens for NumItemsDef {
 
         let num_items = proxmox_api(quote!(types::multi::NumberedItems));
         let name = Ident::new(&name.lock(), quote!().span());
-        let prefix = Literal::string(&prefix);
+        let prefix = Literal::string(prefix);
         let (_, ty) = ty.as_field_ty(false);
 
         tokens.extend(quote! {

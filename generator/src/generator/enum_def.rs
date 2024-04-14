@@ -119,7 +119,7 @@ impl ToTokens for EnumDef {
             let v = Self::to_variant(orig);
 
             let rename = if orig != &v {
-                let orig = Literal::string(&orig);
+                let orig = Literal::string(orig);
                 Some(quote!(#[serde(rename = #orig)]))
             } else {
                 None

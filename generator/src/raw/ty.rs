@@ -58,7 +58,7 @@ impl Type<'_> {
         self.description
             .as_ref()
             .into_iter()
-            .chain(self.verbose_description.as_ref().into_iter())
+            .chain(self.verbose_description.as_ref())
             .flat_map(clean_doc)
     }
 
@@ -137,7 +137,7 @@ impl Type<'_> {
                         let fields: Vec<_> = props
                             .iter()
                             .filter_map(|(original_name, ty)| {
-                                let field_name = crate::name_to_ident(&original_name);
+                                let field_name = crate::name_to_ident(original_name);
                                 let output = ty.type_def(
                                     &field_name,
                                     &format!("{struct_suffix}{field_name}"),

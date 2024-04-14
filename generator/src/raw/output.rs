@@ -8,6 +8,7 @@ pub struct Output {
 }
 
 impl Output {
+    #[allow(clippy::new_without_default)]
     pub fn new() -> Self {
         Self {
             def: None,
@@ -25,7 +26,9 @@ impl Output {
     }
 
     pub fn absorb(&mut self, inner: Output) {
-        inner.def.map(|v| self.module_defs.push(v));
+        if let Some(def) = inner.def {
+            self.module_defs.push(def)
+        }
         self.module_defs.extend(inner.module_defs);
         self.global_defs.extend(inner.global_defs);
     }
