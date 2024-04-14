@@ -62,7 +62,6 @@ impl GetOutput {
             use_gmt_hitset,
             write_fadvise_dontneed,
             application: Default::default(),
-            application_list: Default::default(),
             autoscale_status: Default::default(),
             crush_rule: Default::default(),
             min_size: Default::default(),
@@ -83,8 +82,6 @@ pub struct GetOutput {
     #[doc = "The application of the pool."]
     #[doc = ""]
     pub application: Option<Application>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub application_list: Option<()>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub autoscale_status: Option<AutoscaleStatusGetOutputAutoscaleStatus>,
     #[serde(skip_serializing_if = "Option::is_none", default)]

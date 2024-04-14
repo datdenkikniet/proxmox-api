@@ -15,6 +15,7 @@ pub enum Format<'a> {
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub enum KnownFormat {
+    String,
     Ipv4,
     #[serde(rename = "ipv4mask")]
     Ipv4Mask,

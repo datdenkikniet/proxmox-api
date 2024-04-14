@@ -188,10 +188,14 @@ impl PostParams {
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure VM and CT storage using the new pool."]
     #[doc = ""]
-    pub add_storages: Option<()>,
+    pub add_storages: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The application of the pool."]
     #[doc = ""]

@@ -28,7 +28,6 @@ impl GetOutput {
     pub fn new(health: String) -> Self {
         Self {
             health,
-            attributes: Default::default(),
             text: Default::default(),
             ty: Default::default(),
             additional_properties: Default::default(),
@@ -37,8 +36,6 @@ impl GetOutput {
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutput {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub attributes: Option<()>,
     pub health: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub text: Option<String>,

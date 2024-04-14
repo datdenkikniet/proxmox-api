@@ -117,10 +117,10 @@ impl Generator {
                     .flatten();
 
                 let parameters = if let Some(output) = parameters {
-                    module_defs.push(output.def.clone());
+                    module_defs.extend(output.def.clone());
                     module_defs.extend(output.module_defs);
                     global_defs.extend(output.global_defs);
-                    Some(output.def)
+                    output.def
                 } else {
                     None
                 };
@@ -138,32 +138,37 @@ impl Generator {
 
                 let (returns, call) = if let Some(ret) = info.returns.as_ref() {
                     let output = ret.type_def("", &format!("{method}Output"));
-                    let def = output.def.clone();
-                    module_defs.push(output.def);
-                    module_defs.extend(output.module_defs);
-                    global_defs.extend(output.global_defs);
 
-                    let name = def.as_field_ty(ret.optional.get());
+                    if let Some(output) = output {
+                        let def = output.def.unwrap().clone();
+                        module_defs.push(def.clone());
+                        module_defs.extend(output.module_defs);
+                        global_defs.extend(output.global_defs);
 
-                    let call = match def.primitive() {
-                        Some(PrimitiveTypeDef::Integer) => {
-                            let int = proxmox_api(quote!(types::Integer));
-                            quote!(Ok(self.client.#fn_name::<_, #int>(#defer_signature)?.get()))
-                        }
-                        Some(PrimitiveTypeDef::Number) => {
-                            let num_ty = proxmox_api(quote!(types::Number));
-                            quote!(Ok(self.client.#fn_name::<_, #num_ty>(#defer_signature)?.get()))
-                        }
-                        Some(PrimitiveTypeDef::Boolean) => {
-                            let bool_ty = proxmox_api(quote!(types::Bool));
-                            quote!(Ok(self.client.#fn_name::<_, #bool_ty>(#defer_signature)?.get()))
-                        }
-                        Some(PrimitiveTypeDef::String) | None => {
-                            quote!(self.client.#fn_name(#defer_signature))
-                        }
-                    };
+                        let name = def.as_field_ty(ret.optional.get());
 
-                    (quote! { -> Result<#name, T::Error> }, call)
+                        let call = match def.primitive() {
+                            Some(PrimitiveTypeDef::Integer) => {
+                                let int = proxmox_api(quote!(types::Integer));
+                                quote!(Ok(self.client.#fn_name::<_, #int>(#defer_signature)?.get()))
+                            }
+                            Some(PrimitiveTypeDef::Number) => {
+                                let num_ty = proxmox_api(quote!(types::Number));
+                                quote!(Ok(self.client.#fn_name::<_, #num_ty>(#defer_signature)?.get()))
+                            }
+                            Some(PrimitiveTypeDef::Boolean) => {
+                                let bool_ty = proxmox_api(quote!(types::Bool));
+                                quote!(Ok(self.client.#fn_name::<_, #bool_ty>(#defer_signature)?.get()))
+                            }
+                            Some(PrimitiveTypeDef::String) | None => {
+                                quote!(self.client.#fn_name(#defer_signature))
+                            }
+                        };
+
+                        (quote! { -> Result<#name, T::Error> }, call)
+                    } else {
+                        (quote!( -> Result<(), T::Error> ), quote!(self.client.#fn_name(#defer_signature)))
+                    }
                 } else {
                     (quote!(), quote!(self.client.#fn_name(#defer_signature)))
                 };

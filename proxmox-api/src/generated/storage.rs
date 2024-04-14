@@ -219,15 +219,23 @@ pub struct PostParams {
     #[doc = ""]
     pub content_dirs: Option<String>,
     #[serde(rename = "create-base-path")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Create the base directory if it doesn't exist."]
     #[doc = ""]
-    pub create_base_path: Option<()>,
+    pub create_base_path: Option<bool>,
     #[serde(rename = "create-subdirs")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Populate the directory with the default structure."]
     #[doc = ""]
-    pub create_subdirs: Option<()>,
+    pub create_subdirs: Option<bool>,
     #[serde(rename = "data-pool")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Data Pool (for erasure coding only)"]
@@ -325,10 +333,14 @@ pub struct PostParams {
     #[doc = "Deprecated: use 'prune-backups' instead. Maximal number of backup files per VM. Use '0' for unlimited."]
     #[doc = ""]
     pub maxfiles: Option<u64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Create the directory if it doesn't exist and populate it with default sub-dirs. NOTE: Deprecated, use the 'create-base-path' and 'create-subdirs' options instead."]
     #[doc = ""]
-    pub mkdir: Option<()>,
+    pub mkdir: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "IP addresses of monitors (for external clusters)."]
     #[doc = ""]
@@ -431,10 +443,14 @@ pub struct PostParams {
     #[doc = ""]
     pub shared: Option<bool>,
     #[serde(rename = "skip-cert-verification")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Disable TLS certificate verification, only enable on fully trusted networks!"]
     #[doc = ""]
-    pub skip_cert_verification: Option<()>,
+    pub skip_cert_verification: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "SMB protocol version. 'default' if not set, negotiates the highest SMB2+ version supported by both the client and server."]
     #[doc = ""]

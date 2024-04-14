@@ -49,7 +49,7 @@ pub struct PostOutput {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
-    pub fn new(command: Vec<()>) -> Self {
+    pub fn new(command: Vec<String>) -> Self {
         Self {
             command,
             input_data: Default::default(),
@@ -62,7 +62,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "The command as a list of program + arguments."]
     #[doc = ""]
-    pub command: Vec<()>,
+    pub command: Vec<String>,
     #[serde(rename = "input-data")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Data to pass as 'input-data' to the guest. Usually treated as STDIN to 'command'."]

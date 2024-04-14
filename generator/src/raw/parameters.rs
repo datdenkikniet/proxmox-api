@@ -34,8 +34,8 @@ impl Parameters<'_> {
                     return None;
                 }
 
-                let output = ty.type_def(name, "Returns");
-                let typedef = output.def.clone();
+                let output = ty.type_def(name, "Returns")?;
+                let typedef = output.def.clone()?;
                 final_output.absorb(output);
 
                 let doc = ty.doc();
@@ -62,7 +62,7 @@ impl Parameters<'_> {
             final_output.module_defs.extend(ext);
 
             let type_def = TypeDef::new_struct(name.clone(), fields, additional_properties);
-            final_output.def = type_def;
+            final_output.def = Some(type_def);
 
             Some(final_output)
         } else {

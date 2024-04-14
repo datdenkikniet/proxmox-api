@@ -62,10 +62,16 @@ impl Type<'_> {
             .flat_map(clean_doc)
     }
 
-    pub fn type_def(&self, field_name: &str, struct_suffix: &str) -> Output {
+    pub fn type_def(&self, field_name: &str, struct_suffix: &str) -> Option<Output> {
+        // TODO: report that "command" only has format, and no type
+        if self.format == Some(Format::Kind(KnownFormat::String)) && self.ty.is_none() {
+            return Some(Output::bare_def(TypeDef::Primitive(
+                PrimitiveTypeDef::String,
+            )));
+        }
+
         let output_type = if let Some(ty) = self.ty.as_ref() {
             match ty {
-                TypeKind::Null => TypeDef::Unit,
                 TypeKind::String {
                     enum_values,
                     default,
@@ -103,11 +109,13 @@ impl Type<'_> {
                 TypeKind::Integer { .. } => TypeDef::Primitive(PrimitiveTypeDef::Integer),
                 TypeKind::Boolean { .. } => TypeDef::Primitive(PrimitiveTypeDef::Boolean),
                 TypeKind::Array { items } => {
-                    let mut output = items.type_def(field_name, &format!("{struct_suffix}Items"));
-                    output.module_defs.push(output.def.clone());
-                    output.def = TypeDef::Array(Box::new(output.def.clone()));
+                    let mut output =
+                        items.type_def(field_name, &format!("{struct_suffix}Items"))?;
+                    let def = output.def?.clone();
+                    output.module_defs.push(def.clone());
+                    output.def = Some(TypeDef::Array(Box::new(def)));
 
-                    return output;
+                    return Some(output);
                 }
                 TypeKind::Object {
                     properties,
@@ -132,9 +140,9 @@ impl Type<'_> {
                         let mut ty = Type::default();
                         ty.ty = Some(kind);
 
-                        let output = ty.type_def("Net", "");
+                        let output = ty.type_def("Net", "")?;
 
-                        final_output.global_defs.push(output.def);
+                        final_output.global_defs.extend(output.def);
                         final_output.global_defs.extend(output.module_defs);
                         final_output.global_defs.extend(output.global_defs);
                     }
@@ -154,45 +162,39 @@ impl Type<'_> {
                             .iter()
                             .filter_map(|(original_name, ty)| {
                                 let field_name = crate::name_to_ident(&original_name);
-                                let output = ty
-                                    .type_def(&field_name, &format!("{struct_suffix}{field_name}"));
-                                let inner = output.def.clone();
+                                let output = ty.type_def(
+                                    &field_name,
+                                    &format!("{struct_suffix}{field_name}"),
+                                )?;
+                                let inner = output.def.as_ref()?.clone();
                                 final_output.absorb(output);
 
                                 let doc = ty.doc();
                                 let optional = ty.optional.get();
 
-                                if inner.is_unit() && !optional {
-                                    None
-                                } else {
-                                    let (field, num_items) = FieldDef::new(
-                                        original_name.to_string(),
-                                        inner,
-                                        optional,
-                                        doc,
-                                    );
+                                let (field, num_items) =
+                                    FieldDef::new(original_name.to_string(), inner, optional, doc);
 
-                                    all_external.extend(
-                                        num_items.map(|v| TypeDef::NumberedItems(Box::new(v))),
-                                    );
+                                all_external
+                                    .extend(num_items.map(|v| TypeDef::NumberedItems(Box::new(v))));
 
-                                    Some(field)
-                                }
+                                Some(field)
                             })
                             .collect();
 
                         let def = TypeDef::new_struct(struct_name, fields, additional_props);
-                        final_output.def = def;
-                        return final_output;
+                        final_output.def = Some(def);
+
+                        return Some(final_output);
                     } else if !additional_props.is_none() {
                         TypeDef::new_struct(struct_name, Vec::new(), additional_props)
                     } else {
-                        TypeDef::Unit
+                        return None;
                     }
                 }
             }
         } else {
-            TypeDef::Unit
+            return None;
         };
 
         let def = if let (Some(fallback), Some(Format::Kind(format))) =
@@ -215,7 +217,7 @@ impl Type<'_> {
             output_type
         };
 
-        Output::bare_def(def)
+        Some(Output::bare_def(def))
     }
 }
 
@@ -235,9 +237,9 @@ impl IntOrTy<'_> {
         match self {
             IntOrTy::Int(1) => (AdditionalProperties::Untyped, Vec::new()),
             IntOrTy::Ty(ty) => {
-                let output = ty.type_def("additional_properties", struct_suffix);
+                let output = ty.type_def("additional_properties", struct_suffix).unwrap();
                 (
-                    AdditionalProperties::Type(Box::new(output.def)),
+                    AdditionalProperties::Type(Box::new(output.def.unwrap())),
                     output.module_defs,
                 )
             }
@@ -259,7 +261,6 @@ impl Default for IntOrTy<'_> {
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
 #[serde(tag = "type", rename_all = "kebab-case")]
 pub enum TypeKind<'a> {
-    Null,
     String {
         #[serde(rename = "maxLength", default, skip_serializing_if = "Option::is_none")]
         max_length: Option<u32>,
@@ -294,7 +295,7 @@ pub enum TypeKind<'a> {
     },
     Boolean {
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        default: Option<u32>,
+        default: Option<serde_json::Value>,
     },
     Array {
         items: Box<Type<'a>>,

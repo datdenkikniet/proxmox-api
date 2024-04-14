@@ -26,10 +26,14 @@ where
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PostParams {
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Issue start command even if virtual guest have 'onboot' not set or set to off."]
     #[doc = ""]
-    pub force: Option<()>,
+    pub force: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only consider guests from this comma separated list of VMIDs."]
     #[doc = ""]
