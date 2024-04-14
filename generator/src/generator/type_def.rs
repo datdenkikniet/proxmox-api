@@ -53,10 +53,6 @@ impl TypeDef {
         "::serde::Deserialize",
     ];
 
-    pub fn is_array(&self) -> bool {
-        matches!(self, TypeDef::Array(..))
-    }
-
     pub fn primitive(&self) -> Option<PrimitiveTypeDef> {
         if let Self::Primitive(p) = self {
             Some(*p)
