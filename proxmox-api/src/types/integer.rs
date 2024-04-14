@@ -28,11 +28,7 @@ where
         where
             E: serde::de::Error,
         {
-            if let Ok(v) = u64::try_from(v) {
-                Ok(v)
-            } else {
-                Err(E::custom("Value out of range."))
-            }
+            Ok(v)
         }
 
         fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
