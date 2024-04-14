@@ -1,5 +1,3 @@
-use std::collections::BTreeMap;
-
 use proc_macro2::{Literal, Punct, TokenStream};
 use quote::{quote, ToTokens};
 use syn::{spanned::Spanned, Ident};
@@ -19,6 +17,9 @@ mod file;
 
 mod struct_def;
 pub(crate) use struct_def::{AdditionalProperties, StructDef};
+
+mod mod_defs;
+pub use mod_defs::ModuleDefs;
 
 mod mod_def;
 pub use self::mod_def::ClientModDef;
@@ -96,7 +97,7 @@ impl Generator {
 
         let client_name = Ident::new(&client_name, quote!().span());
 
-        let mut module_defs = Vec::new();
+        let mut module_defs = ModuleDefs::default();
 
         let methods: Vec<_> = node
             .value
@@ -260,8 +261,6 @@ impl Generator {
 
         let client = proxmox_api(quote!(client::Client));
 
-        let (structs, enums, items) = Self::deduplicate(module_defs.into_iter());
-
         let definition = quote! {
             pub struct #client_name<T> {
                 client: T,
@@ -274,11 +273,7 @@ impl Generator {
 
             #(#methods)*
 
-            #(#structs)*
-
-            #(#enums)*
-
-            #(#items)*
+            #module_defs
 
             #(#child_constructors)*
         };
@@ -289,80 +284,6 @@ impl Generator {
             client_tokens: definition,
             children: child_defs,
         }
-    }
-
-    fn deduplicate(
-        types: impl Iterator<Item = TypeDef>,
-    ) -> (
-        impl Iterator<Item = StructDef>,
-        impl Iterator<Item = EnumDef>,
-        impl Iterator<Item = NumItemsDef>,
-    ) {
-        let mut enums = BTreeMap::<_, EnumDef>::new();
-        let mut structs = BTreeMap::new();
-        let mut num_items = BTreeMap::<_, NumItemsDef>::new();
-
-        for def in types {
-            match def {
-                TypeDef::Struct(strt) => {
-                    if let Some(prev_strt) = structs.get(&strt.name()) {
-                        if prev_strt != &strt {
-                            panic!("Encountered structs on the same level with exactly the same name that are not equal!\n{strt:#?}\n{prev_strt:#?}");
-                        }
-                    } else {
-                        structs.insert(strt.name().to_string(), strt);
-                    }
-                }
-                TypeDef::Enum(mut en) => {
-                    let original_name = en.name();
-                    let mut name = original_name.clone();
-                    let mut counter = 2;
-                    let mut found_duplicate = false;
-
-                    while let Some(previous_def) = enums.get(&name) {
-                        if previous_def == &en {
-                            found_duplicate = true;
-                            break;
-                        } else {
-                            name = format!("{original_name}{counter}");
-                            counter += 1;
-                        }
-                    }
-
-                    if !found_duplicate {
-                        en.set_name(&name);
-                        enums.insert(en.name().to_string(), en);
-                    }
-                }
-                TypeDef::NumberedItems(mut new_items) => {
-                    let original_name = new_items.name();
-                    let mut name = original_name.clone();
-                    let mut counter = 2;
-                    let mut found_duplicate = false;
-
-                    while let Some(value) = num_items.get(&name) {
-                        if value == new_items.as_ref() {
-                            found_duplicate = true;
-                            break;
-                        } else {
-                            name = format!("{original_name}{counter}");
-                            counter += 1;
-                        }
-                    }
-                    if !found_duplicate {
-                        new_items.set_name(&name);
-                        num_items.insert(name, *new_items);
-                    }
-                }
-                _ => {}
-            }
-        }
-
-        (
-            structs.into_values(),
-            enums.into_values(),
-            num_items.into_values(),
-        )
     }
 
     fn make_placeholder_constructor(has_parent: bool, placeholder: &str) -> TokenStream {
