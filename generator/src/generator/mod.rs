@@ -133,6 +133,8 @@ impl Generator {
                 {
                     let name = Ident::new(&strt.name(), quote! {}.span());
                     (quote!(&self, params: #name), quote!(&path, &params))
+                } else if parameters.is_some() {
+                    panic!("Cannot handle non-struct parameters!");
                 } else {
                     (quote!(&self), quote!(&path, &()))
                 };
