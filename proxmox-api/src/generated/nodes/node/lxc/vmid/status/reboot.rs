@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a RebootClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> RebootClient<T>
 where
     T: crate::client::Client,
@@ -20,7 +29,7 @@ where
     #[doc = "Reboot the container by shutting it down, and starting it again. Applies pending changes."]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.post(&path, &params)
     }
 }

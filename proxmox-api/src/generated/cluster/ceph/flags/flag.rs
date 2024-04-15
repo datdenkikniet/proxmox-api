@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a FlagClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> FlagClient<T>
 where
     T: crate::client::Client,
@@ -20,7 +29,7 @@ where
     #[doc = "Get the status of a specific ceph flag."]
     #[doc = ""]
     pub fn get(&self) -> Result<bool, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         Ok(self.client.get::<_, crate::types::Bool>(&path, &())?.get())
     }
 }
@@ -31,7 +40,7 @@ where
     #[doc = "Set or clear (unset) a specific ceph flag"]
     #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.put(&path, &params)
     }
 }

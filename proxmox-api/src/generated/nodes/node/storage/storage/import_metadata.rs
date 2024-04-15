@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a ImportMetadataClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> ImportMetadataClient<T>
 where
     T: crate::client::Client,
@@ -20,7 +29,7 @@ where
     #[doc = "Get the base parameters for creating a guest which imports data from a foreign importable guest, like an ESXi VM"]
     #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &params)
     }
 }

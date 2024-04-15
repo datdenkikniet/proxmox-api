@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a NameClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> NameClient<T>
 where
     T: crate::client::Client,
@@ -20,7 +29,7 @@ where
     #[doc = "Remove IP or Network alias."]
     #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.delete(&path, &params)
     }
 }
@@ -31,7 +40,7 @@ where
     #[doc = "Read alias."]
     #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
     }
 }
@@ -42,7 +51,7 @@ where
     #[doc = "Update IP or Network alias."]
     #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.put(&path, &params)
     }
 }

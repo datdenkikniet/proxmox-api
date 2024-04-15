@@ -16,6 +16,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a NotificationsClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> NotificationsClient<T>
 where
     T: crate::client::Client,
@@ -23,7 +32,7 @@ where
     #[doc = "Index for notification-related API endpoints."]
     #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
     }
 }

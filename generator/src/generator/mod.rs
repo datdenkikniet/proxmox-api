@@ -98,6 +98,7 @@ impl Generator {
         let client_name = Ident::new(&client_name, quote!().span());
 
         let mut module_defs = ModuleDefs::default();
+        let proxmox_client = proxmox_api(quote!(ProxmoxClient));
 
         let methods: Vec<_> = node
             .value
@@ -171,7 +172,7 @@ impl Generator {
                 let fn_definition = quote! {
                     #doc
                     pub fn #fn_name(#signature) #returns {
-                        let path = self.path.to_string();
+                        let path = #proxmox_client::path(self).as_ref();
                         #call
                     }
                 };
@@ -255,6 +256,14 @@ impl Generator {
 
             impl<T> #client_name<T> where T: #client {
                 #new
+            }
+
+            impl<'a, T> #proxmox_client for &'a #client_name<T> where T: #client {
+                type Path = &'a str;
+
+                fn path(self) -> Self::Path {
+                    &self.path
+                }
             }
 
             #(#methods)*

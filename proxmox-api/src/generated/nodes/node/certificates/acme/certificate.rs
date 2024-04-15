@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a CertificateClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> CertificateClient<T>
 where
     T: crate::client::Client,
@@ -20,7 +29,7 @@ where
     #[doc = "Revoke existing certificate from CA."]
     #[doc = ""]
     pub fn delete(&self) -> Result<String, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.delete(&path, &())
     }
 }
@@ -31,7 +40,7 @@ where
     #[doc = "Order a new certificate from ACME-compatible CA."]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.post(&path, &params)
     }
 }
@@ -42,7 +51,7 @@ where
     #[doc = "Renew existing certificate from CA."]
     #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.put(&path, &params)
     }
 }

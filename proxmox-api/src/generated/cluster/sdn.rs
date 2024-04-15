@@ -18,6 +18,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a SdnClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> SdnClient<T>
 where
     T: crate::client::Client,
@@ -25,7 +34,7 @@ where
     #[doc = "Directory index."]
     #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
     }
 }
@@ -36,7 +45,7 @@ where
     #[doc = "Apply sdn controller changes && reload."]
     #[doc = ""]
     pub fn put(&self) -> Result<String, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.put(&path, &())
     }
 }

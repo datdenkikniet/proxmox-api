@@ -14,6 +14,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a UseridClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> UseridClient<T>
 where
     T: crate::client::Client,
@@ -21,7 +30,7 @@ where
     #[doc = "List TFA configurations of users."]
     #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
     }
 }
@@ -32,7 +41,7 @@ where
     #[doc = "Add a TFA entry for a user."]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.post(&path, &params)
     }
 }

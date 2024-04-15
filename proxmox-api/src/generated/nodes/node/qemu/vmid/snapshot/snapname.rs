@@ -15,6 +15,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a SnapnameClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> SnapnameClient<T>
 where
     T: crate::client::Client,
@@ -22,7 +31,7 @@ where
     #[doc = "Delete a VM snapshot."]
     #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.delete(&path, &params)
     }
 }
@@ -31,7 +40,7 @@ where
     T: crate::client::Client,
 {
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
     }
 }

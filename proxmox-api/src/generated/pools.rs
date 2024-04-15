@@ -14,6 +14,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a PoolsClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> PoolsClient<T>
 where
     T: crate::client::Client,
@@ -21,7 +30,7 @@ where
     #[doc = "Delete pool."]
     #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.delete(&path, &params)
     }
 }
@@ -32,7 +41,7 @@ where
     #[doc = "List pools or get pool configuration."]
     #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &params)
     }
 }
@@ -43,7 +52,7 @@ where
     #[doc = "Create new pool."]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.post(&path, &params)
     }
 }
@@ -54,7 +63,7 @@ where
     #[doc = "Update pool."]
     #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.put(&path, &params)
     }
 }

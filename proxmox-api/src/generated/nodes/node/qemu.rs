@@ -14,6 +14,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a QemuClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> QemuClient<T>
 where
     T: crate::client::Client,
@@ -21,7 +30,7 @@ where
     #[doc = "Virtual machine index (per node)."]
     #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &params)
     }
 }
@@ -32,7 +41,7 @@ where
     #[doc = "Create or restore a virtual machine."]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.post(&path, &params)
     }
 }

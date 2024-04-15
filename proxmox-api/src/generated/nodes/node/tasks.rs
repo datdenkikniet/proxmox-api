@@ -14,6 +14,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a TasksClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> TasksClient<T>
 where
     T: crate::client::Client,
@@ -21,7 +30,7 @@ where
     #[doc = "Read task list for one node (finished tasks)."]
     #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &params)
     }
 }

@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a NextidClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> NextidClient<T>
 where
     T: crate::client::Client,
@@ -20,7 +29,7 @@ where
     #[doc = "Get next free VMID. Pass a VMID to assert that its free (at time of check)."]
     #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<u64, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         Ok(self
             .client
             .get::<_, crate::types::Integer>(&path, &params)?

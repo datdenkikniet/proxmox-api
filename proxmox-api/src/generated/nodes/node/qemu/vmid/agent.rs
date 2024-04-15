@@ -38,6 +38,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a AgentClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> AgentClient<T>
 where
     T: crate::client::Client,
@@ -45,7 +54,7 @@ where
     #[doc = "QEMU Guest Agent command index."]
     #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
     }
 }
@@ -56,7 +65,7 @@ where
     #[doc = "Execute QEMU Guest Agent commands."]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.post(&path, &params)
     }
 }
