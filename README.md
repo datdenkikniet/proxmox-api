@@ -5,12 +5,24 @@ Features:
 * Types automatically generated from Proxmox VE's almost-json-schema.
 * Re-usable (sub-)clients
 
-
 ## What's missing?
 
 - [ ] Pattern validation
 - [ ] Range validation for values
 - [ ] Rust-types for well known types
+
+## Running the generator
+
+To run the generator, run the `generate.sh` script in the `generator` directory:
+
+```console
+$ cd generator/
+$ ./generate.sh
+```
+
+To see the PVE-schema.json file that the CI is using, you can download the artifacts produced by an [actions] run.
+
+[actions]: https://github.com/datdenkikniet/proxmox-api/actions
 
 ## License
 

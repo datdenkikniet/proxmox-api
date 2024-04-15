@@ -12,7 +12,7 @@ documentation = "https://docs.rs/proxmox-api/"
 
 [package.metadata.proxmox]
 debian-distro = "bookworm"
-pve-version = "8.0.1"
+pve-version = "8.1.0"
 
 [features]
 default = [ "access", "cluster", "nodes", "pools", "storage", "version" ]
