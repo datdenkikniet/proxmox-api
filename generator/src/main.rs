@@ -1,3 +1,5 @@
+use std::io::BufReader;
+
 use generator::{
     raw::{flattened::Collection, TreeNode},
     Generator,
@@ -30,7 +32,22 @@ fn main() -> std::io::Result<()> {
     let cli = Cli::parse();
 
     let input_path = cli.input_path();
-    let str = std::fs::read_to_string(input_path).unwrap();
+
+    let str = if input_path.ends_with(".xz") {
+        let file = std::fs::OpenOptions::new()
+            .read(true)
+            .open(input_path)
+            .unwrap();
+
+        let mut reader = BufReader::new(file);
+
+        let mut output = Vec::new();
+        lzma_rs::xz_decompress(&mut reader, &mut output).unwrap();
+
+        String::from_utf8(output).unwrap()
+    } else {
+        std::fs::read_to_string(input_path).unwrap()
+    };
 
     let tree: Vec<TreeNode> = serde_json::from_str(&str).unwrap();
 
