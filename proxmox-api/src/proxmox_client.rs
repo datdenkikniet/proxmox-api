@@ -1,8 +1,19 @@
+use serde::{de::DeserializeOwned, Serialize};
+
 /// A proxmox client, with a specific path.
 pub trait ProxmoxClient {
     type Path: AsRef<str>;
 
     fn path(self) -> Self::Path;
+}
+
+pub trait ProxmoxClientAction<P, O, E>: ProxmoxClient
+where
+    P: Serialize,
+    O: DeserializeOwned,
+    E: Debug,
+{
+    fn exec(&self, p: &P) -> Result<O, E>;
 }
 
 #[cfg(test)]
