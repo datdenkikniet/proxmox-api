@@ -1,6 +1,6 @@
-* `GET /cluster/sdn/zones` field `pending` has no type
-* `GET /cluster/sdn/controllers` field `pending` has no type.
-* `POST /nodes/{node}/qemu/{vmid}/agent/exec` field `command` has no type
-* `GET /nodes/{node}/ceph/pool/{name}/status` field `application_list` has no items
-* `GET /nodes/{node}/disks/smart` field `attributes` has no items
-* `GET /nodes/{node}/qemu/{vmid}/migrate` field `allowed_nodes` has no items
+* `GET /cluster/sdn/zones` returned field 'pending' has no type. (See 'pve-network/PVE/API2/Network/SDN/Zones.pm')
+* `GET /cluster/sdn/controllers` returned field 'pending' has no type. (See 'pve-network/PVE/API2/Network/SDN/Controllers.pm')
+* `POST /nodes/{node}/qemu/{vmid}/agent/exec` the items of the 'command' property/parameter only have a format' and no 'type'. (See 'qemu-server/PVE/API2/Qemu/Agent.pm')
+* `GET /nodes/{node}/ceph/pool/{name}/status` returned field `application_list` has no items (See 'pve-manager/PVE/API2/Ceph/Pool.pm')
+* `GET /nodes/{node}/disks/smart` returned field 'attributes' has no items (see: 'pve-storage/src/PVE/API2/Disks.pm')
+* `GET /nodes/{node}/qemu/{vmid}/migrate` returned field `allowed_nodes` has no items. (See 'qemu-server/PVE/API2/Qemu.pm')
