@@ -36,6 +36,15 @@ where
             .get())
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<GetParams, u64, T::Error> for &NextidClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: GetParams) -> Result<u64, T::Error> {
+        self.get(params)
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]

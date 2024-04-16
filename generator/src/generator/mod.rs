@@ -129,17 +129,24 @@ impl Generator {
                 let fn_name_str = method.to_ascii_lowercase();
                 let fn_name = Ident::new(&fn_name_str, quote!().span());
 
-                let (signature, defer_signature) = if let Some(TypeDef::Struct(strt)) = &parameters
-                {
+                let params = if let Some(TypeDef::Struct(strt)) = &parameters {
                     let name = Ident::new(&strt.name(), quote! {}.span());
-                    (quote!(&self, params: #name), quote!(&path, &params))
-                } else if parameters.is_some() {
-                    panic!("Cannot handle non-struct parameters!");
+                    quote!(#name)
+                } else if parameters.is_none() {
+                    quote!(())
+                } else {
+                    panic!("Cannot handle non-struct, non-empty parameters!");
+                };
+
+                let base_signature = quote!(&self, params: #params);
+
+                let (signature, defer_signature) = if parameters.is_some() {
+                    (base_signature.clone(), quote!(&path, &params))
                 } else {
                     (quote!(&self), quote!(&path, &()))
                 };
 
-                let (returns, call) = if let Some(ret) = info.returns.as_ref() {
+                let (output_ty, returns, call) = if let Some(ret) = info.returns.as_ref() {
                     let output = ret.type_def("", &format!("{method}Output"));
 
                     if let Some(output) = output {
@@ -152,15 +159,24 @@ impl Generator {
 
                         let call = Self::to_call(def.primitive(), &fn_name, defer_signature);
 
-                        (quote! { -> Result<#name, T::Error> }, call)
+                        (
+                            Some(name.clone()),
+                            quote! { -> Result<#name, T::Error> },
+                            call,
+                        )
                     } else {
                         (
+                            None,
                             quote!( -> Result<(), T::Error> ),
                             quote!(self.client.#fn_name(#defer_signature)),
                         )
                     }
                 } else {
-                    (quote!(), quote!(self.client.#fn_name(#defer_signature)))
+                    (
+                        None,
+                        quote!(),
+                        quote!(self.client.#fn_name(#defer_signature)),
+                    )
                 };
 
                 let doc = if let Some(doc) = &info.description {
@@ -180,10 +196,27 @@ impl Generator {
                 };
 
                 let client = proxmox_api(quote!(client::Client));
+                let action = proxmox_api(quote!(proxmox_client::ProxmoxClientAction));
+
+                let params_ty = params.clone();
+                let params = parameters.as_ref().map(|_| quote!(params)).into_iter();
+                let output_ty = output_ty.unwrap_or_else(|| quote!(()));
+                let method = Ident::new(&method, quote!().span());
+                let method = proxmox_api(quote!(client::Method::#method));
+                let method_ty = proxmox_api(quote!(client::Method));
 
                 let block = quote! {
                     impl<T> #client_name<T> where T: #client {
                         #fn_definition
+                    }
+
+                    impl<T> #action<#params_ty, #output_ty, T::Error>
+                        for &#client_name<T> where T: #client {
+                        const METHOD: #method_ty = #method;
+
+                        fn exec(#base_signature) -> Result<#output_ty, T::Error> {
+                            self.#fn_name(#(#params)*)
+                        }
                     }
                 };
 

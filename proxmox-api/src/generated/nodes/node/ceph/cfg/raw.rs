@@ -33,3 +33,12 @@ where
         self.client.get(&path, &())
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), String, T::Error> for &RawClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: ()) -> Result<String, T::Error> {
+        self.get()
+    }
+}

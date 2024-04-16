@@ -33,6 +33,15 @@ where
         self.client.delete(&path, &())
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), (), T::Error> for &NodeClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Delete;
+    fn exec(&self, params: ()) -> Result<(), T::Error> {
+        self.delete()
+    }
+}
 impl<T> NodeClient<T>
 where
     T: crate::client::Client,
@@ -42,6 +51,16 @@ where
     pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.post(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<PostParams, PostOutput, T::Error>
+    for &NodeClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Post;
+    fn exec(&self, params: PostParams) -> Result<PostOutput, T::Error> {
+        self.post(params)
     }
 }
 impl PostOutput {

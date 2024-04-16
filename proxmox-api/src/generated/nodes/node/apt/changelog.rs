@@ -33,6 +33,16 @@ where
         self.client.get(&path, &params)
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<GetParams, String, T::Error>
+    for &ChangelogClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: GetParams) -> Result<String, T::Error> {
+        self.get(params)
+    }
+}
 impl GetParams {
     pub fn new(name: String) -> Self {
         Self {

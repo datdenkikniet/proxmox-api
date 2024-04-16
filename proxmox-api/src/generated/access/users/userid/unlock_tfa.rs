@@ -33,3 +33,12 @@ where
         Ok(self.client.put::<_, crate::types::Bool>(&path, &())?.get())
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), bool, T::Error> for &UnlockTfaClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Put;
+    fn exec(&self, params: ()) -> Result<bool, T::Error> {
+        self.put()
+    }
+}

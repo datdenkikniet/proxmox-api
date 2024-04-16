@@ -33,6 +33,16 @@ where
         self.client.delete(&path, &params)
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<DeleteParams, Option<String>, T::Error>
+    for &VolumeClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Delete;
+    fn exec(&self, params: DeleteParams) -> Result<Option<String>, T::Error> {
+        self.delete(params)
+    }
+}
 impl<T> VolumeClient<T>
 where
     T: crate::client::Client,
@@ -42,6 +52,15 @@ where
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), GetOutput, T::Error> for &VolumeClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: ()) -> Result<GetOutput, T::Error> {
+        self.get()
     }
 }
 impl<T> VolumeClient<T>
@@ -55,6 +74,16 @@ where
         self.client.post(&path, &params)
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<PostParams, String, T::Error>
+    for &VolumeClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Post;
+    fn exec(&self, params: PostParams) -> Result<String, T::Error> {
+        self.post(params)
+    }
+}
 impl<T> VolumeClient<T>
 where
     T: crate::client::Client,
@@ -64,6 +93,15 @@ where
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.put(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<PutParams, (), T::Error> for &VolumeClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Put;
+    fn exec(&self, params: PutParams) -> Result<(), T::Error> {
+        self.put(params)
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]

@@ -33,3 +33,12 @@ where
         self.client.post(&path, &())
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), String, T::Error> for &StopClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Post;
+    fn exec(&self, params: ()) -> Result<String, T::Error> {
+        self.post()
+    }
+}

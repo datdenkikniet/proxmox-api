@@ -33,6 +33,16 @@ where
         self.client.post(&path, &())
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), PostOutput, T::Error>
+    for &SuspendRamClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Post;
+    fn exec(&self, params: ()) -> Result<PostOutput, T::Error> {
+        self.post()
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PostOutput {
     #[serde(

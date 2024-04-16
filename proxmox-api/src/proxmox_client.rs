@@ -1,5 +1,7 @@
 use serde::{de::DeserializeOwned, Serialize};
 
+use crate::client::Method;
+
 /// A proxmox client, with a specific path.
 pub trait ProxmoxClient {
     type Path: AsRef<str>;
@@ -11,9 +13,11 @@ pub trait ProxmoxClientAction<P, O, E>: ProxmoxClient
 where
     P: Serialize,
     O: DeserializeOwned,
-    E: Debug,
+    E: core::fmt::Debug,
 {
-    fn exec(&self, p: &P) -> Result<O, E>;
+    const METHOD: Method;
+
+    fn exec(&self, p: P) -> Result<O, E>;
 }
 
 #[cfg(test)]

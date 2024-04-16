@@ -33,6 +33,16 @@ where
         self.client.get(&path, &())
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), GetOutput, T::Error>
+    for &IncludedVolumesClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: ()) -> Result<GetOutput, T::Error> {
+        self.get()
+    }
+}
 impl ChildrenGetOutputChildrenItems {
     pub fn new(id: u64, ty: Type) -> Self {
         Self {

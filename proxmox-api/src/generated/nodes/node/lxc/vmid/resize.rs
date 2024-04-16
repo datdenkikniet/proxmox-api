@@ -33,6 +33,15 @@ where
         self.client.put(&path, &params)
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<PutParams, String, T::Error> for &ResizeClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Put;
+    fn exec(&self, params: PutParams) -> Result<String, T::Error> {
+        self.put(params)
+    }
+}
 impl PutParams {
     pub fn new(disk: Disk, size: String) -> Self {
         Self {

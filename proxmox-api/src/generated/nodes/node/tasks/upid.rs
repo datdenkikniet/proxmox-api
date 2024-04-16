@@ -35,6 +35,15 @@ where
         self.client.delete(&path, &())
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), (), T::Error> for &UpidClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Delete;
+    fn exec(&self, params: ()) -> Result<(), T::Error> {
+        self.delete()
+    }
+}
 impl<T> UpidClient<T>
 where
     T: crate::client::Client,
@@ -42,6 +51,16 @@ where
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), Vec<GetOutputItems>, T::Error>
+    for &UpidClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: ()) -> Result<Vec<GetOutputItems>, T::Error> {
+        self.get()
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]

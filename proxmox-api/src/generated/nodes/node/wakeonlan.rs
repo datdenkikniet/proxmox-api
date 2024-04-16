@@ -33,3 +33,13 @@ where
         self.client.post(&path, &())
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), crate::types::MacAddr<true>, T::Error>
+    for &WakeonlanClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Post;
+    fn exec(&self, params: ()) -> Result<crate::types::MacAddr<true>, T::Error> {
+        self.post()
+    }
+}

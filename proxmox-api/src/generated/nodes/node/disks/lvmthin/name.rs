@@ -33,6 +33,16 @@ where
         self.client.delete(&path, &params)
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<DeleteParams, String, T::Error>
+    for &NameClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Delete;
+    fn exec(&self, params: DeleteParams) -> Result<String, T::Error> {
+        self.delete(params)
+    }
+}
 impl DeleteParams {
     pub fn new(volume_group: String) -> Self {
         Self {

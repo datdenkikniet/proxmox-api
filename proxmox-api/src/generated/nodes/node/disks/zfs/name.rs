@@ -33,6 +33,16 @@ where
         self.client.delete(&path, &params)
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<DeleteParams, String, T::Error>
+    for &NameClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Delete;
+    fn exec(&self, params: DeleteParams) -> Result<String, T::Error> {
+        self.delete(params)
+    }
+}
 impl<T> NameClient<T>
 where
     T: crate::client::Client,
@@ -42,6 +52,15 @@ where
     pub fn get(&self) -> Result<GetOutput, T::Error> {
         let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), GetOutput, T::Error> for &NameClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: ()) -> Result<GetOutput, T::Error> {
+        self.get()
     }
 }
 impl ChildrenGetOutputChildrenItems {

@@ -36,3 +36,12 @@ where
             .get())
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), u64, T::Error> for &ApiversionClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: ()) -> Result<u64, T::Error> {
+        self.get()
+    }
+}

@@ -33,6 +33,16 @@ where
         self.client.post(&path, &params)
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<PostParams, PostOutput, T::Error>
+    for &ExecClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Post;
+    fn exec(&self, params: PostParams) -> Result<PostOutput, T::Error> {
+        self.post(params)
+    }
+}
 impl PostOutput {
     pub fn new(pid: u64) -> Self {
         Self {

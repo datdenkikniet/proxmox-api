@@ -33,6 +33,15 @@ where
         self.client.get(&path, &())
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), GetOutput, T::Error> for &CurrentClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: ()) -> Result<GetOutput, T::Error> {
+        self.get()
+    }
+}
 impl GetOutput {
     pub fn new(ha: HaGetOutputHa, status: Status, vmid: crate::types::VmId) -> Self {
         Self {

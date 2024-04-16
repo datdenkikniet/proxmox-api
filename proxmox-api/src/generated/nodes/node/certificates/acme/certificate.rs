@@ -33,6 +33,15 @@ where
         self.client.delete(&path, &())
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), String, T::Error> for &CertificateClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Delete;
+    fn exec(&self, params: ()) -> Result<String, T::Error> {
+        self.delete()
+    }
+}
 impl<T> CertificateClient<T>
 where
     T: crate::client::Client,
@@ -44,6 +53,16 @@ where
         self.client.post(&path, &params)
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<PostParams, String, T::Error>
+    for &CertificateClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Post;
+    fn exec(&self, params: PostParams) -> Result<String, T::Error> {
+        self.post(params)
+    }
+}
 impl<T> CertificateClient<T>
 where
     T: crate::client::Client,
@@ -53,6 +72,16 @@ where
     pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
         let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.put(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<PutParams, String, T::Error>
+    for &CertificateClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Put;
+    fn exec(&self, params: PutParams) -> Result<String, T::Error> {
+        self.put(params)
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]

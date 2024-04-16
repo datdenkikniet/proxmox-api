@@ -34,6 +34,15 @@ where
         self.client.delete(&path, &())
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), (), T::Error> for &NetworkClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Delete;
+    fn exec(&self, params: ()) -> Result<(), T::Error> {
+        self.delete()
+    }
+}
 impl<T> NetworkClient<T>
 where
     T: crate::client::Client,
@@ -43,6 +52,16 @@ where
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<GetParams, Vec<GetOutputItems>, T::Error>
+    for &NetworkClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        self.get(params)
     }
 }
 impl<T> NetworkClient<T>
@@ -56,6 +75,15 @@ where
         self.client.post(&path, &params)
     }
 }
+impl<T> crate::proxmox_client::ProxmoxClientAction<PostParams, (), T::Error> for &NetworkClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Post;
+    fn exec(&self, params: PostParams) -> Result<(), T::Error> {
+        self.post(params)
+    }
+}
 impl<T> NetworkClient<T>
 where
     T: crate::client::Client,
@@ -65,6 +93,15 @@ where
     pub fn put(&self) -> Result<String, T::Error> {
         let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.put(&path, &())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), String, T::Error> for &NetworkClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Put;
+    fn exec(&self, params: ()) -> Result<String, T::Error> {
+        self.put()
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
