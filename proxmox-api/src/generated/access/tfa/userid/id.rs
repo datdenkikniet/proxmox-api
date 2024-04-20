@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a IdClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> IdClient<T>
 where
     T: crate::client::Client,
@@ -20,8 +29,17 @@ where
     #[doc = "Delete a TFA entry by ID."]
     #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.delete(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<DeleteParams, (), T::Error> for &IdClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Delete;
+    fn exec(&self, params: DeleteParams) -> Result<(), T::Error> {
+        self.delete(params)
     }
 }
 impl<T> IdClient<T>
@@ -31,8 +49,17 @@ where
     #[doc = "Fetch a requested TFA entry if present."]
     #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), GetOutput, T::Error> for &IdClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: ()) -> Result<GetOutput, T::Error> {
+        self.get()
     }
 }
 impl<T> IdClient<T>
@@ -42,8 +69,17 @@ where
     #[doc = "Add a TFA entry for a user."]
     #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.put(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<PutParams, (), T::Error> for &IdClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Put;
+    fn exec(&self, params: PutParams) -> Result<(), T::Error> {
+        self.put(params)
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]

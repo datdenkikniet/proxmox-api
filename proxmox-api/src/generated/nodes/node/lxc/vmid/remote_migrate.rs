@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a RemoteMigrateClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> RemoteMigrateClient<T>
 where
     T: crate::client::Client,
@@ -20,8 +29,18 @@ where
     #[doc = "Migrate the container to another cluster. Creates a new migration task. EXPERIMENTAL feature!"]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.post(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<PostParams, String, T::Error>
+    for &RemoteMigrateClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Post;
+    fn exec(&self, params: PostParams) -> Result<String, T::Error> {
+        self.post(params)
     }
 }
 impl PostParams {

@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a TokenidClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> TokenidClient<T>
 where
     T: crate::client::Client,
@@ -20,8 +29,17 @@ where
     #[doc = "Remove API token for a specific user."]
     #[doc = ""]
     pub fn delete(&self) -> Result<(), T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.delete(&path, &())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), (), T::Error> for &TokenidClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Delete;
+    fn exec(&self, params: ()) -> Result<(), T::Error> {
+        self.delete()
     }
 }
 impl<T> TokenidClient<T>
@@ -31,8 +49,17 @@ where
     #[doc = "Get specific API token information."]
     #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), GetOutput, T::Error> for &TokenidClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: ()) -> Result<GetOutput, T::Error> {
+        self.get()
     }
 }
 impl<T> TokenidClient<T>
@@ -42,8 +69,18 @@ where
     #[doc = "Generate a new API token for a specific user. NOTE: returns API token value, which needs to be stored as it cannot be retrieved afterwards!"]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.post(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<PostParams, PostOutput, T::Error>
+    for &TokenidClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Post;
+    fn exec(&self, params: PostParams) -> Result<PostOutput, T::Error> {
+        self.post(params)
     }
 }
 impl<T> TokenidClient<T>
@@ -53,8 +90,18 @@ where
     #[doc = "Update API token for a specific user."]
     #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<PutOutput, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.put(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<PutParams, PutOutput, T::Error>
+    for &TokenidClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Put;
+    fn exec(&self, params: PutParams) -> Result<PutOutput, T::Error> {
+        self.put(params)
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]

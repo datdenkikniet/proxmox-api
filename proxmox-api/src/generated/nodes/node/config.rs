@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a ConfigClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> ConfigClient<T>
 where
     T: crate::client::Client,
@@ -20,8 +29,18 @@ where
     #[doc = "Get node configuration options."]
     #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<GetParams, GetOutput, T::Error>
+    for &ConfigClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        self.get(params)
     }
 }
 impl<T> ConfigClient<T>
@@ -31,8 +50,17 @@ where
     #[doc = "Set node configuration options."]
     #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.put(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<PutParams, (), T::Error> for &ConfigClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Put;
+    fn exec(&self, params: PutParams) -> Result<(), T::Error> {
+        self.put(params)
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]

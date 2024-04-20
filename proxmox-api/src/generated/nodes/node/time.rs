@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a TimeClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> TimeClient<T>
 where
     T: crate::client::Client,
@@ -20,8 +29,17 @@ where
     #[doc = "Read server time and time zone settings."]
     #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), GetOutput, T::Error> for &TimeClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: ()) -> Result<GetOutput, T::Error> {
+        self.get()
     }
 }
 impl<T> TimeClient<T>
@@ -31,8 +49,17 @@ where
     #[doc = "Set time zone."]
     #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.put(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<PutParams, (), T::Error> for &TimeClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Put;
+    fn exec(&self, params: PutParams) -> Result<(), T::Error> {
+        self.put(params)
     }
 }
 impl GetOutput {

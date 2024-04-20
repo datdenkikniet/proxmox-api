@@ -14,6 +14,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a AccountClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> AccountClient<T>
 where
     T: crate::client::Client,
@@ -21,8 +30,18 @@ where
     #[doc = "ACMEAccount index."]
     #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), Vec<GetOutputItems>, T::Error>
+    for &AccountClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: ()) -> Result<Vec<GetOutputItems>, T::Error> {
+        self.get()
     }
 }
 impl<T> AccountClient<T>
@@ -32,8 +51,18 @@ where
     #[doc = "Register a new ACME account with CA."]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.post(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<PostParams, String, T::Error>
+    for &AccountClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Post;
+    fn exec(&self, params: PostParams) -> Result<String, T::Error> {
+        self.post(params)
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]

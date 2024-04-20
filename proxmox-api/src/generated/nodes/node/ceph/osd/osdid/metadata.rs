@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a MetadataClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> MetadataClient<T>
 where
     T: crate::client::Client,
@@ -20,8 +29,17 @@ where
     #[doc = "Get OSD details"]
     #[doc = ""]
     pub fn get(&self) -> Result<GetOutput, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), GetOutput, T::Error> for &MetadataClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: ()) -> Result<GetOutput, T::Error> {
+        self.get()
     }
 }
 impl DevicesGetOutputDevicesItems {

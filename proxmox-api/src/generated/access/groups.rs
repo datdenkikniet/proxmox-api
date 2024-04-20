@@ -14,6 +14,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a GroupsClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> GroupsClient<T>
 where
     T: crate::client::Client,
@@ -21,8 +30,18 @@ where
     #[doc = "Group index."]
     #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), Vec<GetOutputItems>, T::Error>
+    for &GroupsClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: ()) -> Result<Vec<GetOutputItems>, T::Error> {
+        self.get()
     }
 }
 impl<T> GroupsClient<T>
@@ -32,8 +51,17 @@ where
     #[doc = "Create new group."]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.post(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<PostParams, (), T::Error> for &GroupsClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Post;
+    fn exec(&self, params: PostParams) -> Result<(), T::Error> {
+        self.post(params)
     }
 }
 impl GetOutputItems {

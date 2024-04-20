@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a ExecuteClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> ExecuteClient<T>
 where
     T: crate::client::Client,
@@ -20,8 +29,18 @@ where
     #[doc = "Execute multiple commands in order, root only."]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<Vec<PostOutputItems>, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.post(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<PostParams, Vec<PostOutputItems>, T::Error>
+    for &ExecuteClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Post;
+    fn exec(&self, params: PostParams) -> Result<Vec<PostOutputItems>, T::Error> {
+        self.post(params)
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]

@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a WipediskClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> WipediskClient<T>
 where
     T: crate::client::Client,
@@ -20,8 +29,18 @@ where
     #[doc = "Wipe a disk or partition."]
     #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.put(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<PutParams, String, T::Error>
+    for &WipediskClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Put;
+    fn exec(&self, params: PutParams) -> Result<String, T::Error> {
+        self.put(params)
     }
 }
 impl PutParams {

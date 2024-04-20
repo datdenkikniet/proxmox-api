@@ -18,6 +18,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a SdnClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> SdnClient<T>
 where
     T: crate::client::Client,
@@ -25,8 +34,18 @@ where
     #[doc = "Directory index."]
     #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), Vec<GetOutputItems>, T::Error>
+    for &SdnClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: ()) -> Result<Vec<GetOutputItems>, T::Error> {
+        self.get()
     }
 }
 impl<T> SdnClient<T>
@@ -36,8 +55,17 @@ where
     #[doc = "Apply sdn controller changes && reload."]
     #[doc = ""]
     pub fn put(&self) -> Result<String, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.put(&path, &())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), String, T::Error> for &SdnClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Put;
+    fn exec(&self, params: ()) -> Result<String, T::Error> {
+        self.put()
     }
 }
 impl GetOutputItems {

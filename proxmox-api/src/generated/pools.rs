@@ -14,6 +14,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a PoolsClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> PoolsClient<T>
 where
     T: crate::client::Client,
@@ -21,8 +30,17 @@ where
     #[doc = "Delete pool."]
     #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.delete(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<DeleteParams, (), T::Error> for &PoolsClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Delete;
+    fn exec(&self, params: DeleteParams) -> Result<(), T::Error> {
+        self.delete(params)
     }
 }
 impl<T> PoolsClient<T>
@@ -32,8 +50,18 @@ where
     #[doc = "List pools or get pool configuration."]
     #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<GetParams, Vec<GetOutputItems>, T::Error>
+    for &PoolsClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
+        self.get(params)
     }
 }
 impl<T> PoolsClient<T>
@@ -43,8 +71,17 @@ where
     #[doc = "Create new pool."]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.post(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<PostParams, (), T::Error> for &PoolsClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Post;
+    fn exec(&self, params: PostParams) -> Result<(), T::Error> {
+        self.post(params)
     }
 }
 impl<T> PoolsClient<T>
@@ -54,8 +91,17 @@ where
     #[doc = "Update pool."]
     #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.put(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<PutParams, (), T::Error> for &PoolsClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Put;
+    fn exec(&self, params: PutParams) -> Result<(), T::Error> {
+        self.put(params)
     }
 }
 impl DeleteParams {

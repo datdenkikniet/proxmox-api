@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a DownloadClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> DownloadClient<T>
 where
     T: crate::client::Client,
@@ -20,8 +29,17 @@ where
     #[doc = "Extract a file or directory (as zip archive) from a PBS backup."]
     #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<(), T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<GetParams, (), T::Error> for &DownloadClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: GetParams) -> Result<(), T::Error> {
+        self.get(params)
     }
 }
 impl GetParams {

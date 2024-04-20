@@ -14,6 +14,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a CloudinitClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> CloudinitClient<T>
 where
     T: crate::client::Client,
@@ -21,8 +30,18 @@ where
     #[doc = "Get the cloudinit configuration with both current and pending values."]
     #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), Vec<GetOutputItems>, T::Error>
+    for &CloudinitClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: ()) -> Result<Vec<GetOutputItems>, T::Error> {
+        self.get()
     }
 }
 impl<T> CloudinitClient<T>
@@ -32,8 +51,17 @@ where
     #[doc = "Regenerate and change cloudinit config drive."]
     #[doc = ""]
     pub fn put(&self) -> Result<(), T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.put(&path, &())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), (), T::Error> for &CloudinitClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Put;
+    fn exec(&self, params: ()) -> Result<(), T::Error> {
+        self.put()
     }
 }
 impl GetOutputItems {

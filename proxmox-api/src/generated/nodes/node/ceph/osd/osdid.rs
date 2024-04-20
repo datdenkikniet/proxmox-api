@@ -18,6 +18,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a OsdidClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> OsdidClient<T>
 where
     T: crate::client::Client,
@@ -25,8 +34,18 @@ where
     #[doc = "Destroy OSD"]
     #[doc = ""]
     pub fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.delete(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<DeleteParams, String, T::Error>
+    for &OsdidClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Delete;
+    fn exec(&self, params: DeleteParams) -> Result<String, T::Error> {
+        self.delete(params)
     }
 }
 impl<T> OsdidClient<T>
@@ -36,8 +55,18 @@ where
     #[doc = "OSD index."]
     #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), Vec<GetOutputItems>, T::Error>
+    for &OsdidClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: ()) -> Result<Vec<GetOutputItems>, T::Error> {
+        self.get()
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]

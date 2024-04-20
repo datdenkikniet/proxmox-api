@@ -15,6 +15,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a FileRestoreClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> FileRestoreClient<T>
 where
     T: crate::client::Client,

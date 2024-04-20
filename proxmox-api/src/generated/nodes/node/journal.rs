@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a JournalClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> JournalClient<T>
 where
     T: crate::client::Client,
@@ -20,8 +29,18 @@ where
     #[doc = "Read Journal"]
     #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<Vec<String>, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         self.client.get(&path, &params)
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<GetParams, Vec<String>, T::Error>
+    for &JournalClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: GetParams) -> Result<Vec<String>, T::Error> {
+        self.get(params)
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]

@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a ApiversionClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> ApiversionClient<T>
 where
     T: crate::client::Client,
@@ -20,10 +29,19 @@ where
     #[doc = "Return the version of the cluster join API available on this node."]
     #[doc = ""]
     pub fn get(&self) -> Result<u64, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         Ok(self
             .client
             .get::<_, crate::types::Integer>(&path, &())?
             .get())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), u64, T::Error> for &ApiversionClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Get;
+    fn exec(&self, params: ()) -> Result<u64, T::Error> {
+        self.get()
     }
 }

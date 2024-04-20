@@ -13,6 +13,15 @@ where
         }
     }
 }
+impl<'a, T> crate::ProxmoxClient for &'a UnlockTfaClient<T>
+where
+    T: crate::client::Client,
+{
+    type Path = &'a str;
+    fn path(self) -> Self::Path {
+        &self.path
+    }
+}
 impl<T> UnlockTfaClient<T>
 where
     T: crate::client::Client,
@@ -20,7 +29,16 @@ where
     #[doc = "Unlock a user's TFA authentication."]
     #[doc = ""]
     pub fn put(&self) -> Result<bool, T::Error> {
-        let path = self.path.to_string();
+        let path = crate::ProxmoxClient::path(self).as_ref();
         Ok(self.client.put::<_, crate::types::Bool>(&path, &())?.get())
+    }
+}
+impl<T> crate::proxmox_client::ProxmoxClientAction<(), bool, T::Error> for &UnlockTfaClient<T>
+where
+    T: crate::client::Client,
+{
+    const METHOD: crate::client::Method = crate::client::Method::Put;
+    fn exec(&self, params: ()) -> Result<bool, T::Error> {
+        self.put()
     }
 }
