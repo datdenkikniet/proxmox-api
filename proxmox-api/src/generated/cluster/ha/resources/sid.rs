@@ -189,7 +189,7 @@ pub struct PutParams {
     #[doc = ""]
     #[doc = "on node failures."]
     #[doc = ""]
-    pub state: Option<State>,
+    pub state: Option<State2>,
     #[serde(
         flatten,
         default,
@@ -223,6 +223,81 @@ impl TryFrom<&str> for State {
             "stopped" => Ok(Self::Stopped),
             v => Err(format!("Unknown variant {v}")),
         }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[doc = "Requested resource state."]
+#[doc = ""]
+#[doc = "Requested resource state. The CRM reads this state and acts accordingly."]
+#[doc = ""]
+#[doc = "Please note that `enabled` is just an alias for `started`."]
+#[doc = ""]
+#[doc = "`started`;;"]
+#[doc = ""]
+#[doc = "The CRM tries to start the resource. Service state is"]
+#[doc = ""]
+#[doc = "set to `started` after successful start. On node failures, or when start"]
+#[doc = ""]
+#[doc = "fails, it tries to recover the resource.  If everything fails, service"]
+#[doc = ""]
+#[doc = "state it set to `error`."]
+#[doc = ""]
+#[doc = "`stopped`;;"]
+#[doc = ""]
+#[doc = "The CRM tries to keep the resource in `stopped` state, but it"]
+#[doc = ""]
+#[doc = "still tries to relocate the resources on node failures."]
+#[doc = ""]
+#[doc = "`disabled`;;"]
+#[doc = ""]
+#[doc = "The CRM tries to put the resource in `stopped` state, but does not try"]
+#[doc = ""]
+#[doc = "to relocate the resources on node failures. The main purpose of this"]
+#[doc = ""]
+#[doc = "state is error recovery, because it is the only way to move a resource out"]
+#[doc = ""]
+#[doc = "of the `error` state."]
+#[doc = ""]
+#[doc = "`ignored`;;"]
+#[doc = ""]
+#[doc = "The resource gets removed from the manager status and so the CRM and the LRM do"]
+#[doc = ""]
+#[doc = "not touch the resource anymore. All {pve} API calls affecting this resource"]
+#[doc = ""]
+#[doc = "will be executed, directly bypassing the HA stack. CRM commands will be thrown"]
+#[doc = ""]
+#[doc = "away while there source is in this state. The resource will not get relocated"]
+#[doc = ""]
+#[doc = "on node failures."]
+#[doc = ""]
+pub enum State2 {
+    #[serde(rename = "disabled")]
+    Disabled,
+    #[serde(rename = "enabled")]
+    Enabled,
+    #[serde(rename = "ignored")]
+    Ignored,
+    #[serde(rename = "started")]
+    Started,
+    #[serde(rename = "stopped")]
+    Stopped,
+}
+impl TryFrom<&str> for State2 {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "disabled" => Ok(Self::Disabled),
+            "enabled" => Ok(Self::Enabled),
+            "ignored" => Ok(Self::Ignored),
+            "started" => Ok(Self::Started),
+            "stopped" => Ok(Self::Stopped),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
+impl Default for State2 {
+    fn default() -> Self {
+        Self::Started
     }
 }
 impl<T> SidClient<T>

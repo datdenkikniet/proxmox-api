@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 clap = { version = "4.5.4", features = ["derive", "std", "help", "color", "usage"], default-features = false }
 lzma-rs = "0.3.0"
+parking_lot = "0.12.1"
 proc-macro2 = "1.0.79"
 quote = "1.0.35"
 serde = { version = "1.0.197", features = ["derive"] }

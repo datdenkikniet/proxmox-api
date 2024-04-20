@@ -1,3 +1,6 @@
+use std::{ops::Deref, sync::Arc};
+
+use parking_lot::Mutex;
 use proc_macro2::TokenStream;
 use quote::ToTokens;
 use syn::{spanned::Spanned, Ident};
@@ -19,11 +22,18 @@ impl AdditionalProperties {
     }
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug)]
 pub struct StructDef {
-    name: String,
+    name: Arc<Mutex<String>>,
     fields: Vec<FieldDef>,
     additional_props: AdditionalProperties,
+}
+
+impl PartialEq for StructDef {
+    fn eq(&self, other: &Self) -> bool {
+        self.name.lock().deref() == other.name.lock().deref()
+            && self.additional_props == other.additional_props
+    }
 }
 
 impl StructDef {
@@ -33,18 +43,18 @@ impl StructDef {
         additional_props: AdditionalProperties,
     ) -> Self {
         Self {
-            name,
+            name: Arc::new(Mutex::new(name)),
             fields,
             additional_props,
         }
     }
 
-    pub fn name(&self) -> &str {
-        &self.name
-    }
-
     pub fn fields(&self) -> &[FieldDef] {
         &self.fields
+    }
+
+    pub fn name(&self) -> String {
+        self.name.lock().to_string()
     }
 }
 
@@ -56,7 +66,7 @@ impl ToTokens for StructDef {
             additional_props,
         } = self;
 
-        let name = Ident::new(self.name(), quote!().span());
+        let name = Ident::new(&self.name(), quote!().span());
 
         let additional_props_ty = match additional_props {
             AdditionalProperties::None => None,
@@ -66,7 +76,7 @@ impl ToTokens for StructDef {
             AdditionalProperties::Type(ty) => {
                 ty.to_tokens(tokens);
 
-                let ty = ty.as_field_ty(false);
+                let (_, ty) = ty.as_field_ty(false);
                 Some(quote! (::std::collections::HashMap<String, #ty>))
             }
         };
@@ -127,7 +137,7 @@ impl ToTokens for StructDef {
         let (additional_props, test) = if let Some(additional_props) = additional_props_ty {
             let multis: Vec<_> = fields
                 .iter()
-                .filter_map(|f| f.multi())
+                .filter_map(|f| f.numbered_items())
                 .map(|m| m.name())
                 .collect();
 

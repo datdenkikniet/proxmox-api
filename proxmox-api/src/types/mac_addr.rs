@@ -80,7 +80,7 @@ impl<const B: bool> TryFrom<&str> for MacAddr<B> {
                 .split(':')
                 .try_fold((0usize, [0u8; 6]), |(mut idx, mut accum), input| {
                     if idx == 6 {
-                        Err(format!("Too many segments in MAC address"))
+                        Err("Too many segments in MAC address".to_string())
                     } else if let Ok(value) = u8::from_str_radix(input, 16) {
                         accum[idx] = value;
                         idx += 1;
@@ -97,7 +97,9 @@ impl<const B: bool> TryFrom<&str> for MacAddr<B> {
                 "Not enough segments in MAC address. Expected 6, got {count}"
             ))
         } else if !B && addr.ig_bit_int() {
-            Err(format!("Mac address "))
+            Err(format!(
+                "MAC address type disallows IG bit, but it is set. Address: {addr}"
+            ))
         } else {
             Ok(addr)
         }

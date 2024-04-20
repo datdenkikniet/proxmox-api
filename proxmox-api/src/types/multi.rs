@@ -24,7 +24,7 @@ pub trait NumberedItems: Default {
         let (first_part, second_part) = name.split_once(Self::PREFIX)?;
 
         if first_part.is_empty() {
-            let num = u32::from_str_radix(second_part, 10).ok()?;
+            let num = second_part.parse::<u32>().ok()?;
             Some(num)
         } else {
             None

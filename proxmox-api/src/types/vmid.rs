@@ -11,7 +11,7 @@ pub struct VmId(
 
 impl VmId {
     pub fn new(value: u64) -> Option<Self> {
-        if value >= 100 && value <= 999_999_999 {
+        if (100..=999_999_999).contains(&value) {
             Some(Self(value))
         } else {
             None

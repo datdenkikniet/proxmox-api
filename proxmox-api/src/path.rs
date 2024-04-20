@@ -34,7 +34,7 @@ impl PathElement {
 
     pub fn as_string_without_brackets(&self) -> &str {
         match self {
-            PathElement::Literal(v) | PathElement::Placeholder(v) => &v,
+            PathElement::Literal(v) | PathElement::Placeholder(v) => v,
         }
     }
 }
@@ -62,11 +62,7 @@ impl TryFrom<&str> for Path {
             return Err(());
         }
 
-        let elements = value
-            .split('/')
-            .skip(1)
-            .map(|v| PathElement::from(v))
-            .collect();
+        let elements = value.split('/').skip(1).map(PathElement::from).collect();
 
         Ok(Self { elements })
     }

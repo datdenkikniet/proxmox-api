@@ -40,12 +40,13 @@ impl Parameters<'_> {
 
                 let doc = ty.doc();
                 let optional = ty.optional.get();
-                let (field_def, num_items_def) =
-                    FieldDef::new(name.to_string(), typedef, optional, doc);
+                let field_def = FieldDef::new(name.to_string(), typedef, optional, doc);
 
-                final_output
-                    .module_defs
-                    .extend(num_items_def.map(|v| TypeDef::NumberedItems(Box::new(v))));
+                if let Some(items) = field_def.numbered_items() {
+                    final_output
+                        .module_defs
+                        .push(TypeDef::NumberedItems(Box::new(items.clone())));
+                }
 
                 Some(field_def)
             });

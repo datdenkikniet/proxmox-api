@@ -1,5 +1,3 @@
-use std::collections::BTreeMap;
-
 use proc_macro2::{Literal, Punct, TokenStream};
 use quote::{quote, ToTokens};
 use syn::{spanned::Spanned, Ident};
@@ -20,6 +18,9 @@ mod file;
 mod struct_def;
 pub(crate) use struct_def::{AdditionalProperties, StructDef};
 
+mod mod_defs;
+pub use mod_defs::ModuleDefs;
+
 mod mod_def;
 pub use self::mod_def::ClientModDef;
 
@@ -29,15 +30,15 @@ pub(crate) use num_items_def::NumItemsDef;
 mod type_def;
 pub(crate) use type_def::{PrimitiveTypeDef, TypeDef};
 
-pub(self) fn proxmox_api(path: TokenStream) -> TokenStream {
+pub fn proxmox_api(path: TokenStream) -> TokenStream {
     quote! { crate::#path }
 }
 
-pub(self) fn proxmox_api_str(path: String) -> Literal {
+pub fn proxmox_api_str(path: String) -> Literal {
     Literal::string(&format!("crate::{path}"))
 }
 
-pub fn clean_doc<'a, T: AsRef<str>>(input: &'a T) -> impl Iterator<Item = String> + 'a {
+pub fn clean_doc<T: AsRef<str>>(input: &T) -> impl Iterator<Item = String> + '_ {
     input
         .as_ref()
         .split('\n')
@@ -59,7 +60,7 @@ pub struct Generator {
 impl Generator {
     pub fn new(collection: &Collection) -> Self {
         Self {
-            mods: Self::generate(&collection),
+            mods: Self::generate(collection),
         }
     }
 
@@ -90,19 +91,19 @@ impl Generator {
         global_defs: &mut Vec<TypeDef>,
     ) -> ClientModDef {
         let segment_no_braces = segment.as_string_without_braces();
-        let segment_name = crate::name_to_underscore_name(&segment_no_braces);
+        let segment_name = crate::name_to_underscore_name(segment_no_braces);
         let mut client_name = crate::name_to_ident(&segment_name);
         client_name.push_str("Client");
 
         let client_name = Ident::new(&client_name, quote!().span());
 
-        let mut module_defs = Vec::new();
+        let mut module_defs = ModuleDefs::default();
 
         let methods: Vec<_> = node
             .value
             .info
             .values()
-            .filter_map(|info| {
+            .map(|info| {
                 let method: String = info
                     .method
                     .chars()
@@ -113,8 +114,7 @@ impl Generator {
                 let parameters = info
                     .parameters
                     .as_ref()
-                    .map(|v| v.type_def(&method, &node.value.path))
-                    .flatten();
+                    .and_then(|v| v.type_def(&method, &node.value.path));
 
                 let parameters = if let Some(output) = parameters {
                     module_defs.extend(output.def.clone());
@@ -130,7 +130,7 @@ impl Generator {
 
                 let (signature, defer_signature) = if let Some(TypeDef::Struct(strt)) = &parameters
                 {
-                    let name = Ident::new(strt.name(), quote! {}.span());
+                    let name = Ident::new(&strt.name(), quote! {}.span());
                     (quote!(&self, params: #name), quote!(&path, &params))
                 } else {
                     (quote!(&self), quote!(&path, &()))
@@ -145,29 +145,16 @@ impl Generator {
                         module_defs.extend(output.module_defs);
                         global_defs.extend(output.global_defs);
 
-                        let name = def.as_field_ty(ret.optional.get());
+                        let (_, name) = def.as_field_ty(ret.optional.get());
 
-                        let call = match def.primitive() {
-                            Some(PrimitiveTypeDef::Integer) => {
-                                let int = proxmox_api(quote!(types::Integer));
-                                quote!(Ok(self.client.#fn_name::<_, #int>(#defer_signature)?.get()))
-                            }
-                            Some(PrimitiveTypeDef::Number) => {
-                                let num_ty = proxmox_api(quote!(types::Number));
-                                quote!(Ok(self.client.#fn_name::<_, #num_ty>(#defer_signature)?.get()))
-                            }
-                            Some(PrimitiveTypeDef::Boolean) => {
-                                let bool_ty = proxmox_api(quote!(types::Bool));
-                                quote!(Ok(self.client.#fn_name::<_, #bool_ty>(#defer_signature)?.get()))
-                            }
-                            Some(PrimitiveTypeDef::String) | None => {
-                                quote!(self.client.#fn_name(#defer_signature))
-                            }
-                        };
+                        let call = Self::to_call(def.primitive(), &fn_name, defer_signature);
 
                         (quote! { -> Result<#name, T::Error> }, call)
                     } else {
-                        (quote!( -> Result<(), T::Error> ), quote!(self.client.#fn_name(#defer_signature)))
+                        (
+                            quote!( -> Result<(), T::Error> ),
+                            quote!(self.client.#fn_name(#defer_signature)),
+                        )
                     }
                 } else {
                     (quote!(), quote!(self.client.#fn_name(#defer_signature)))
@@ -197,7 +184,7 @@ impl Generator {
                     }
                 };
 
-                Some(block)
+                block
             })
             .collect();
 
@@ -260,8 +247,6 @@ impl Generator {
 
         let client = proxmox_api(quote!(client::Client));
 
-        let (structs, enums, items) = Self::deduplicate(module_defs.into_iter());
-
         let definition = quote! {
             pub struct #client_name<T> {
                 client: T,
@@ -274,11 +259,7 @@ impl Generator {
 
             #(#methods)*
 
-            #(#structs)*
-
-            #(#enums)*
-
-            #(#items)*
+            #module_defs
 
             #(#child_constructors)*
         };
@@ -291,73 +272,30 @@ impl Generator {
         }
     }
 
-    fn deduplicate(
-        types: impl Iterator<Item = TypeDef>,
-    ) -> (
-        impl Iterator<Item = StructDef>,
-        impl Iterator<Item = EnumDef>,
-        impl Iterator<Item = NumItemsDef>,
-    ) {
-        let mut enums = BTreeMap::<_, EnumDef>::new();
-        let mut structs = BTreeMap::new();
-        let mut num_items = BTreeMap::<_, NumItemsDef>::new();
-
-        for def in types {
-            match def {
-                TypeDef::Struct(strt) => {
-                    if let Some(prev_strt) = structs.get(strt.name()) {
-                        if prev_strt != &strt {
-                            panic!("Encountered structs on the same level with exactly the same name that are not equal!\n{strt:#?}\n{prev_strt:#?}");
-                        }
-                    } else {
-                        structs.insert(strt.name().to_string(), strt);
-                    }
-                }
-                TypeDef::Enum(en) => {
-                    if let Some(previous_def) = enums.get_mut(en.name()) {
-                        if previous_def.values() != en.values() {
-                            eprintln!(
-                                "The previous definition of enum '{}' has a different set of enum variants.",
-                                en.name()
-                            );
-
-                            let mut prev: Vec<_> = previous_def.values().iter().collect();
-                            prev.sort();
-
-                            let mut now: Vec<_> = en.values().iter().collect();
-                            now.sort();
-
-                            eprintln!("S1: {prev:?}");
-                            eprintln!("S2: {now:?}");
-
-                            eprintln!("Updating S1 with missing values from S2...");
-
-                            en.values().iter().for_each(|v| {
-                                previous_def.values_mut().insert(v.clone());
-                            });
-                        }
-                    } else {
-                        enums.insert(en.name().to_string(), en);
-                    }
-                }
-                TypeDef::NumberedItems(new_items) => {
-                    if let Some(item) = num_items.get(&new_items.name()) {
-                        if item != new_items.as_ref() {
-                            panic!("Found non-equal duplicate items definition\nNew:{new_items:?}\nExisting:{item:?}")
-                        }
-                    } else {
-                        num_items.insert(new_items.name(), *new_items);
-                    }
-                }
-                _ => {}
+    // This is a separate method because cargo fmt breaks if the tokens in this
+    // function are too far to the right, for some reason...
+    fn to_call(
+        def: Option<PrimitiveTypeDef>,
+        fn_name: &Ident,
+        defer_signature: TokenStream,
+    ) -> TokenStream {
+        match def {
+            Some(PrimitiveTypeDef::Integer) => {
+                let int = proxmox_api(quote!(types::Integer));
+                quote!(Ok(self.client.#fn_name::<_, #int>(#defer_signature)?.get()))
+            }
+            Some(PrimitiveTypeDef::Number) => {
+                let num_ty = proxmox_api(quote!(types::Number));
+                quote!(Ok(self.client.#fn_name::<_, #num_ty>(#defer_signature)?.get()))
+            }
+            Some(PrimitiveTypeDef::Boolean) => {
+                let bool_ty = proxmox_api(quote!(types::Bool));
+                quote!(Ok(self.client.#fn_name::<_, #bool_ty>(#defer_signature)?.get()))
+            }
+            Some(PrimitiveTypeDef::String) | None => {
+                quote!(self.client.#fn_name(#defer_signature))
             }
         }
-
-        (
-            structs.into_values(),
-            enums.into_values(),
-            num_items.into_values(),
-        )
     }
 
     fn make_placeholder_constructor(has_parent: bool, placeholder: &str) -> TokenStream {

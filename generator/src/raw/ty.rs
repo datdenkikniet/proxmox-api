@@ -58,7 +58,7 @@ impl Type<'_> {
         self.description
             .as_ref()
             .into_iter()
-            .chain(self.verbose_description.as_ref().into_iter())
+            .chain(self.verbose_description.as_ref())
             .flat_map(clean_doc)
     }
 
@@ -123,30 +123,6 @@ impl Type<'_> {
                 } => {
                     let mut final_output = Output::new();
 
-                    if let Some(value) =
-                        properties.as_ref().map(|prop| prop.get("net[n]")).flatten()
-                    {
-                        let props =
-                            if let Format::Properties(props) = value.format.as_ref().unwrap() {
-                                props
-                            } else {
-                                panic!()
-                            };
-
-                        let kind = TypeKind::Object {
-                            properties: Some(props.clone()),
-                            additional_properties: IntOrTy::Int(0),
-                        };
-                        let mut ty = Type::default();
-                        ty.ty = Some(kind);
-
-                        let output = ty.type_def("Net", "")?;
-
-                        final_output.global_defs.extend(output.def);
-                        final_output.global_defs.extend(output.module_defs);
-                        final_output.global_defs.extend(output.global_defs);
-                    }
-
                     let field_name = crate::name_to_ident(field_name);
                     let suffix = crate::name_to_ident(struct_suffix);
                     let struct_name = format!("{field_name}{suffix}");
@@ -161,7 +137,7 @@ impl Type<'_> {
                         let fields: Vec<_> = props
                             .iter()
                             .filter_map(|(original_name, ty)| {
-                                let field_name = crate::name_to_ident(&original_name);
+                                let field_name = crate::name_to_ident(original_name);
                                 let output = ty.type_def(
                                     &field_name,
                                     &format!("{struct_suffix}{field_name}"),
@@ -172,11 +148,14 @@ impl Type<'_> {
                                 let doc = ty.doc();
                                 let optional = ty.optional.get();
 
-                                let (field, num_items) =
+                                let field =
                                     FieldDef::new(original_name.to_string(), inner, optional, doc);
 
-                                all_external
-                                    .extend(num_items.map(|v| TypeDef::NumberedItems(Box::new(v))));
+                                if let Some(numbered_items) = field.numbered_items() {
+                                    final_output.module_defs.push(TypeDef::NumberedItems(
+                                        Box::new(numbered_items.clone()),
+                                    ));
+                                }
 
                                 Some(field)
                             })

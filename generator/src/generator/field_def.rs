@@ -19,16 +19,10 @@ pub struct FieldDef {
     optional: bool,
     doc: Vec<String>,
     ty: Box<TypeDef>,
-    numbered_items: Option<NumItemsDef>,
 }
 
 impl FieldDef {
-    pub fn new<S, D>(
-        name: String,
-        ty: TypeDef,
-        optional: bool,
-        doc: D,
-    ) -> (Self, Option<NumItemsDef>)
+    pub fn new<S, D>(name: String, ty: TypeDef, optional: bool, doc: D) -> Self
     where
         D: Iterator<Item = S>,
         S: Into<String>,
@@ -46,25 +40,20 @@ impl FieldDef {
             None
         };
 
-        // TODO: type-ify this and hoist that shit at an earlier stage
-        let num_items_def = if multi {
-            let def = NumItemsDef::new(&fixed_name, ty.clone());
-            Some(def)
+        let ty = if multi {
+            let def = NumItemsDef::new(&fixed_name, ty);
+            TypeDef::NumberedItems(Box::new(def))
         } else {
-            None
+            ty
         };
 
-        (
-            Self {
-                name: fixed_name,
-                rename,
-                ty: Box::new(ty),
-                optional,
-                doc: doc.map(Into::into).collect(),
-                numbered_items: num_items_def.clone(),
-            },
-            num_items_def,
-        )
+        Self {
+            name: fixed_name,
+            rename,
+            ty: Box::new(ty),
+            optional,
+            doc: doc.map(Into::into).collect(),
+        }
     }
 
     pub fn optional(&self) -> bool {
@@ -75,16 +64,17 @@ impl FieldDef {
             )
     }
 
-    pub fn multi(&self) -> Option<&NumItemsDef> {
-        self.numbered_items.as_ref()
+    pub fn numbered_items(&self) -> Option<&NumItemsDef> {
+        self.ty.numbered_items()
     }
 
     pub fn ty(&self) -> TokenStream {
-        self.ty.as_field_ty(self.optional)
+        let (_, ty) = self.ty.as_field_ty(self.optional);
+        ty
     }
 
     pub fn name(&self) -> String {
-        if self.numbered_items.is_some() {
+        if self.numbered_items().is_some() {
             format!("{}s", self.name)
         } else {
             self.name.clone()
@@ -100,14 +90,13 @@ impl ToTokens for FieldDef {
             ty,
             optional,
             doc,
-            numbered_items,
         } = self;
 
         let name = self.name();
         let name = Ident::new(&name, quote!().span());
 
         let rename = if let Some(rename) = rename {
-            let renamed = Literal::string(&rename);
+            let renamed = Literal::string(rename);
             Some(quote!(#[serde(rename = #renamed)]))
         } else {
             None
@@ -125,9 +114,9 @@ impl ToTokens for FieldDef {
             Some(quote! { #[serde(serialize_with = #ser_fn, deserialize_with = #des_fn )] })
         };
 
-        let flatten = numbered_items.as_ref().map(|_| quote!(#[serde(flatten)]));
+        let flatten = self.numbered_items().map(|_| quote!(#[serde(flatten)]));
 
-        let serialize = if let Some(num_items) = numbered_items.as_ref() {
+        let serialize = if let Some(num_items) = self.numbered_items() {
             let numbered_name = num_items.name();
             ser_des(&format!("multi::<{}, _>", numbered_name), false)
         } else if let Some(primitive) = ty.primitive() {
@@ -143,34 +132,8 @@ impl ToTokens for FieldDef {
             None
         };
 
-        let (optional, skip_default) = if numbered_items.is_some() {
-            (
-                false,
-                Some(
-                    quote!(#[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]),
-                ),
-            )
-        } else if ty.is_array() {
-            (
-                false,
-                Some(quote!(#[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)])),
-            )
-        } else if *optional {
-            (
-                true,
-                Some(quote!(#[serde(skip_serializing_if = "Option::is_none", default)])),
-            )
-        } else {
-            (false, None)
-        };
-
-        let ty = ty.as_field_ty(optional); // optional = !multi && !ty.is_array() && !optional
-
-        let ty = if numbered_items.as_ref().is_some() {
-            quote!(::std::collections::HashMap<u32, #ty>)
-        } else {
-            ty
-        };
+        let (empty_check, ty) = ty.as_field_ty(self.optional);
+        let empty_check = empty_check.map(Literal::string).into_iter();
 
         let doc = doc.iter().flat_map(super::clean_doc).map(|v| {
             let doc_literal = Literal::string(&v);
@@ -178,10 +141,11 @@ impl ToTokens for FieldDef {
                 #[doc = #doc_literal]
             }
         });
+
         tokens.extend(quote! {
             #rename
             #serialize
-            #skip_default
+            #(#[serde(skip_serializing_if = #empty_check, default)])*
             #flatten
             #(#doc)*
             pub #name: #ty,
