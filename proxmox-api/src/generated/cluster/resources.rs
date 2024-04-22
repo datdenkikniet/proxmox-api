@@ -62,10 +62,14 @@ pub struct GetOutputItems {
     #[doc = "The cgroup mode the node operates under (when type == node)."]
     #[doc = ""]
     pub cgroup_mode: Option<u64>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Allowed storage content types (when type == storage)."]
     #[doc = ""]
-    pub content: Option<String>,
+    pub content: Vec<String>,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
         deserialize_with = "crate::types::deserialize_number_optional"

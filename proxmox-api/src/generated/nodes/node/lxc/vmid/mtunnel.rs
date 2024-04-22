@@ -26,14 +26,22 @@ where
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PostParams {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of network bridges to check availability. Will be checked again for actually used bridges during migration."]
     #[doc = ""]
-    pub bridges: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub bridges: Vec<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of storages to check permission and availability. Will be checked again for all actually used storages during migration."]
     #[doc = ""]
-    pub storages: Option<String>,
+    pub storages: Vec<String>,
     #[serde(
         flatten,
         default,

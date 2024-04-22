@@ -127,14 +127,22 @@ pub struct PutParams {
     #[doc = "Remove the passed VMIDs and/or storage IDs instead of adding them."]
     #[doc = ""]
     pub delete: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of storage IDs to add or remove from this pool."]
     #[doc = ""]
-    pub storage: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub storage: Vec<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of guest VMIDs to add or remove from this pool."]
     #[doc = ""]
-    pub vms: Option<String>,
+    pub vms: Vec<crate::types::VmId>,
     #[serde(
         flatten,
         default,

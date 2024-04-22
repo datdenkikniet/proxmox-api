@@ -48,8 +48,12 @@ impl GetOutputItems {
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub privs: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    pub privs: Vec<String>,
     pub roleid: String,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -75,8 +79,12 @@ impl PostParams {
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub privs: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    pub privs: Vec<String>,
     pub roleid: String,
     #[serde(
         flatten,

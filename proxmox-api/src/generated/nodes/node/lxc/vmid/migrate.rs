@@ -67,10 +67,14 @@ pub struct PostParams {
     #[doc = ""]
     pub target: String,
     #[serde(rename = "target-storage")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Mapping from source to target storages. Providing only a single storage ID maps all source storages to that storage. Providing the special value '1' will map each source storage to itself."]
     #[doc = ""]
-    pub target_storage: Option<String>,
+    pub target_storage: Vec<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"

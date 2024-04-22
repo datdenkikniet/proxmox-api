@@ -25,7 +25,11 @@ where
     }
 }
 impl PostParams {
-    pub fn new(target_bridge: String, target_endpoint: String, target_storage: String) -> Self {
+    pub fn new(
+        target_bridge: Vec<String>,
+        target_endpoint: String,
+        target_storage: Vec<String>,
+    ) -> Self {
         Self {
             target_bridge,
             target_endpoint,
@@ -65,17 +69,27 @@ pub struct PostParams {
     #[doc = ""]
     pub online: Option<bool>,
     #[serde(rename = "target-bridge")]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Mapping from source to target bridges. Providing only a single bridge ID maps all source bridges to that bridge. Providing the special value '1' will map each source bridge to itself."]
     #[doc = ""]
-    pub target_bridge: String,
+    pub target_bridge: Vec<String>,
     #[serde(rename = "target-endpoint")]
     #[doc = "Remote target endpoint"]
     #[doc = ""]
     pub target_endpoint: String,
     #[serde(rename = "target-storage")]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Mapping from source to target storages. Providing only a single storage ID maps all source storages to that storage. Providing the special value '1' will map each source storage to itself."]
     #[doc = ""]
-    pub target_storage: String,
+    pub target_storage: Vec<String>,
     #[serde(rename = "target-vmid")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The (unique) ID of the VM."]

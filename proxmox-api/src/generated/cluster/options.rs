@@ -58,10 +58,14 @@ pub struct PutParams {
     #[doc = "Cluster resource scheduling settings."]
     #[doc = ""]
     pub crs: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "A list of settings you want to delete."]
     #[doc = ""]
-    pub delete: Option<String>,
+    pub delete: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Datacenter description. Shown in the web-interface datacenter notes panel. This is saved as comment inside the configuration file."]
     #[doc = ""]

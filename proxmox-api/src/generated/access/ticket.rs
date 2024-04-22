@@ -100,10 +100,14 @@ pub struct PostParams {
     #[doc = "Verify ticket, and check if user have access 'privs' on 'path'"]
     #[doc = ""]
     pub path: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Verify ticket, and check if user have access 'privs' on 'path'"]
     #[doc = ""]
-    pub privs: Option<String>,
+    pub privs: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "You can optionally pass the realm using this parameter. Normally the realm is simply added to the username \\\\<username\\\\>@\\\\<relam\\\\>."]
     #[doc = ""]

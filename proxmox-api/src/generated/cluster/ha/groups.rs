@@ -55,7 +55,7 @@ pub struct GetOutputItems {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
-    pub fn new(group: String, nodes: String) -> Self {
+    pub fn new(group: String, nodes: Vec<String>) -> Self {
         Self {
             group,
             nodes,
@@ -76,11 +76,16 @@ pub struct PostParams {
     #[doc = "The HA group identifier."]
     #[doc = ""]
     pub group: String,
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of cluster node names with optional priority."]
     #[doc = ""]
     #[doc = "List of cluster node members, where a priority can be given to each node. A resource bound to a group will run on the available nodes with the highest priority. If there are more nodes in the highest priority class, the services will get distributed to those nodes. The priorities have a relative meaning only."]
     #[doc = ""]
-    pub nodes: String,
+    pub nodes: Vec<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

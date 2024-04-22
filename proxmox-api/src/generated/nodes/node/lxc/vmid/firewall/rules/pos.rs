@@ -144,10 +144,14 @@ pub struct PutParams {
     #[doc = "Descriptive comment."]
     #[doc = ""]
     pub comment: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "A list of settings you want to delete."]
     #[doc = ""]
-    pub delete: Option<String>,
+    pub delete: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Restrict packet destination address. This can refer to a single IP address, an IP set ('+ipsetname') or an IP alias definition. You can also specify an address range like '20.34.101.207-201.3.9.99', or a list of IP addresses and networks (entries are separated by comma). Please do not mix IPv4 and IPv6 addresses inside such lists."]
     #[doc = ""]

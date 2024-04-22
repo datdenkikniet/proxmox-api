@@ -51,10 +51,14 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub comment: Option<String>,
     pub groupid: String,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "list of users which form this group"]
     #[doc = ""]
-    pub users: Option<String>,
+    pub users: Vec<String>,
     #[serde(
         flatten,
         default,

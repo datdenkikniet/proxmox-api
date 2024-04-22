@@ -73,7 +73,10 @@ impl ModuleDefs {
                     self.num_items.insert(name, *new_items);
                 }
             }
-            TypeDef::Array(_) | TypeDef::Primitive(_) | TypeDef::KnownType { .. } => {}
+            TypeDef::Array(_)
+            | TypeDef::Primitive(_)
+            | TypeDef::KnownType { .. }
+            | TypeDef::KnownTypeList { .. } => {}
         }
     }
 }

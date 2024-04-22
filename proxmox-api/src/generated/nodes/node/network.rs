@@ -146,10 +146,14 @@ pub struct PostParams {
     #[doc = "Selects the transmit hash policy to use for slave selection in balance-xor and 802.3ad modes."]
     #[doc = ""]
     pub bond_xmit_hash_policy: Option<BondXmitHashPolicy>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Specify the interfaces you want to add to your bridge."]
     #[doc = ""]
-    pub bridge_ports: Option<String>,
+    pub bridge_ports: Vec<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -205,10 +209,14 @@ pub struct PostParams {
     #[doc = "Network mask."]
     #[doc = ""]
     pub netmask6: Option<u64>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Specify the interfaces used by the bonding device."]
     #[doc = ""]
-    pub ovs_bonds: Option<String>,
+    pub ovs_bonds: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The OVS bridge associated with a OVS port. This is required when you create an OVS port."]
     #[doc = ""]
@@ -217,10 +225,14 @@ pub struct PostParams {
     #[doc = "OVS interface options."]
     #[doc = ""]
     pub ovs_options: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Specify the interfaces you want to add to your bridge."]
     #[doc = ""]
-    pub ovs_ports: Option<String>,
+    pub ovs_ports: Vec<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -229,10 +241,14 @@ pub struct PostParams {
     #[doc = "Specify a VLan tag (used by OVSPort, OVSIntPort, OVSBond)"]
     #[doc = ""]
     pub ovs_tag: Option<u64>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Specify the interfaces used by the bonding device."]
     #[doc = ""]
-    pub slaves: Option<String>,
+    pub slaves: Vec<String>,
     #[serde(rename = "type")]
     #[doc = "Network interface type"]
     #[doc = ""]

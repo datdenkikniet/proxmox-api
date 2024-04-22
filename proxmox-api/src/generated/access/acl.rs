@@ -65,7 +65,7 @@ pub struct GetOutputItems {
     pub ugid: String,
 }
 impl PutParams {
-    pub fn new(path: String, roles: String) -> Self {
+    pub fn new(path: String, roles: Vec<String>) -> Self {
         Self {
             path,
             roles,
@@ -88,10 +88,14 @@ pub struct PutParams {
     #[doc = "Remove permissions (instead of adding it)."]
     #[doc = ""]
     pub delete: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of groups."]
     #[doc = ""]
-    pub groups: Option<String>,
+    pub groups: Vec<String>,
     #[doc = "Access control path"]
     #[doc = ""]
     pub path: String,
@@ -103,17 +107,30 @@ pub struct PutParams {
     #[doc = "Allow to propagate (inherit) permissions."]
     #[doc = ""]
     pub propagate: Option<bool>,
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of roles."]
     #[doc = ""]
-    pub roles: String,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub roles: Vec<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of API tokens."]
     #[doc = ""]
-    pub tokens: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub tokens: Vec<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of users."]
     #[doc = ""]
-    pub users: Option<String>,
+    pub users: Vec<String>,
     #[serde(
         flatten,
         default,

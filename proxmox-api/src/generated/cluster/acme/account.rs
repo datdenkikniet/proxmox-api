@@ -46,7 +46,7 @@ pub struct GetOutputItems {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
-    pub fn new(contact: String) -> Self {
+    pub fn new(contact: Vec<String>) -> Self {
         Self {
             contact,
             directory: Default::default(),
@@ -60,9 +60,14 @@ impl PostParams {
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Contact email addresses."]
     #[doc = ""]
-    pub contact: String,
+    pub contact: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "URL of ACME CA directory endpoint."]
     #[doc = ""]

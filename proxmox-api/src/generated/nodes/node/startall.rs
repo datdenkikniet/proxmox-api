@@ -34,10 +34,14 @@ pub struct PostParams {
     #[doc = "Issue start command even if virtual guest have 'onboot' not set or set to off."]
     #[doc = ""]
     pub force: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Only consider guests from this comma separated list of VMIDs."]
     #[doc = ""]
-    pub vms: Option<String>,
+    pub vms: Vec<crate::types::VmId>,
     #[serde(
         flatten,
         default,

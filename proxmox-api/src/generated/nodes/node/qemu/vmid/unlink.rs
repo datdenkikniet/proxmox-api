@@ -25,7 +25,7 @@ where
     }
 }
 impl PutParams {
-    pub fn new(idlist: String) -> Self {
+    pub fn new(idlist: Vec<String>) -> Self {
         Self {
             idlist,
             force: Default::default(),
@@ -43,9 +43,14 @@ pub struct PutParams {
     #[doc = "Force physical removal. Without this, we simple remove the disk from the config file and create an additional configuration entry called 'unused\\\\[n\\\\]', which contains the volume ID. Unlink of unused\\\\[n\\\\] always cause physical removal."]
     #[doc = ""]
     pub force: Option<bool>,
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "A list of disk IDs you want to delete."]
     #[doc = ""]
-    pub idlist: String,
+    pub idlist: Vec<String>,
     #[serde(
         flatten,
         default,

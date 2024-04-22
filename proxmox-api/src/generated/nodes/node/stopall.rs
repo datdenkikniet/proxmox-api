@@ -43,10 +43,14 @@ pub struct PostParams {
     #[doc = "Timeout for each guest shutdown task. Depending on `force-stop`, the shutdown gets then simply aborted or a hard-stop is forced."]
     #[doc = ""]
     pub timeout: Option<u64>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Only consider Guests with these IDs."]
     #[doc = ""]
-    pub vms: Option<String>,
+    pub vms: Vec<crate::types::VmId>,
     #[serde(
         flatten,
         default,

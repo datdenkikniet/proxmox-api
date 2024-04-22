@@ -4,7 +4,7 @@ use proc_macro2::TokenStream;
 use quote::{quote, ToTokens};
 use syn::{spanned::Spanned, Ident};
 
-use crate::raw::KnownFormat;
+use crate::raw::KnownFormatType;
 
 use super::{
     field_def::FieldDef, proxmox_api, struct_def::AdditionalProperties, EnumDef, NumItemsDef,
@@ -36,7 +36,11 @@ impl ToTokens for PrimitiveTypeDef {
 pub enum TypeDef {
     Primitive(PrimitiveTypeDef),
     KnownType {
-        format: KnownFormat,
+        format: KnownFormatType,
+        fallback: PrimitiveTypeDef,
+    },
+    KnownTypeList {
+        format: KnownFormatType,
         fallback: PrimitiveTypeDef,
     },
     Array(Box<TypeDef>),
@@ -55,6 +59,14 @@ impl TypeDef {
 
     pub fn is_array(&self) -> bool {
         matches!(self, TypeDef::Array(..))
+    }
+
+    pub fn known_ty_list(&self) -> Option<TokenStream> {
+        if let Self::KnownTypeList { format, fallback } = self {
+            Some(Self::known_type(format, fallback))
+        } else {
+            None
+        }
     }
 
     pub fn primitive(&self) -> Option<PrimitiveTypeDef> {
@@ -110,6 +122,12 @@ impl TypeDef {
                 quote!(#ident)
             }
             TypeDef::KnownType { format, fallback } => Self::known_type(format, fallback),
+            TypeDef::KnownTypeList { format, fallback } => {
+                let inner = Self::known_type(format, fallback);
+                let empty_check = "::std::vec::Vec::is_empty";
+                let def = quote!(Vec<#inner>);
+                return (Some(empty_check), def);
+            }
             TypeDef::Primitive(name) => name.to_token_stream(),
             TypeDef::Array(inner) => {
                 let (_, inner) = inner.as_field_ty(false);
@@ -128,13 +146,13 @@ impl TypeDef {
         (empty_check, ty)
     }
 
-    fn known_type(known: &KnownFormat, fallback: &PrimitiveTypeDef) -> TokenStream {
+    fn known_type(known: &KnownFormatType, fallback: &PrimitiveTypeDef) -> TokenStream {
         match known {
-            KnownFormat::PveVmId => proxmox_api(quote!(types::VmId)),
-            KnownFormat::Ipv4 => quote!(::std::net::Ipv4Addr),
-            KnownFormat::Ipv6 => quote!(::std::net::Ipv6Addr),
-            KnownFormat::Ip => quote!(::std::net::IpAddr),
-            KnownFormat::MacAddr(allow_multicast) => {
+            KnownFormatType::PveVmId => proxmox_api(quote!(types::VmId)),
+            KnownFormatType::Ipv4 => quote!(::std::net::Ipv4Addr),
+            KnownFormatType::Ipv6 => quote!(::std::net::Ipv6Addr),
+            KnownFormatType::Ip => quote!(::std::net::IpAddr),
+            KnownFormatType::MacAddr(allow_multicast) => {
                 proxmox_api(quote!(types::MacAddr<#allow_multicast>))
             }
             _ => fallback.to_token_stream(),
@@ -145,7 +163,7 @@ impl TypeDef {
 impl ToTokens for TypeDef {
     fn to_tokens(&self, tokens: &mut TokenStream) {
         match self {
-            TypeDef::Primitive(_) | TypeDef::KnownType { .. } => {}
+            TypeDef::Primitive(_) | TypeDef::KnownType { .. } | TypeDef::KnownTypeList { .. } => {}
             TypeDef::Array(inner) => inner.to_tokens(tokens),
             TypeDef::Enum(def) => def.to_tokens(tokens),
             TypeDef::Struct(strt) => strt.to_tokens(tokens),

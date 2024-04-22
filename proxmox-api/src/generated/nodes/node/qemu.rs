@@ -546,10 +546,14 @@ pub struct PostParams {
     #[doc = "Set a name for the VM. Only used on the configuration web interface."]
     #[doc = ""]
     pub name: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "cloud-init: Sets DNS server IP address for a container. Create will automatically use the setting from the host if neither searchdomain nor nameserver are set."]
     #[doc = ""]
-    pub nameserver: Option<String>,
+    pub nameserver: Vec<String>,
     #[serde(rename = "net[n]")]
     #[serde(
         serialize_with = "crate::types::serialize_multi::<NumberedNets, _>",
@@ -780,10 +784,14 @@ pub struct PostParams {
     #[doc = "Enable/disable the USB tablet device. This device is usually needed to allow absolute mouse positioning with VNC. Else the mouse runs out of sync with normal VNC clients. If you're running lots of console-only guests on one host, you may consider disabling this to save some context switches. This is turned off by default if you use spice (`qm set \\\\<vmid\\\\> --vga qxl`)."]
     #[doc = ""]
     pub tablet: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Tags of the VM. This is only meta information."]
     #[doc = ""]
-    pub tags: Option<String>,
+    pub tags: Vec<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

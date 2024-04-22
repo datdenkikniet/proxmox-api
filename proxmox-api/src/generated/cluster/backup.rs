@@ -82,10 +82,14 @@ pub struct PostParams {
     #[doc = "Compress dump file."]
     #[doc = ""]
     pub compress: Option<Compress>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Day of week selection."]
     #[doc = ""]
-    pub dow: Option<String>,
+    pub dow: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Store resulting files to specified directory."]
     #[doc = ""]
@@ -98,10 +102,14 @@ pub struct PostParams {
     #[doc = "Enable or disable the job."]
     #[doc = ""]
     pub enabled: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Exclude specified guest systems (assumes --all)"]
     #[doc = ""]
-    pub exclude: Option<String>,
+    pub exclude: Vec<crate::types::VmId>,
     #[serde(rename = "exclude-path")]
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Exclude certain files/directories (shell globs). Paths starting with '/' are anchored to the container's root, other paths match relative to each subdirectory."]
@@ -131,10 +139,14 @@ pub struct PostParams {
     #[doc = "Deprecated: use notification targets/matchers instead. Specify when to send a notification mail"]
     #[doc = ""]
     pub mailnotification: Option<Mailnotification>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Deprecated: Use notification targets/matchers instead. Comma-separated list of email addresses or users that should receive email notifications."]
     #[doc = ""]
-    pub mailto: Option<String>,
+    pub mailto: Vec<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -269,10 +281,14 @@ pub struct PostParams {
     #[doc = "Store temporary files to specified directory."]
     #[doc = ""]
     pub tmpdir: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "The ID of the guest system you want to backup."]
     #[doc = ""]
-    pub vmid: Option<String>,
+    pub vmid: Vec<crate::types::VmId>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"

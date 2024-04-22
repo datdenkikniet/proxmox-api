@@ -80,8 +80,12 @@ pub struct GetOutputItems {
     pub expire: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub firstname: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub groups: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    pub groups: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Keys for two factor auth (yubico)."]
     #[doc = ""]
@@ -189,8 +193,12 @@ pub struct PostParams {
     pub expire: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub firstname: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub groups: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    pub groups: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Keys for two factor auth (yubico)."]
     #[doc = ""]

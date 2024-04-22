@@ -65,10 +65,14 @@ pub struct PutParams {
     #[doc = "DNS plugin data. (base64 encoded)"]
     #[doc = ""]
     pub data: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "A list of settings you want to delete."]
     #[doc = ""]
-    pub delete: Option<String>,
+    pub delete: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
     #[doc = ""]
@@ -81,10 +85,14 @@ pub struct PutParams {
     #[doc = "Flag to disable the config."]
     #[doc = ""]
     pub disable: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of cluster node names."]
     #[doc = ""]
-    pub nodes: Option<String>,
+    pub nodes: Vec<String>,
     #[serde(rename = "validation-delay")]
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",

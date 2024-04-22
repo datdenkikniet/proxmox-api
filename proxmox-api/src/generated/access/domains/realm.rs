@@ -122,10 +122,14 @@ pub struct PutParams {
     #[doc = "Use this as default realm"]
     #[doc = ""]
     pub default: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "A list of settings you want to delete."]
     #[doc = ""]
-    pub delete: Option<String>,
+    pub delete: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
     #[doc = ""]
@@ -138,10 +142,14 @@ pub struct PutParams {
     #[doc = "LDAP filter for user sync."]
     #[doc = ""]
     pub filter: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "The objectclasses for groups."]
     #[doc = ""]
-    pub group_classes: Option<String>,
+    pub group_classes: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "LDAP base domain name for group sync. If not set, the base_dn will be used."]
     #[doc = ""]
@@ -220,10 +228,14 @@ pub struct PutParams {
     #[doc = "LDAP user attribute name"]
     #[doc = ""]
     pub user_attr: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "The objectclasses for users."]
     #[doc = ""]
-    pub user_classes: Option<String>,
+    pub user_classes: Vec<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

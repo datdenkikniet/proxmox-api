@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::generator::{clean_doc, AdditionalProperties, FieldDef, PrimitiveTypeDef, TypeDef};
 
-use super::{Format, KnownFormat, Optional, Output};
+use super::{format::KnownFormatType, Format, KnownFormat, Optional, Output};
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Default)]
 pub struct Type<'a> {
@@ -64,7 +64,13 @@ impl Type<'_> {
 
     pub fn type_def(&self, field_name: &str, struct_suffix: &str) -> Option<Output> {
         // TODO: report that "command" only has format, and no type
-        if self.format == Some(Format::Kind(KnownFormat::String)) && self.ty.is_none() {
+        if self.format
+            == Some(Format::Kind(KnownFormat {
+                is_list: false,
+                ty: KnownFormatType::String,
+            }))
+            && self.ty.is_none()
+        {
             return Some(Output::bare_def(TypeDef::Primitive(
                 PrimitiveTypeDef::String,
             )));
@@ -179,19 +185,30 @@ impl Type<'_> {
         let def = if let (Some(fallback), Some(Format::Kind(format))) =
             (output_type.primitive(), &self.format)
         {
-            let format = match format {
-                KnownFormat::MacAddr { .. } => {
+            let ty = match format.ty {
+                KnownFormatType::MacAddr { .. } => {
                     let allow_ig_bit = self
                         .verbose_description
                         .as_ref()
                         .map(|v| !v.contains("the I/G (Individual/Group) bit not set"))
                         .unwrap_or(true);
-                    KnownFormat::MacAddr(allow_ig_bit)
+
+                    KnownFormatType::MacAddr(allow_ig_bit)
                 }
-                format => *format,
+                format => format,
             };
 
-            TypeDef::KnownType { format, fallback }
+            if format.is_list {
+                TypeDef::KnownTypeList {
+                    format: ty,
+                    fallback,
+                }
+            } else {
+                TypeDef::KnownType {
+                    format: ty,
+                    fallback,
+                }
+            }
         } else {
             output_type
         };

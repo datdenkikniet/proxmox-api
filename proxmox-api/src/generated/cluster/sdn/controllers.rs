@@ -150,10 +150,14 @@ pub struct PostParams {
     #[doc = ""]
     pub isis_domain: Option<String>,
     #[serde(rename = "isis-ifaces")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "ISIS interface."]
     #[doc = ""]
-    pub isis_ifaces: Option<String>,
+    pub isis_ifaces: Vec<String>,
     #[serde(rename = "isis-net")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "ISIS network entity title."]
@@ -167,10 +171,14 @@ pub struct PostParams {
     #[doc = "The cluster node name."]
     #[doc = ""]
     pub node: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "peers address list."]
     #[doc = ""]
-    pub peers: Option<String>,
+    pub peers: Vec<::std::net::IpAddr>,
     #[serde(rename = "type")]
     #[doc = "Plugin type."]
     #[doc = ""]

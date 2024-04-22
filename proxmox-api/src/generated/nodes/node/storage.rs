@@ -26,7 +26,7 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(content: String, storage: String, ty: String) -> Self {
+    pub fn new(content: Vec<String>, storage: String, ty: String) -> Self {
         Self {
             content,
             storage,
@@ -60,9 +60,14 @@ pub struct GetOutputItems {
     #[doc = "Available storage space in bytes."]
     #[doc = ""]
     pub avail: Option<u64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Allowed storage content types."]
     #[doc = ""]
-    pub content: String,
+    pub content: Vec<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -119,10 +124,14 @@ pub struct GetOutputItems {
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetParams {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Only list stores which support this content type."]
     #[doc = ""]
-    pub content: Option<String>,
+    pub content: Vec<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

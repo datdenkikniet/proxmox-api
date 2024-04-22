@@ -38,10 +38,14 @@ where
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PostParams {
     #[serde(rename = "mon-address")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Overwrites autodetected monitor IP address(es). Must be in the public network(s) of Ceph."]
     #[doc = ""]
-    pub mon_address: Option<String>,
+    pub mon_address: Vec<::std::net::IpAddr>,
     #[serde(
         flatten,
         default,

@@ -117,17 +117,25 @@ pub struct PutParams {
     #[doc = "target group for comstar views"]
     #[doc = ""]
     pub comstar_tg: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Allowed content types."]
     #[doc = ""]
     #[doc = "NOTE: the value 'rootdir' is used for Containers, and value 'images' for VMs."]
     #[doc = ""]
-    pub content: Option<String>,
+    pub content: Vec<String>,
     #[serde(rename = "content-dirs")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Overrides for default content type directories."]
     #[doc = ""]
-    pub content_dirs: Option<String>,
+    pub content_dirs: Vec<String>,
     #[serde(rename = "create-base-path")]
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -151,10 +159,14 @@ pub struct PutParams {
     #[doc = "Data Pool (for erasure coding only)"]
     #[doc = ""]
     pub data_pool: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "A list of settings you want to delete."]
     #[doc = ""]
-    pub delete: Option<String>,
+    pub delete: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
     #[doc = ""]
@@ -247,10 +259,14 @@ pub struct PutParams {
     #[doc = "Create the directory if it doesn't exist and populate it with default sub-dirs. NOTE: Deprecated, use the 'create-base-path' and 'create-subdirs' options instead."]
     #[doc = ""]
     pub mkdir: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "IP addresses of monitors (for external clusters)."]
     #[doc = ""]
-    pub monhost: Option<String>,
+    pub monhost: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "mount point"]
     #[doc = ""]
@@ -267,10 +283,14 @@ pub struct PutParams {
     #[doc = "Set the NOCOW flag on files. Disables data checksumming and causes data errors to be unrecoverable from while allowing direct I/O. Only use this if data does not need to be any more safe than on a single ext4 formatted disk with no underlying raid system."]
     #[doc = ""]
     pub nocow: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of nodes for which the storage configuration applies."]
     #[doc = ""]
-    pub nodes: Option<String>,
+    pub nodes: Vec<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

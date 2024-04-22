@@ -203,10 +203,14 @@ pub struct PostParams {
     #[doc = "Faucet dataplane id"]
     #[doc = ""]
     pub dp_id: Option<u64>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of cluster node names."]
     #[doc = ""]
-    pub exitnodes: Option<String>,
+    pub exitnodes: Vec<String>,
     #[serde(rename = "exitnodes-local-routing")]
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -237,23 +241,35 @@ pub struct PostParams {
     #[doc = "MTU"]
     #[doc = ""]
     pub mtu: Option<u64>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "List of cluster node names."]
     #[doc = ""]
-    pub nodes: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub nodes: Vec<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "peers address list."]
     #[doc = ""]
-    pub peers: Option<String>,
+    pub peers: Vec<::std::net::IpAddr>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "reverse dns api server"]
     #[doc = ""]
     pub reversedns: Option<String>,
     #[serde(rename = "rt-import")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Route-Target import"]
     #[doc = ""]
-    pub rt_import: Option<String>,
+    pub rt_import: Vec<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"

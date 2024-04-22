@@ -183,10 +183,14 @@ pub struct GetOutput {
     #[doc = "Use volume as container mount point. Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume."]
     #[doc = ""]
     pub mps: ::std::collections::HashMap<u32, String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Sets DNS server IP address for a container. Create will automatically use the setting from the host if you neither set searchdomain nor nameserver."]
     #[doc = ""]
-    pub nameserver: Option<String>,
+    pub nameserver: Vec<String>,
     #[serde(rename = "net[n]")]
     #[serde(
         serialize_with = "crate::types::serialize_multi::<NumberedNets, _>",
@@ -221,10 +225,14 @@ pub struct GetOutput {
     #[doc = "Use volume as container root."]
     #[doc = ""]
     pub rootfs: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Sets DNS search domains for a container. Create will automatically use the setting from the host if you neither set searchdomain nor nameserver."]
     #[doc = ""]
-    pub searchdomain: Option<String>,
+    pub searchdomain: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Startup and shutdown behavior. Order is a non-negative number defining the general startup order. Shutdown in done with reverse ordering. Additionally you can set the 'up' or 'down' delay in seconds, which specifies a delay to wait before the next VM is started or stopped."]
     #[doc = ""]
@@ -237,10 +245,14 @@ pub struct GetOutput {
     #[doc = "Amount of SWAP for the container in MB."]
     #[doc = ""]
     pub swap: Option<u64>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Tags of the Container. This is only meta information."]
     #[doc = ""]
-    pub tags: Option<String>,
+    pub tags: Vec<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -378,10 +390,14 @@ pub struct PutParams {
     #[doc = "Try to be more verbose. For now this only enables debug log-level on start."]
     #[doc = ""]
     pub debug: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "A list of settings you want to delete."]
     #[doc = ""]
-    pub delete: Option<String>,
+    pub delete: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the Container. Shown in the web-interface CT's summary. This is saved as comment inside the configuration file."]
     #[doc = ""]
@@ -434,10 +450,14 @@ pub struct PutParams {
     #[doc = "Use volume as container mount point. Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume."]
     #[doc = ""]
     pub mps: ::std::collections::HashMap<u32, String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Sets DNS server IP address for a container. Create will automatically use the setting from the host if you neither set searchdomain nor nameserver."]
     #[doc = ""]
-    pub nameserver: Option<String>,
+    pub nameserver: Vec<String>,
     #[serde(rename = "net[n]")]
     #[serde(
         serialize_with = "crate::types::serialize_multi::<NumberedNets, _>",
@@ -468,18 +488,26 @@ pub struct PutParams {
     #[doc = "Sets the protection flag of the container. This will prevent the CT or CT's disk remove/update operation."]
     #[doc = ""]
     pub protection: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Revert a pending change."]
     #[doc = ""]
-    pub revert: Option<String>,
+    pub revert: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Use volume as container root."]
     #[doc = ""]
     pub rootfs: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Sets DNS search domains for a container. Create will automatically use the setting from the host if you neither set searchdomain nor nameserver."]
     #[doc = ""]
-    pub searchdomain: Option<String>,
+    pub searchdomain: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Startup and shutdown behavior. Order is a non-negative number defining the general startup order. Shutdown in done with reverse ordering. Additionally you can set the 'up' or 'down' delay in seconds, which specifies a delay to wait before the next VM is started or stopped."]
     #[doc = ""]
@@ -492,10 +520,14 @@ pub struct PutParams {
     #[doc = "Amount of SWAP for the container in MB."]
     #[doc = ""]
     pub swap: Option<u64>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Tags of the Container. This is only meta information."]
     #[doc = ""]
-    pub tags: Option<String>,
+    pub tags: Vec<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

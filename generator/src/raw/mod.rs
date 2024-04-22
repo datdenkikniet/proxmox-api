@@ -4,7 +4,7 @@ use std::{borrow::Cow, collections::BTreeMap};
 pub mod flattened;
 
 mod format;
-pub use format::{Format, KnownFormat};
+pub use format::{Format, KnownFormat, KnownFormatType};
 
 mod info;
 pub use info::Info;

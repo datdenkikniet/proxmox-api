@@ -43,7 +43,7 @@ pub struct GetOutput {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl GetParams {
-    pub fn new(ds: String, timeframe: Timeframe) -> Self {
+    pub fn new(ds: Vec<String>, timeframe: Timeframe) -> Self {
         Self {
             ds,
             timeframe,
@@ -58,9 +58,14 @@ pub struct GetParams {
     #[doc = "The RRD consolidation function"]
     #[doc = ""]
     pub cf: Option<Cf>,
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "The list of datasources you want to display."]
     #[doc = ""]
-    pub ds: String,
+    pub ds: Vec<String>,
     #[doc = "Specify the time frame you are interested in."]
     #[doc = ""]
     pub timeframe: Timeframe,

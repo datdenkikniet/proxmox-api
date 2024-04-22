@@ -128,6 +128,8 @@ impl ToTokens for FieldDef {
                 PrimitiveTypeDef::Integer => ser_des("int"),
                 PrimitiveTypeDef::Boolean => ser_des("bool"),
             }
+        } else if let Some(_) = ty.known_ty_list() {
+            ser_des(&format!("list"), false)
         } else {
             None
         };

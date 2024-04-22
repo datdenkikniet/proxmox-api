@@ -195,10 +195,14 @@ pub struct PostParams {
     #[doc = "LDAP filter for user sync."]
     #[doc = ""]
     pub filter: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "The objectclasses for groups."]
     #[doc = ""]
-    pub group_classes: Option<String>,
+    pub group_classes: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "LDAP base domain name for group sync. If not set, the base_dn will be used."]
     #[doc = ""]
@@ -284,10 +288,14 @@ pub struct PostParams {
     #[doc = "LDAP user attribute name"]
     #[doc = ""]
     pub user_attr: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[serde(
+        serialize_with = "crate::types::serialize_list",
+        deserialize_with = "crate::types::deserialize_list"
+    )]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "The objectclasses for users."]
     #[doc = ""]
-    pub user_classes: Option<String>,
+    pub user_classes: Vec<String>,
     #[serde(rename = "username-claim")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "OpenID claim used to generate the unique username."]
