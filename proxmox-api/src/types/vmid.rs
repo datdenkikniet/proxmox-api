@@ -28,3 +28,15 @@ impl std::fmt::Display for VmId {
         write!(f, "{}", self.0)
     }
 }
+
+impl TryFrom<String> for VmId {
+    type Error = String;
+
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        let value: u64 = value
+            .parse()
+            .map_err(|_| format!("Invalid VM id '{value}'"))?;
+
+        Self::new(value).ok_or_else(|| format!("Invalid VM id '{value}' (out of range)"))
+    }
+}
