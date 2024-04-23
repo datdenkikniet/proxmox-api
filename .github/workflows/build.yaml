@@ -35,15 +35,6 @@ jobs:
       - name: Save package versions
         run: docker exec $CONTAINER_NAME /usr/bin/bash -c "apt list --installed | tee /mnt/packages.txt"
 
-      - name: Generate the client
-        run: cargo run --manifest-path generator/Cargo.toml -- recursive ./ci/PVE-schema.json proxmox-api/src/generated.rs
-
-      - name: Format the generated client
-        run: cargo fmt --manifest-path ./proxmox-api/Cargo.toml -- ./proxmox-api/src/generated.rs
-
-      - name: Display git diff
-        run: ./ci/assert-empty-git-diff.sh
-
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -51,6 +42,15 @@ jobs:
           path: |
             ./ci/PVE-schema.json
             ./ci/packages.txt
+
+      - name: Generate the client
+        run: cargo run --manifest-path generator/Cargo.toml -- recursive ./ci/PVE-schema.json proxmox-api/src/generated.rs
+
+      - name: Format the generated client
+        run: cargo fmt --manifest-path ./proxmox-api/Cargo.toml -- ./proxmox-api/src/generated.rs
+
+      - name: Assert empty git diff
+        run: ./ci/assert-empty-git-diff.sh
 
       - name: Show line count
         run: wc -l ./ci/PVE-schema.json
