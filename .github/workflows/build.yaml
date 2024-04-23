@@ -18,8 +18,10 @@ jobs:
         run: |
           DISTRO=$(./ci/get-metadata.sh debian-distro)
           PROXMOX_VE_VERSION=$(./ci/get-metadata.sh pve-version)
+          PACKAGES=$(./ci/get-metadata.sh packages | jq -r '.[0] | to_entries | map(.key + "=" + .value) | join(" ")')
           echo "DISTRO=$DISTRO" >> "$GITHUB_ENV"
           echo "PROXMOX_VE_VERSION=$PROXMOX_VE_VERSION" >> "$GITHUB_ENV"
+          echo "PACKAGES=$PACKAGES" >> "$GITHUB_ENV"
 
       - name: Create container
         run: |
@@ -27,7 +29,12 @@ jobs:
           docker start $CONTAINER_NAME
 
       - name: Setup proxmox-ve ${{ env.PROXMOX_VE_VERSION }} on debian ${{ env.DISTRO }}
-        run: docker exec $CONTAINER_NAME /mnt/setup.sh $DISTRO $PROXMOX_VE_VERSION
+        run: docker exec $CONTAINER_NAME /mnt/setup.sh $DISTRO
+
+      - name: Install all packages
+        run: docker exec $CONTAINER_NAME apt-get install -y $(echo $PACKAGES)
+        # Installing some packages comes with some errors
+        continue-on-error: true
 
       - name: Generate JSON schema
         run: docker exec $CONTAINER_NAME /usr/bin/bash -c "/mnt/dump-schema.pl > /mnt/PVE-schema.json"

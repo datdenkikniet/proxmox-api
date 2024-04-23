@@ -10,7 +10,7 @@ fi
 output=$(echo "$metadata" | jq --raw-output ".packages[] | select(.name == \"proxmox-api\") | .metadata.proxmox.\"$1\"")
 
 if [[ -z "$output" || "$output" = "null" ]]; then
-    echo "Could not find requested metadata!" >&2
+    echo "Could not find requested metadata '$1'!" >&2
     exit 1
 fi
 
