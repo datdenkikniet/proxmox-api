@@ -61,6 +61,10 @@ pub struct PostParams {
     #[doc = "Exclude certain files/directories (shell globs). Paths starting with '/' are anchored to the container's root, other paths match relative to each subdirectory."]
     #[doc = ""]
     pub exclude_path: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Options for backup fleecing (VM only)."]
+    #[doc = ""]
+    pub fleecing: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"

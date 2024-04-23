@@ -519,7 +519,7 @@ pub struct PostParams {
     #[doc = ""]
     pub lock: Option<Lock>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Specifies the QEMU machine type."]
+    #[doc = "Specify the QEMU machine."]
     #[doc = ""]
     pub machine: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
