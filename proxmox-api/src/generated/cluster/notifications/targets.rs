@@ -98,6 +98,8 @@ pub enum Type {
     Gotify,
     #[serde(rename = "sendmail")]
     Sendmail,
+    #[serde(rename = "smtp")]
+    Smtp,
 }
 impl TryFrom<&str> for Type {
     type Error = String;
@@ -105,6 +107,7 @@ impl TryFrom<&str> for Type {
         match value {
             "gotify" => Ok(Self::Gotify),
             "sendmail" => Ok(Self::Sendmail),
+            "smtp" => Ok(Self::Smtp),
             v => Err(format!("Unknown variant {v}")),
         }
     }
