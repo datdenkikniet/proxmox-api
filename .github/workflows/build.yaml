@@ -31,6 +31,9 @@ jobs:
       - name: Setup proxmox-ve ${{ env.PROXMOX_VE_VERSION }} on debian ${{ env.DISTRO }}
         run: docker exec $CONTAINER_NAME /mnt/setup.sh $DISTRO
 
+      - name: Check if newer versions of specific packages are available
+        run: docker exec $CONTAINER_NAME /mnt/check-package-versions.sh $(echo $PACKAGES)
+
       - name: Install all packages
         run: docker exec $CONTAINER_NAME apt-get install -y $(echo $PACKAGES)
         # Installing some packages comes with some errors
