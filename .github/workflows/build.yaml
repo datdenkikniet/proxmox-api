@@ -33,7 +33,7 @@ jobs:
         run: docker exec $CONTAINER_NAME /usr/bin/bash -c "/mnt/dump-schema.pl > /mnt/PVE-schema.json"
 
       - name: Save package versions
-        run: docker exec $CONTAINER_NAME /usr/bin/bash -c "apt list --installed > /mnt/packages.txt"
+        run: docker exec $CONTAINER_NAME /usr/bin/bash -c "apt list --installed | tee /mnt/packages.txt"
 
       - name: Generate the client
         run: cargo run --manifest-path generator/Cargo.toml -- recursive ./ci/PVE-schema.json proxmox-api/src/generated.rs
