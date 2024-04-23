@@ -61,10 +61,15 @@ jobs:
         definition:
           - name: "library"
             args: "--lib"
+            manifest: proxmox-api/Cargo.toml
           - name: "CLI tool"
             args: "--bin proxmox-api --features cli"
+            manifest: proxmox-api/Cargo.toml
           - name: "library with just the reqwest client"
             args: "--lib --no-default-features --features reqwest-client"
+            manifest: proxmox-api/Cargo.toml
+          - name: generator
+            manifest: generator/Cargo.toml
 
     name: Build & check the ${{ matrix.definition.name }}
     runs-on: ubuntu-latest
@@ -73,11 +78,11 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
 
       - name: Validate the formatting
-        run: cargo fmt --manifest-path proxmox-api/Cargo.toml --check
+        run: cargo fmt --manifest-path ${{ matrix.definition.manifest }} --check
 
       - name: Check the ${{ matrix.definition.name }}
-        run: cargo check --manifest-path proxmox-api/Cargo.toml ${{ matrix.definition.args }}
+        run: cargo check --locked --manifest-path ${{ matrix.definition.manifest }} ${{ matrix.definition.args }}
 
       # TODO: reenable this for merges to main?
       - name: Build the ${{ matrix.definition.name }}
-        run: cargo build --manifest-path proxmox-api/Cargo.toml ${{ matrix.definition.args }}
+        run: cargo build --locked --manifest-path ${{ matrix.definition.manifest }} ${{ matrix.definition.args }}
