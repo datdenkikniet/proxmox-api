@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct FeatureClient<T> {
     client: T,
     path: String,

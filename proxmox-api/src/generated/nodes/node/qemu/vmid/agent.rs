@@ -23,6 +23,7 @@ pub mod shutdown;
 pub mod suspend_disk;
 pub mod suspend_hybrid;
 pub mod suspend_ram;
+#[derive(Debug, Clone)]
 pub struct AgentClient<T> {
     client: T,
     path: String,

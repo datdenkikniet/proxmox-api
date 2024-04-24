@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct TemplateClient<T> {
     client: T,
     path: String,

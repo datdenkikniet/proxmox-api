@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct IfaceClient<T> {
     client: T,
     path: String,

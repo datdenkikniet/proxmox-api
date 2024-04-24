@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct PingClient<T> {
     client: T,
     path: String,

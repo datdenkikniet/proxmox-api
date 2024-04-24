@@ -1,4 +1,5 @@
 pub mod content;
+#[derive(Debug, Clone)]
 pub struct ZoneClient<T> {
     client: T,
     path: String,

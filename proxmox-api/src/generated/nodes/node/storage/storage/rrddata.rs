@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct RrddataClient<T> {
     client: T,
     path: String,

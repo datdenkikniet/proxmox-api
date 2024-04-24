@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct QueryUrlMetadataClient<T> {
     client: T,
     path: String,

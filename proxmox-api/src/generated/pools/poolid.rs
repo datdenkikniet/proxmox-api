@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct PoolidClient<T> {
     client: T,
     path: String,

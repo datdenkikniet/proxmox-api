@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct SpiceshellClient<T> {
     client: T,
     path: String,

@@ -1,5 +1,6 @@
 pub mod download;
 pub mod list;
+#[derive(Debug, Clone)]
 pub struct FileRestoreClient<T> {
     client: T,
     path: String,

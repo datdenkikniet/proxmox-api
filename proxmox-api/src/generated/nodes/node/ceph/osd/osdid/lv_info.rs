@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct LvInfoClient<T> {
     client: T,
     path: String,

@@ -1,5 +1,6 @@
 pub mod ips;
 pub mod subnets;
+#[derive(Debug, Clone)]
 pub struct VnetClient<T> {
     client: T,
     path: String,

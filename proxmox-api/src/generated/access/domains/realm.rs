@@ -1,4 +1,5 @@
 pub mod sync;
+#[derive(Debug, Clone)]
 pub struct RealmClient<T> {
     client: T,
     path: String,

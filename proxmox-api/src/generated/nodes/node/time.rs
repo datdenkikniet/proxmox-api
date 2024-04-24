@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct TimeClient<T> {
     client: T,
     path: String,

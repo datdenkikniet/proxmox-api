@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct DownloadUrlClient<T> {
     client: T,
     path: String,

@@ -1,5 +1,6 @@
 pub mod pci;
 pub mod usb;
+#[derive(Debug, Clone)]
 pub struct HardwareClient<T> {
     client: T,
     path: String,

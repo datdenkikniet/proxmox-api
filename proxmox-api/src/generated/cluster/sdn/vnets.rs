@@ -1,4 +1,5 @@
 pub mod vnet;
+#[derive(Debug, Clone)]
 pub struct VnetsClient<T> {
     client: T,
     path: String,

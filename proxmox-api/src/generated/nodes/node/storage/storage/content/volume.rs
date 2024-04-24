@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct VolumeClient<T> {
     client: T,
     path: String,

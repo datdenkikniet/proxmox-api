@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct SyncClient<T> {
     client: T,
     path: String,

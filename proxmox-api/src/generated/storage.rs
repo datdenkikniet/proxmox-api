@@ -1,4 +1,5 @@
 pub mod storage;
+#[derive(Debug, Clone)]
 pub struct StorageClient<T> {
     client: T,
     path: String,

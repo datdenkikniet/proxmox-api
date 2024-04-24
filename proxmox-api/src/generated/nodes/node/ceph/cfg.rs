@@ -1,6 +1,7 @@
 pub mod db;
 pub mod raw;
 pub mod value;
+#[derive(Debug, Clone)]
 pub struct CfgClient<T> {
     client: T,
     path: String,

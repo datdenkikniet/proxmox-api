@@ -4,6 +4,7 @@ pub mod directories;
 pub mod meta;
 pub mod plugins;
 pub mod tos;
+#[derive(Debug, Clone)]
 pub struct AcmeClient<T> {
     client: T,
     path: String,

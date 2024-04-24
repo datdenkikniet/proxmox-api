@@ -1,4 +1,5 @@
 pub mod poolid;
+#[derive(Debug, Clone)]
 pub struct PoolsClient<T> {
     client: T,
     path: String,

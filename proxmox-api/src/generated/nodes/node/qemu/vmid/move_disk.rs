@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct MoveDiskClient<T> {
     client: T,
     path: String,

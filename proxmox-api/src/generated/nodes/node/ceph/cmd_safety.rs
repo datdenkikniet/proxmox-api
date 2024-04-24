@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct CmdSafetyClient<T> {
     client: T,
     path: String,

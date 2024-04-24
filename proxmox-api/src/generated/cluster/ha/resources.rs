@@ -1,4 +1,5 @@
 pub mod sid;
+#[derive(Debug, Clone)]
 pub struct ResourcesClient<T> {
     client: T,
     path: String,

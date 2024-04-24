@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct QdeviceClient<T> {
     client: T,
     path: String,

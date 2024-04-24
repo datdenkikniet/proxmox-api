@@ -1,4 +1,5 @@
 pub mod not_backed_up;
+#[derive(Debug, Clone)]
 pub struct BackupInfoClient<T> {
     client: T,
     path: String,

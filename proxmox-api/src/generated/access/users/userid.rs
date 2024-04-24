@@ -1,6 +1,7 @@
 pub mod tfa;
 pub mod token;
 pub mod unlock_tfa;
+#[derive(Debug, Clone)]
 pub struct UseridClient<T> {
     client: T,
     path: String,

@@ -1,5 +1,6 @@
 pub mod defaults;
 pub mod extractconfig;
+#[derive(Debug, Clone)]
 pub struct VzdumpClient<T> {
     client: T,
     path: String,

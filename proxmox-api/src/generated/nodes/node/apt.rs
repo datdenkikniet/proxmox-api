@@ -2,6 +2,7 @@ pub mod changelog;
 pub mod repositories;
 pub mod update;
 pub mod versions;
+#[derive(Debug, Clone)]
 pub struct AptClient<T> {
     client: T,
     path: String,

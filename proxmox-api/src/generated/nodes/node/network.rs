@@ -1,4 +1,5 @@
 pub mod iface;
+#[derive(Debug, Clone)]
 pub struct NetworkClient<T> {
     client: T,
     path: String,

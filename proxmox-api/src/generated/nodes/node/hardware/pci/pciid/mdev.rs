@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct MdevClient<T> {
     client: T,
     path: String,

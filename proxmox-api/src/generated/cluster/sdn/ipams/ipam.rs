@@ -1,4 +1,5 @@
 pub mod status;
+#[derive(Debug, Clone)]
 pub struct IpamClient<T> {
     client: T,
     path: String,

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct CertificateClient<T> {
     client: T,
     path: String,

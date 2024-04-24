@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct VncproxyClient<T> {
     client: T,
     path: String,

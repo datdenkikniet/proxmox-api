@@ -3,6 +3,7 @@ pub mod restart;
 pub mod start;
 pub mod state;
 pub mod stop;
+#[derive(Debug, Clone)]
 pub struct ServiceClient<T> {
     client: T,
     path: String,

@@ -1,4 +1,5 @@
 pub mod pos;
+#[derive(Debug, Clone)]
 pub struct RulesClient<T> {
     client: T,
     path: String,

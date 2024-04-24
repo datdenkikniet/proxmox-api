@@ -1,4 +1,5 @@
 pub mod tokenid;
+#[derive(Debug, Clone)]
 pub struct TokenClient<T> {
     client: T,
     path: String,

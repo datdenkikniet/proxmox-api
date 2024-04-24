@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct SubscriptionClient<T> {
     client: T,
     path: String,

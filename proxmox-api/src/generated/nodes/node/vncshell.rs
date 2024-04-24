@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct VncshellClient<T> {
     client: T,
     path: String,

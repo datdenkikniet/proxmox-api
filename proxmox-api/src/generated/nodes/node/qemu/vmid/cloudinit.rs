@@ -1,4 +1,5 @@
 pub mod dump;
+#[derive(Debug, Clone)]
 pub struct CloudinitClient<T> {
     client: T,
     path: String,

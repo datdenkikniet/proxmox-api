@@ -1,4 +1,5 @@
 pub mod monid;
+#[derive(Debug, Clone)]
 pub struct MonClient<T> {
     client: T,
     path: String,

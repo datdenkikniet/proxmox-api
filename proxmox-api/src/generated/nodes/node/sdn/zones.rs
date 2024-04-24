@@ -1,4 +1,5 @@
 pub mod zone;
+#[derive(Debug, Clone)]
 pub struct ZonesClient<T> {
     client: T,
     path: String,

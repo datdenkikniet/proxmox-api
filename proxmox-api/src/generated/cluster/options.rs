@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct OptionsClient<T> {
     client: T,
     path: String,

@@ -1,4 +1,5 @@
 pub mod id;
+#[derive(Debug, Clone)]
 pub struct PluginsClient<T> {
     client: T,
     path: String,

@@ -1,4 +1,5 @@
 pub mod volume;
+#[derive(Debug, Clone)]
 pub struct ContentClient<T> {
     client: T,
     path: String,

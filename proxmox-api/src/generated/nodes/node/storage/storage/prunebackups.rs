@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct PrunebackupsClient<T> {
     client: T,
     path: String,

@@ -6,6 +6,7 @@ pub mod lvmthin;
 pub mod nfs;
 pub mod pbs;
 pub mod zfs;
+#[derive(Debug, Clone)]
 pub struct ScanClient<T> {
     client: T,
     path: String,

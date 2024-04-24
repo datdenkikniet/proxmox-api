@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct PbsClient<T> {
     client: T,
     path: String,

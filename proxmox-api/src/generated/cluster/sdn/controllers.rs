@@ -1,4 +1,5 @@
 pub mod controller;
+#[derive(Debug, Clone)]
 pub struct ControllersClient<T> {
     client: T,
     path: String,

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct ExecStatusClient<T> {
     client: T,
     path: String,

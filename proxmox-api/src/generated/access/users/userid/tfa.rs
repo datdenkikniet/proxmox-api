@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct TfaClient<T> {
     client: T,
     path: String,

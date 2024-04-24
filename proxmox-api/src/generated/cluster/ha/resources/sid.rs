@@ -1,5 +1,6 @@
 pub mod migrate;
 pub mod relocate;
+#[derive(Debug, Clone)]
 pub struct SidClient<T> {
     client: T,
     path: String,

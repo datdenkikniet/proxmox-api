@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct ChallengeSchemaClient<T> {
     client: T,
     path: String,

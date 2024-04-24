@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct DirectoriesClient<T> {
     client: T,
     path: String,

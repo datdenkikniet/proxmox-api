@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct SmartClient<T> {
     client: T,
     path: String,

@@ -1,5 +1,6 @@
 pub mod config;
 pub mod rollback;
+#[derive(Debug, Clone)]
 pub struct SnapnameClient<T> {
     client: T,
     path: String,

@@ -1,4 +1,5 @@
 pub mod vmid;
+#[derive(Debug, Clone)]
 pub struct QemuClient<T> {
     client: T,
     path: String,

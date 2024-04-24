@@ -1,4 +1,5 @@
 pub mod subnet;
+#[derive(Debug, Clone)]
 pub struct SubnetsClient<T> {
     client: T,
     path: String,

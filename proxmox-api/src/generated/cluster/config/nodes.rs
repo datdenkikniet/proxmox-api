@@ -1,4 +1,5 @@
 pub mod node;
+#[derive(Debug, Clone)]
 pub struct NodesClient<T> {
     client: T,
     path: String,

@@ -1,6 +1,7 @@
 pub mod log;
 pub mod schedule_now;
 pub mod status;
+#[derive(Debug, Clone)]
 pub struct IdClient<T> {
     client: T,
     path: String,

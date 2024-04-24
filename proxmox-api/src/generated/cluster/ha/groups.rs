@@ -1,4 +1,5 @@
 pub mod group;
+#[derive(Debug, Clone)]
 pub struct GroupsClient<T> {
     client: T,
     path: String,

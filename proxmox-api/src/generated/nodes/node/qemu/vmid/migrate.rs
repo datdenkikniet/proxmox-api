@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct MigrateClient<T> {
     client: T,
     path: String,

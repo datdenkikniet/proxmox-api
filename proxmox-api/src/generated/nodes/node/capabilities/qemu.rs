@@ -1,5 +1,6 @@
 pub mod cpu;
 pub mod machines;
+#[derive(Debug, Clone)]
 pub struct QemuClient<T> {
     client: T,
     path: String,

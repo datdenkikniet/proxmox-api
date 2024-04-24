@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct SubnetClient<T> {
     client: T,
     path: String,

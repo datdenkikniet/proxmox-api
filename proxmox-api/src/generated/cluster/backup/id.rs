@@ -1,4 +1,5 @@
 pub mod included_volumes;
+#[derive(Debug, Clone)]
 pub struct IdClient<T> {
     client: T,
     path: String,

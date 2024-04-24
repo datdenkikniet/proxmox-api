@@ -3,6 +3,7 @@ pub mod join;
 pub mod nodes;
 pub mod qdevice;
 pub mod totem;
+#[derive(Debug, Clone)]
 pub struct ConfigClient<T> {
     client: T,
     path: String,

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct UploadClient<T> {
     client: T,
     path: String,

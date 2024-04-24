@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct StopClient<T> {
     client: T,
     path: String,

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct PendingClient<T> {
     client: T,
     path: String,

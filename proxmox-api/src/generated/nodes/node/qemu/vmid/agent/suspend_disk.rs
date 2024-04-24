@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct SuspendDiskClient<T> {
     client: T,
     path: String,

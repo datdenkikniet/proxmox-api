@@ -1,4 +1,5 @@
 pub mod name;
+#[derive(Debug, Clone)]
 pub struct SmtpClient<T> {
     client: T,
     path: String,

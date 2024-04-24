@@ -1,4 +1,5 @@
 pub mod flag;
+#[derive(Debug, Clone)]
 pub struct FlagsClient<T> {
     client: T,
     path: String,

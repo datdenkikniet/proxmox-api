@@ -1,4 +1,5 @@
 pub mod snapname;
+#[derive(Debug, Clone)]
 pub struct SnapshotClient<T> {
     client: T,
     path: String,

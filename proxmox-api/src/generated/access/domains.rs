@@ -1,4 +1,5 @@
 pub mod realm;
+#[derive(Debug, Clone)]
 pub struct DomainsClient<T> {
     client: T,
     path: String,

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct VncwebsocketClient<T> {
     client: T,
     path: String,

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct ApiversionClient<T> {
     client: T,
     path: String,

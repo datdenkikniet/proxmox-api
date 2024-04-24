@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct FlagClient<T> {
     client: T,
     path: String,
