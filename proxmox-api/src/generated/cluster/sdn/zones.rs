@@ -47,6 +47,7 @@ impl GetOutputItems {
             ipam: Default::default(),
             mtu: Default::default(),
             nodes: Default::default(),
+            pending: Default::default(),
             reversedns: Default::default(),
             state: Default::default(),
             additional_properties: Default::default(),
@@ -71,6 +72,12 @@ pub struct GetOutputItems {
     pub mtu: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub nodes: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub pending: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub reversedns: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
