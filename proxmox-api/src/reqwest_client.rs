@@ -109,9 +109,9 @@ impl Client {
     ) -> Result<Self, Error> {
         let me = Self::new_empty(host, user, realm);
 
-        // PVEAPIToken=USER@REALM!TOKENID=UUID
         let api_token = format!("{user}@{realm}!{token_id}={token}");
-        me.login(&api_token)?;
+
+        // PVEAPIToken=USER@REALM!TOKENID=UUID
         me.auth_state.write().api_token = Some(api_token);
 
         Ok(me)
@@ -145,7 +145,8 @@ impl Client {
         };
 
         let request = if let Some(api_token) = &auth_state.api_token {
-            request.header("Authorization", api_token)
+            // PVEAPIToken=USER@REALM!TOKENID=UUID
+            request.header("Authorization", format!("PVEAPIToken={api_token}"))
         } else {
             request
         };
@@ -185,13 +186,16 @@ impl Client {
     pub fn refresh_auth_ticket(&self, force: bool) -> Result<(), Error> {
         log::trace!("Checking whether auth ticket should be refreshed (force: {force})");
 
-        let auth_ticket = self
-            .auth_state
-            .read()
-            .auth_ticket
-            .as_ref()
-            .expect("Cannot refresh auth ticket without having logged in previously.")
-            .to_string();
+        let auth_ticket = if let Some(ticket) = self.auth_state.read().auth_ticket.as_ref() {
+            ticket.clone()
+        } else {
+            if self.auth_state.read().api_token.is_none() {
+                log::warn!(
+                    "Tried to refresh auth ticket without existing auth ticket or API token."
+                );
+            }
+            return Ok(());
+        };
 
         if force || self.auth_state.read().auth_ticket_time.elapsed() > Duration::from_secs(60 * 60)
         {
@@ -246,6 +250,11 @@ impl crate::client::Client for Client {
 
         let response = self.append_headers(request).send()?;
         let response_status = response.status();
+
+        if response_status != StatusCode::OK {
+            return Err(Error::UnknownFailure(response_status));
+        }
+
         let json_data = response.bytes()?;
         let json_str = std::str::from_utf8(&json_data).map_err(|_| Error::ResponseWasNotString)?;
 
