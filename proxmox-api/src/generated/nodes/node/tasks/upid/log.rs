@@ -26,7 +26,7 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(n: u64, t: String) -> Self {
+    pub fn new(n: i64, t: String) -> Self {
         Self {
             n,
             t,
@@ -42,7 +42,7 @@ pub struct GetOutputItems {
     )]
     #[doc = "Line number"]
     #[doc = ""]
-    pub n: u64,
+    pub n: i64,
     #[doc = "Line text"]
     #[doc = ""]
     pub t: String,
@@ -70,7 +70,7 @@ pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The amount of lines to read from the tasklog."]
     #[doc = ""]
-    pub limit: Option<u64>,
+    pub limit: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -78,7 +78,7 @@ pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Start at this line when reading the tasklog"]
     #[doc = ""]
-    pub start: Option<u64>,
+    pub start: Option<i64>,
     #[serde(
         flatten,
         default,

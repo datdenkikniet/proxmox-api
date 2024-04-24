@@ -57,15 +57,15 @@ pub struct AutoscaleStatusGetOutputItemsAutoscaleStatus {
 }
 impl GetOutputItems {
     pub fn new(
-        bytes_used: u64,
-        crush_rule: u64,
+        bytes_used: i64,
+        crush_rule: i64,
         crush_rule_name: String,
-        min_size: u64,
+        min_size: i64,
         percent_used: f64,
-        pg_num: u64,
-        pool: u64,
+        pg_num: i64,
+        pool: i64,
         pool_name: String,
-        size: u64,
+        size: i64,
         ty: Type,
     ) -> Self {
         Self {
@@ -100,18 +100,18 @@ pub struct GetOutputItems {
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub bytes_used: u64,
+    pub bytes_used: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub crush_rule: u64,
+    pub crush_rule: i64,
     pub crush_rule_name: String,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub min_size: u64,
+    pub min_size: i64,
     #[serde(
         serialize_with = "crate::types::serialize_number",
         deserialize_with = "crate::types::deserialize_number"
@@ -123,36 +123,36 @@ pub struct GetOutputItems {
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub pg_num: u64,
+    pub pg_num: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub pg_num_final: Option<u64>,
+    pub pg_num_final: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub pg_num_min: Option<u64>,
+    pub pg_num_min: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub pool: u64,
+    pub pool: i64,
     pub pool_name: String,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub size: u64,
+    pub size: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub target_size: Option<u64>,
+    pub target_size: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
         deserialize_with = "crate::types::deserialize_number_optional"
@@ -217,7 +217,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Minimum number of replicas per object"]
     #[doc = ""]
-    pub min_size: Option<u64>,
+    pub min_size: Option<i64>,
     #[doc = "The name of the pool. It must be unique."]
     #[doc = ""]
     pub name: String,
@@ -232,7 +232,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of placement groups."]
     #[doc = ""]
-    pub pg_num: Option<u64>,
+    pub pg_num: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -240,7 +240,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Minimal number of placement groups."]
     #[doc = ""]
-    pub pg_num_min: Option<u64>,
+    pub pg_num_min: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -248,7 +248,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of replicas per object"]
     #[doc = ""]
-    pub size: Option<u64>,
+    pub size: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The estimated target size of the pool for the PG autoscaler."]
     #[doc = ""]

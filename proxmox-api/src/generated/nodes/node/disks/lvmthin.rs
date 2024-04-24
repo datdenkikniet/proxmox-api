@@ -40,10 +40,10 @@ where
 impl GetOutputItems {
     pub fn new(
         lv: String,
-        lv_size: u64,
-        metadata_size: u64,
-        metadata_used: u64,
-        used: u64,
+        lv_size: i64,
+        metadata_size: i64,
+        metadata_used: i64,
+        used: i64,
         vg: String,
     ) -> Self {
         Self {
@@ -68,28 +68,28 @@ pub struct GetOutputItems {
     )]
     #[doc = "The size of the thinpool in bytes."]
     #[doc = ""]
-    pub lv_size: u64,
+    pub lv_size: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The size of the metadata lv in bytes."]
     #[doc = ""]
-    pub metadata_size: u64,
+    pub metadata_size: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The used bytes of the metadata lv."]
     #[doc = ""]
-    pub metadata_used: u64,
+    pub metadata_used: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "The used bytes of the thinpool."]
     #[doc = ""]
-    pub used: u64,
+    pub used: i64,
     #[doc = "The associated volume group."]
     #[doc = ""]
     pub vg: String,

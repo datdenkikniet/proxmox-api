@@ -43,7 +43,7 @@ pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum number of entries."]
     #[doc = ""]
-    pub max: Option<u64>,
+    pub max: Option<i64>,
     #[serde(
         flatten,
         default,

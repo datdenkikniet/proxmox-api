@@ -38,7 +38,7 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(created: u64, description: String, id: String, ty: Type) -> Self {
+    pub fn new(created: i64, description: String, id: String, ty: Type) -> Self {
         Self {
             created,
             description,
@@ -57,7 +57,7 @@ pub struct GetOutputItems {
     )]
     #[doc = "Creation time of this entry as unix epoch."]
     #[doc = ""]
-    pub created: u64,
+    pub created: i64,
     #[doc = "User chosen description for this entry."]
     #[doc = ""]
     pub description: String,

@@ -103,7 +103,7 @@ pub struct PostParams {
     #[doc = ""]
     #[doc = ".\" to utilize their performance better."]
     #[doc = ""]
-    pub osds_per_device: Option<u64>,
+    pub osds_per_device: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Block device name for block.wal."]
     #[doc = ""]

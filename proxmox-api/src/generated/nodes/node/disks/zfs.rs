@@ -39,13 +39,13 @@ where
 }
 impl GetOutputItems {
     pub fn new(
-        alloc: u64,
+        alloc: i64,
         dedup: f64,
-        frag: u64,
-        free: u64,
+        frag: i64,
+        free: i64,
         health: String,
         name: String,
-        size: u64,
+        size: i64,
     ) -> Self {
         Self {
             alloc,
@@ -65,7 +65,7 @@ pub struct GetOutputItems {
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub alloc: u64,
+    pub alloc: i64,
     #[serde(
         serialize_with = "crate::types::serialize_number",
         deserialize_with = "crate::types::deserialize_number"
@@ -75,19 +75,19 @@ pub struct GetOutputItems {
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub frag: u64,
+    pub frag: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub free: u64,
+    pub free: i64,
     pub health: String,
     pub name: String,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub size: u64,
+    pub size: i64,
     #[serde(
         flatten,
         default,
@@ -126,7 +126,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Pool sector size exponent."]
     #[doc = ""]
-    pub ashift: Option<u64>,
+    pub ashift: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The compression algorithm to use."]
     #[doc = ""]

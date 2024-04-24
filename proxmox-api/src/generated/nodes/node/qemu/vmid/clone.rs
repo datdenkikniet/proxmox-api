@@ -51,7 +51,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Override I/O bandwidth limit (in KiB/s)."]
     #[doc = ""]
-    pub bwlimit: Option<u64>,
+    pub bwlimit: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the new VM."]
     #[doc = ""]

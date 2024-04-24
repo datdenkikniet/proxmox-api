@@ -68,7 +68,7 @@ pub struct GetOutput {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
-    pub fn new(port: u64, server: String, ty: Type) -> Self {
+    pub fn new(port: i64, server: String, ty: Type) -> Self {
         Self {
             port,
             server,
@@ -118,7 +118,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "InfluxDB max-body-size in bytes. Requests are batched up to this size."]
     #[doc = ""]
-    pub max_body_size: Option<u64>,
+    pub max_body_size: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -126,7 +126,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "MTU for metrics transmission over UDP"]
     #[doc = ""]
-    pub mtu: Option<u64>,
+    pub mtu: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The InfluxDB organization. Only necessary when using the http v2 api. Has no meaning when using v2 compatibility api."]
     #[doc = ""]
@@ -141,7 +141,7 @@ pub struct PostParams {
     )]
     #[doc = "server network port"]
     #[doc = ""]
-    pub port: u64,
+    pub port: i64,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Protocol to send graphite data. TCP or UDP (default)"]
     #[doc = ""]
@@ -156,7 +156,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "graphite TCP socket timeout (default=1)"]
     #[doc = ""]
-    pub timeout: Option<u64>,
+    pub timeout: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The InfluxDB access token. Only necessary when using the http v2 api. If the v2 compatibility api is used, use 'user:password' instead."]
     #[doc = ""]
@@ -182,7 +182,7 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PutParams {
-    pub fn new(port: u64, server: String) -> Self {
+    pub fn new(port: i64, server: String) -> Self {
         Self {
             port,
             server,
@@ -241,7 +241,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "InfluxDB max-body-size in bytes. Requests are batched up to this size."]
     #[doc = ""]
-    pub max_body_size: Option<u64>,
+    pub max_body_size: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -249,7 +249,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "MTU for metrics transmission over UDP"]
     #[doc = ""]
-    pub mtu: Option<u64>,
+    pub mtu: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The InfluxDB organization. Only necessary when using the http v2 api. Has no meaning when using v2 compatibility api."]
     #[doc = ""]
@@ -264,7 +264,7 @@ pub struct PutParams {
     )]
     #[doc = "server network port"]
     #[doc = ""]
-    pub port: u64,
+    pub port: i64,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Protocol to send graphite data. TCP or UDP (default)"]
     #[doc = ""]
@@ -279,7 +279,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "graphite TCP socket timeout (default=1)"]
     #[doc = ""]
-    pub timeout: Option<u64>,
+    pub timeout: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The InfluxDB access token. Only necessary when using the http v2 api. If the v2 compatibility api is used, use 'user:password' instead."]
     #[doc = ""]

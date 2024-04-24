@@ -24,7 +24,7 @@ impl ToTokens for PrimitiveTypeDef {
         let this_tokens = match self {
             PrimitiveTypeDef::String => quote!(String),
             PrimitiveTypeDef::Number => quote!(f64),
-            PrimitiveTypeDef::Integer => quote!(u64),
+            PrimitiveTypeDef::Integer => quote!(i64),
             PrimitiveTypeDef::Boolean => quote!(bool),
         };
 

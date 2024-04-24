@@ -62,7 +62,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "process exit code if it was normally terminated."]
     #[doc = ""]
-    pub exitcode: Option<u64>,
+    pub exitcode: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool",
         deserialize_with = "crate::types::deserialize_bool"
@@ -91,7 +91,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "signal number or exception code if the process was abnormally terminated."]
     #[doc = ""]
-    pub signal: Option<u64>,
+    pub signal: Option<i64>,
     #[serde(
         flatten,
         default,
@@ -100,7 +100,7 @@ pub struct GetOutput {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl GetParams {
-    pub fn new(pid: u64) -> Self {
+    pub fn new(pid: i64) -> Self {
         Self {
             pid,
             additional_properties: Default::default(),
@@ -115,7 +115,7 @@ pub struct GetParams {
     )]
     #[doc = "The PID to query"]
     #[doc = ""]
-    pub pid: u64,
+    pub pid: i64,
     #[serde(
         flatten,
         default,

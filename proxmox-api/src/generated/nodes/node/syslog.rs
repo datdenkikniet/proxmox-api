@@ -26,7 +26,7 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(n: u64, t: String) -> Self {
+    pub fn new(n: i64, t: String) -> Self {
         Self {
             n,
             t,
@@ -42,7 +42,7 @@ pub struct GetOutputItems {
     )]
     #[doc = "Line number"]
     #[doc = ""]
-    pub n: u64,
+    pub n: i64,
     #[doc = "Line text"]
     #[doc = ""]
     pub t: String,
@@ -60,7 +60,7 @@ pub struct GetParams {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub limit: Option<u64>,
+    pub limit: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Service ID"]
     #[doc = ""]
@@ -74,7 +74,7 @@ pub struct GetParams {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub start: Option<u64>,
+    pub start: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Display all log until this date-time string."]
     #[doc = ""]

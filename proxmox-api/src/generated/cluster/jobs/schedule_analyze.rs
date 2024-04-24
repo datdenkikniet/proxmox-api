@@ -26,7 +26,7 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(timestamp: u64, utc: String) -> Self {
+    pub fn new(timestamp: i64, utc: String) -> Self {
         Self {
             timestamp,
             utc,
@@ -42,7 +42,7 @@ pub struct GetOutputItems {
     )]
     #[doc = "UNIX timestamp for the run."]
     #[doc = ""]
-    pub timestamp: u64,
+    pub timestamp: i64,
     #[doc = "UTC timestamp for the run."]
     #[doc = ""]
     pub utc: String,
@@ -72,7 +72,7 @@ pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of event-iteration to simulate and return."]
     #[doc = ""]
-    pub iterations: Option<u64>,
+    pub iterations: Option<i64>,
     #[doc = "Job schedule. The format is a subset of `systemd` calendar events."]
     #[doc = ""]
     pub schedule: String,
@@ -83,7 +83,7 @@ pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "UNIX timestamp to start the calculation from. Defaults to the current time."]
     #[doc = ""]
-    pub starttime: Option<u64>,
+    pub starttime: Option<i64>,
     #[serde(
         flatten,
         default,

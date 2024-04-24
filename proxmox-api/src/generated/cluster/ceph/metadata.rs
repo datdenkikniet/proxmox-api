@@ -80,8 +80,8 @@ impl IdGetOutputMdsId {
         ceph_version: String,
         ceph_version_short: String,
         hostname: String,
-        mem_swap_kb: u64,
-        mem_total_kb: u64,
+        mem_swap_kb: i64,
+        mem_total_kb: i64,
         name: String,
     ) -> Self {
         Self {
@@ -120,14 +120,14 @@ pub struct IdGetOutputMdsId {
     )]
     #[doc = "Memory of the service currently in swap."]
     #[doc = ""]
-    pub mem_swap_kb: u64,
+    pub mem_swap_kb: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Memory consumption of the service."]
     #[doc = ""]
-    pub mem_total_kb: u64,
+    pub mem_total_kb: i64,
     #[doc = "Name of the service instance."]
     #[doc = ""]
     pub name: String,
@@ -145,8 +145,8 @@ impl IdGetOutputMgrId {
         ceph_version: String,
         ceph_version_short: String,
         hostname: String,
-        mem_swap_kb: u64,
-        mem_total_kb: u64,
+        mem_swap_kb: i64,
+        mem_total_kb: i64,
         name: String,
     ) -> Self {
         Self {
@@ -185,14 +185,14 @@ pub struct IdGetOutputMgrId {
     )]
     #[doc = "Memory of the service currently in swap."]
     #[doc = ""]
-    pub mem_swap_kb: u64,
+    pub mem_swap_kb: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Memory consumption of the service."]
     #[doc = ""]
-    pub mem_total_kb: u64,
+    pub mem_total_kb: i64,
     #[doc = "Name of the service instance."]
     #[doc = ""]
     pub name: String,
@@ -210,8 +210,8 @@ impl IdGetOutputMonId {
         ceph_version: String,
         ceph_version_short: String,
         hostname: String,
-        mem_swap_kb: u64,
-        mem_total_kb: u64,
+        mem_swap_kb: i64,
+        mem_total_kb: i64,
         name: String,
     ) -> Self {
         Self {
@@ -250,14 +250,14 @@ pub struct IdGetOutputMonId {
     )]
     #[doc = "Memory of the service currently in swap."]
     #[doc = ""]
-    pub mem_swap_kb: u64,
+    pub mem_swap_kb: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Memory consumption of the service."]
     #[doc = ""]
-    pub mem_total_kb: u64,
+    pub mem_total_kb: i64,
     #[doc = "Name of the service instance."]
     #[doc = ""]
     pub name: String,

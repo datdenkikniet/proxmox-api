@@ -67,7 +67,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Snapshot creation time"]
     #[doc = ""]
-    pub snaptime: Option<u64>,
+    pub snaptime: Option<i64>,
     #[serde(
         flatten,
         default,

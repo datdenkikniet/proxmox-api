@@ -73,13 +73,13 @@ pub struct PutParams {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub reversemaskv6: Option<u64>,
+    pub reversemaskv6: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub ttl: Option<u64>,
+    pub ttl: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub url: Option<String>,
     #[serde(

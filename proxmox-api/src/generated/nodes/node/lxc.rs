@@ -75,7 +75,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Root disk size in bytes."]
     #[doc = ""]
-    pub maxdisk: Option<u64>,
+    pub maxdisk: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -83,7 +83,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum memory in bytes."]
     #[doc = ""]
-    pub maxmem: Option<u64>,
+    pub maxmem: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -91,7 +91,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum SWAP memory in bytes."]
     #[doc = ""]
-    pub maxswap: Option<u64>,
+    pub maxswap: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Container name."]
     #[doc = ""]
@@ -110,7 +110,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Uptime."]
     #[doc = ""]
-    pub uptime: Option<u64>,
+    pub uptime: Option<i64>,
     #[doc = "The (unique) ID of the VM."]
     #[doc = ""]
     pub vmid: crate::types::VmId,
@@ -203,7 +203,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of cores assigned to the container. A container can use all available cores by default."]
     #[doc = ""]
-    pub cores: Option<u64>,
+    pub cores: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
         deserialize_with = "crate::types::deserialize_number_optional"
@@ -223,7 +223,7 @@ pub struct PostParams {
     #[doc = ""]
     #[doc = "CPU weight for a container. Argument is used in the kernel fair scheduler. The larger the number is, the more CPU time this container gets. Number is relative to the weights of all the other running guests."]
     #[doc = ""]
-    pub cpuunits: Option<u64>,
+    pub cpuunits: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -286,7 +286,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of RAM for the container in MB."]
     #[doc = ""]
-    pub memory: Option<u64>,
+    pub memory: Option<i64>,
     #[serde(rename = "mp[n]")]
     #[serde(
         serialize_with = "crate::types::serialize_multi::<NumberedMps, _>",
@@ -386,7 +386,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of SWAP for the container in MB."]
     #[doc = ""]
-    pub swap: Option<u64>,
+    pub swap: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Tags of the Container. This is only meta information."]
     #[doc = ""]
@@ -410,7 +410,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify the number of tty available to the container"]
     #[doc = ""]
-    pub tty: Option<u64>,
+    pub tty: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

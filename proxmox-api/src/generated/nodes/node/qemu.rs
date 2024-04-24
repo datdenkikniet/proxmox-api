@@ -78,7 +78,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Root disk size in bytes."]
     #[doc = ""]
-    pub maxdisk: Option<u64>,
+    pub maxdisk: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -86,7 +86,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum memory in bytes."]
     #[doc = ""]
-    pub maxmem: Option<u64>,
+    pub maxmem: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "VM name."]
     #[doc = ""]
@@ -98,7 +98,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "PID of running qemu process."]
     #[doc = ""]
-    pub pid: Option<u64>,
+    pub pid: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "VM run state from the 'query-status' QMP monitor command."]
     #[doc = ""]
@@ -127,7 +127,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Uptime."]
     #[doc = ""]
-    pub uptime: Option<u64>,
+    pub uptime: Option<i64>,
     #[doc = "The (unique) ID of the VM."]
     #[doc = ""]
     pub vmid: crate::types::VmId,
@@ -303,7 +303,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of target RAM for the VM in MiB. Using zero disables the ballon driver."]
     #[doc = ""]
-    pub balloon: Option<u64>,
+    pub balloon: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Select BIOS implementation."]
     #[doc = ""]
@@ -323,7 +323,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Override I/O bandwidth limit (in KiB/s)."]
     #[doc = ""]
-    pub bwlimit: Option<u64>,
+    pub bwlimit: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "This is an alias for option -ide2"]
     #[doc = ""]
@@ -359,7 +359,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of cores per socket."]
     #[doc = ""]
-    pub cores: Option<u64>,
+    pub cores: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Emulated CPU type."]
     #[doc = ""]
@@ -385,7 +385,7 @@ pub struct PostParams {
     #[doc = ""]
     #[doc = "CPU weight for a VM. Argument is used in the kernel fair scheduler. The larger the number is, the more CPU time this VM gets. Number is relative to weights of all the other running VMs."]
     #[doc = ""]
-    pub cpuunits: Option<u64>,
+    pub cpuunits: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the VM. Shown in the web-interface VM's summary. This is saved as comment inside the configuration file."]
     #[doc = ""]
@@ -542,7 +542,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set maximum speed (in MB/s) for migrations. Value 0 is no limit."]
     #[doc = ""]
-    pub migrate_speed: Option<u64>,
+    pub migrate_speed: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set a name for the VM. Only used on the configuration web interface."]
     #[doc = ""]
@@ -722,7 +722,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of memory shares for auto-ballooning. The larger the number is, the more memory this VM gets. Number is relative to weights of all other running VMs. Using zero disables auto-ballooning. Auto-ballooning is done by pvestatd."]
     #[doc = ""]
-    pub shares: Option<u64>,
+    pub shares: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify SMBIOS type 1 fields."]
     #[doc = ""]
@@ -734,7 +734,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of CPUs. Please use option -sockets instead."]
     #[doc = ""]
-    pub smp: Option<u64>,
+    pub smp: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -742,7 +742,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of CPU sockets."]
     #[doc = ""]
-    pub sockets: Option<u64>,
+    pub sockets: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure additional enhancements for SPICE."]
     #[doc = ""]
@@ -840,7 +840,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of hotplugged vcpus."]
     #[doc = ""]
-    pub vcpus: Option<u64>,
+    pub vcpus: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure the VGA hardware."]
     #[doc = ""]

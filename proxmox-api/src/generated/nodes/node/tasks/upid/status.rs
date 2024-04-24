@@ -29,7 +29,7 @@ impl GetOutput {
     pub fn new(
         id: String,
         node: String,
-        pid: u64,
+        pid: i64,
         starttime: f64,
         status: Status,
         ty: String,
@@ -60,7 +60,7 @@ pub struct GetOutput {
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub pid: u64,
+    pub pid: i64,
     #[serde(
         serialize_with = "crate::types::serialize_number",
         deserialize_with = "crate::types::deserialize_number"

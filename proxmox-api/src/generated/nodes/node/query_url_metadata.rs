@@ -36,7 +36,7 @@ pub struct GetOutput {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub size: Option<u64>,
+    pub size: Option<i64>,
     #[serde(
         flatten,
         default,

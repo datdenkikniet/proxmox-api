@@ -122,7 +122,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Extra delay in seconds to wait before requesting validation. Allows to cope with a long TTL of DNS records."]
     #[doc = ""]
-    pub validation_delay: Option<u64>,
+    pub validation_delay: Option<i64>,
     #[serde(
         flatten,
         default,

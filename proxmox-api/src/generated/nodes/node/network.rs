@@ -193,7 +193,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "MTU."]
     #[doc = ""]
-    pub mtu: Option<u64>,
+    pub mtu: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Network mask."]
     #[doc = ""]
@@ -205,7 +205,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Network mask."]
     #[doc = ""]
-    pub netmask6: Option<u64>,
+    pub netmask6: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify the interfaces used by the bonding device."]
     #[doc = ""]
@@ -229,7 +229,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify a VLan tag (used by OVSPort, OVSIntPort, OVSBond)"]
     #[doc = ""]
-    pub ovs_tag: Option<u64>,
+    pub ovs_tag: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify the interfaces used by the bonding device."]
     #[doc = ""]
@@ -246,7 +246,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "vlan-id for a custom named vlan interface (ifupdown2 only)."]
     #[doc = ""]
-    pub vlan_id: Option<u64>,
+    pub vlan_id: Option<i64>,
     #[serde(rename = "vlan-raw-device")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify the raw interface for the vlan interface."]

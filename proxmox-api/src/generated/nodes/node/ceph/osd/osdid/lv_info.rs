@@ -30,7 +30,7 @@ impl GetOutput {
         creation_time: String,
         lv_name: String,
         lv_path: String,
-        lv_size: u64,
+        lv_size: i64,
         lv_uuid: String,
         vg_name: String,
     ) -> Self {
@@ -62,7 +62,7 @@ pub struct GetOutput {
     )]
     #[doc = "Size of the logical volume (LV)."]
     #[doc = ""]
-    pub lv_size: u64,
+    pub lv_size: i64,
     #[doc = "UUID of the logical volume (LV)."]
     #[doc = ""]
     pub lv_uuid: String,

@@ -99,7 +99,7 @@ pub struct MembersGetOutputMembersItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub vmid: Option<u64>,
+    pub vmid: Option<i64>,
     #[serde(
         flatten,
         default,

@@ -27,11 +27,11 @@ where
 }
 impl GetOutputItems {
     pub fn new(
-        busnum: u64,
-        class: u64,
-        devnum: u64,
-        level: u64,
-        port: u64,
+        busnum: i64,
+        class: i64,
+        devnum: i64,
+        level: i64,
+        port: i64,
         prodid: String,
         speed: String,
         vendid: String,
@@ -59,29 +59,29 @@ pub struct GetOutputItems {
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub busnum: u64,
+    pub busnum: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub class: u64,
+    pub class: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub devnum: u64,
+    pub devnum: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub level: u64,
+    pub level: i64,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub manufacturer: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub port: u64,
+    pub port: i64,
     pub prodid: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub product: Option<String>,

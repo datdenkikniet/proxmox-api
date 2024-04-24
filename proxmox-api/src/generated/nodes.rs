@@ -63,7 +63,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of available CPUs."]
     #[doc = ""]
-    pub maxcpu: Option<u64>,
+    pub maxcpu: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -71,7 +71,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of available memory in bytes."]
     #[doc = ""]
-    pub maxmem: Option<u64>,
+    pub maxmem: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -79,7 +79,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Used memory in bytes."]
     #[doc = ""]
-    pub mem: Option<u64>,
+    pub mem: Option<i64>,
     #[doc = "The cluster node name."]
     #[doc = ""]
     pub node: String,
@@ -97,7 +97,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node uptime in seconds."]
     #[doc = ""]
-    pub uptime: Option<u64>,
+    pub uptime: Option<i64>,
     #[serde(
         flatten,
         default,

@@ -27,7 +27,7 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(disable: bool, id: String, port: u64, server: String, ty: String) -> Self {
+    pub fn new(disable: bool, id: String, port: i64, server: String, ty: String) -> Self {
         Self {
             disable,
             id,
@@ -56,7 +56,7 @@ pub struct GetOutputItems {
     )]
     #[doc = "Server network port"]
     #[doc = ""]
-    pub port: u64,
+    pub port: i64,
     #[doc = "Server dns name or IP address"]
     #[doc = ""]
     pub server: String,

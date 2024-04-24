@@ -49,7 +49,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Minimum number of available replicas per object to allow I/O"]
     #[doc = ""]
-    pub min_size: Option<u64>,
+    pub min_size: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Use specific network for all ceph related traffic"]
     #[doc = ""]
@@ -63,7 +63,7 @@ pub struct PostParams {
     #[doc = ""]
     #[doc = "Depreacted. This setting was deprecated in recent Ceph versions."]
     #[doc = ""]
-    pub pg_bits: Option<u64>,
+    pub pg_bits: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -71,7 +71,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Targeted number of replicas per object"]
     #[doc = ""]
-    pub size: Option<u64>,
+    pub size: Option<i64>,
     #[serde(
         flatten,
         default,

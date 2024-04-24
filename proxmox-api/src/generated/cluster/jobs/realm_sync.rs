@@ -66,7 +66,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Last execution time of the job in seconds since the beginning of the UNIX epoch"]
     #[doc = ""]
-    pub last_run: Option<u64>,
+    pub last_run: Option<i64>,
     #[serde(rename = "next-run")]
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -75,7 +75,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Next planned execution time of the job in seconds since the beginning of the UNIX epoch."]
     #[doc = ""]
-    pub next_run: Option<u64>,
+    pub next_run: Option<i64>,
     #[doc = "Authentication domain ID"]
     #[doc = ""]
     pub realm: String,

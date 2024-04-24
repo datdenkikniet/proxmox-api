@@ -104,7 +104,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "vlan or vxlan id"]
     #[doc = ""]
-    pub tag: Option<u64>,
+    pub tag: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

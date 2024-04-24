@@ -38,7 +38,7 @@ pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Limit to the last X lines. Conflicts with a range."]
     #[doc = ""]
-    pub lastentries: Option<u64>,
+    pub lastentries: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -46,7 +46,7 @@ pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Display all log since this UNIX epoch. Conflicts with 'startcursor'."]
     #[doc = ""]
-    pub since: Option<u64>,
+    pub since: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Start after the given Cursor. Conflicts with 'since'"]
     #[doc = ""]
@@ -58,7 +58,7 @@ pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Display all log until this UNIX epoch. Conflicts with 'endcursor'."]
     #[doc = ""]
-    pub until: Option<u64>,
+    pub until: Option<i64>,
     #[serde(
         flatten,
         default,

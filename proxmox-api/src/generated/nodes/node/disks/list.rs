@@ -30,9 +30,9 @@ impl GetOutputItems {
         devpath: String,
         gpt: bool,
         mounted: bool,
-        osdid: u64,
-        osdid_list: Vec<u64>,
-        size: u64,
+        osdid: i64,
+        osdid_list: Vec<i64>,
+        size: i64,
     ) -> Self {
         Self {
             devpath,
@@ -75,10 +75,10 @@ pub struct GetOutputItems {
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub osdid: u64,
+    pub osdid: i64,
     #[serde(rename = "osdid-list")]
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
-    pub osdid_list: Vec<u64>,
+    pub osdid_list: Vec<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For partitions only. The device path of the disk the partition resides on."]
     #[doc = ""]
@@ -89,7 +89,7 @@ pub struct GetOutputItems {
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub size: u64,
+    pub size: i64,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub used: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]

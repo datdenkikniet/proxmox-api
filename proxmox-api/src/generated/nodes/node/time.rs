@@ -37,7 +37,7 @@ where
     }
 }
 impl GetOutput {
-    pub fn new(localtime: u64, time: u64, timezone: String) -> Self {
+    pub fn new(localtime: i64, time: i64, timezone: String) -> Self {
         Self {
             localtime,
             time,
@@ -53,14 +53,14 @@ pub struct GetOutput {
     )]
     #[doc = "Seconds since 1970-01-01 00:00:00 (local time)"]
     #[doc = ""]
-    pub localtime: u64,
+    pub localtime: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Seconds since 1970-01-01 00:00:00 UTC."]
     #[doc = ""]
-    pub time: u64,
+    pub time: i64,
     #[doc = "Time zone"]
     #[doc = ""]
     pub timezone: String,

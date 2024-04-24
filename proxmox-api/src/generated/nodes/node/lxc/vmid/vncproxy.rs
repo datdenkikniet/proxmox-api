@@ -34,7 +34,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "sets the height of the console in pixels."]
     #[doc = ""]
-    pub height: Option<u64>,
+    pub height: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -50,7 +50,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "sets the width of the console in pixels."]
     #[doc = ""]
-    pub width: Option<u64>,
+    pub width: Option<i64>,
     #[serde(
         flatten,
         default,

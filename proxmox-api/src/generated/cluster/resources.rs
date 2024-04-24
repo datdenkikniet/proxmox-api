@@ -62,7 +62,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The cgroup mode the node operates under (when type == node)."]
     #[doc = ""]
-    pub cgroup_mode: Option<u64>,
+    pub cgroup_mode: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allowed storage content types (when type == storage)."]
     #[doc = ""]
@@ -82,7 +82,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Used disk space in bytes (when type in storage), used root image spave for VMs (type in qemu,lxc)."]
     #[doc = ""]
-    pub disk: Option<u64>,
+    pub disk: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "HA service status (for HA managed VMs)."]
     #[doc = ""]
@@ -109,7 +109,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Storage size in bytes (when type in storage), root image size for VMs (type in qemu,lxc)."]
     #[doc = ""]
-    pub maxdisk: Option<u64>,
+    pub maxdisk: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -117,7 +117,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of available memory in bytes (when type in node,qemu,lxc)."]
     #[doc = ""]
-    pub maxmem: Option<u64>,
+    pub maxmem: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -125,7 +125,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Used memory in bytes (when type in node,qemu,lxc)."]
     #[doc = ""]
-    pub mem: Option<u64>,
+    pub mem: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Name of the resource."]
     #[doc = ""]
@@ -161,7 +161,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node uptime in seconds (when type in node,qemu,lxc)."]
     #[doc = ""]
-    pub uptime: Option<u64>,
+    pub uptime: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The numerical vmid (when type in qemu,lxc)."]
     #[doc = ""]

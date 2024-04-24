@@ -69,7 +69,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "API token expiration date (seconds since epoch). '0' means no expiration date."]
     #[doc = ""]
-    pub expire: Option<u64>,
+    pub expire: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -96,7 +96,7 @@ pub struct InfoPostOutputInfo {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "API token expiration date (seconds since epoch). '0' means no expiration date."]
     #[doc = ""]
-    pub expire: Option<u64>,
+    pub expire: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -143,7 +143,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "API token expiration date (seconds since epoch). '0' means no expiration date."]
     #[doc = ""]
-    pub expire: Option<u64>,
+    pub expire: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -170,7 +170,7 @@ pub struct PutOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "API token expiration date (seconds since epoch). '0' means no expiration date."]
     #[doc = ""]
-    pub expire: Option<u64>,
+    pub expire: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -197,7 +197,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "API token expiration date (seconds since epoch). '0' means no expiration date."]
     #[doc = ""]
-    pub expire: Option<u64>,
+    pub expire: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

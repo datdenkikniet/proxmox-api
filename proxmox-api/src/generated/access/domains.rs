@@ -232,7 +232,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Server port."]
     #[doc = ""]
-    pub port: Option<u64>,
+    pub port: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specifies whether the Authorization Server prompts the End-User for reauthentication and consent."]
     #[doc = ""]

@@ -67,7 +67,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Root disk size in bytes."]
     #[doc = ""]
-    pub maxdisk: Option<u64>,
+    pub maxdisk: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -75,7 +75,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum memory in bytes."]
     #[doc = ""]
-    pub maxmem: Option<u64>,
+    pub maxmem: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -83,7 +83,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum SWAP memory in bytes."]
     #[doc = ""]
-    pub maxswap: Option<u64>,
+    pub maxswap: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Container name."]
     #[doc = ""]
@@ -102,7 +102,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Uptime."]
     #[doc = ""]
-    pub uptime: Option<u64>,
+    pub uptime: Option<i64>,
     #[doc = "The (unique) ID of the VM."]
     #[doc = ""]
     pub vmid: crate::types::VmId,

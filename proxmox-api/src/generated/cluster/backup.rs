@@ -74,7 +74,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Limit I/O bandwidth (in KiB/s)."]
     #[doc = ""]
-    pub bwlimit: Option<u64>,
+    pub bwlimit: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the Job."]
     #[doc = ""]
@@ -123,7 +123,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set IO priority when using the BFQ scheduler. For snapshot and suspend mode backups of VMs, this only affects the compressor. A value of 8 means the idle priority is used, otherwise the best-effort priority is used with the specified value."]
     #[doc = ""]
-    pub ionice: Option<u64>,
+    pub ionice: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -131,7 +131,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal time to wait for the global lock (minutes)."]
     #[doc = ""]
-    pub lockwait: Option<u64>,
+    pub lockwait: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Deprecated: use notification targets/matchers instead. Specify when to send a notification mail"]
     #[doc = ""]
@@ -147,7 +147,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Deprecated: use 'prune-backups' instead. Maximal number of backup files per guest system."]
     #[doc = ""]
-    pub maxfiles: Option<u64>,
+    pub maxfiles: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Backup mode."]
     #[doc = ""]
@@ -187,7 +187,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Use pigz instead of gzip when N\\\\>0. N=1 uses half of cores, N\\\\>1 uses N as thread count."]
     #[doc = ""]
-    pub pigz: Option<u64>,
+    pub pigz: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Backup all known guest systems included in the specified pool."]
     #[doc = ""]
@@ -265,7 +265,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal time to wait until a guest system is stopped (minutes)."]
     #[doc = ""]
-    pub stopwait: Option<u64>,
+    pub stopwait: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Store resulting file to this storage."]
     #[doc = ""]
@@ -285,7 +285,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Zstd threads. N=0 uses half of the available cores, if N is set to a value bigger than 0, N is used as thread count."]
     #[doc = ""]
-    pub zstd: Option<u64>,
+    pub zstd: Option<i64>,
     #[serde(
         flatten,
         default,

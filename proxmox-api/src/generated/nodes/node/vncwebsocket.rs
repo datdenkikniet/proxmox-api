@@ -44,7 +44,7 @@ pub struct GetOutput {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl GetParams {
-    pub fn new(port: u64, vncticket: String) -> Self {
+    pub fn new(port: i64, vncticket: String) -> Self {
         Self {
             port,
             vncticket,
@@ -60,7 +60,7 @@ pub struct GetParams {
     )]
     #[doc = "Port number returned by previous vncproxy call."]
     #[doc = ""]
-    pub port: u64,
+    pub port: i64,
     #[doc = "Ticket from previous call to vncproxy."]
     #[doc = ""]
     pub vncticket: String,

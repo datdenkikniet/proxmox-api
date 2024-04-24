@@ -94,7 +94,7 @@ pub struct PostParams {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub section: Option<u64>,
+    pub section: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub token: Option<String>,
     #[serde(rename = "type")]

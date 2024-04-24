@@ -97,7 +97,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "vlan or vxlan id"]
     #[doc = ""]
-    pub tag: Option<u64>,
+    pub tag: Option<i64>,
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Type"]

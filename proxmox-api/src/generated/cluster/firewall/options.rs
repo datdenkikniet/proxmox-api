@@ -53,7 +53,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable or disable the firewall cluster wide."]
     #[doc = ""]
-    pub enable: Option<u64>,
+    pub enable: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log ratelimiting settings"]
     #[doc = ""]
@@ -98,7 +98,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable or disable the firewall cluster wide."]
     #[doc = ""]
-    pub enable: Option<u64>,
+    pub enable: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log ratelimiting settings"]
     #[doc = ""]

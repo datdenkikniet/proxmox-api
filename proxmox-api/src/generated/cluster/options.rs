@@ -112,7 +112,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Defines how many workers (per node) are maximal started  on actions like 'stopall VMs' or task from the ha-manager."]
     #[doc = ""]
-    pub max_workers: Option<u64>,
+    pub max_workers: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For cluster wide migration settings."]
     #[doc = ""]

@@ -90,7 +90,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "autonomous system number"]
     #[doc = ""]
-    pub asn: Option<u64>,
+    pub asn: Option<i64>,
     #[serde(rename = "bgp-multipath-as-path-relax")]
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -120,7 +120,7 @@ pub struct PutParams {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub ebgp_multihop: Option<u64>,
+    pub ebgp_multihop: Option<i64>,
     #[serde(rename = "isis-domain")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "ISIS domain."]

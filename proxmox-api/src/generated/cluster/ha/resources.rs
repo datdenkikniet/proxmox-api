@@ -100,7 +100,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal number of service relocate tries when a service failes to start."]
     #[doc = ""]
-    pub max_relocate: Option<u64>,
+    pub max_relocate: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -108,7 +108,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal number of tries to restart the service on a node after its start failed."]
     #[doc = ""]
-    pub max_restart: Option<u64>,
+    pub max_restart: Option<i64>,
     #[doc = "HA resource ID. This consists of a resource type followed by a resource specific name, separated with colon (example: vm:100 / ct:100). For virtual machines and containers, you can simply use the VM or CT id as a shortcut (example: 100)."]
     #[doc = ""]
     pub sid: String,

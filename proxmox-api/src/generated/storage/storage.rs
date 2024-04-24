@@ -231,7 +231,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal number of protected backups per guest. Use '-1' for unlimited."]
     #[doc = ""]
-    pub max_protected_backups: Option<u64>,
+    pub max_protected_backups: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -239,7 +239,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Deprecated: use 'prune-backups' instead. Maximal number of backup files per VM. Use '0' for unlimited."]
     #[doc = ""]
-    pub maxfiles: Option<u64>,
+    pub maxfiles: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -299,7 +299,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For non default port."]
     #[doc = ""]
-    pub port: Option<u64>,
+    pub port: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Preallocation mode for raw and qcow2 images. Using 'metadata' on raw images results in preallocation=off."]
     #[doc = ""]

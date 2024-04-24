@@ -38,14 +38,14 @@ impl GetOutput {
     pub fn new(
         fast_read: bool,
         hashpspool: bool,
-        id: u64,
+        id: i64,
         name: String,
         nodeep_scrub: bool,
         nodelete: bool,
         nopgchange: bool,
         noscrub: bool,
         nosizechange: bool,
-        pgp_num: u64,
+        pgp_num: i64,
         use_gmt_hitset: bool,
         write_fadvise_dontneed: bool,
     ) -> Self {
@@ -103,7 +103,7 @@ pub struct GetOutput {
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub id: u64,
+    pub id: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -111,7 +111,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Minimum number of replicas per object"]
     #[doc = ""]
-    pub min_size: Option<u64>,
+    pub min_size: Option<i64>,
     #[doc = "The name of the pool. It must be unique."]
     #[doc = ""]
     pub name: String,
@@ -152,7 +152,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of placement groups."]
     #[doc = ""]
-    pub pg_num: Option<u64>,
+    pub pg_num: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -160,12 +160,12 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Minimal number of placement groups."]
     #[doc = ""]
-    pub pg_num_min: Option<u64>,
+    pub pg_num_min: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub pgp_num: u64,
+    pub pgp_num: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -173,7 +173,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of replicas per object"]
     #[doc = ""]
-    pub size: Option<u64>,
+    pub size: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub statistics: Option<StatisticsGetOutputStatistics>,
     #[serde(skip_serializing_if = "Option::is_none", default)]

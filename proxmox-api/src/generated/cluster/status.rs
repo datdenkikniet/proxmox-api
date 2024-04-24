@@ -70,7 +70,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "\\\\[node\\\\] ID of the node from the corosync configuration."]
     #[doc = ""]
-    pub nodeid: Option<u64>,
+    pub nodeid: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -78,7 +78,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "\\\\[cluster\\\\] Nodes count, including offline nodes."]
     #[doc = ""]
-    pub nodes: Option<u64>,
+    pub nodes: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -106,7 +106,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "\\\\[cluster\\\\] Current version of the corosync configuration file."]
     #[doc = ""]
-    pub version: Option<u64>,
+    pub version: Option<i64>,
     #[serde(
         flatten,
         default,

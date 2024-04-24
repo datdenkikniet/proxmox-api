@@ -38,7 +38,7 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(pos: u64) -> Self {
+    pub fn new(pos: i64) -> Self {
         Self {
             pos,
             additional_properties: Default::default(),
@@ -51,7 +51,7 @@ pub struct GetOutputItems {
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub pos: u64,
+    pub pos: i64,
     #[serde(
         flatten,
         default,
@@ -109,7 +109,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Flag to enable/disable a rule."]
     #[doc = ""]
-    pub enable: Option<u64>,
+    pub enable: Option<i64>,
     #[serde(rename = "icmp-type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify icmp-type. Only valid if proto equals 'icmp' or 'icmpv6'/'ipv6-icmp'."]
@@ -135,7 +135,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Update rule at position \\\\<pos\\\\>."]
     #[doc = ""]
-    pub pos: Option<u64>,
+    pub pos: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "IP protocol. You can use protocol names ('tcp'/'udp') or simple numbers, as defined in '/etc/protocols'."]
     #[doc = ""]

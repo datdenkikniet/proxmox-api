@@ -44,7 +44,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Certificate's notAfter timestamp (UNIX epoch)."]
     #[doc = ""]
-    pub notafter: Option<u64>,
+    pub notafter: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -52,7 +52,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Certificate's notBefore timestamp (UNIX epoch)."]
     #[doc = ""]
-    pub notbefore: Option<u64>,
+    pub notbefore: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Certificate in PEM format"]
     #[doc = ""]
@@ -65,7 +65,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Certificate's public key size"]
     #[doc = ""]
-    pub public_key_bits: Option<u64>,
+    pub public_key_bits: Option<i64>,
     #[serde(rename = "public-key-type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Certificate's public key algorithm"]

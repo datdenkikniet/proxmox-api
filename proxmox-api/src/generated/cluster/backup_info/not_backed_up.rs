@@ -26,7 +26,7 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(ty: Type, vmid: u64) -> Self {
+    pub fn new(ty: Type, vmid: i64) -> Self {
         Self {
             ty,
             vmid,
@@ -51,7 +51,7 @@ pub struct GetOutputItems {
     )]
     #[doc = "VMID of the guest."]
     #[doc = ""]
-    pub vmid: u64,
+    pub vmid: i64,
     #[serde(
         flatten,
         default,
