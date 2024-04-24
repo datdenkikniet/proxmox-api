@@ -21,7 +21,7 @@ where
         type Value = i64;
 
         fn expecting(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-            write!(f, "A string or number encoded bool")
+            write!(f, "an integer or string encoding an integer")
         }
 
         fn visit_u64<E>(self, v: u64) -> Result<Self::Value, E>
