@@ -299,7 +299,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 pub enum Influxdbproto {
     #[serde(rename = "http")]
     Http,
@@ -324,7 +324,7 @@ impl Default for Influxdbproto {
         Self::Udp
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Protocol to send graphite data. TCP or UDP (default)"]
 #[doc = ""]
 pub enum Proto {
@@ -343,7 +343,7 @@ impl TryFrom<&str> for Proto {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Plugin type."]
 #[doc = ""]
 pub enum Type {

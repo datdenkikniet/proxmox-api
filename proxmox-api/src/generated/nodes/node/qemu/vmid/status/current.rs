@@ -161,7 +161,7 @@ pub struct HaGetOutputHa {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Enable a specific clipboard. If not set, depending on the display type the SPICE one will be added."]
 #[doc = ""]
 pub enum Clipboard {
@@ -177,7 +177,7 @@ impl TryFrom<&str> for Clipboard {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "QEMU process status."]
 #[doc = ""]
 pub enum Status {

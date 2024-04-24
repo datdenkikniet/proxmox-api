@@ -127,7 +127,7 @@ pub struct GetParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Whether the backup would be kept or removed. Backups that are protected or don't use the standard naming scheme are not removed."]
 #[doc = ""]
 pub enum Mark {
@@ -152,7 +152,7 @@ impl TryFrom<&str> for Mark {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Either 'qemu' or 'lxc'. Only consider backups for guests of this type."]
 #[doc = ""]
 pub enum Type {

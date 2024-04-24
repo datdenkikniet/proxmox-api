@@ -230,7 +230,7 @@ pub struct StatisticsGetOutputStatistics {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "The application of the pool."]
 #[doc = ""]
 pub enum Application {
@@ -257,7 +257,7 @@ impl Default for Application {
         Self::Rbd
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "The automatic PG scaling mode of the pool."]
 #[doc = ""]
 pub enum PgAutoscaleMode {

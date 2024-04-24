@@ -56,7 +56,7 @@ pub struct GetParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "The type of TFA the users realm has set, if any."]
 #[doc = ""]
 pub enum Realm {
@@ -75,7 +75,7 @@ impl TryFrom<&str> for Realm {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "A TFA type."]
 #[doc = ""]
 pub enum Types {
@@ -103,7 +103,7 @@ impl TryFrom<&str> for Types {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "The type of TFA the user has set, if any. Only set if 'multiple' was not passed."]
 #[doc = ""]
 pub enum User {

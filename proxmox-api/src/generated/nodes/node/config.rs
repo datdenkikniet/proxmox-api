@@ -162,7 +162,7 @@ impl crate::types::multi::Test for PutParams {
         the_test as _
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Return only a specific property from the node configuration."]
 #[doc = ""]
 pub enum Property {

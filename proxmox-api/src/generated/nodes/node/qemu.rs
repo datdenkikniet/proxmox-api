@@ -919,7 +919,7 @@ impl crate::types::multi::Test for PostParams {
         the_test as _
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Virtual processor architecture. Defaults to the host."]
 #[doc = ""]
 pub enum Arch {
@@ -938,7 +938,7 @@ impl TryFrom<&str> for Arch {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Select BIOS implementation."]
 #[doc = ""]
 pub enum Bios {
@@ -962,7 +962,7 @@ impl Default for Bios {
         Self::Seabios
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Specifies the cloud-init configuration format. The default depends on the configured operating system type (`ostype`. We use the `nocloud` format for Linux, and `configdrive2` for windows."]
 #[doc = ""]
 pub enum Citype {
@@ -984,7 +984,7 @@ impl TryFrom<&str> for Citype {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Enable/disable hugepages memory."]
 #[doc = ""]
 pub enum Hugepages {
@@ -1006,7 +1006,7 @@ impl TryFrom<&str> for Hugepages {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Keyboard layout for VNC server. This option is generally not required and is often better handled from within the guest OS."]
 #[doc = ""]
 pub enum Keyboard {
@@ -1094,7 +1094,7 @@ impl TryFrom<&str> for Keyboard {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Lock/unlock the VM."]
 #[doc = ""]
 pub enum Lock {
@@ -1134,7 +1134,7 @@ impl TryFrom<&str> for Lock {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Specify guest operating system."]
 #[doc = ""]
 #[doc = "Specify guest operating system. This is used to enable special"]
@@ -1218,7 +1218,7 @@ impl TryFrom<&str> for Ostype {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "SCSI controller model"]
 #[doc = ""]
 pub enum Scsihw {
@@ -1254,7 +1254,7 @@ impl Default for Scsihw {
         Self::Lsi
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "QEMU process status."]
 #[doc = ""]
 pub enum Status {

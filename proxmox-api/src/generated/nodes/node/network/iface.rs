@@ -245,7 +245,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Bonding mode."]
 #[doc = ""]
 pub enum BondMode {
@@ -288,7 +288,7 @@ impl TryFrom<&str> for BondMode {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Selects the transmit hash policy to use for slave selection in balance-xor and 802.3ad modes."]
 #[doc = ""]
 pub enum BondXmitHashPolicy {
@@ -310,7 +310,7 @@ impl TryFrom<&str> for BondXmitHashPolicy {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Network interface type"]
 #[doc = ""]
 pub enum Type {

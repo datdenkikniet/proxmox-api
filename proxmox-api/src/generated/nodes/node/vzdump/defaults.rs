@@ -230,7 +230,7 @@ pub struct GetParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Compress dump file."]
 #[doc = ""]
 pub enum Compress {
@@ -263,7 +263,7 @@ impl Default for Compress {
         Self::_0
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Deprecated: use notification targets/matchers instead. Specify when to send a notification mail"]
 #[doc = ""]
 pub enum Mailnotification {
@@ -287,7 +287,7 @@ impl Default for Mailnotification {
         Self::Always
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Backup mode."]
 #[doc = ""]
 pub enum Mode {
@@ -314,7 +314,7 @@ impl Default for Mode {
         Self::Snapshot
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Determine which notification system to use. If set to 'legacy-sendmail', vzdump will consider the mailto/mailnotification parameters and send emails to the specified address(es) via the 'sendmail' command. If set to 'notification-system', a notification will be sent via PVE's notification system, and the mailto and mailnotification will be ignored. If set to 'auto' (default setting), an email will be sent if mailto is set, and the notification system will be used if not."]
 #[doc = ""]
 pub enum NotificationMode {
@@ -341,7 +341,7 @@ impl Default for NotificationMode {
         Self::Auto
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Deprecated: Do not use"]
 #[doc = ""]
 pub enum NotificationPolicy {

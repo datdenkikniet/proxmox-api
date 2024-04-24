@@ -197,7 +197,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Requested resource state."]
 #[doc = ""]
 pub enum State {
@@ -225,7 +225,7 @@ impl TryFrom<&str> for State {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Requested resource state."]
 #[doc = ""]
 #[doc = "Requested resource state. The CRM reads this state and acts accordingly."]

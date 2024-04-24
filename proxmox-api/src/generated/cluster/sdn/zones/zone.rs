@@ -231,7 +231,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Type of the DHCP backend for this zone"]
 #[doc = ""]
 pub enum Dhcp {
@@ -247,7 +247,7 @@ impl TryFrom<&str> for Dhcp {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 pub enum VlanProtocol {
     #[serde(rename = "802.1ad")]
     _8021ad,

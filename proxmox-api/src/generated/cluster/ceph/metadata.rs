@@ -393,7 +393,7 @@ pub struct VersionGetOutputNodeNodeVersion {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 pub enum Scope {
     #[serde(rename = "all")]
     All,

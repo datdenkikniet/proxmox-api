@@ -308,7 +308,7 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "LDAP protocol mode."]
 #[doc = ""]
 pub enum Mode {
@@ -335,7 +335,7 @@ impl Default for Mode {
         Self::Ldap
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "LDAPS TLS/SSL version. It's not recommended to use version older than 1.2!"]
 #[doc = ""]
 pub enum Sslversion {
@@ -360,7 +360,7 @@ impl TryFrom<&str> for Sslversion {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Two-factor authentication provider."]
 #[doc = ""]
 pub enum Tfa {
@@ -379,7 +379,7 @@ impl TryFrom<&str> for Tfa {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Realm type."]
 #[doc = ""]
 pub enum Type {
