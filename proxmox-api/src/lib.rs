@@ -8,8 +8,8 @@ pub mod types;
 mod generated;
 pub use generated::*;
 
-#[cfg(feature = "reqwest-client")]
-mod reqwest_client;
+#[cfg(any(feature = "reqwest-client", feature = "ureq-client"))]
+mod clients;
 
-#[cfg(feature = "reqwest-client")]
-pub use reqwest_client::Client as ReqwestClient;
+#[cfg(any(feature = "reqwest-client", feature = "ureq-client"))]
+pub use clients::*;
