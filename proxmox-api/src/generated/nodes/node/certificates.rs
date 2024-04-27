@@ -1,6 +1,7 @@
 pub mod acme;
 pub mod custom;
 pub mod info;
+#[derive(Debug, Clone)]
 pub struct CertificatesClient<T> {
     client: T,
     path: String,

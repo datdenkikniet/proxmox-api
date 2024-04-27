@@ -14,6 +14,7 @@ pub mod rules;
 pub mod start;
 pub mod status;
 pub mod stop;
+#[derive(Debug, Clone)]
 pub struct CephClient<T> {
     client: T,
     path: String,

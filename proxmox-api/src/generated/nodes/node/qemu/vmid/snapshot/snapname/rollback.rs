@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct RollbackClient<T> {
     client: T,
     path: String,

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct LvInfoClient<T> {
     client: T,
     path: String,
@@ -29,7 +30,7 @@ impl GetOutput {
         creation_time: String,
         lv_name: String,
         lv_path: String,
-        lv_size: u64,
+        lv_size: i64,
         lv_uuid: String,
         vg_name: String,
     ) -> Self {
@@ -61,7 +62,7 @@ pub struct GetOutput {
     )]
     #[doc = "Size of the logical volume (LV)."]
     #[doc = ""]
-    pub lv_size: u64,
+    pub lv_size: i64,
     #[doc = "UUID of the logical volume (LV)."]
     #[doc = ""]
     pub lv_uuid: String,
@@ -89,7 +90,7 @@ pub struct GetParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "OSD device type"]
 #[doc = ""]
 pub enum Type {

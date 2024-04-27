@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct ConfigClient<T> {
     client: T,
     path: String,
@@ -67,7 +68,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Initial delay in seconds, before starting all the Virtual Guests with on-boot enabled."]
     #[doc = ""]
-    pub startall_onboot_delay: Option<u64>,
+    pub startall_onboot_delay: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node specific wake on LAN settings."]
     #[doc = ""]
@@ -139,7 +140,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Initial delay in seconds, before starting all the Virtual Guests with on-boot enabled."]
     #[doc = ""]
-    pub startall_onboot_delay: Option<u64>,
+    pub startall_onboot_delay: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node specific wake on LAN settings."]
     #[doc = ""]
@@ -162,7 +163,7 @@ impl crate::types::multi::Test for PutParams {
         the_test as _
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Return only a specific property from the node configuration."]
 #[doc = ""]
 pub enum Property {

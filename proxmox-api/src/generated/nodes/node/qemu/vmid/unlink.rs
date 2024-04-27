@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct UnlinkClient<T> {
     client: T,
     path: String,

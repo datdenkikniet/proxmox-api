@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct SendkeyClient<T> {
     client: T,
     path: String,

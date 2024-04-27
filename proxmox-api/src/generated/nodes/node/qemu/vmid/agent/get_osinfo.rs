@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct GetOsinfoClient<T> {
     client: T,
     path: String,

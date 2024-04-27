@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct CifsClient<T> {
     client: T,
     path: String,

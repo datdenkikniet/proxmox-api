@@ -1,4 +1,5 @@
 pub mod monid;
+#[derive(Debug, Clone)]
 pub struct MonClient<T> {
     client: T,
     path: String,
@@ -70,13 +71,13 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub rank: Option<u64>,
+    pub rank: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub service: Option<u64>,
+    pub service: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub state: Option<String>,
     #[serde(

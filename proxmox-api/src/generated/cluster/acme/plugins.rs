@@ -1,4 +1,5 @@
 pub mod id;
+#[derive(Debug, Clone)]
 pub struct PluginsClient<T> {
     client: T,
     path: String,
@@ -121,7 +122,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Extra delay in seconds to wait before requesting validation. Allows to cope with a long TTL of DNS records."]
     #[doc = ""]
-    pub validation_delay: Option<u64>,
+    pub validation_delay: Option<i64>,
     #[serde(
         flatten,
         default,
@@ -129,7 +130,7 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "API plugin name"]
 #[doc = ""]
 pub enum Api {
@@ -577,7 +578,7 @@ impl TryFrom<&str> for Api {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Only list ACME plugins of a specific type"]
 #[doc = ""]
 pub enum Type {

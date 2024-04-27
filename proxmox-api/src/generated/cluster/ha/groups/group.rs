@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct GroupClient<T> {
     client: T,
     path: String,

@@ -1,4 +1,5 @@
 pub mod vmid;
+#[derive(Debug, Clone)]
 pub struct LxcClient<T> {
     client: T,
     path: String,
@@ -74,7 +75,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Root disk size in bytes."]
     #[doc = ""]
-    pub maxdisk: Option<u64>,
+    pub maxdisk: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -82,7 +83,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum memory in bytes."]
     #[doc = ""]
-    pub maxmem: Option<u64>,
+    pub maxmem: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -90,7 +91,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum SWAP memory in bytes."]
     #[doc = ""]
-    pub maxswap: Option<u64>,
+    pub maxswap: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Container name."]
     #[doc = ""]
@@ -109,7 +110,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Uptime."]
     #[doc = ""]
-    pub uptime: Option<u64>,
+    pub uptime: Option<i64>,
     #[doc = "The (unique) ID of the VM."]
     #[doc = ""]
     pub vmid: crate::types::VmId,
@@ -202,7 +203,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of cores assigned to the container. A container can use all available cores by default."]
     #[doc = ""]
-    pub cores: Option<u64>,
+    pub cores: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
         deserialize_with = "crate::types::deserialize_number_optional"
@@ -222,7 +223,7 @@ pub struct PostParams {
     #[doc = ""]
     #[doc = "CPU weight for a container. Argument is used in the kernel fair scheduler. The larger the number is, the more CPU time this container gets. Number is relative to the weights of all the other running guests."]
     #[doc = ""]
-    pub cpuunits: Option<u64>,
+    pub cpuunits: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -285,7 +286,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of RAM for the container in MB."]
     #[doc = ""]
-    pub memory: Option<u64>,
+    pub memory: Option<i64>,
     #[serde(rename = "mp[n]")]
     #[serde(
         serialize_with = "crate::types::serialize_multi::<NumberedMps, _>",
@@ -385,7 +386,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of SWAP for the container in MB."]
     #[doc = ""]
-    pub swap: Option<u64>,
+    pub swap: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Tags of the Container. This is only meta information."]
     #[doc = ""]
@@ -409,7 +410,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify the number of tty available to the container"]
     #[doc = ""]
-    pub tty: Option<u64>,
+    pub tty: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -463,7 +464,7 @@ impl crate::types::multi::Test for PostParams {
         the_test as _
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "OS architecture type."]
 #[doc = ""]
 pub enum Arch {
@@ -499,7 +500,7 @@ impl Default for Arch {
         Self::Amd64
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Console mode. By default, the console command tries to open a connection to one of the available tty devices. By setting cmode to 'console' it tries to attach to /dev/console instead. If you set cmode to 'shell', it simply invokes a shell inside the container (no login)."]
 #[doc = ""]
 pub enum Cmode {
@@ -526,7 +527,7 @@ impl Default for Cmode {
         Self::Tty
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Lock/unlock the container."]
 #[doc = ""]
 pub enum Lock {
@@ -569,7 +570,7 @@ impl TryFrom<&str> for Lock {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "OS type. This is used to setup configuration inside the container, and corresponds to lxc setup scripts in /usr/share/lxc/config/\\<ostype\\>.common.conf. Value 'unmanaged' can be used to skip and OS specific setup."]
 #[doc = ""]
 pub enum Ostype {
@@ -615,7 +616,7 @@ impl TryFrom<&str> for Ostype {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "LXC Container status."]
 #[doc = ""]
 pub enum Status {

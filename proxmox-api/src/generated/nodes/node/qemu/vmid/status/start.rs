@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct StartClient<T> {
     client: T,
     path: String,
@@ -70,7 +71,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Wait maximal timeout seconds."]
     #[doc = ""]
-    pub timeout: Option<u64>,
+    pub timeout: Option<i64>,
     #[serde(
         flatten,
         default,
@@ -78,7 +79,7 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Migration traffic is encrypted using an SSH tunnel by default. On secure, completely private networks this can be disabled to increase performance."]
 #[doc = ""]
 pub enum MigrationType {

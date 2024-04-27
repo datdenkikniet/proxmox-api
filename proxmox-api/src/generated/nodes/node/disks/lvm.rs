@@ -1,4 +1,5 @@
 pub mod name;
+#[derive(Debug, Clone)]
 pub struct LvmClient<T> {
     client: T,
     path: String,
@@ -37,7 +38,7 @@ where
     }
 }
 impl ChildrenGetOutputChildrenItems {
-    pub fn new(free: u64, leaf: bool, name: String, size: u64) -> Self {
+    pub fn new(free: i64, leaf: bool, name: String, size: i64) -> Self {
         Self {
             free,
             leaf,
@@ -60,7 +61,7 @@ pub struct ChildrenGetOutputChildrenItems {
     )]
     #[doc = "The free bytes in the volume group"]
     #[doc = ""]
-    pub free: u64,
+    pub free: i64,
     #[serde(
         serialize_with = "crate::types::serialize_bool",
         deserialize_with = "crate::types::deserialize_bool"
@@ -75,7 +76,7 @@ pub struct ChildrenGetOutputChildrenItems {
     )]
     #[doc = "The size of the volume group in bytes"]
     #[doc = ""]
-    pub size: u64,
+    pub size: i64,
     #[serde(
         flatten,
         default,
@@ -84,7 +85,7 @@ pub struct ChildrenGetOutputChildrenItems {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl ChildrenGetOutputChildrenItemsChildrenItems {
-    pub fn new(free: u64, leaf: bool, name: String, size: u64) -> Self {
+    pub fn new(free: i64, leaf: bool, name: String, size: i64) -> Self {
         Self {
             free,
             leaf,
@@ -102,7 +103,7 @@ pub struct ChildrenGetOutputChildrenItemsChildrenItems {
     )]
     #[doc = "The free bytes in the physical volume"]
     #[doc = ""]
-    pub free: u64,
+    pub free: i64,
     #[serde(
         serialize_with = "crate::types::serialize_bool",
         deserialize_with = "crate::types::deserialize_bool"
@@ -117,7 +118,7 @@ pub struct ChildrenGetOutputChildrenItemsChildrenItems {
     )]
     #[doc = "The size of the physical volume in bytes"]
     #[doc = ""]
-    pub size: u64,
+    pub size: i64,
     #[serde(
         flatten,
         default,

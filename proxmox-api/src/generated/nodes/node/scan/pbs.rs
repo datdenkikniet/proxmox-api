@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct PbsClient<T> {
     client: T,
     path: String,
@@ -77,7 +78,7 @@ pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Optional port."]
     #[doc = ""]
-    pub port: Option<u64>,
+    pub port: Option<i64>,
     #[doc = "The server address (name or IP)."]
     #[doc = ""]
     pub server: String,

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct NfsClient<T> {
     client: T,
     path: String,

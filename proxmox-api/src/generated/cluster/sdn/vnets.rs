@@ -1,4 +1,5 @@
 pub mod vnet;
+#[derive(Debug, Clone)]
 pub struct VnetsClient<T> {
     client: T,
     path: String,
@@ -96,7 +97,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "vlan or vxlan id"]
     #[doc = ""]
-    pub tag: Option<u64>,
+    pub tag: Option<i64>,
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Type"]
@@ -123,7 +124,7 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Type"]
 #[doc = ""]
 pub enum Type {

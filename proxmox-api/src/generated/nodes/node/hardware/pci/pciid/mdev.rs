@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct MdevClient<T> {
     client: T,
     path: String,
@@ -25,7 +26,7 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(available: u64, description: String, ty: String) -> Self {
+    pub fn new(available: i64, description: String, ty: String) -> Self {
         Self {
             available,
             description,
@@ -42,7 +43,7 @@ pub struct GetOutputItems {
     )]
     #[doc = "The number of still available instances of this type."]
     #[doc = ""]
-    pub available: u64,
+    pub available: i64,
     pub description: String,
     #[serde(rename = "type")]
     #[doc = "The name of the mdev type."]

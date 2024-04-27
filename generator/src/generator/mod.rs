@@ -248,6 +248,7 @@ impl Generator {
         let client = proxmox_api(quote!(client::Client));
 
         let definition = quote! {
+            #[derive(Debug, Clone)]
             pub struct #client_name<T> {
                 client: T,
                 path: String,

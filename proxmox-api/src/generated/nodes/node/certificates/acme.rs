@@ -1,4 +1,5 @@
 pub mod certificate;
+#[derive(Debug, Clone)]
 pub struct AcmeClient<T> {
     client: T,
     path: String,

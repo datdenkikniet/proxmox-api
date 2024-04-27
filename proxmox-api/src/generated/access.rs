@@ -8,6 +8,7 @@ pub mod roles;
 pub mod tfa;
 pub mod ticket;
 pub mod users;
+#[derive(Debug, Clone)]
 pub struct AccessClient<T> {
     client: T,
     path: String,

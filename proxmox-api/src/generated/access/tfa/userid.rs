@@ -1,4 +1,5 @@
 pub mod id;
+#[derive(Debug, Clone)]
 pub struct UseridClient<T> {
     client: T,
     path: String,
@@ -37,7 +38,7 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(created: u64, description: String, id: String, ty: Type) -> Self {
+    pub fn new(created: i64, description: String, id: String, ty: Type) -> Self {
         Self {
             created,
             description,
@@ -56,7 +57,7 @@ pub struct GetOutputItems {
     )]
     #[doc = "Creation time of this entry as unix epoch."]
     #[doc = ""]
-    pub created: u64,
+    pub created: i64,
     #[doc = "User chosen description for this entry."]
     #[doc = ""]
     pub description: String,
@@ -158,7 +159,7 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "TFA Entry Type."]
 #[doc = ""]
 pub enum Type {

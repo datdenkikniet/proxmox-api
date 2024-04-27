@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct StopallClient<T> {
     client: T,
     path: String,
@@ -42,7 +43,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Timeout for each guest shutdown task. Depending on `force-stop`, the shutdown gets then simply aborted or a hard-stop is forced."]
     #[doc = ""]
-    pub timeout: Option<u64>,
+    pub timeout: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only consider Guests with these IDs."]
     #[doc = ""]

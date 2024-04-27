@@ -1,5 +1,6 @@
 pub mod auth_url;
 pub mod login;
+#[derive(Debug, Clone)]
 pub struct OpenidClient<T> {
     client: T,
     path: String,

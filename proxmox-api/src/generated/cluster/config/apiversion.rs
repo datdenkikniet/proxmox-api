@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct ApiversionClient<T> {
     client: T,
     path: String,
@@ -19,7 +20,7 @@ where
 {
     #[doc = "Return the version of the cluster join API available on this node."]
     #[doc = ""]
-    pub fn get(&self) -> Result<u64, T::Error> {
+    pub fn get(&self) -> Result<i64, T::Error> {
         let path = self.path.to_string();
         Ok(self
             .client

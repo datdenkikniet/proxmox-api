@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct PrunebackupsClient<T> {
     client: T,
     path: String,
@@ -59,7 +60,7 @@ pub struct DeleteParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl GetOutputItems {
-    pub fn new(ctime: u64, mark: Mark, ty: String, volid: String) -> Self {
+    pub fn new(ctime: i64, mark: Mark, ty: String, volid: String) -> Self {
         Self {
             ctime,
             mark,
@@ -78,7 +79,7 @@ pub struct GetOutputItems {
     )]
     #[doc = "Creation time of the backup (seconds since the UNIX epoch)."]
     #[doc = ""]
-    pub ctime: u64,
+    pub ctime: i64,
     #[doc = "Whether the backup would be kept or removed. Backups that are protected or don't use the standard naming scheme are not removed."]
     #[doc = ""]
     pub mark: Mark,
@@ -93,7 +94,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The VM the backup belongs to."]
     #[doc = ""]
-    pub vmid: Option<u64>,
+    pub vmid: Option<i64>,
     #[doc = "Backup volume ID."]
     #[doc = ""]
     pub volid: String,
@@ -127,7 +128,7 @@ pub struct GetParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Whether the backup would be kept or removed. Backups that are protected or don't use the standard naming scheme are not removed."]
 #[doc = ""]
 pub enum Mark {
@@ -152,7 +153,7 @@ impl TryFrom<&str> for Mark {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Either 'qemu' or 'lxc'. Only consider backups for guests of this type."]
 #[doc = ""]
 pub enum Type {

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct CurrentClient<T> {
     client: T,
     path: String,
@@ -58,7 +59,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For type 'service'."]
     #[doc = ""]
-    pub max_relocate: Option<u64>,
+    pub max_relocate: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -66,7 +67,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For type 'service'."]
     #[doc = ""]
-    pub max_restart: Option<u64>,
+    pub max_restart: Option<i64>,
     #[doc = "Node associated to status entry."]
     #[doc = ""]
     pub node: String,
@@ -100,7 +101,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For type 'lrm','master'. Timestamp of the status information."]
     #[doc = ""]
-    pub timestamp: Option<u64>,
+    pub timestamp: Option<i64>,
     #[serde(
         flatten,
         default,

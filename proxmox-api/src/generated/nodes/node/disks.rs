@@ -6,6 +6,7 @@ pub mod lvmthin;
 pub mod smart;
 pub mod wipedisk;
 pub mod zfs;
+#[derive(Debug, Clone)]
 pub struct DisksClient<T> {
     client: T,
     path: String,

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct OptionsClient<T> {
     client: T,
     path: String,
@@ -111,7 +112,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Defines how many workers (per node) are maximal started  on actions like 'stopall VMs' or task from the ha-manager."]
     #[doc = ""]
-    pub max_workers: Option<u64>,
+    pub max_workers: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For cluster wide migration settings."]
     #[doc = ""]
@@ -163,7 +164,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Select the default Console viewer. You can either use the builtin java applet (VNC; deprecated and maps to html5), an external virt-viewer comtatible application (SPICE), an HTML5 based vnc viewer (noVNC), or an HTML5 based console client (xtermjs). If the selected viewer is not available (e.g. SPICE not activated for the VM), the fallback is noVNC."]
 #[doc = ""]
 pub enum Console {
@@ -188,7 +189,7 @@ impl TryFrom<&str> for Console {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Set the fencing mode of the HA cluster. Hardware mode needs a valid configuration of fence devices in /etc/pve/ha/fence.cfg. With both all two modes are used."]
 #[doc = ""]
 #[doc = "WARNING: 'hardware' and 'both' are EXPERIMENTAL & WIP"]
@@ -217,7 +218,7 @@ impl Default for Fencing {
         Self::Watchdog
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Default keybord layout for vnc server."]
 #[doc = ""]
 pub enum Keyboard {
@@ -305,7 +306,7 @@ impl TryFrom<&str> for Keyboard {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Default GUI language."]
 #[doc = ""]
 pub enum Language {

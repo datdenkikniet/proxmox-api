@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct MigrateallClient<T> {
     client: T,
     path: String,
@@ -44,7 +45,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal number of parallel migration job. If not set, uses'max_workers' from datacenter.cfg. One of both must be set!"]
     #[doc = ""]
-    pub maxworkers: Option<u64>,
+    pub maxworkers: Option<i64>,
     #[doc = "Target node."]
     #[doc = ""]
     pub target: String,

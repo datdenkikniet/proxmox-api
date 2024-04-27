@@ -1,4 +1,5 @@
 pub mod userid;
+#[derive(Debug, Clone)]
 pub struct UsersClient<T> {
     client: T,
     path: String,
@@ -77,7 +78,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Account expiration date (seconds since epoch). '0' means no expiration date."]
     #[doc = ""]
-    pub expire: Option<u64>,
+    pub expire: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub firstname: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -101,7 +102,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Contains a timestamp until when a user is locked out of 2nd factors."]
     #[doc = ""]
-    pub tfa_locked_until: Option<u64>,
+    pub tfa_locked_until: Option<i64>,
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     pub tokens: Vec<TokensGetOutputItemsTokensItems>,
     #[serde(rename = "totp-locked")]
@@ -186,7 +187,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Account expiration date (seconds since epoch). '0' means no expiration date."]
     #[doc = ""]
-    pub expire: Option<u64>,
+    pub expire: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub firstname: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -233,7 +234,7 @@ pub struct TokensGetOutputItemsTokensItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "API token expiration date (seconds since epoch). '0' means no expiration date."]
     #[doc = ""]
-    pub expire: Option<u64>,
+    pub expire: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

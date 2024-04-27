@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct GetMemoryBlockInfoClient<T> {
     client: T,
     path: String,

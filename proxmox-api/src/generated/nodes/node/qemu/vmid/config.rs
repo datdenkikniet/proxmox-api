@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct ConfigClient<T> {
     client: T,
     path: String,
@@ -182,7 +183,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of target RAM for the VM in MiB. Using zero disables the ballon driver."]
     #[doc = ""]
-    pub balloon: Option<u64>,
+    pub balloon: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Select BIOS implementation."]
     #[doc = ""]
@@ -230,7 +231,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of cores per socket."]
     #[doc = ""]
-    pub cores: Option<u64>,
+    pub cores: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Emulated CPU type."]
     #[doc = ""]
@@ -256,7 +257,7 @@ pub struct GetOutput {
     #[doc = ""]
     #[doc = "CPU weight for a VM. Argument is used in the kernel fair scheduler. The larger the number is, the more CPU time this VM gets. Number is relative to weights of all the other running VMs."]
     #[doc = ""]
-    pub cpuunits: Option<u64>,
+    pub cpuunits: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the VM. Shown in the web-interface VM's summary. This is saved as comment inside the configuration file."]
     #[doc = ""]
@@ -399,7 +400,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set maximum speed (in MB/s) for migrations. Value 0 is no limit."]
     #[doc = ""]
-    pub migrate_speed: Option<u64>,
+    pub migrate_speed: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set a name for the VM. Only used on the configuration web interface."]
     #[doc = ""]
@@ -575,7 +576,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of memory shares for auto-ballooning. The larger the number is, the more memory this VM gets. Number is relative to weights of all other running VMs. Using zero disables auto-ballooning. Auto-ballooning is done by pvestatd."]
     #[doc = ""]
-    pub shares: Option<u64>,
+    pub shares: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify SMBIOS type 1 fields."]
     #[doc = ""]
@@ -587,7 +588,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of CPUs. Please use option -sockets instead."]
     #[doc = ""]
-    pub smp: Option<u64>,
+    pub smp: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -595,7 +596,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of CPU sockets."]
     #[doc = ""]
-    pub sockets: Option<u64>,
+    pub sockets: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure additional enhancements for SPICE."]
     #[doc = ""]
@@ -673,7 +674,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of hotplugged vcpus."]
     #[doc = ""]
-    pub vcpus: Option<u64>,
+    pub vcpus: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure the VGA hardware."]
     #[doc = ""]
@@ -822,7 +823,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Time to wait for the task to finish. We return 'null' if the task finish within that time."]
     #[doc = ""]
-    pub background_delay: Option<u64>,
+    pub background_delay: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -830,7 +831,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of target RAM for the VM in MiB. Using zero disables the ballon driver."]
     #[doc = ""]
-    pub balloon: Option<u64>,
+    pub balloon: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Select BIOS implementation."]
     #[doc = ""]
@@ -878,7 +879,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of cores per socket."]
     #[doc = ""]
-    pub cores: Option<u64>,
+    pub cores: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Emulated CPU type."]
     #[doc = ""]
@@ -904,7 +905,7 @@ pub struct PostParams {
     #[doc = ""]
     #[doc = "CPU weight for a VM. Argument is used in the kernel fair scheduler. The larger the number is, the more CPU time this VM gets. Number is relative to weights of all the other running VMs."]
     #[doc = ""]
-    pub cpuunits: Option<u64>,
+    pub cpuunits: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of settings you want to delete."]
     #[doc = ""]
@@ -1060,7 +1061,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set maximum speed (in MB/s) for migrations. Value 0 is no limit."]
     #[doc = ""]
-    pub migrate_speed: Option<u64>,
+    pub migrate_speed: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set a name for the VM. Only used on the configuration web interface."]
     #[doc = ""]
@@ -1240,7 +1241,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of memory shares for auto-ballooning. The larger the number is, the more memory this VM gets. Number is relative to weights of all other running VMs. Using zero disables auto-ballooning. Auto-ballooning is done by pvestatd."]
     #[doc = ""]
-    pub shares: Option<u64>,
+    pub shares: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -1260,7 +1261,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of CPUs. Please use option -sockets instead."]
     #[doc = ""]
-    pub smp: Option<u64>,
+    pub smp: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -1268,7 +1269,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of CPU sockets."]
     #[doc = ""]
-    pub sockets: Option<u64>,
+    pub sockets: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure additional enhancements for SPICE."]
     #[doc = ""]
@@ -1346,7 +1347,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of hotplugged vcpus."]
     #[doc = ""]
-    pub vcpus: Option<u64>,
+    pub vcpus: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure the VGA hardware."]
     #[doc = ""]
@@ -1474,7 +1475,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of target RAM for the VM in MiB. Using zero disables the ballon driver."]
     #[doc = ""]
-    pub balloon: Option<u64>,
+    pub balloon: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Select BIOS implementation."]
     #[doc = ""]
@@ -1522,7 +1523,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of cores per socket."]
     #[doc = ""]
-    pub cores: Option<u64>,
+    pub cores: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Emulated CPU type."]
     #[doc = ""]
@@ -1548,7 +1549,7 @@ pub struct PutParams {
     #[doc = ""]
     #[doc = "CPU weight for a VM. Argument is used in the kernel fair scheduler. The larger the number is, the more CPU time this VM gets. Number is relative to weights of all the other running VMs."]
     #[doc = ""]
-    pub cpuunits: Option<u64>,
+    pub cpuunits: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of settings you want to delete."]
     #[doc = ""]
@@ -1704,7 +1705,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set maximum speed (in MB/s) for migrations. Value 0 is no limit."]
     #[doc = ""]
-    pub migrate_speed: Option<u64>,
+    pub migrate_speed: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set a name for the VM. Only used on the configuration web interface."]
     #[doc = ""]
@@ -1884,7 +1885,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of memory shares for auto-ballooning. The larger the number is, the more memory this VM gets. Number is relative to weights of all other running VMs. Using zero disables auto-ballooning. Auto-ballooning is done by pvestatd."]
     #[doc = ""]
-    pub shares: Option<u64>,
+    pub shares: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -1904,7 +1905,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of CPUs. Please use option -sockets instead."]
     #[doc = ""]
-    pub smp: Option<u64>,
+    pub smp: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -1912,7 +1913,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of CPU sockets."]
     #[doc = ""]
-    pub sockets: Option<u64>,
+    pub sockets: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure additional enhancements for SPICE."]
     #[doc = ""]
@@ -1990,7 +1991,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of hotplugged vcpus."]
     #[doc = ""]
-    pub vcpus: Option<u64>,
+    pub vcpus: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Configure the VGA hardware."]
     #[doc = ""]
@@ -2067,7 +2068,7 @@ impl crate::types::multi::Test for PutParams {
         the_test as _
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Virtual processor architecture. Defaults to the host."]
 #[doc = ""]
 pub enum Arch {
@@ -2086,7 +2087,7 @@ impl TryFrom<&str> for Arch {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Select BIOS implementation."]
 #[doc = ""]
 pub enum Bios {
@@ -2110,7 +2111,7 @@ impl Default for Bios {
         Self::Seabios
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Specifies the cloud-init configuration format. The default depends on the configured operating system type (`ostype`. We use the `nocloud` format for Linux, and `configdrive2` for windows."]
 #[doc = ""]
 pub enum Citype {
@@ -2132,7 +2133,7 @@ impl TryFrom<&str> for Citype {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Enable/disable hugepages memory."]
 #[doc = ""]
 pub enum Hugepages {
@@ -2154,7 +2155,7 @@ impl TryFrom<&str> for Hugepages {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Keyboard layout for VNC server. This option is generally not required and is often better handled from within the guest OS."]
 #[doc = ""]
 pub enum Keyboard {
@@ -2242,7 +2243,7 @@ impl TryFrom<&str> for Keyboard {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Lock/unlock the VM."]
 #[doc = ""]
 pub enum Lock {
@@ -2282,7 +2283,7 @@ impl TryFrom<&str> for Lock {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Specify guest operating system."]
 #[doc = ""]
 #[doc = "Specify guest operating system. This is used to enable special"]
@@ -2366,7 +2367,7 @@ impl TryFrom<&str> for Ostype {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "SCSI controller model"]
 #[doc = ""]
 pub enum Scsihw {

@@ -1,6 +1,7 @@
 pub mod endpoints;
 pub mod matchers;
 pub mod targets;
+#[derive(Debug, Clone)]
 pub struct NotificationsClient<T> {
     client: T,
     path: String,

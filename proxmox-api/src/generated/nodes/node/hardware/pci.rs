@@ -1,4 +1,5 @@
 pub mod pciid;
+#[derive(Debug, Clone)]
 pub struct PciClient<T> {
     client: T,
     path: String,
@@ -26,7 +27,7 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(class: String, device: String, id: String, iommugroup: u64, vendor: String) -> Self {
+    pub fn new(class: String, device: String, id: String, iommugroup: i64, vendor: String) -> Self {
         Self {
             class,
             device,
@@ -63,7 +64,7 @@ pub struct GetOutputItems {
     )]
     #[doc = "The IOMMU group in which the device is in. If no IOMMU group is detected, it is set to -1."]
     #[doc = ""]
-    pub iommugroup: u64,
+    pub iommugroup: i64,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

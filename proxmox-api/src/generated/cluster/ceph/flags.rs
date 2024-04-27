@@ -1,4 +1,5 @@
 pub mod flag;
+#[derive(Debug, Clone)]
 pub struct FlagsClient<T> {
     client: T,
     path: String,
@@ -166,7 +167,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Flag name."]
 #[doc = ""]
 pub enum Name {

@@ -1,4 +1,5 @@
 pub mod storage;
+#[derive(Debug, Clone)]
 pub struct StorageClient<T> {
     client: T,
     path: String,
@@ -59,7 +60,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Available storage space in bytes."]
     #[doc = ""]
-    pub avail: Option<u64>,
+    pub avail: Option<i64>,
     #[doc = "Allowed storage content types."]
     #[doc = ""]
     pub content: String,
@@ -89,7 +90,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Total storage space in bytes."]
     #[doc = ""]
-    pub total: Option<u64>,
+    pub total: Option<i64>,
     #[serde(rename = "type")]
     #[doc = "Storage type."]
     #[doc = ""]
@@ -101,7 +102,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Used storage space in bytes."]
     #[doc = ""]
-    pub used: Option<u64>,
+    pub used: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
         deserialize_with = "crate::types::deserialize_number_optional"

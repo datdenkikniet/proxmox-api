@@ -19,6 +19,7 @@ pub mod template;
 pub mod termproxy;
 pub mod vncproxy;
 pub mod vncwebsocket;
+#[derive(Debug, Clone)]
 pub struct VmidClient<T> {
     client: T,
     path: String,

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct WipediskClient<T> {
     client: T,
     path: String,

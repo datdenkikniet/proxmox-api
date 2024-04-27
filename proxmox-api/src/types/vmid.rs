@@ -6,19 +6,19 @@ pub struct VmId(
         deserialize_with = "crate::types::deserialize_int",
         serialize_with = "crate::types::serialize_int"
     )]
-    u64,
+    i64,
 );
 
 impl VmId {
-    pub fn new(value: u64) -> Option<Self> {
+    pub fn new(value: i64) -> Option<Self> {
         if (100..=999_999_999).contains(&value) {
-            Some(Self(value))
+            Some(Self(value as i64))
         } else {
             None
         }
     }
 
-    pub fn get(&self) -> u64 {
+    pub fn get(&self) -> i64 {
         self.0
     }
 }

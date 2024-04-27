@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct NameClient<T> {
     client: T,
     path: String,
@@ -42,7 +43,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of placement groups for the backing data pool. The metadata pool will use a quarter of this."]
     #[doc = ""]
-    pub pg_num: Option<u64>,
+    pub pg_num: Option<i64>,
     #[serde(
         flatten,
         default,

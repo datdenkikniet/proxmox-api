@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct FstrimClient<T> {
     client: T,
     path: String,

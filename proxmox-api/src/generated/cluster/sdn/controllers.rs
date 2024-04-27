@@ -1,4 +1,5 @@
 pub mod controller;
+#[derive(Debug, Clone)]
 pub struct ControllersClient<T> {
     client: T,
     path: String,
@@ -125,7 +126,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "autonomous system number"]
     #[doc = ""]
-    pub asn: Option<u64>,
+    pub asn: Option<i64>,
     #[serde(rename = "bgp-multipath-as-path-relax")]
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -150,7 +151,7 @@ pub struct PostParams {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub ebgp_multihop: Option<u64>,
+    pub ebgp_multihop: Option<i64>,
     #[serde(rename = "isis-domain")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "ISIS domain."]
@@ -189,7 +190,7 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Only list sdn controllers of specific type"]
 #[doc = ""]
 pub enum Type {

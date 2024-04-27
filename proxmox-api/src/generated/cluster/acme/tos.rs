@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct TosClient<T> {
     client: T,
     path: String,

@@ -1,4 +1,5 @@
 pub mod qemu;
+#[derive(Debug, Clone)]
 pub struct CapabilitiesClient<T> {
     client: T,
     path: String,

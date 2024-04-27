@@ -1,4 +1,5 @@
 pub mod service;
+#[derive(Debug, Clone)]
 pub struct ServicesClient<T> {
     client: T,
     path: String,

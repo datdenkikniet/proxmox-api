@@ -1,5 +1,6 @@
 pub mod current;
 pub mod manager_status;
+#[derive(Debug, Clone)]
 pub struct StatusClient<T> {
     client: T,
     path: String,

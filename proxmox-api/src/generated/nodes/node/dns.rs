@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct DnsClient<T> {
     client: T,
     path: String,

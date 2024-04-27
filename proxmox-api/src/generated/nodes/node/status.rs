@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct StatusClient<T> {
     client: T,
     path: String,
@@ -145,7 +146,7 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Specify the command."]
 #[doc = ""]
 pub enum Command {
@@ -164,7 +165,7 @@ impl TryFrom<&str> for Command {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Through which firmware the system got booted."]
 #[doc = ""]
 pub enum Mode {

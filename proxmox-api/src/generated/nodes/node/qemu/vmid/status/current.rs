@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct CurrentClient<T> {
     client: T,
     path: String,
@@ -84,7 +85,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Root disk size in bytes."]
     #[doc = ""]
-    pub maxdisk: Option<u64>,
+    pub maxdisk: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -92,7 +93,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum memory in bytes."]
     #[doc = ""]
-    pub maxmem: Option<u64>,
+    pub maxmem: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "VM name."]
     #[doc = ""]
@@ -104,7 +105,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "PID of running qemu process."]
     #[doc = ""]
-    pub pid: Option<u64>,
+    pub pid: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "VM run state from the 'query-status' QMP monitor command."]
     #[doc = ""]
@@ -141,7 +142,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Uptime."]
     #[doc = ""]
-    pub uptime: Option<u64>,
+    pub uptime: Option<i64>,
     #[doc = "The (unique) ID of the VM."]
     #[doc = ""]
     pub vmid: crate::types::VmId,
@@ -161,7 +162,7 @@ pub struct HaGetOutputHa {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Enable a specific clipboard. If not set, depending on the display type the SPICE one will be added."]
 #[doc = ""]
 pub enum Clipboard {
@@ -177,7 +178,7 @@ impl TryFrom<&str> for Clipboard {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "QEMU process status."]
 #[doc = ""]
 pub enum Status {

@@ -1,4 +1,5 @@
 pub mod zone;
+#[derive(Debug, Clone)]
 pub struct ZonesClient<T> {
     client: T,
     path: String,
@@ -69,7 +70,7 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub mtu: Option<u64>,
+    pub mtu: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub nodes: Option<String>,
     #[serde(
@@ -209,7 +210,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Faucet dataplane id"]
     #[doc = ""]
-    pub dp_id: Option<u64>,
+    pub dp_id: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of cluster node names."]
     #[doc = ""]
@@ -243,7 +244,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "MTU"]
     #[doc = ""]
-    pub mtu: Option<u64>,
+    pub mtu: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of cluster node names."]
     #[doc = ""]
@@ -268,7 +269,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Service-VLAN Tag"]
     #[doc = ""]
-    pub tag: Option<u64>,
+    pub tag: Option<i64>,
     #[serde(rename = "type")]
     #[doc = "Plugin type."]
     #[doc = ""]
@@ -284,7 +285,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "l3vni."]
     #[doc = ""]
-    pub vrf_vxlan: Option<u64>,
+    pub vrf_vxlan: Option<i64>,
     #[serde(rename = "vxlan-port")]
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -293,7 +294,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Vxlan tunnel udp port (default 4789)."]
     #[doc = ""]
-    pub vxlan_port: Option<u64>,
+    pub vxlan_port: Option<i64>,
     #[doc = "The SDN zone object identifier."]
     #[doc = ""]
     pub zone: String,
@@ -304,7 +305,7 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Type of the DHCP backend for this zone"]
 #[doc = ""]
 pub enum Dhcp {
@@ -320,7 +321,7 @@ impl TryFrom<&str> for Dhcp {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Only list SDN zones of specific type"]
 #[doc = ""]
 pub enum Type {
@@ -351,7 +352,7 @@ impl TryFrom<&str> for Type {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 pub enum VlanProtocol {
     #[serde(rename = "802.1ad")]
     _8021ad,
