@@ -16,7 +16,13 @@ pub enum Error {
     ResponseWasNotString,
     DecodingFailed(String, serde_json::Error),
     Other(&'static str),
-    UnknownFailure,
+    NoData,
+}
+
+impl crate::client::Error for Error {
+    fn is_empty_data(&self) -> bool {
+        matches!(self, Self::NoData)
+    }
 }
 
 impl From<ureq::Error> for Error {
@@ -260,7 +266,7 @@ impl crate::client::Client for Client {
         } else if let Some(errors) = result.errors {
             Err(Error::EncounteredErrors(errors))
         } else {
-            Err(Error::UnknownFailure)
+            Err(Error::NoData)
         }
     }
 }

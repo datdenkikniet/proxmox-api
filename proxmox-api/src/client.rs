@@ -19,8 +19,12 @@ impl std::fmt::Display for Method {
     }
 }
 
+pub trait Error {
+    fn is_empty_data(&self) -> bool;
+}
+
 pub trait Client: Clone {
-    type Error: core::fmt::Debug;
+    type Error: core::fmt::Debug + Error;
 
     /// Transmit an authenticated request to a Proxmox VE API endpoint
     /// using the provided method, path, body, and query.

@@ -13,11 +13,18 @@ pub enum Error {
     DecodingFailed(String, serde_json::Error),
     UnknownFailure(StatusCode),
     Other(&'static str),
+    NoData,
 }
 
 impl From<reqwest::Error> for Error {
     fn from(value: reqwest::Error) -> Self {
         Self::Reqwest(value)
+    }
+}
+
+impl crate::client::Error for Error {
+    fn is_empty_data(&self) -> bool {
+        matches!(self, Self::NoData)
     }
 }
 
@@ -201,7 +208,7 @@ impl crate::client::Client for Client {
         } else if let Some(errors) = result.errors {
             Err(Error::EncounteredErrors(errors))
         } else {
-            Err(Error::UnknownFailure(response_status))
+            Err(Error::NoData)
         }
     }
 }
