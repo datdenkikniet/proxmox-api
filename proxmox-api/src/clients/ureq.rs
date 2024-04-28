@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{sync::Arc, time::Duration};
 
 use rustls::{
     client::danger::{HandshakeSignatureValid, ServerCertVerified, ServerCertVerifier},
@@ -204,6 +204,7 @@ impl crate::client::Client for Client {
 
         let agent = ureq::AgentBuilder::new()
             .tls_config(Arc::new(config))
+            .timeout_connect(Duration::from_secs(10))
             .build();
 
         let request = match method {
