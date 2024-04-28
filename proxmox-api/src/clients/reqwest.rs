@@ -1,44 +1,9 @@
-#![allow(warnings)]
+use std::sync::Arc;
 
-use std::{
-    sync::Arc,
-    time::{Duration, Instant},
-};
-
-use parking_lot::RwLock;
 use reqwest::{blocking::RequestBuilder, Method, StatusCode};
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
-// Hardcoded auth stuff so we don't have to activate all of `access`.
-
-#[derive(Debug, Serialize)]
-struct Ticket<'a> {
-    #[serde(rename = "username")]
-    user: &'a str,
-    realm: &'a str,
-    password: &'a str,
-}
-
-impl<'a> Ticket<'a> {
-    pub fn new(user: &'a str, realm: &'a str, password: &'a str) -> Self {
-        Self {
-            user,
-            realm,
-            password,
-        }
-    }
-}
-
-#[derive(Debug, Deserialize)]
-struct TicketResponse {
-    pub username: String,
-    #[serde(rename = "CSRFPreventionToken")]
-    pub csrf_token: Option<String>,
-    #[serde(rename = "clustername")]
-    pub cluster_name: Option<String>,
-    #[serde(rename = "ticket")]
-    pub auth_ticket: Option<String>,
-}
+use super::base_access::{AuthState, Ticket, TicketResponse};
 
 #[derive(Debug)]
 pub enum Error {
@@ -56,14 +21,6 @@ impl From<reqwest::Error> for Error {
     }
 }
 
-#[derive(Debug)]
-struct AuthState {
-    auth_ticket: Option<String>,
-    auth_ticket_time: Instant,
-    csrf_token: Option<String>,
-    api_token: Option<String>,
-}
-
 #[derive(Debug, Clone)]
 pub struct Client {
     client: Arc<reqwest::blocking::Client>,
@@ -72,7 +29,7 @@ pub struct Client {
     user: String,
     realm: String,
 
-    auth_state: Arc<RwLock<AuthState>>,
+    auth_state: AuthState,
 }
 
 impl Client {
@@ -91,12 +48,7 @@ impl Client {
             host: host.to_string(),
             user: user.into(),
             realm: realm.into(),
-            auth_state: Arc::new(RwLock::new(AuthState {
-                auth_ticket: None,
-                csrf_token: None,
-                auth_ticket_time: Instant::now(),
-                api_token: None,
-            })),
+            auth_state: AuthState::new(),
         }
     }
 
@@ -109,10 +61,8 @@ impl Client {
     ) -> Result<Self, Error> {
         let me = Self::new_empty(host, user, realm);
 
-        let api_token = format!("{user}@{realm}!{token_id}={token}");
-
         // PVEAPIToken=USER@REALM!TOKENID=UUID
-        me.auth_state.write().api_token = Some(api_token);
+        me.auth_state.set_api_token(user, realm, token_id, token);
 
         Ok(me)
     }
@@ -130,26 +80,10 @@ impl Client {
     }
 
     fn append_headers(&self, request: RequestBuilder) -> RequestBuilder {
-        let auth_state = self.auth_state.read();
-
-        let request = if let Some(auth_ticket) = &auth_state.auth_ticket {
-            request.header("Cookie", format!("PVEAuthCookie={auth_ticket}"))
-        } else {
-            request
-        };
-
-        let request = if let Some(csrf) = &auth_state.csrf_token {
-            request.header("CSRFPreventionToken", csrf)
-        } else {
-            request
-        };
-
-        let request = if let Some(api_token) = &auth_state.api_token {
-            // PVEAPIToken=USER@REALM!TOKENID=UUID
-            request.header("Authorization", format!("PVEAPIToken={api_token}"))
-        } else {
-            request
-        };
+        let mut request = request;
+        for (k, v) in self.auth_state.headers() {
+            request = request.header(k, v);
+        }
 
         request
     }
@@ -162,19 +96,14 @@ impl Client {
         let csrf_details: TicketResponse =
             crate::client::Client::post(self, "/access/ticket", &request)?;
 
-        let mut auth_state = self.auth_state.write();
-
-        auth_state.auth_ticket_time = Instant::now();
         let ticket = csrf_details
             .auth_ticket
             .ok_or(Error::Other("Missing ticket from access response!"))?;
-        auth_state.auth_ticket = Some(format!("{ticket}"));
+        let csrf = csrf_details
+            .csrf_token
+            .ok_or(Error::Other("Missing CSRF token from access response!"))?;
 
-        auth_state.csrf_token = Some(
-            csrf_details
-                .csrf_token
-                .ok_or(Error::Other("Missing CSRF token from access response!"))?,
-        );
+        self.auth_state.set_csrf(ticket, csrf);
 
         Ok(())
     }
@@ -186,10 +115,10 @@ impl Client {
     pub fn refresh_auth_ticket(&self, force: bool) -> Result<(), Error> {
         log::trace!("Checking whether auth ticket should be refreshed (force: {force})");
 
-        let auth_ticket = if let Some(ticket) = self.auth_state.read().auth_ticket.as_ref() {
-            ticket.clone()
+        let auth_ticket = if let Some(ticket) = self.auth_state.auth_ticket() {
+            ticket
         } else {
-            if self.auth_state.read().api_token.is_none() {
+            if self.auth_state.api_token().is_none() {
                 log::warn!(
                     "Tried to refresh auth ticket without existing auth ticket or API token."
                 );
@@ -197,8 +126,7 @@ impl Client {
             return Ok(());
         };
 
-        if force || self.auth_state.read().auth_ticket_time.elapsed() > Duration::from_secs(60 * 60)
-        {
+        if force || self.auth_state.should_refresh() {
             // TODO: lock auth state during entire login operation to avoid
             // Time Of Check Time Of Use barriers
             log::debug!("Refreshing auth ticket.");
@@ -249,16 +177,21 @@ impl crate::client::Client for Client {
         };
 
         let response = self.append_headers(request).send()?;
-        let response_status = response.status();
 
-        if response_status != StatusCode::OK {
-            return Err(Error::UnknownFailure(response_status));
-        }
+        let response_status = response.status();
 
         let json_data = response.bytes()?;
         let json_str = std::str::from_utf8(&json_data).map_err(|_| Error::ResponseWasNotString)?;
 
         log::debug!("JSON response: {json_str}");
+
+        if response_status != StatusCode::OK {
+            // TODO: get useful error message from status message line.
+            // perhaps it is in the extensions? Proxmox sometimes returns
+            // HTTP 500 Disk is locked, and we need to be able to extract
+            // that information, somehow... Ureq client can do this
+            return Err(Error::UnknownFailure(response_status));
+        }
 
         let result: Response<R> = serde_json::from_str(json_str)
             .map_err(|e| Error::DecodingFailed(json_str.into(), e))?;
