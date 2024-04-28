@@ -72,6 +72,9 @@ impl Type<'_> {
 
         let output_type = if let Some(ty) = self.ty.as_ref() {
             match ty {
+                TypeKind::Null => {
+                    return None;
+                }
                 TypeKind::String {
                     enum_values,
                     default,
@@ -240,6 +243,7 @@ impl Default for IntOrTy<'_> {
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
 #[serde(tag = "type", rename_all = "kebab-case")]
 pub enum TypeKind<'a> {
+    Null,
     String {
         #[serde(rename = "maxLength", default, skip_serializing_if = "Option::is_none")]
         max_length: Option<u32>,

@@ -139,7 +139,20 @@ impl Generator {
                 let (returns, call) = if let Some(ret) = info.returns.as_ref() {
                     let output = ret.type_def("", &format!("{method}Output"));
 
-                    if let Some(output) = output {
+                    // Special case: NULL
+                    if ret.ty == Some(crate::raw::TypeKind::Null) {
+                        let error = proxmox_api(quote!(client::Error));
+                        (
+                            quote!( -> Result<(), T::Error> ),
+                            quote! {
+                                match self.client.#fn_name(#defer_signature) {
+                                    Ok(o) => Ok(o),
+                                    Err(e) if #error::is_empty_data(&e) => Ok(()),
+                                    Err(e) => Err(e),
+                                }
+                            },
+                        )
+                    } else if let Some(output) = output {
                         let def = output.def.unwrap().clone();
                         module_defs.push(def.clone());
                         module_defs.extend(output.module_defs);

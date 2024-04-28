@@ -34,7 +34,11 @@ where
     #[doc = ""]
     pub fn put(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
-        self.client.put(&path, &())
+        match self.client.put(&path, &()) {
+            Ok(o) => Ok(o),
+            Err(e) if crate::client::Error::is_empty_data(&e) => Ok(()),
+            Err(e) => Err(e),
+        }
     }
 }
 impl GetOutputItems {

@@ -23,7 +23,11 @@ where
     #[doc = ""]
     pub fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
-        self.client.delete(&path, &())
+        match self.client.delete(&path, &()) {
+            Ok(o) => Ok(o),
+            Err(e) if crate::client::Error::is_empty_data(&e) => Ok(()),
+            Err(e) => Err(e),
+        }
     }
 }
 impl<T> RealmClient<T>
@@ -45,7 +49,11 @@ where
     #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
-        self.client.put(&path, &params)
+        match self.client.put(&path, &params) {
+            Ok(o) => Ok(o),
+            Err(e) if crate::client::Error::is_empty_data(&e) => Ok(()),
+            Err(e) => Err(e),
+        }
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]

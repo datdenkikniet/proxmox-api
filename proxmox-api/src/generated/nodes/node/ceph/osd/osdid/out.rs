@@ -22,6 +22,10 @@ where
     #[doc = ""]
     pub fn post(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
-        self.client.post(&path, &())
+        match self.client.post(&path, &()) {
+            Ok(o) => Ok(o),
+            Err(e) if crate::client::Error::is_empty_data(&e) => Ok(()),
+            Err(e) => Err(e),
+        }
     }
 }

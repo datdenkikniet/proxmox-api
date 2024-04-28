@@ -22,7 +22,11 @@ where
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
-        self.client.post(&path, &params)
+        match self.client.post(&path, &params) {
+            Ok(o) => Ok(o),
+            Err(e) if crate::client::Error::is_empty_data(&e) => Ok(()),
+            Err(e) => Err(e),
+        }
     }
 }
 impl PostParams {

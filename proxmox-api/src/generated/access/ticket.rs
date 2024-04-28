@@ -22,7 +22,11 @@ where
     #[doc = ""]
     pub fn get(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
-        self.client.get(&path, &())
+        match self.client.get(&path, &()) {
+            Ok(o) => Ok(o),
+            Err(e) if crate::client::Error::is_empty_data(&e) => Ok(()),
+            Err(e) => Err(e),
+        }
     }
 }
 impl<T> TicketClient<T>
