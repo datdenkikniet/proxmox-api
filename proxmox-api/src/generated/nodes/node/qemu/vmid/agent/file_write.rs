@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct FileWriteClient<T> {
     client: T,
     path: String,

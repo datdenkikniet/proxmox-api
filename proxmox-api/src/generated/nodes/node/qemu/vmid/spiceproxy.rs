@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct SpiceproxyClient<T> {
     client: T,
     path: String,

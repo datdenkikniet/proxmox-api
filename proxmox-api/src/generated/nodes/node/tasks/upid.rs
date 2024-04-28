@@ -1,5 +1,6 @@
 pub mod log;
 pub mod status;
+#[derive(Debug, Clone)]
 pub struct UpidClient<T> {
     client: T,
     path: String,

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct DownloadUrlClient<T> {
     client: T,
     path: String,
@@ -78,7 +79,7 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "The algorithm to calculate the checksum of the file."]
 #[doc = ""]
 pub enum ChecksumAlgorithm {
@@ -109,7 +110,7 @@ impl TryFrom<&str> for ChecksumAlgorithm {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Content type."]
 #[doc = ""]
 pub enum Content {

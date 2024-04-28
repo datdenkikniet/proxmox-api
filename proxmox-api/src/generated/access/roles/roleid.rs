@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct RoleidClient<T> {
     client: T,
     path: String,

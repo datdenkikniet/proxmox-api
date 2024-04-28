@@ -3,6 +3,7 @@ pub mod dns;
 pub mod ipams;
 pub mod vnets;
 pub mod zones;
+#[derive(Debug, Clone)]
 pub struct SdnClient<T> {
     client: T,
     path: String,

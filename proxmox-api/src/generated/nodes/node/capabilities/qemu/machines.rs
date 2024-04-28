@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct MachinesClient<T> {
     client: T,
     path: String,
@@ -53,7 +54,7 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "The machine type."]
 #[doc = ""]
 pub enum Type {

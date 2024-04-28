@@ -1,4 +1,5 @@
 pub mod dns;
+#[derive(Debug, Clone)]
 pub struct DnsClient<T> {
     client: T,
     path: String,
@@ -96,19 +97,19 @@ pub struct PostParams {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub reversemaskv6: Option<u64>,
+    pub reversemaskv6: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub reversev6mask: Option<u64>,
+    pub reversev6mask: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub ttl: Option<u64>,
+    pub ttl: Option<i64>,
     #[serde(rename = "type")]
     #[doc = "Plugin type."]
     #[doc = ""]
@@ -121,7 +122,7 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Only list sdn dns of specific type"]
 #[doc = ""]
 pub enum Type {

@@ -1,6 +1,7 @@
 pub mod tfa;
 pub mod token;
 pub mod unlock_tfa;
+#[derive(Debug, Clone)]
 pub struct UseridClient<T> {
     client: T,
     path: String,
@@ -70,7 +71,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Account expiration date (seconds since epoch). '0' means no expiration date."]
     #[doc = ""]
-    pub expire: Option<u64>,
+    pub expire: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub firstname: Option<String>,
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
@@ -111,7 +112,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Account expiration date (seconds since epoch). '0' means no expiration date."]
     #[doc = ""]
-    pub expire: Option<u64>,
+    pub expire: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub firstname: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -140,7 +141,7 @@ pub struct AdditionalPropertiesGetOutputTokens {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "API token expiration date (seconds since epoch). '0' means no expiration date."]
     #[doc = ""]
-    pub expire: Option<u64>,
+    pub expire: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

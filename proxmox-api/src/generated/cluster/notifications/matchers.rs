@@ -1,4 +1,5 @@
 pub mod name;
+#[derive(Debug, Clone)]
 pub struct MatchersClient<T> {
     client: T,
     path: String,
@@ -184,7 +185,7 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Choose between 'all' and 'any' for when multiple properties are specified"]
 #[doc = ""]
 pub enum Mode {
@@ -208,7 +209,7 @@ impl Default for Mode {
         Self::All
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Show if this entry was created by a user or was built-in"]
 #[doc = ""]
 pub enum Origin {

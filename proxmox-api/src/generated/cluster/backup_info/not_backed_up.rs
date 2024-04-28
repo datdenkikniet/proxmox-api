@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct NotBackedUpClient<T> {
     client: T,
     path: String,
@@ -25,7 +26,7 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(ty: Type, vmid: u64) -> Self {
+    pub fn new(ty: Type, vmid: i64) -> Self {
         Self {
             ty,
             vmid,
@@ -50,7 +51,7 @@ pub struct GetOutputItems {
     )]
     #[doc = "VMID of the guest."]
     #[doc = ""]
-    pub vmid: u64,
+    pub vmid: i64,
     #[serde(
         flatten,
         default,
@@ -58,7 +59,7 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Type of the guest."]
 #[doc = ""]
 pub enum Type {

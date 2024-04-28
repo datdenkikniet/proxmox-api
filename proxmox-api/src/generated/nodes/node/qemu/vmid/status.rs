@@ -6,6 +6,7 @@ pub mod shutdown;
 pub mod start;
 pub mod stop;
 pub mod suspend;
+#[derive(Debug, Clone)]
 pub struct StatusClient<T> {
     client: T,
     path: String,

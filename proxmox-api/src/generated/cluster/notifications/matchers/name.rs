@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct NameClient<T> {
     client: T,
     path: String,
@@ -184,7 +185,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Choose between 'all' and 'any' for when multiple properties are specified"]
 #[doc = ""]
 pub enum Mode {

@@ -17,6 +17,7 @@ pub mod resources;
 pub mod sdn;
 pub mod status;
 pub mod tasks;
+#[derive(Debug, Clone)]
 pub struct ClusterClient<T> {
     client: T,
     path: String,

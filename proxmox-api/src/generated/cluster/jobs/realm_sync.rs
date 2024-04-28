@@ -1,4 +1,5 @@
 pub mod id;
+#[derive(Debug, Clone)]
 pub struct RealmSyncClient<T> {
     client: T,
     path: String,
@@ -65,7 +66,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Last execution time of the job in seconds since the beginning of the UNIX epoch"]
     #[doc = ""]
-    pub last_run: Option<u64>,
+    pub last_run: Option<i64>,
     #[serde(rename = "next-run")]
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
@@ -74,7 +75,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Next planned execution time of the job in seconds since the beginning of the UNIX epoch."]
     #[doc = ""]
-    pub next_run: Option<u64>,
+    pub next_run: Option<i64>,
     #[doc = "Authentication domain ID"]
     #[doc = ""]
     pub realm: String,
@@ -97,7 +98,7 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Select what to sync."]
 #[doc = ""]
 pub enum Scope {

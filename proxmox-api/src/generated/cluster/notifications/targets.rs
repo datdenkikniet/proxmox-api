@@ -1,4 +1,5 @@
 pub mod name;
+#[derive(Debug, Clone)]
 pub struct TargetsClient<T> {
     client: T,
     path: String,
@@ -68,7 +69,7 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Show if this entry was created by a user or was built-in"]
 #[doc = ""]
 pub enum Origin {
@@ -90,7 +91,7 @@ impl TryFrom<&str> for Origin {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Type of the target."]
 #[doc = ""]
 pub enum Type {
@@ -98,6 +99,8 @@ pub enum Type {
     Gotify,
     #[serde(rename = "sendmail")]
     Sendmail,
+    #[serde(rename = "smtp")]
+    Smtp,
 }
 impl TryFrom<&str> for Type {
     type Error = String;
@@ -105,6 +108,7 @@ impl TryFrom<&str> for Type {
         match value {
             "gotify" => Ok(Self::Gotify),
             "sendmail" => Ok(Self::Sendmail),
+            "smtp" => Ok(Self::Smtp),
             v => Err(format!("Unknown variant {v}")),
         }
     }

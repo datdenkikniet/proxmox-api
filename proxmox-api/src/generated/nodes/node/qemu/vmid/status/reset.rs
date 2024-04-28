@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct ResetClient<T> {
     client: T,
     path: String,

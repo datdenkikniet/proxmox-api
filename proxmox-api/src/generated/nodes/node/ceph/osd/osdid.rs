@@ -3,6 +3,7 @@ pub mod lv_info;
 pub mod metadata;
 pub mod out;
 pub mod scrub;
+#[derive(Debug, Clone)]
 pub struct OsdidClient<T> {
     client: T,
     path: String,

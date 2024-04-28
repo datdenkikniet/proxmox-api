@@ -7,6 +7,7 @@ pub mod rrd;
 pub mod rrddata;
 pub mod status;
 pub mod upload;
+#[derive(Debug, Clone)]
 pub struct StorageClient<T> {
     client: T,
     path: String,

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct CrushClient<T> {
     client: T,
     path: String,

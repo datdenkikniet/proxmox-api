@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct ShutdownClient<T> {
     client: T,
     path: String,
@@ -17,7 +18,7 @@ impl<T> ShutdownClient<T>
 where
     T: crate::client::Client,
 {
-    #[doc = "Shutdown virtual machine. This is similar to pressing the power button on a physical machine.This will send an ACPI event for the guest OS, which should then proceed to a clean shutdown."]
+    #[doc = "Shutdown virtual machine. This is similar to pressing the power button on a physical machine. This will send an ACPI event for the guest OS, which should then proceed to a clean shutdown."]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
@@ -59,7 +60,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Wait maximal timeout seconds."]
     #[doc = ""]
-    pub timeout: Option<u64>,
+    pub timeout: Option<i64>,
     #[serde(
         flatten,
         default,

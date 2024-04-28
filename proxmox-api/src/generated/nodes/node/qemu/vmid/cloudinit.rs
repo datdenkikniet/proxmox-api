@@ -1,4 +1,5 @@
 pub mod dump;
+#[derive(Debug, Clone)]
 pub struct CloudinitClient<T> {
     client: T,
     path: String,
@@ -56,7 +57,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Indicates a pending delete request if present and not 0."]
     #[doc = ""]
-    pub delete: Option<u64>,
+    pub delete: Option<i64>,
     #[doc = "Configuration option name."]
     #[doc = ""]
     pub key: String,

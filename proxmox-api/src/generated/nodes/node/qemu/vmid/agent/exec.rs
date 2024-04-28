@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct ExecClient<T> {
     client: T,
     path: String,
@@ -25,7 +26,7 @@ where
     }
 }
 impl PostOutput {
-    pub fn new(pid: u64) -> Self {
+    pub fn new(pid: i64) -> Self {
         Self {
             pid,
             additional_properties: Default::default(),
@@ -40,7 +41,7 @@ pub struct PostOutput {
     )]
     #[doc = "The PID of the process started by the guest-agent."]
     #[doc = ""]
-    pub pid: u64,
+    pub pid: i64,
     #[serde(
         flatten,
         default,

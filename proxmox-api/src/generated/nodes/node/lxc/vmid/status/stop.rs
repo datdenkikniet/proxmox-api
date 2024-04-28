@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct StopClient<T> {
     client: T,
     path: String,
@@ -26,6 +27,15 @@ where
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PostParams {
+    #[serde(rename = "overrule-shutdown")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Try to abort active 'vzshutdown' tasks before stopping."]
+    #[doc = ""]
+    pub overrule_shutdown: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

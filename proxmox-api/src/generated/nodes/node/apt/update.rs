@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct UpdateClient<T> {
     client: T,
     path: String,

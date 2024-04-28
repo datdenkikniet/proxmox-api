@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct JoinClient<T> {
     client: T,
     path: String,
@@ -78,7 +79,7 @@ impl NodelistGetOutputNodelistItems {
         name: String,
         pve_addr: ::std::net::IpAddr,
         pve_fp: String,
-        quorum_votes: u64,
+        quorum_votes: i64,
     ) -> Self {
         Self {
             name,
@@ -103,7 +104,7 @@ pub struct NodelistGetOutputNodelistItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node id for this node."]
     #[doc = ""]
-    pub nodeid: Option<u64>,
+    pub nodeid: Option<i64>,
     pub pve_addr: ::std::net::IpAddr,
     #[doc = "Certificate SHA 256 fingerprint."]
     #[doc = ""]
@@ -112,7 +113,7 @@ pub struct NodelistGetOutputNodelistItems {
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub quorum_votes: u64,
+    pub quorum_votes: i64,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Address and priority information of a single corosync link. (up to 8 links supported; link0..link7)"]
     #[doc = ""]
@@ -171,7 +172,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node id for this node."]
     #[doc = ""]
-    pub nodeid: Option<u64>,
+    pub nodeid: Option<i64>,
     #[doc = "Superuser (root) password of peer node."]
     #[doc = ""]
     pub password: String,
@@ -182,7 +183,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of votes for this node"]
     #[doc = ""]
-    pub votes: Option<u64>,
+    pub votes: Option<i64>,
     #[serde(
         flatten,
         deserialize_with = "crate::types::multi::deserialize_additional_data::<'_, PostParams, _, _>"

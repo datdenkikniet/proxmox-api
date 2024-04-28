@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct SuspendallClient<T> {
     client: T,
     path: String,

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct SetUserPasswordClient<T> {
     client: T,
     path: String,

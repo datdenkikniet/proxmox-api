@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct NameClient<T> {
     client: T,
     path: String,
@@ -114,7 +115,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The port to be used. Defaults to 465 for TLS based connections, 587 for STARTTLS based connections and port 25 for insecure plain-text connections."]
     #[doc = ""]
-    pub port: Option<u64>,
+    pub port: Option<i64>,
     #[doc = "The address of the SMTP server."]
     #[doc = ""]
     pub server: String,
@@ -184,7 +185,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The port to be used. Defaults to 465 for TLS based connections, 587 for STARTTLS based connections and port 25 for insecure plain-text connections."]
     #[doc = ""]
-    pub port: Option<u64>,
+    pub port: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The address of the SMTP server."]
     #[doc = ""]
@@ -200,7 +201,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Determine which encryption method shall be used for the connection."]
 #[doc = ""]
 pub enum Mode {

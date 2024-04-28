@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct IdClient<T> {
     client: T,
     path: String,
@@ -93,7 +94,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Extra delay in seconds to wait before requesting validation. Allows to cope with a long TTL of DNS records."]
     #[doc = ""]
-    pub validation_delay: Option<u64>,
+    pub validation_delay: Option<i64>,
     #[serde(
         flatten,
         default,
@@ -101,7 +102,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "API plugin name"]
 #[doc = ""]
 pub enum Api {

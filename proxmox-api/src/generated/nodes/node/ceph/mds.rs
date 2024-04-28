@@ -1,4 +1,5 @@
 pub mod name;
+#[derive(Debug, Clone)]
 pub struct MdsClient<T> {
     client: T,
     path: String,
@@ -48,7 +49,7 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub rank: Option<u64>,
+    pub rank: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

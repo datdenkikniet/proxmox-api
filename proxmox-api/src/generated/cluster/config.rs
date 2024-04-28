@@ -3,6 +3,7 @@ pub mod join;
 pub mod nodes;
 pub mod qdevice;
 pub mod totem;
+#[derive(Debug, Clone)]
 pub struct ConfigClient<T> {
     client: T,
     path: String,
@@ -82,7 +83,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node id for this node."]
     #[doc = ""]
-    pub nodeid: Option<u64>,
+    pub nodeid: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -90,7 +91,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of votes for this node."]
     #[doc = ""]
-    pub votes: Option<u64>,
+    pub votes: Option<i64>,
     #[serde(
         flatten,
         deserialize_with = "crate::types::multi::deserialize_additional_data::<'_, PostParams, _, _>"

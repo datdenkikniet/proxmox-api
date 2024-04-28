@@ -1,6 +1,7 @@
 pub mod flags;
 pub mod metadata;
 pub mod status;
+#[derive(Debug, Clone)]
 pub struct CephClient<T> {
     client: T,
     path: String,

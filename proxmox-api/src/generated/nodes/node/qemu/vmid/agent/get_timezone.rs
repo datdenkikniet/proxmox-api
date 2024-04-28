@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct GetTimezoneClient<T> {
     client: T,
     path: String,

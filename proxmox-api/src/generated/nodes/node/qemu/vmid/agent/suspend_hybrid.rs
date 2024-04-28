@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct SuspendHybridClient<T> {
     client: T,
     path: String,

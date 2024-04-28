@@ -1,4 +1,5 @@
 pub mod server;
+#[derive(Debug, Clone)]
 pub struct MetricsClient<T> {
     client: T,
     path: String,

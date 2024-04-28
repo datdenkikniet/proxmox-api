@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct MetadataClient<T> {
     client: T,
     path: String,
@@ -29,7 +30,7 @@ impl DevicesGetOutputDevicesItems {
         dev_node: String,
         device: Device,
         devices: String,
-        size: u64,
+        size: i64,
         support_discard: bool,
         ty: String,
     ) -> Self {
@@ -61,7 +62,7 @@ pub struct DevicesGetOutputDevicesItems {
     )]
     #[doc = "Size in bytes"]
     #[doc = ""]
-    pub size: u64,
+    pub size: i64,
     #[serde(
         serialize_with = "crate::types::serialize_bool",
         deserialize_with = "crate::types::deserialize_bool"
@@ -112,11 +113,11 @@ impl OsdGetOutputOsd {
         hb_back_addr: String,
         hb_front_addr: String,
         hostname: String,
-        id: u64,
-        mem_usage: u64,
+        id: i64,
+        mem_usage: i64,
         osd_data: String,
         osd_objectstore: String,
-        pid: u64,
+        pid: i64,
         version: String,
     ) -> Self {
         Self {
@@ -158,14 +159,14 @@ pub struct OsdGetOutputOsd {
     )]
     #[doc = "ID of the OSD."]
     #[doc = ""]
-    pub id: u64,
+    pub id: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Memory usage of the OSD service."]
     #[doc = ""]
-    pub mem_usage: u64,
+    pub mem_usage: i64,
     #[doc = "Path to the OSD's data directory."]
     #[doc = ""]
     pub osd_data: String,
@@ -178,7 +179,7 @@ pub struct OsdGetOutputOsd {
     )]
     #[doc = "OSD process ID."]
     #[doc = ""]
-    pub pid: u64,
+    pub pid: i64,
     #[doc = "Ceph version of the OSD service."]
     #[doc = ""]
     pub version: String,
@@ -189,7 +190,7 @@ pub struct OsdGetOutputOsd {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Kind of OSD device"]
 #[doc = ""]
 pub enum Device {

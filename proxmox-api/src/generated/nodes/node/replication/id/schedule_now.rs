@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct ScheduleNowClient<T> {
     client: T,
     path: String,

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct StopClient<T> {
     client: T,
     path: String,
@@ -17,7 +18,7 @@ impl<T> StopClient<T>
 where
     T: crate::client::Client,
 {
-    #[doc = "Stop virtual machine. The qemu process will exit immediately. Thisis akin to pulling the power plug of a running computer and may damage the VM data"]
+    #[doc = "Stop virtual machine. The qemu process will exit immediately. This is akin to pulling the power plug of a running computer and may damage the VM data."]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
@@ -39,6 +40,15 @@ pub struct PostParams {
     #[doc = "The cluster node name."]
     #[doc = ""]
     pub migratedfrom: Option<String>,
+    #[serde(rename = "overrule-shutdown")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Try to abort active 'qmshutdown' tasks before stopping."]
+    #[doc = ""]
+    pub overrule_shutdown: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -54,7 +64,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Wait maximal timeout seconds."]
     #[doc = ""]
-    pub timeout: Option<u64>,
+    pub timeout: Option<i64>,
     #[serde(
         flatten,
         default,

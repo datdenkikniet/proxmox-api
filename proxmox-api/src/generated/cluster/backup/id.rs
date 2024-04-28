@@ -1,4 +1,5 @@
 pub mod included_volumes;
+#[derive(Debug, Clone)]
 pub struct IdClient<T> {
     client: T,
     path: String,
@@ -73,7 +74,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Limit I/O bandwidth (in KiB/s)."]
     #[doc = ""]
-    pub bwlimit: Option<u64>,
+    pub bwlimit: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the Job."]
     #[doc = ""]
@@ -111,6 +112,10 @@ pub struct PutParams {
     #[doc = "Exclude certain files/directories (shell globs). Paths starting with '/' are anchored to the container's root, other paths match relative to each subdirectory."]
     #[doc = ""]
     pub exclude_path: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Options for backup fleecing (VM only)."]
+    #[doc = ""]
+    pub fleecing: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -118,7 +123,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set IO priority when using the BFQ scheduler. For snapshot and suspend mode backups of VMs, this only affects the compressor. A value of 8 means the idle priority is used, otherwise the best-effort priority is used with the specified value."]
     #[doc = ""]
-    pub ionice: Option<u64>,
+    pub ionice: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -126,7 +131,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal time to wait for the global lock (minutes)."]
     #[doc = ""]
-    pub lockwait: Option<u64>,
+    pub lockwait: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Deprecated: use notification targets/matchers instead. Specify when to send a notification mail"]
     #[doc = ""]
@@ -142,7 +147,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Deprecated: use 'prune-backups' instead. Maximal number of backup files per guest system."]
     #[doc = ""]
-    pub maxfiles: Option<u64>,
+    pub maxfiles: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Backup mode."]
     #[doc = ""]
@@ -182,7 +187,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Use pigz instead of gzip when N\\\\>0. N=1 uses half of cores, N\\\\>1 uses N as thread count."]
     #[doc = ""]
-    pub pigz: Option<u64>,
+    pub pigz: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Backup all known guest systems included in the specified pool."]
     #[doc = ""]
@@ -260,7 +265,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal time to wait until a guest system is stopped (minutes)."]
     #[doc = ""]
-    pub stopwait: Option<u64>,
+    pub stopwait: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Store resulting file to this storage."]
     #[doc = ""]
@@ -280,7 +285,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Zstd threads. N=0 uses half of the available cores, if N is set to a value bigger than 0, N is used as thread count."]
     #[doc = ""]
-    pub zstd: Option<u64>,
+    pub zstd: Option<i64>,
     #[serde(
         flatten,
         default,
@@ -288,7 +293,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Compress dump file."]
 #[doc = ""]
 pub enum Compress {
@@ -321,7 +326,7 @@ impl Default for Compress {
         Self::_0
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Deprecated: use notification targets/matchers instead. Specify when to send a notification mail"]
 #[doc = ""]
 pub enum Mailnotification {
@@ -345,7 +350,7 @@ impl Default for Mailnotification {
         Self::Always
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Backup mode."]
 #[doc = ""]
 pub enum Mode {
@@ -372,7 +377,7 @@ impl Default for Mode {
         Self::Snapshot
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Determine which notification system to use. If set to 'legacy-sendmail', vzdump will consider the mailto/mailnotification parameters and send emails to the specified address(es) via the 'sendmail' command. If set to 'notification-system', a notification will be sent via PVE's notification system, and the mailto and mailnotification will be ignored. If set to 'auto' (default setting), an email will be sent if mailto is set, and the notification system will be used if not."]
 #[doc = ""]
 pub enum NotificationMode {
@@ -399,7 +404,7 @@ impl Default for NotificationMode {
         Self::Auto
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Deprecated: Do not use"]
 #[doc = ""]
 pub enum NotificationPolicy {

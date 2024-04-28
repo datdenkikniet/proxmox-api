@@ -1,4 +1,5 @@
 pub mod volume;
+#[derive(Debug, Clone)]
 pub struct ContentClient<T> {
     client: T,
     path: String,
@@ -37,7 +38,7 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(format: String, size: u64, volid: String) -> Self {
+    pub fn new(format: String, size: i64, volid: String) -> Self {
         Self {
             format,
             size,
@@ -63,7 +64,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Creation time (seconds since the UNIX Epoch)."]
     #[doc = ""]
-    pub ctime: Option<u64>,
+    pub ctime: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "If whole backup is encrypted, value is the fingerprint or '1'  if encrypted. Only useful for the Proxmox Backup Server storage type."]
     #[doc = ""]
@@ -93,7 +94,7 @@ pub struct GetOutputItems {
     )]
     #[doc = "Volume size in bytes."]
     #[doc = ""]
-    pub size: u64,
+    pub size: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -101,7 +102,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Used space. Please note that most storage plugins do not report anything useful here."]
     #[doc = ""]
-    pub used: Option<u64>,
+    pub used: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Last backup verification result, only useful for PBS storages."]
     #[doc = ""]
@@ -113,7 +114,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Associated Owner VMID."]
     #[doc = ""]
-    pub vmid: Option<u64>,
+    pub vmid: Option<i64>,
     #[doc = "Volume identifier."]
     #[doc = ""]
     pub volid: String,
@@ -196,7 +197,7 @@ pub struct VerificationGetOutputItemsVerification {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 pub enum Format {
     #[serde(rename = "qcow2")]
     Qcow2,

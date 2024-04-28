@@ -1,4 +1,5 @@
 pub mod id;
+#[derive(Debug, Clone)]
 pub struct PciClient<T> {
     client: T,
     path: String,
@@ -137,6 +138,8 @@ pub struct PostParams {
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Marks the device(s) as being capable of providing mediated devices."]
+    #[doc = ""]
     pub mdev: Option<bool>,
     #[serde(
         flatten,
@@ -145,7 +148,7 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "The severity of the error"]
 #[doc = ""]
 pub enum Severity {

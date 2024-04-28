@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct RrdClient<T> {
     client: T,
     path: String,
@@ -71,7 +72,7 @@ pub struct GetParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "The RRD consolidation function"]
 #[doc = ""]
 pub enum Cf {
@@ -88,7 +89,7 @@ impl TryFrom<&str> for Cf {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Specify the time frame you are interested in."]
 #[doc = ""]
 pub enum Timeframe {

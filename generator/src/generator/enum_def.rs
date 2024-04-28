@@ -63,6 +63,7 @@ impl EnumDef {
             derives: super::TypeDef::DEFAULT_DERIVES
                 .into_iter()
                 .map(str::to_string)
+                .chain(Some("PartialEq".to_string()))
                 .chain(extra_derives.into_iter().map(|e| e.as_ref().to_string()))
                 .map(|v| v.to_string())
                 .collect(),

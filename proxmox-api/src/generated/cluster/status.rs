@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct StatusClient<T> {
     client: T,
     path: String,
@@ -69,7 +70,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "\\\\[node\\\\] ID of the node from the corosync configuration."]
     #[doc = ""]
-    pub nodeid: Option<u64>,
+    pub nodeid: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -77,7 +78,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "\\\\[cluster\\\\] Nodes count, including offline nodes."]
     #[doc = ""]
-    pub nodes: Option<u64>,
+    pub nodes: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -105,7 +106,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "\\\\[cluster\\\\] Current version of the corosync configuration file."]
     #[doc = ""]
-    pub version: Option<u64>,
+    pub version: Option<i64>,
     #[serde(
         flatten,
         default,
@@ -113,7 +114,7 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Indicates the type, either cluster or node. The type defines the object properties e.g. quorate available for type cluster."]
 #[doc = ""]
 pub enum Type {

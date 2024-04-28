@@ -1,4 +1,5 @@
 pub mod roleid;
+#[derive(Debug, Clone)]
 pub struct RolesClient<T> {
     client: T,
     path: String,

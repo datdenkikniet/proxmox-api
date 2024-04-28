@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct VolumeClient<T> {
     client: T,
     path: String,
@@ -66,7 +67,7 @@ pub struct DeleteParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Time to wait for the task to finish. We return 'null' if the task finish within that time."]
     #[doc = ""]
-    pub delay: Option<u64>,
+    pub delay: Option<i64>,
     #[serde(
         flatten,
         default,
@@ -75,7 +76,7 @@ pub struct DeleteParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl GetOutput {
-    pub fn new(format: String, path: String, size: u64, used: u64) -> Self {
+    pub fn new(format: String, path: String, size: i64, used: i64) -> Self {
         Self {
             format,
             path,
@@ -113,14 +114,14 @@ pub struct GetOutput {
     )]
     #[doc = "Volume size in bytes."]
     #[doc = ""]
-    pub size: u64,
+    pub size: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
     #[doc = "Used space. Please note that most storage plugins do not report anything useful here."]
     #[doc = ""]
-    pub used: u64,
+    pub used: i64,
     #[serde(
         flatten,
         default,

@@ -40,6 +40,7 @@ pub mod vncshell;
 pub mod vncwebsocket;
 pub mod vzdump;
 pub mod wakeonlan;
+#[derive(Debug, Clone)]
 pub struct NodeClient<T> {
     client: T,
     path: String,

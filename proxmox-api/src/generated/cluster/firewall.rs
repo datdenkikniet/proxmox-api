@@ -5,6 +5,7 @@ pub mod macros;
 pub mod options;
 pub mod refs;
 pub mod rules;
+#[derive(Debug, Clone)]
 pub struct FirewallClient<T> {
     client: T,
     path: String,

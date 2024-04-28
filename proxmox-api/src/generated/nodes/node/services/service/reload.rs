@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct ReloadClient<T> {
     client: T,
     path: String,

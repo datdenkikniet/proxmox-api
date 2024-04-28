@@ -1,4 +1,5 @@
 pub mod group;
+#[derive(Debug, Clone)]
 pub struct GroupsClient<T> {
     client: T,
     path: String,
@@ -111,7 +112,7 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Group type."]
 #[doc = ""]
 pub enum Type {

@@ -1,6 +1,7 @@
 pub mod groups;
 pub mod resources;
 pub mod status;
+#[derive(Debug, Clone)]
 pub struct HaClient<T> {
     client: T,
     path: String,

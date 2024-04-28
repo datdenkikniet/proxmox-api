@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct RepositoriesClient<T> {
     client: T,
     path: String,
@@ -72,7 +73,7 @@ pub struct ErrorsGetOutputErrorsItems {
 }
 impl FilesGetOutputFilesItems {
     pub fn new(
-        digest: Vec<u64>,
+        digest: Vec<i64>,
         file_type: FileType,
         path: String,
         repositories: Vec<RepositoriesGetOutputFilesItemsRepositoriesItems>,
@@ -91,7 +92,7 @@ pub struct FilesGetOutputFilesItems {
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "Digest of the file as bytes."]
     #[doc = ""]
-    pub digest: Vec<u64>,
+    pub digest: Vec<i64>,
     #[serde(rename = "file-type")]
     #[doc = "Format of the file."]
     #[doc = ""]
@@ -218,7 +219,7 @@ pub struct OptionsGetOutputFilesItemsRepositoriesItemsOptionsItems {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
-    pub fn new(index: u64, path: String) -> Self {
+    pub fn new(index: i64, path: String) -> Self {
         Self {
             index,
             path,
@@ -248,7 +249,7 @@ pub struct PostParams {
     )]
     #[doc = "Index within the file (starting from 0)."]
     #[doc = ""]
-    pub index: u64,
+    pub index: i64,
     #[doc = "Path to the containing file."]
     #[doc = ""]
     pub path: String,
@@ -389,7 +390,7 @@ pub struct StandardReposGetOutputStandardReposItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Format of the file."]
 #[doc = ""]
 pub enum FileType {
@@ -408,7 +409,7 @@ impl TryFrom<&str> for FileType {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 pub enum Types {
     #[serde(rename = "deb")]
     Deb,

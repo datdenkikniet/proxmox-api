@@ -1,4 +1,5 @@
 pub mod status;
+#[derive(Debug, Clone)]
 pub struct NameClient<T> {
     client: T,
     path: String,
@@ -106,7 +107,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Minimum number of replicas per object"]
     #[doc = ""]
-    pub min_size: Option<u64>,
+    pub min_size: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The automatic PG scaling mode of the pool."]
     #[doc = ""]
@@ -118,7 +119,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of placement groups."]
     #[doc = ""]
-    pub pg_num: Option<u64>,
+    pub pg_num: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -126,7 +127,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Minimal number of placement groups."]
     #[doc = ""]
-    pub pg_num_min: Option<u64>,
+    pub pg_num_min: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -134,7 +135,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of replicas per object"]
     #[doc = ""]
-    pub size: Option<u64>,
+    pub size: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The estimated target size of the pool for the PG autoscaler."]
     #[doc = ""]
@@ -154,7 +155,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "The application of the pool."]
 #[doc = ""]
 pub enum Application {
@@ -176,7 +177,7 @@ impl TryFrom<&str> for Application {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "The automatic PG scaling mode of the pool."]
 #[doc = ""]
 pub enum PgAutoscaleMode {

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct FsfreezeThawClient<T> {
     client: T,
     path: String,

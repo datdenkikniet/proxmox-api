@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct GetHostNameClient<T> {
     client: T,
     path: String,

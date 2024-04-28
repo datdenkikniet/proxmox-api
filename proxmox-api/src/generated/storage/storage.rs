@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct StorageClient<T> {
     client: T,
     path: String,
@@ -230,7 +231,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal number of protected backups per guest. Use '-1' for unlimited."]
     #[doc = ""]
-    pub max_protected_backups: Option<u64>,
+    pub max_protected_backups: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -238,7 +239,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Deprecated: use 'prune-backups' instead. Maximal number of backup files per VM. Use '0' for unlimited."]
     #[doc = ""]
-    pub maxfiles: Option<u64>,
+    pub maxfiles: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -298,7 +299,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For non default port."]
     #[doc = ""]
-    pub port: Option<u64>,
+    pub port: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Preallocation mode for raw and qcow2 images. Using 'metadata' on raw images results in preallocation=off."]
     #[doc = ""]
@@ -384,7 +385,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Preallocation mode for raw and qcow2 images. Using 'metadata' on raw images results in preallocation=off."]
 #[doc = ""]
 pub enum Preallocation {
@@ -414,7 +415,7 @@ impl Default for Preallocation {
         Self::Metadata
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "SMB protocol version. 'default' if not set, negotiates the highest SMB2+ version supported by both the client and server."]
 #[doc = ""]
 pub enum Smbversion {
@@ -450,7 +451,7 @@ impl Default for Smbversion {
         Self::Default
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Gluster transport: tcp or rdma"]
 #[doc = ""]
 pub enum Transport {
@@ -472,7 +473,7 @@ impl TryFrom<&str> for Transport {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "The type of the created storage."]
 #[doc = ""]
 pub enum Type {

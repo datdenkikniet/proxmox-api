@@ -18,8 +18,10 @@ jobs:
         run: |
           DISTRO=$(./ci/get-metadata.sh debian-distro)
           PROXMOX_VE_VERSION=$(./ci/get-metadata.sh pve-version)
+          PACKAGES=$(./ci/get-metadata.sh packages | jq -r '.[0] | to_entries | map(.key + "=" + .value) | join(" ")')
           echo "DISTRO=$DISTRO" >> "$GITHUB_ENV"
           echo "PROXMOX_VE_VERSION=$PROXMOX_VE_VERSION" >> "$GITHUB_ENV"
+          echo "PACKAGES=$PACKAGES" >> "$GITHUB_ENV"
 
       - name: Create container
         run: |
@@ -27,22 +29,21 @@ jobs:
           docker start $CONTAINER_NAME
 
       - name: Setup proxmox-ve ${{ env.PROXMOX_VE_VERSION }} on debian ${{ env.DISTRO }}
-        run: docker exec $CONTAINER_NAME /mnt/setup.sh $DISTRO $PROXMOX_VE_VERSION
+        run: docker exec $CONTAINER_NAME /mnt/setup.sh $DISTRO
+
+      - name: Check if newer versions of specific packages are available
+        run: docker exec $CONTAINER_NAME /mnt/check-package-versions.sh $(echo $PACKAGES)
+
+      - name: Install all packages
+        run: docker exec $CONTAINER_NAME apt-get install -y $(echo $PACKAGES)
+        # Installing some packages comes with some errors
+        continue-on-error: true
 
       - name: Generate JSON schema
         run: docker exec $CONTAINER_NAME /usr/bin/bash -c "/mnt/dump-schema.pl > /mnt/PVE-schema.json"
 
       - name: Save package versions
-        run: docker exec $CONTAINER_NAME /usr/bin/bash -c "apt list --installed > /mnt/packages.txt"
-
-      - name: Generate the client
-        run: cargo run --manifest-path generator/Cargo.toml -- recursive ./ci/PVE-schema.json proxmox-api/src/generated.rs
-
-      - name: Format the generated client
-        run: cargo fmt --manifest-path ./proxmox-api/Cargo.toml -- ./proxmox-api/src/generated.rs
-
-      - name: Display git diff
-        run: ./ci/assert-empty-git-diff.sh
+        run: docker exec $CONTAINER_NAME /usr/bin/bash -c "apt list --installed | tee /mnt/packages.txt"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -51,6 +52,15 @@ jobs:
           path: |
             ./ci/PVE-schema.json
             ./ci/packages.txt
+
+      - name: Generate the client
+        run: cargo run --manifest-path generator/Cargo.toml -- recursive ./ci/PVE-schema.json proxmox-api/src/generated.rs
+
+      - name: Format the generated client
+        run: cargo fmt --manifest-path ./proxmox-api/Cargo.toml -- ./proxmox-api/src/generated.rs
+
+      - name: Assert empty git diff
+        run: ./ci/assert-empty-git-diff.sh
 
       - name: Show line count
         run: wc -l ./ci/PVE-schema.json
@@ -61,10 +71,15 @@ jobs:
         definition:
           - name: "library"
             args: "--lib"
+            manifest: proxmox-api/Cargo.toml
           - name: "CLI tool"
             args: "--bin proxmox-api --features cli"
+            manifest: proxmox-api/Cargo.toml
           - name: "library with just the reqwest client"
             args: "--lib --no-default-features --features reqwest-client"
+            manifest: proxmox-api/Cargo.toml
+          - name: generator
+            manifest: generator/Cargo.toml
 
     name: Build & check the ${{ matrix.definition.name }}
     runs-on: ubuntu-latest
@@ -73,11 +88,11 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
 
       - name: Validate the formatting
-        run: cargo fmt --manifest-path proxmox-api/Cargo.toml --check
+        run: cargo fmt --manifest-path ${{ matrix.definition.manifest }} --check
 
       - name: Check the ${{ matrix.definition.name }}
-        run: cargo check --manifest-path proxmox-api/Cargo.toml ${{ matrix.definition.args }}
+        run: cargo check --locked --manifest-path ${{ matrix.definition.manifest }} ${{ matrix.definition.args }}
 
       # TODO: reenable this for merges to main?
       - name: Build the ${{ matrix.definition.name }}
-        run: cargo build --manifest-path proxmox-api/Cargo.toml ${{ matrix.definition.args }}
+        run: cargo build --locked --manifest-path ${{ matrix.definition.manifest }} ${{ matrix.definition.args }}

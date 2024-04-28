@@ -1,6 +1,7 @@
 pub mod gotify;
 pub mod sendmail;
 pub mod smtp;
+#[derive(Debug, Clone)]
 pub struct EndpointsClient<T> {
     client: T,
     path: String,

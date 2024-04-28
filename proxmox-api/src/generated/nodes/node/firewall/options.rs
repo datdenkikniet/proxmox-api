@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct OptionsClient<T> {
     client: T,
     path: String,
@@ -88,7 +89,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum number of tracked connections."]
     #[doc = ""]
-    pub nf_conntrack_max: Option<u64>,
+    pub nf_conntrack_max: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -96,7 +97,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Conntrack established timeout."]
     #[doc = ""]
-    pub nf_conntrack_tcp_timeout_established: Option<u64>,
+    pub nf_conntrack_tcp_timeout_established: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -104,7 +105,15 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Conntrack syn recv timeout."]
     #[doc = ""]
-    pub nf_conntrack_tcp_timeout_syn_recv: Option<u64>,
+    pub nf_conntrack_tcp_timeout_syn_recv: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Enable nftables based firewall (tech preview)"]
+    #[doc = ""]
+    pub nftables: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -128,7 +137,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Synflood protection rate burst by ip src."]
     #[doc = ""]
-    pub protection_synflood_burst: Option<u64>,
+    pub protection_synflood_burst: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -136,7 +145,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Synflood protection rate syn/sec by ip src."]
     #[doc = ""]
-    pub protection_synflood_rate: Option<u64>,
+    pub protection_synflood_rate: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log level for SMURFS filter."]
     #[doc = ""]
@@ -221,7 +230,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum number of tracked connections."]
     #[doc = ""]
-    pub nf_conntrack_max: Option<u64>,
+    pub nf_conntrack_max: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -229,7 +238,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Conntrack established timeout."]
     #[doc = ""]
-    pub nf_conntrack_tcp_timeout_established: Option<u64>,
+    pub nf_conntrack_tcp_timeout_established: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -237,7 +246,15 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Conntrack syn recv timeout."]
     #[doc = ""]
-    pub nf_conntrack_tcp_timeout_syn_recv: Option<u64>,
+    pub nf_conntrack_tcp_timeout_syn_recv: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Enable nftables based firewall (tech preview)"]
+    #[doc = ""]
+    pub nftables: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -261,7 +278,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Synflood protection rate burst by ip src."]
     #[doc = ""]
-    pub protection_synflood_burst: Option<u64>,
+    pub protection_synflood_burst: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -269,7 +286,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Synflood protection rate syn/sec by ip src."]
     #[doc = ""]
-    pub protection_synflood_rate: Option<u64>,
+    pub protection_synflood_rate: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log level for SMURFS filter."]
     #[doc = ""]
@@ -293,7 +310,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Log level for incoming traffic."]
 #[doc = ""]
 pub enum LogLevelIn {
@@ -333,7 +350,7 @@ impl TryFrom<&str> for LogLevelIn {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Log level for outgoing traffic."]
 #[doc = ""]
 pub enum LogLevelOut {
@@ -373,7 +390,7 @@ impl TryFrom<&str> for LogLevelOut {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Log level for SMURFS filter."]
 #[doc = ""]
 pub enum SmurfLogLevel {
@@ -413,7 +430,7 @@ impl TryFrom<&str> for SmurfLogLevel {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Log level for illegal tcp flags filter."]
 #[doc = ""]
 pub enum TcpFlagsLogLevel {

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct PoolidClient<T> {
     client: T,
     path: String,
@@ -98,7 +99,7 @@ pub struct MembersGetOutputMembersItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub vmid: Option<u64>,
+    pub vmid: Option<i64>,
     #[serde(
         flatten,
         default,
@@ -142,7 +143,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 pub enum Type {
     #[serde(rename = "lxc")]
     Lxc,
@@ -162,7 +163,7 @@ impl TryFrom<&str> for Type {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 pub enum Type2 {
     #[serde(rename = "lxc")]
     Lxc,

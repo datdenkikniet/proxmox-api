@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct CloneClient<T> {
     client: T,
     path: String,
@@ -50,7 +51,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Override I/O bandwidth limit (in KiB/s)."]
     #[doc = ""]
-    pub bwlimit: Option<u64>,
+    pub bwlimit: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the new VM."]
     #[doc = ""]
@@ -97,7 +98,7 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Target format for file storage. Only valid for full clone."]
 #[doc = ""]
 pub enum Format {

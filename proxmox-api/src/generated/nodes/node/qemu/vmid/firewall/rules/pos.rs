@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct PosClient<T> {
     client: T,
     path: String,
@@ -60,7 +61,7 @@ pub struct DeleteParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl GetOutput {
-    pub fn new(action: String, pos: u64, ty: String) -> Self {
+    pub fn new(action: String, pos: i64, ty: String) -> Self {
         Self {
             action,
             pos,
@@ -95,7 +96,7 @@ pub struct GetOutput {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub enable: Option<u64>,
+    pub enable: Option<i64>,
     #[serde(rename = "icmp-type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub icmp_type: Option<String>,
@@ -106,7 +107,7 @@ pub struct GetOutput {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub ipversion: Option<u64>,
+    pub ipversion: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log level for firewall rule"]
     #[doc = ""]
@@ -118,7 +119,7 @@ pub struct GetOutput {
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub pos: u64,
+    pub pos: i64,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub proto: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -167,7 +168,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Flag to enable/disable a rule."]
     #[doc = ""]
-    pub enable: Option<u64>,
+    pub enable: Option<i64>,
     #[serde(rename = "icmp-type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify icmp-type. Only valid if proto equals 'icmp' or 'icmpv6'/'ipv6-icmp'."]
@@ -193,7 +194,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Move rule to new position \\\\<moveto\\\\>. Other arguments are ignored."]
     #[doc = ""]
-    pub moveto: Option<u64>,
+    pub moveto: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "IP protocol. You can use protocol names ('tcp'/'udp') or simple numbers, as defined in '/etc/protocols'."]
     #[doc = ""]
@@ -218,7 +219,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Log level for firewall rule"]
 #[doc = ""]
 pub enum Log {
@@ -258,7 +259,7 @@ impl TryFrom<&str> for Log {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Rule type."]
 #[doc = ""]
 pub enum Type {

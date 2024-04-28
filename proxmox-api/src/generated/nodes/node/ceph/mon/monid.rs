@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct MonidClient<T> {
     client: T,
     path: String,

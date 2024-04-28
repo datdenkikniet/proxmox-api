@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct AclClient<T> {
     client: T,
     path: String,
@@ -121,7 +122,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 pub enum Type {
     #[serde(rename = "group")]
     Group,

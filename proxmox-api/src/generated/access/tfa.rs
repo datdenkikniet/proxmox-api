@@ -1,4 +1,5 @@
 pub mod userid;
+#[derive(Debug, Clone)]
 pub struct TfaClient<T> {
     client: T,
     path: String,
@@ -26,7 +27,7 @@ where
     }
 }
 impl EntriesGetOutputItemsEntriesItems {
-    pub fn new(created: u64, description: String, id: String, ty: Type) -> Self {
+    pub fn new(created: i64, description: String, id: String, ty: Type) -> Self {
         Self {
             created,
             description,
@@ -45,7 +46,7 @@ pub struct EntriesGetOutputItemsEntriesItems {
     )]
     #[doc = "Creation time of this entry as unix epoch."]
     #[doc = ""]
-    pub created: u64,
+    pub created: i64,
     #[doc = "User chosen description for this entry."]
     #[doc = ""]
     pub description: String,
@@ -94,7 +95,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Contains a timestamp until when a user is locked out of 2nd factors."]
     #[doc = ""]
-    pub tfa_locked_until: Option<u64>,
+    pub tfa_locked_until: Option<i64>,
     #[serde(rename = "totp-locked")]
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -114,7 +115,7 @@ pub struct GetOutputItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "TFA Entry Type."]
 #[doc = ""]
 pub enum Type {

@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct OptionsClient<T> {
     client: T,
     path: String,
@@ -52,7 +53,7 @@ pub struct GetOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable or disable the firewall cluster wide."]
     #[doc = ""]
-    pub enable: Option<u64>,
+    pub enable: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log ratelimiting settings"]
     #[doc = ""]
@@ -97,7 +98,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Enable or disable the firewall cluster wide."]
     #[doc = ""]
-    pub enable: Option<u64>,
+    pub enable: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log ratelimiting settings"]
     #[doc = ""]
@@ -117,7 +118,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Input policy."]
 #[doc = ""]
 pub enum PolicyIn {
@@ -136,7 +137,7 @@ impl TryFrom<&str> for PolicyIn {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Output policy."]
 #[doc = ""]
 pub enum PolicyOut {

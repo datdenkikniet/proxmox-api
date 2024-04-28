@@ -1,4 +1,5 @@
 pub mod mdev;
+#[derive(Debug, Clone)]
 pub struct PciidClient<T> {
     client: T,
     path: String,

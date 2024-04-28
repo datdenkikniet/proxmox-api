@@ -78,12 +78,12 @@ pub trait Client: Clone {
         self.request_with_body(Method::Post, path, body)
     }
 
-    fn delete<B, R>(&self, path: &str, body: &B) -> Result<R, Self::Error>
+    fn delete<B, R>(&self, path: &str, query: &B) -> Result<R, Self::Error>
     where
         B: Serialize,
         R: DeserializeOwned,
     {
-        self.request_with_body(Method::Delete, path, body)
+        self.request_with_query(Method::Delete, path, query)
     }
 
     fn get<Q, R>(&self, path: &str, query: &Q) -> Result<R, Self::Error>

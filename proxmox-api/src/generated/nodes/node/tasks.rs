@@ -1,4 +1,5 @@
 pub mod upid;
+#[derive(Debug, Clone)]
 pub struct TasksClient<T> {
     client: T,
     path: String,
@@ -29,9 +30,9 @@ impl GetOutputItems {
     pub fn new(
         id: String,
         node: String,
-        pid: u64,
-        pstart: u64,
-        starttime: u64,
+        pid: i64,
+        pstart: i64,
+        starttime: i64,
         ty: String,
         upid: String,
         user: String,
@@ -58,24 +59,24 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub endtime: Option<u64>,
+    pub endtime: Option<i64>,
     pub id: String,
     pub node: String,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub pid: u64,
+    pub pid: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub pstart: u64,
+    pub pstart: i64,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub starttime: u64,
+    pub starttime: i64,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub status: Option<String>,
     #[serde(rename = "type")]
@@ -106,7 +107,7 @@ pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only list this amount of tasks."]
     #[doc = ""]
-    pub limit: Option<u64>,
+    pub limit: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -114,7 +115,7 @@ pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only list tasks since this UNIX epoch."]
     #[doc = ""]
-    pub since: Option<u64>,
+    pub since: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List archived, active or all tasks."]
     #[doc = ""]
@@ -126,7 +127,7 @@ pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List tasks beginning from this offset."]
     #[doc = ""]
-    pub start: Option<u64>,
+    pub start: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of Task States that should be returned."]
     #[doc = ""]
@@ -142,7 +143,7 @@ pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only list tasks until this UNIX epoch."]
     #[doc = ""]
-    pub until: Option<u64>,
+    pub until: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Only list tasks from this user."]
     #[doc = ""]
@@ -158,7 +159,7 @@ pub struct GetParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "List archived, active or all tasks."]
 #[doc = ""]
 pub enum Source {

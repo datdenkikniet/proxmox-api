@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct IncludedVolumesClient<T> {
     client: T,
     path: String,
@@ -25,7 +26,7 @@ where
     }
 }
 impl ChildrenGetOutputChildrenItems {
-    pub fn new(id: u64, ty: Type) -> Self {
+    pub fn new(id: i64, ty: Type) -> Self {
         Self {
             id,
             ty,
@@ -47,7 +48,7 @@ pub struct ChildrenGetOutputChildrenItems {
     )]
     #[doc = "VMID of the guest."]
     #[doc = ""]
-    pub id: u64,
+    pub id: i64,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Name of the guest"]
     #[doc = ""]
@@ -118,7 +119,7 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Type of the guest, VM, CT or unknown for removed but not purged guests."]
 #[doc = ""]
 pub enum Type {

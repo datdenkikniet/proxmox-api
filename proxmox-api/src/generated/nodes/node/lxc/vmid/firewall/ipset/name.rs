@@ -1,4 +1,5 @@
 pub mod cidr;
+#[derive(Debug, Clone)]
 pub struct NameClient<T> {
     client: T,
     path: String,

@@ -1,4 +1,5 @@
 pub mod sid;
+#[derive(Debug, Clone)]
 pub struct ResourcesClient<T> {
     client: T,
     path: String,
@@ -99,7 +100,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal number of service relocate tries when a service failes to start."]
     #[doc = ""]
-    pub max_relocate: Option<u64>,
+    pub max_relocate: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -107,7 +108,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal number of tries to restart the service on a node after its start failed."]
     #[doc = ""]
-    pub max_restart: Option<u64>,
+    pub max_restart: Option<i64>,
     #[doc = "HA resource ID. This consists of a resource type followed by a resource specific name, separated with colon (example: vm:100 / ct:100). For virtual machines and containers, you can simply use the VM or CT id as a shortcut (example: 100)."]
     #[doc = ""]
     pub sid: String,
@@ -169,7 +170,7 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Requested resource state."]
 #[doc = ""]
 #[doc = "Requested resource state. The CRM reads this state and acts accordingly."]
@@ -244,7 +245,7 @@ impl Default for State {
         Self::Started
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Only list resources of specific type"]
 #[doc = ""]
 pub enum Type {

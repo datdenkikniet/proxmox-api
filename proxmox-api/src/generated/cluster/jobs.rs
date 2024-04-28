@@ -1,5 +1,6 @@
 pub mod realm_sync;
 pub mod schedule_analyze;
+#[derive(Debug, Clone)]
 pub struct JobsClient<T> {
     client: T,
     path: String,

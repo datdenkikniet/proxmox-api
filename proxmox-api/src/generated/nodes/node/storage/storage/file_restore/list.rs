@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct ListClient<T> {
     client: T,
     path: String,
@@ -56,7 +57,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Entry last-modified time (unix timestamp)."]
     #[doc = ""]
-    pub mtime: Option<u64>,
+    pub mtime: Option<i64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -64,7 +65,7 @@ pub struct GetOutputItems {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Entry file size."]
     #[doc = ""]
-    pub size: Option<u64>,
+    pub size: Option<i64>,
     #[doc = "Entry display text."]
     #[doc = ""]
     pub text: String,

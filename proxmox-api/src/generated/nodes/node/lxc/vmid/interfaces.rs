@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct InterfacesClient<T> {
     client: T,
     path: String,

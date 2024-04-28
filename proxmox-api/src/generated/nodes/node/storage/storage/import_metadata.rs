@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct ImportMetadataClient<T> {
     client: T,
     path: String,
@@ -140,7 +141,7 @@ pub struct WarningsGetOutputWarningsItems {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "The type of the import-source of this guest volume."]
 #[doc = ""]
 pub enum Source {
@@ -156,7 +157,7 @@ impl TryFrom<&str> for Source {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "The type of guest this is going to produce."]
 #[doc = ""]
 pub enum Type {
@@ -172,7 +173,7 @@ impl TryFrom<&str> for Type {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "What this warning is about."]
 #[doc = ""]
 pub enum WarningType {

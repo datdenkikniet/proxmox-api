@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct StatusClient<T> {
     client: T,
     path: String,
@@ -28,7 +29,7 @@ impl GetOutput {
     pub fn new(
         id: String,
         node: String,
-        pid: u64,
+        pid: i64,
         starttime: f64,
         status: Status,
         ty: String,
@@ -59,7 +60,7 @@ pub struct GetOutput {
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
-    pub pid: u64,
+    pub pid: i64,
     #[serde(
         serialize_with = "crate::types::serialize_number",
         deserialize_with = "crate::types::deserialize_number"
@@ -77,7 +78,7 @@ pub struct GetOutput {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 pub enum Status {
     #[serde(rename = "running")]
     Running,
