@@ -64,12 +64,8 @@ impl AuthState {
         inner.auth_ticket_time = Instant::now();
     }
 
-    pub fn ticket(&self) -> Option<String> {
-        self.inner.read().auth_ticket.clone()
-    }
-
-    pub fn csrf(&self) -> Option<String> {
-        self.inner.read().csrf_token.clone()
+    pub fn should_refresh(&self) -> bool {
+        self.inner.read().auth_ticket_time.elapsed() > Duration::from_secs(60 * 60)
     }
 
     pub fn auth_ticket(&self) -> Option<String> {
@@ -80,8 +76,28 @@ impl AuthState {
         self.inner.read().api_token.clone()
     }
 
-    pub fn should_refresh(&self) -> bool {
-        self.inner.read().auth_ticket_time.elapsed() > Duration::from_secs(60 * 60)
+    pub fn headers(&self) -> impl Iterator<Item = (&str, String)> + '_ {
+        let inner = self.inner.read();
+
+        let cookie = inner
+            .auth_ticket
+            .as_ref()
+            .map(|v| ("Cookie", format!("PVEAuthCookie={v}")));
+
+        let csrf = inner
+            .csrf_token
+            .as_ref()
+            .map(|v| ("CSRFPreventionToken", v.to_string()));
+
+        let api_token = inner
+            .api_token
+            .as_ref()
+            .map(|v| ("Authorization", format!("PVEAPIToken={v}")));
+
+        cookie
+            .into_iter()
+            .chain(csrf.into_iter())
+            .chain(api_token.into_iter())
     }
 }
 

@@ -70,25 +70,10 @@ impl Client {
     }
 
     fn append_headers(&self, request: Request) -> Request {
-        let auth_state = &self.auth_state;
-
-        let request = if let Some(auth_ticket) = auth_state.ticket() {
-            request.set("Cookie", &format!("PVEAuthCookie={auth_ticket}"))
-        } else {
-            request
-        };
-
-        let request = if let Some(csrf) = auth_state.csrf() {
-            request.set("CSRFPreventionToken", csrf.as_str())
-        } else {
-            request
-        };
-
-        let request = if let Some(api_token) = auth_state.api_token() {
-            request.set("Authorization", &format!("PVEAPIToken={api_token}"))
-        } else {
-            request
-        };
+        let mut request = request;
+        for (k, v) in self.auth_state.headers() {
+            request = request.set(k, &v);
+        }
 
         request
     }
