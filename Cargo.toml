@@ -1,0 +1,3 @@
+[workspace]
+members = ["generator", "proxmox-api"]
+resolver = "2"
