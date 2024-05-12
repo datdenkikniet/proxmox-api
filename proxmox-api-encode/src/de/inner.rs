@@ -95,11 +95,12 @@ impl<'de> Deserializer<'de> {
 impl<'de, 'a> de::Deserializer<'de> for &'a mut Deserializer<'de> {
     type Error = Error;
 
-    fn deserialize_any<V>(self, _visitor: V) -> Result<V::Value>
+    fn deserialize_any<V>(self, visitor: V) -> Result<V::Value>
     where
         V: Visitor<'de>,
     {
-        unimplemented!()
+        let s = self.parse_string()?;
+        visitor.visit_str(s)
     }
 
     fn deserialize_bool<V>(self, visitor: V) -> Result<V::Value>

@@ -159,3 +159,59 @@ fn test_deserialize_enum() {
     let s: Test1 = from_str(s).unwrap();
     println!("{:?}", s);
 }
+
+#[test]
+fn test_deserialize_extra() {
+    #[derive(Deserialize, Debug)]
+    #[allow(dead_code)]
+    struct Test1 {
+        pub status: bool,
+        pub key1: i16,
+        pub key2: String,
+        pub sub1: SubTest1,
+        pub e: EnumTest,
+        pub arr: Vec<i32>,
+    }
+
+    let s = r#"status=1&key1=13232&key2=value2&sub1=key1%3Dsubvalue134%3A32&e=I&arr=1%3B2&WTF=1"#;
+    let s: Test1 = from_str(s).unwrap();
+    println!("{:?}", s);
+}
+
+#[test]
+fn test_deserialize_option_none() {
+    #[derive(Deserialize, Debug)]
+    #[allow(dead_code)]
+    struct Test1 {
+        pub status: bool,
+        pub key1: i16,
+        pub key2: String,
+        pub sub1: SubTest1,
+        pub e: EnumTest,
+        pub arr: Vec<i32>,
+        pub option: Option<i32>
+    }
+
+    let s = r#"status=1&key1=13232&key2=value2&sub1=key1%3Dsubvalue134%3A32&e=I&arr=1%3B2&WTF=1"#;
+    let s: Test1 = from_str(s).unwrap();
+    println!("{:?}", s);
+}
+
+#[test]
+fn test_deserialize_option_some() {
+    #[derive(Deserialize, Debug)]
+    #[allow(dead_code)]
+    struct Test1 {
+        pub status: bool,
+        pub key1: i16,
+        pub key2: String,
+        pub sub1: SubTest1,
+        pub e: EnumTest,
+        pub arr: Vec<i32>,
+        pub option: Option<i32>
+    }
+
+    let s = r#"status=1&key1=13232&key2=value2&sub1=key1%3Dsubvalue134%3A32&e=I&arr=1%3B2&WTF=1&option=1"#;
+    let s: Test1 = from_str(s).unwrap();
+    println!("{:?}", s);
+}
