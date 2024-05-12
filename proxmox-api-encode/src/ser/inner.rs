@@ -1,5 +1,8 @@
-use crate::error::{Error, Result};
-use percent_encoding::{utf8_percent_encode, NON_ALPHANUMERIC};
+use crate::{
+    error::{Error, Result},
+    CUSTOM_ENCODING_SET,
+};
+use percent_encoding::utf8_percent_encode;
 use serde::{ser, Serialize};
 
 pub struct Serializer {
@@ -291,8 +294,29 @@ impl<'a> ser::SerializeMap for &'a mut Serializer {
         value.serialize(&mut **self)
     }
 
+    fn serialize_entry<K: ?Sized, V: ?Sized>(
+        &mut self,
+        key: &K,
+        value: &V,
+    ) -> std::prelude::v1::Result<(), Self::Error>
+    where
+        K: Serialize,
+        V: Serialize,
+    {
+        let v_s = inner_to_string(&value);
+        if v_s.is_ok() {
+            match self.serialize_key(key) {
+                Ok(val) => val,
+                Err(err) => return Err(err),
+            };
+            self.output += "=";
+            v_s.unwrap().serialize(&mut **self)?;
+        }
+        Ok(())
+    }
+
     fn end(self) -> Result<Self::Ok> {
-        self.output = utf8_percent_encode(&self.output, NON_ALPHANUMERIC).to_string();
+        self.output = utf8_percent_encode(&self.output, CUSTOM_ENCODING_SET).to_string();
         Ok(())
     }
 }
@@ -305,16 +329,21 @@ impl<'a> ser::SerializeStruct for &'a mut Serializer {
     where
         T: ?Sized + Serialize,
     {
-        if !self.output.is_empty() {
-            self.output += ",";
+        let value = inner_to_string(&value);
+        if value.is_ok() {
+            if !self.output.is_empty() {
+                self.output += ",";
+            }
+            key.serialize(&mut **self)?;
+            self.output += "=";
+            value.unwrap().serialize(&mut **self).unwrap();
         }
-        key.serialize(&mut **self)?;
-        self.output += "=";
-        value.serialize(&mut **self)
+
+        Ok(())
     }
 
     fn end(self) -> Result<Self::Ok> {
-        self.output = utf8_percent_encode(&self.output, NON_ALPHANUMERIC).to_string();
+        self.output = utf8_percent_encode(&self.output, CUSTOM_ENCODING_SET).to_string();
         Ok(())
     }
 }

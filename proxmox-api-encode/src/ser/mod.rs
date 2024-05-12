@@ -213,6 +213,27 @@ impl<'a> ser::SerializeMap for &'a mut Serializer {
         inner_to_string(&value).unwrap().serialize(&mut **self)
     }
 
+    fn serialize_entry<K: ?Sized, V: ?Sized>(
+        &mut self,
+        key: &K,
+        value: &V,
+    ) -> std::prelude::v1::Result<(), Self::Error>
+    where
+        K: Serialize,
+        V: Serialize,
+    {
+        let v_s = inner_to_string(&value);
+        if v_s.is_ok() {
+            match self.serialize_key(key) {
+                Ok(val) => val,
+                Err(err) => return Err(err),
+            };
+            self.output += "=";
+            v_s.unwrap().serialize(&mut **self)?;
+        }
+        Ok(())
+    }
+
     fn end(self) -> Result<Self::Ok> {
         Ok(())
     }
@@ -226,12 +247,18 @@ impl<'a> ser::SerializeStruct for &'a mut Serializer {
     where
         T: ?Sized + Serialize,
     {
-        if !self.output.is_empty() {
-            self.output += "&";
+        let value = inner_to_string(&value);
+        if value.is_ok() {
+
+            if !self.output.is_empty() {
+                self.output += "&";
+            }
+            key.serialize(&mut **self)?;
+            self.output += "=";
+            value.unwrap().serialize(&mut **self).unwrap();
         }
-        key.serialize(&mut **self)?;
-        self.output += "=";
-        inner_to_string(&value).unwrap().serialize(&mut **self)
+
+        Ok(())
     }
 
     fn end(self) -> Result<Self::Ok> {

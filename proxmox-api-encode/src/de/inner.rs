@@ -70,7 +70,33 @@ impl<'de> Deserializer<'de> {
         }
     }
 
+    fn next_is_value(&mut self) -> Result<bool> {
+        let eq = self.input.find("%3D");
+        let comma = self.input.find("%2C");
+        println!("eq: {:?}, comma: {:?}", eq, comma);
+        Ok(if eq.is_none() && comma.is_none() {
+            true
+        } else if eq.is_some() && comma.is_none() {
+            if eq == Some(0){
+                true
+            } else {
+                false
+            }
+        } else {
+            if comma == Some(0) {
+                false
+            } else if eq == Some(0) {
+                true
+            } else if comma.unwrap() < eq.unwrap() {
+                true
+            } else {
+                false
+            }
+        })
+    }
+
     fn parse_string(&mut self) -> Result<&'de str> {
+        println!("parsing");
         let eq = self.input.find("%3D");
         let comma = self.input.find("%2C");
         let target = if eq.is_none() && comma.is_none() {
@@ -373,6 +399,14 @@ impl<'de, 'a> MapAccess<'de> for CommaSeparated<'a, 'de> {
         if self.de.peek_char().is_err() {
             return Ok(None);
         }
+        println!("hit_key_seed: {}", self.de.input);
+        if self.de.next_is_value().unwrap() {
+            println!("next is value: {}", self.de.input);
+            let mut de = Deserializer::from_str("");
+            return seed.deserialize(&mut de).map(Some);
+        }
+        println!("next is not value: {}", self.de.input);
+
         if !self.first && self.de.next_three_str()? != "%2C" {
             return Err(Error::Message("ExpectedAnd".into()));
         }
@@ -384,9 +418,11 @@ impl<'de, 'a> MapAccess<'de> for CommaSeparated<'a, 'de> {
     where
         V: DeserializeSeed<'de>,
     {
-        if self.de.next_three_str()? != "%3D" {
+        println!("hit value: {}", self.de.input);
+        if !self.first && self.de.next_three_str()? != "%3D" {
             return Err(Error::Message("ExpectedEqual".into()));
         }
+        self.first = false;
         seed.deserialize(&mut *self.de)
     }
 
