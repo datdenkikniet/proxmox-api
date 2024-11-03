@@ -75,4 +75,4 @@ parking_lot = { optional = true, version = "0.12.1" }
 reqwest = { optional = true, version = "0.12.1", features = ["blocking", "json"] }
 clap = { optional = true, version = "4.5.3", features = ["derive", "env"] }
 pretty_env_logger = { optional = true, version = "0.5.0" }
-rustls = { optional = true, version = "0.22", default-features = false, features = ["ring"] }
+rustls = { optional = true, version = "0.23.16", default-features = false, features = ["ring"] }
