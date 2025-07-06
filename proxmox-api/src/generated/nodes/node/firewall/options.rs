@@ -47,6 +47,10 @@ pub struct GetOutput {
     #[doc = ""]
     pub enable: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Log level for forwarded traffic."]
+    #[doc = ""]
+    pub log_level_forward: Option<LogLevelForward>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log level for incoming traffic."]
     #[doc = ""]
     pub log_level_in: Option<LogLevelIn>,
@@ -188,6 +192,10 @@ pub struct PutParams {
     #[doc = ""]
     pub enable: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Log level for forwarded traffic."]
+    #[doc = ""]
+    pub log_level_forward: Option<LogLevelForward>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log level for incoming traffic."]
     #[doc = ""]
     pub log_level_in: Option<LogLevelIn>,
@@ -309,6 +317,46 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "Log level for forwarded traffic."]
+#[doc = ""]
+pub enum LogLevelForward {
+    #[serde(rename = "alert")]
+    Alert,
+    #[serde(rename = "crit")]
+    Crit,
+    #[serde(rename = "debug")]
+    Debug,
+    #[serde(rename = "emerg")]
+    Emerg,
+    #[serde(rename = "err")]
+    Err,
+    #[serde(rename = "info")]
+    Info,
+    #[serde(rename = "nolog")]
+    Nolog,
+    #[serde(rename = "notice")]
+    Notice,
+    #[serde(rename = "warning")]
+    Warning,
+}
+impl TryFrom<&str> for LogLevelForward {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "alert" => Ok(Self::Alert),
+            "crit" => Ok(Self::Crit),
+            "debug" => Ok(Self::Debug),
+            "emerg" => Ok(Self::Emerg),
+            "err" => Ok(Self::Err),
+            "info" => Ok(Self::Info),
+            "nolog" => Ok(Self::Nolog),
+            "notice" => Ok(Self::Notice),
+            "warning" => Ok(Self::Warning),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Log level for incoming traffic."]

@@ -29,7 +29,7 @@ impl<T> ConfigClient<T>
 where
     T: crate::client::Client,
 {
-    #[doc = "Set virtual machine options (asynchrounous API)."]
+    #[doc = "Set virtual machine options (asynchronous API)."]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<Option<String>, T::Error> {
         let path = self.path.to_string();
@@ -40,7 +40,7 @@ impl<T> ConfigClient<T>
 where
     T: crate::client::Client,
 {
-    #[doc = "Set virtual machine options (synchrounous API) - You should consider using the POST method instead for any actions involving hotplug or storage allocation."]
+    #[doc = "Set virtual machine options (synchronous API) - You should consider using the POST method instead for any actions involving hotplug or storage allocation."]
     #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
@@ -54,6 +54,7 @@ impl GetOutput {
             acpi: Default::default(),
             affinity: Default::default(),
             agent: Default::default(),
+            amd_sev: Default::default(),
             arch: Default::default(),
             args: Default::default(),
             audio0: Default::default(),
@@ -125,6 +126,7 @@ impl GetOutput {
             vcpus: Default::default(),
             vga: Default::default(),
             virtios: Default::default(),
+            virtiofss: Default::default(),
             vmgenid: Default::default(),
             vmstatestorage: Default::default(),
             watchdog: Default::default(),
@@ -150,6 +152,11 @@ pub struct GetOutput {
     #[doc = "Enable/disable communication with the QEMU Guest Agent and its properties."]
     #[doc = ""]
     pub agent: Option<String>,
+    #[serde(rename = "amd-sev")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Secure Encrypted Virtualization (SEV) features by AMD CPUs"]
+    #[doc = ""]
+    pub amd_sev: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Virtual processor architecture. Defaults to the host."]
     #[doc = ""]
@@ -390,7 +397,7 @@ pub struct GetOutput {
         deserialize_with = "crate::types::deserialize_number_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Set maximum tolerated downtime (in seconds) for migrations."]
+    #[doc = "Set maximum tolerated downtime (in seconds) for migrations. Should the migration not be able to converge in the very end, because too much newly dirtied RAM needs to be transferred, the limit will be increased automatically step-by-step until migration can converge."]
     #[doc = ""]
     pub migrate_downtime: Option<f64>,
     #[serde(
@@ -693,6 +700,16 @@ pub struct GetOutput {
     #[doc = "Use volume as VIRTIO hard disk (n is 0 to 15)."]
     #[doc = ""]
     pub virtios: ::std::collections::HashMap<u32, String>,
+    #[serde(rename = "virtiofs[n]")]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedVirtiofss, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedVirtiofss, _>"
+    )]
+    #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
+    #[serde(flatten)]
+    #[doc = "Configuration for sharing a directory between host and guest using Virtio-fs."]
+    #[doc = ""]
+    pub virtiofss: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set VM Generation ID. Use '1' to autogenerate on create or update, pass '0' to disable explicitly."]
     #[doc = ""]
@@ -745,6 +762,8 @@ impl crate::types::multi::Test for GetOutput {
                     as fn(&str) -> bool,
                 <NumberedVirtios as crate::types::multi::NumberedItems>::key_matches
                     as fn(&str) -> bool,
+                <NumberedVirtiofss as crate::types::multi::NumberedItems>::key_matches
+                    as fn(&str) -> bool,
             ];
             array.iter().any(|f| f(input))
         }
@@ -790,6 +809,11 @@ pub struct PostParams {
     #[doc = "Enable/disable communication with the QEMU Guest Agent and its properties."]
     #[doc = ""]
     pub agent: Option<String>,
+    #[serde(rename = "amd-sev")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Secure Encrypted Virtualization (SEV) features by AMD CPUs"]
+    #[doc = ""]
+    pub amd_sev: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Virtual processor architecture. Defaults to the host."]
     #[doc = ""]
@@ -978,6 +1002,11 @@ pub struct PostParams {
     #[doc = "Use volume as IDE hard disk or CD-ROM (n is 0 to 3). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
     #[doc = ""]
     pub ides: ::std::collections::HashMap<u32, String>,
+    #[serde(rename = "import-working-storage")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "A file-based storage with 'images' content-type enabled, which is used as an intermediary extraction storage during import. Defaults to the source storage."]
+    #[doc = ""]
+    pub import_working_storage: Option<String>,
     #[serde(rename = "ipconfig[n]")]
     #[serde(
         serialize_with = "crate::types::serialize_multi::<NumberedIpconfigs, _>",
@@ -1051,7 +1080,7 @@ pub struct PostParams {
         deserialize_with = "crate::types::deserialize_number_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Set maximum tolerated downtime (in seconds) for migrations."]
+    #[doc = "Set maximum tolerated downtime (in seconds) for migrations. Should the migration not be able to converge in the very end, because too much newly dirtied RAM needs to be transferred, the limit will be increased automatically step-by-step until migration can converge."]
     #[doc = ""]
     pub migrate_downtime: Option<f64>,
     #[serde(
@@ -1366,6 +1395,16 @@ pub struct PostParams {
     #[doc = "Use volume as VIRTIO hard disk (n is 0 to 15). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
     #[doc = ""]
     pub virtios: ::std::collections::HashMap<u32, String>,
+    #[serde(rename = "virtiofs[n]")]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedVirtiofss, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedVirtiofss, _>"
+    )]
+    #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
+    #[serde(flatten)]
+    #[doc = "Configuration for sharing a directory between host and guest using Virtio-fs."]
+    #[doc = ""]
+    pub virtiofss: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set VM Generation ID. Use '1' to autogenerate on create or update, pass '0' to disable explicitly."]
     #[doc = ""]
@@ -1418,6 +1457,8 @@ impl crate::types::multi::Test for PostParams {
                     as fn(&str) -> bool,
                 <NumberedVirtios as crate::types::multi::NumberedItems>::key_matches
                     as fn(&str) -> bool,
+                <NumberedVirtiofss as crate::types::multi::NumberedItems>::key_matches
+                    as fn(&str) -> bool,
             ];
             array.iter().any(|f| f(input))
         }
@@ -1442,6 +1483,11 @@ pub struct PutParams {
     #[doc = "Enable/disable communication with the QEMU Guest Agent and its properties."]
     #[doc = ""]
     pub agent: Option<String>,
+    #[serde(rename = "amd-sev")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Secure Encrypted Virtualization (SEV) features by AMD CPUs"]
+    #[doc = ""]
+    pub amd_sev: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Virtual processor architecture. Defaults to the host."]
     #[doc = ""]
@@ -1695,7 +1741,7 @@ pub struct PutParams {
         deserialize_with = "crate::types::deserialize_number_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Set maximum tolerated downtime (in seconds) for migrations."]
+    #[doc = "Set maximum tolerated downtime (in seconds) for migrations. Should the migration not be able to converge in the very end, because too much newly dirtied RAM needs to be transferred, the limit will be increased automatically step-by-step until migration can converge."]
     #[doc = ""]
     pub migrate_downtime: Option<f64>,
     #[serde(
@@ -2010,6 +2056,16 @@ pub struct PutParams {
     #[doc = "Use volume as VIRTIO hard disk (n is 0 to 15). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
     #[doc = ""]
     pub virtios: ::std::collections::HashMap<u32, String>,
+    #[serde(rename = "virtiofs[n]")]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedVirtiofss, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedVirtiofss, _>"
+    )]
+    #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
+    #[serde(flatten)]
+    #[doc = "Configuration for sharing a directory between host and guest using Virtio-fs."]
+    #[doc = ""]
+    pub virtiofss: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set VM Generation ID. Use '1' to autogenerate on create or update, pass '0' to disable explicitly."]
     #[doc = ""]
@@ -2061,6 +2117,8 @@ impl crate::types::multi::Test for PutParams {
                 <NumberedUsbs as crate::types::multi::NumberedItems>::key_matches
                     as fn(&str) -> bool,
                 <NumberedVirtios as crate::types::multi::NumberedItems>::key_matches
+                    as fn(&str) -> bool,
+                <NumberedVirtiofss as crate::types::multi::NumberedItems>::key_matches
                     as fn(&str) -> bool,
             ];
             array.iter().any(|f| f(input))
@@ -2468,6 +2526,12 @@ struct NumberedUsbs;
 impl crate::types::multi::NumberedItems for NumberedUsbs {
     type Item = String;
     const PREFIX: &'static str = "usb";
+}
+#[derive(Default)]
+struct NumberedVirtiofss;
+impl crate::types::multi::NumberedItems for NumberedVirtiofss {
+    type Item = String;
+    const PREFIX: &'static str = "virtiofs";
 }
 #[derive(Default)]
 struct NumberedVirtios;

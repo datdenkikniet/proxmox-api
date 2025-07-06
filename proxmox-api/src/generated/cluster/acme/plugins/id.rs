@@ -118,6 +118,8 @@ pub enum Api {
     Ad,
     #[serde(rename = "ali")]
     Ali,
+    #[serde(rename = "alviy")]
+    Alviy,
     #[serde(rename = "anx")]
     Anx,
     #[serde(rename = "artfiles")]
@@ -174,8 +176,6 @@ pub enum Api {
     Dnsimple,
     #[serde(rename = "dnsservices")]
     Dnsservices,
-    #[serde(rename = "do")]
-    Do,
     #[serde(rename = "doapi")]
     Doapi,
     #[serde(rename = "domeneshop")]
@@ -240,6 +240,8 @@ pub enum Api {
     Inwx,
     #[serde(rename = "ionos")]
     Ionos,
+    #[serde(rename = "ionos_cloud")]
+    IonosCloud,
     #[serde(rename = "ipv64")]
     Ipv64,
     #[serde(rename = "ispconfig")]
@@ -262,6 +264,8 @@ pub enum Api {
     Leaseweb,
     #[serde(rename = "lexicon")]
     Lexicon,
+    #[serde(rename = "limacity")]
+    Limacity,
     #[serde(rename = "linode")]
     Linode,
     #[serde(rename = "linode_v4")]
@@ -318,6 +322,8 @@ pub enum Api {
     Nw,
     #[serde(rename = "oci")]
     Oci,
+    #[serde(rename = "omglol")]
+    Omglol,
     #[serde(rename = "one")]
     One,
     #[serde(rename = "online")]
@@ -360,10 +366,14 @@ pub enum Api {
     Servercow,
     #[serde(rename = "simply")]
     Simply,
+    #[serde(rename = "technitium")]
+    Technitium,
     #[serde(rename = "tele3")]
     Tele3,
     #[serde(rename = "tencent")]
     Tencent,
+    #[serde(rename = "timeweb")]
+    Timeweb,
     #[serde(rename = "transip")]
     Transip,
     #[serde(rename = "udr")]
@@ -384,16 +394,20 @@ pub enum Api {
     Vultr,
     #[serde(rename = "websupport")]
     Websupport,
+    #[serde(rename = "west_cn")]
+    WestCn,
     #[serde(rename = "world4you")]
     World4you,
-    #[serde(rename = "yandex")]
-    Yandex,
+    #[serde(rename = "yandex360")]
+    Yandex360,
     #[serde(rename = "yc")]
     Yc,
     #[serde(rename = "zilore")]
     Zilore,
     #[serde(rename = "zone")]
     Zone,
+    #[serde(rename = "zoneedit")]
+    Zoneedit,
     #[serde(rename = "zonomi")]
     Zonomi,
 }
@@ -407,6 +421,7 @@ impl TryFrom<&str> for Api {
             "active24" => Ok(Self::Active24),
             "ad" => Ok(Self::Ad),
             "ali" => Ok(Self::Ali),
+            "alviy" => Ok(Self::Alviy),
             "anx" => Ok(Self::Anx),
             "artfiles" => Ok(Self::Artfiles),
             "arvan" => Ok(Self::Arvan),
@@ -435,7 +450,6 @@ impl TryFrom<&str> for Api {
             "dnshome" => Ok(Self::Dnshome),
             "dnsimple" => Ok(Self::Dnsimple),
             "dnsservices" => Ok(Self::Dnsservices),
-            "do" => Ok(Self::Do),
             "doapi" => Ok(Self::Doapi),
             "domeneshop" => Ok(Self::Domeneshop),
             "dp" => Ok(Self::Dp),
@@ -468,6 +482,7 @@ impl TryFrom<&str> for Api {
             "internetbs" => Ok(Self::Internetbs),
             "inwx" => Ok(Self::Inwx),
             "ionos" => Ok(Self::Ionos),
+            "ionos_cloud" => Ok(Self::IonosCloud),
             "ipv64" => Ok(Self::Ipv64),
             "ispconfig" => Ok(Self::Ispconfig),
             "jd" => Ok(Self::Jd),
@@ -479,6 +494,7 @@ impl TryFrom<&str> for Api {
             "la" => Ok(Self::La),
             "leaseweb" => Ok(Self::Leaseweb),
             "lexicon" => Ok(Self::Lexicon),
+            "limacity" => Ok(Self::Limacity),
             "linode" => Ok(Self::Linode),
             "linode_v4" => Ok(Self::LinodeV4),
             "loopia" => Ok(Self::Loopia),
@@ -507,6 +523,7 @@ impl TryFrom<&str> for Api {
             "nsupdate" => Ok(Self::Nsupdate),
             "nw" => Ok(Self::Nw),
             "oci" => Ok(Self::Oci),
+            "omglol" => Ok(Self::Omglol),
             "one" => Ok(Self::One),
             "online" => Ok(Self::Online),
             "openprovider" => Ok(Self::Openprovider),
@@ -528,8 +545,10 @@ impl TryFrom<&str> for Api {
             "selfhost" => Ok(Self::Selfhost),
             "servercow" => Ok(Self::Servercow),
             "simply" => Ok(Self::Simply),
+            "technitium" => Ok(Self::Technitium),
             "tele3" => Ok(Self::Tele3),
             "tencent" => Ok(Self::Tencent),
+            "timeweb" => Ok(Self::Timeweb),
             "transip" => Ok(Self::Transip),
             "udr" => Ok(Self::Udr),
             "ultra" => Ok(Self::Ultra),
@@ -540,11 +559,13 @@ impl TryFrom<&str> for Api {
             "vscale" => Ok(Self::Vscale),
             "vultr" => Ok(Self::Vultr),
             "websupport" => Ok(Self::Websupport),
+            "west_cn" => Ok(Self::WestCn),
             "world4you" => Ok(Self::World4you),
-            "yandex" => Ok(Self::Yandex),
+            "yandex360" => Ok(Self::Yandex360),
             "yc" => Ok(Self::Yc),
             "zilore" => Ok(Self::Zilore),
             "zone" => Ok(Self::Zone),
+            "zoneedit" => Ok(Self::Zoneedit),
             "zonomi" => Ok(Self::Zonomi),
             v => Err(format!("Unknown variant {v}")),
         }

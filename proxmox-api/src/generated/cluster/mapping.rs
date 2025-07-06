@@ -1,3 +1,4 @@
+pub mod dir;
 pub mod pci;
 pub mod usb;
 #[derive(Debug, Clone)]
@@ -35,6 +36,14 @@ pub struct GetOutputItems {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+impl<T> MappingClient<T>
+where
+    T: crate::client::Client,
+{
+    pub fn dir(&self) -> dir::DirClient<T> {
+        dir::DirClient::<T>::new(self.client.clone(), &self.path)
+    }
 }
 impl<T> MappingClient<T>
 where
