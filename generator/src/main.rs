@@ -1,5 +1,3 @@
-use std::io::BufReader;
-
 pub mod raw;
 
 mod path;
@@ -10,6 +8,9 @@ pub use generator::{ClientModDef, Generator};
 
 use clap::Parser;
 use raw::{flattened::Collection, TreeNode};
+
+mod parser;
+pub use parser::api;
 
 const RENAME_MAP: &[(&str, &str)] = &[
     ("type", "ty"),
@@ -108,38 +109,20 @@ pub enum Style {
 
 #[derive(Parser)]
 pub enum Cli {
-    Recursive { input_path: String, file: String },
-    NonRecursive { input_path: String, file: String },
-}
-
-impl Cli {
-    pub fn input_path(&self) -> &str {
-        match self {
-            Cli::Recursive { input_path, .. } => input_path,
-            Cli::NonRecursive { input_path, .. } => input_path,
-        }
-    }
+    Recursive { file: String },
+    NonRecursive { file: String },
 }
 
 fn main() -> std::io::Result<()> {
     let cli = Cli::parse();
 
-    let input_path = cli.input_path();
-
-    let str = if input_path.ends_with(".xz") {
-        let file = std::fs::OpenOptions::new()
-            .read(true)
-            .open(input_path)
+    let str = {
+        let text = reqwest::blocking::get("https://pve.proxmox.com/pve-docs/api-viewer/apidoc.js")
+            .unwrap()
+            .text()
             .unwrap();
 
-        let mut reader = BufReader::new(file);
-
-        let mut output = Vec::new();
-        lzma_rs::xz_decompress(&mut reader, &mut output).unwrap();
-
-        String::from_utf8(output).unwrap()
-    } else {
-        std::fs::read_to_string(input_path).unwrap()
+        api::extract_api_schema(&text).expect("failed to get schema")
     };
 
     let tree: Vec<TreeNode> = serde_json::from_str(&str).unwrap();

@@ -218,7 +218,7 @@ impl Generator {
                         quote!(&str)
                     };
 
-                    let next_val_ident = Ident::new(p, quote!().span());
+                    let next_val_ident = Ident::new(&snake_case(p), quote!().span());
                     (
                         quote! { #child_fn_name(&self, #next_val_ident: #next_val_ty) -> #defer },
                         quote! { #defer::new(self.client.clone(), &self.path, #next_val_ident)},
@@ -300,7 +300,7 @@ impl Generator {
     }
 
     fn make_placeholder_constructor(has_parent: bool, placeholder: &str) -> TokenStream {
-        let placeholder_ident = Ident::new(placeholder, quote!().span());
+        let placeholder_ident = Ident::new(&snake_case(placeholder), quote!().span());
 
         let placeholder_ty = if placeholder == "vmid" {
             proxmox_api(quote!(types::VmId))
@@ -397,4 +397,30 @@ impl core::ops::Deref for Generator {
     fn deref(&self) -> &Self::Target {
         &self.mods
     }
+}
+
+fn snake_case(input: &str) -> String {
+    println!("{}", input);
+    let mut result = String::new();
+    let mut last_was_uppercase = false;
+
+    for (i, c) in input.chars().enumerate() {
+        if c == '-' {
+            result.push('_');
+            last_was_uppercase = true;
+            continue;
+        }
+
+        if c.is_uppercase() {
+            if i > 0 && !last_was_uppercase {
+                result.push('_');
+            }
+            last_was_uppercase = true;
+        } else {
+            last_was_uppercase = false;
+        }
+        result.push(c.to_ascii_lowercase());
+    }
+
+    result
 }
