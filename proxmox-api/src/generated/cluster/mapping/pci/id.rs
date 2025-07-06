@@ -70,6 +70,15 @@ pub struct PutParams {
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
     #[doc = ""]
     pub digest: Option<String>,
+    #[serde(rename = "live-migration-capable")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Marks the device(s) as being able to be live-migrated (Experimental). This needs hardware and driver support to work."]
+    #[doc = ""]
+    pub live_migration_capable: Option<bool>,
     #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
     #[doc = "A list of maps for the cluster nodes."]
     #[doc = ""]

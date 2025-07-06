@@ -203,6 +203,8 @@ impl TryFrom<&str> for Log {
 #[doc = "Rule type."]
 #[doc = ""]
 pub enum Type {
+    #[serde(rename = "forward")]
+    Forward,
     #[serde(rename = "group")]
     Group,
     #[serde(rename = "in")]
@@ -214,6 +216,7 @@ impl TryFrom<&str> for Type {
     type Error = String;
     fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
         match value {
+            "forward" => Ok(Self::Forward),
             "group" => Ok(Self::Group),
             "in" => Ok(Self::In),
             "out" => Ok(Self::Out),

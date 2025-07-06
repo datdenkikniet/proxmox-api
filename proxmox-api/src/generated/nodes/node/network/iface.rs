@@ -79,6 +79,7 @@ impl PutParams {
             bond_mode: Default::default(),
             bond_xmit_hash_policy: Default::default(),
             bridge_ports: Default::default(),
+            bridge_vids: Default::default(),
             bridge_vlan_aware: Default::default(),
             cidr: Default::default(),
             cidr6: Default::default(),
@@ -137,6 +138,10 @@ pub struct PutParams {
     #[doc = "Specify the interfaces you want to add to your bridge."]
     #[doc = ""]
     pub bridge_ports: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Specify the allowed VLANs. For example: '2 4 100-200'. Only used if the bridge is VLAN aware."]
+    #[doc = ""]
+    pub bridge_vids: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -331,6 +336,8 @@ pub enum Type {
     Unknown,
     #[serde(rename = "vlan")]
     Vlan,
+    #[serde(rename = "vnet")]
+    Vnet,
 }
 impl TryFrom<&str> for Type {
     type Error = String;
@@ -346,6 +353,7 @@ impl TryFrom<&str> for Type {
             "eth" => Ok(Self::Eth),
             "unknown" => Ok(Self::Unknown),
             "vlan" => Ok(Self::Vlan),
+            "vnet" => Ok(Self::Vnet),
             v => Err(format!("Unknown variant {v}")),
         }
     }

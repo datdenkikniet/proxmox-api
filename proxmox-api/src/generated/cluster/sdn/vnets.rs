@@ -77,6 +77,7 @@ impl PostParams {
             vnet,
             zone,
             alias: Default::default(),
+            isolate_ports: Default::default(),
             tag: Default::default(),
             ty: Default::default(),
             vlanaware: Default::default(),
@@ -90,6 +91,15 @@ pub struct PostParams {
     #[doc = "alias name of the vnet"]
     #[doc = ""]
     pub alias: Option<String>,
+    #[serde(rename = "isolate-ports")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "If true, sets the isolated property for all members of this VNet"]
+    #[doc = ""]
+    pub isolate_ports: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"

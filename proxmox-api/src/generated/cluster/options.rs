@@ -51,6 +51,11 @@ pub struct PutParams {
     #[doc = "Set I/O bandwidth limit for various operations (in KiB/s)."]
     #[doc = ""]
     pub bwlimit: Option<String>,
+    #[serde(rename = "consent-text")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Consent text that is displayed before logging in."]
+    #[doc = ""]
+    pub consent_text: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Select the default Console viewer. You can either use the builtin java applet (VNC; deprecated and maps to html5), an external virt-viewer comtatible application (SPICE), an HTML5 based vnc viewer (noVNC), or an HTML5 based console client (xtermjs). If the selected viewer is not available (e.g. SPICE not activated for the VM), the fallback is noVNC."]
     #[doc = ""]

@@ -33,4 +33,7 @@ pub struct Info<'a> {
         skip_serializing_if = "Option::is_none"
     )]
     pub proxy_to: Option<Cow<'a, str>>,
+    //todo: unknown field usage
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub download_allowed: Option<u8>,
 }

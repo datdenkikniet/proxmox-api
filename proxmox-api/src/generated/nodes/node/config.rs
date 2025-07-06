@@ -52,6 +52,15 @@ pub struct GetOutput {
     #[doc = "ACME domain and validation plugin"]
     #[doc = ""]
     pub acmedomains: ::std::collections::HashMap<u32, String>,
+    #[serde(rename = "ballooning-target")]
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "RAM usage target for ballooning (in percent of total memory)"]
+    #[doc = ""]
+    pub ballooning_target: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the Node. Shown in the web-interface node notes panel. This is saved as comment inside the configuration file."]
     #[doc = ""]
@@ -120,6 +129,15 @@ pub struct PutParams {
     #[doc = "ACME domain and validation plugin"]
     #[doc = ""]
     pub acmedomains: ::std::collections::HashMap<u32, String>,
+    #[serde(rename = "ballooning-target")]
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "RAM usage target for ballooning (in percent of total memory)"]
+    #[doc = ""]
+    pub ballooning_target: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of settings you want to delete."]
     #[doc = ""]
@@ -181,6 +199,8 @@ pub enum Property {
     Acmedomain4,
     #[serde(rename = "acmedomain5")]
     Acmedomain5,
+    #[serde(rename = "ballooning-target")]
+    BallooningTarget,
     #[serde(rename = "description")]
     Description,
     #[serde(rename = "startall-onboot-delay")]
@@ -199,6 +219,7 @@ impl TryFrom<&str> for Property {
             "acmedomain3" => Ok(Self::Acmedomain3),
             "acmedomain4" => Ok(Self::Acmedomain4),
             "acmedomain5" => Ok(Self::Acmedomain5),
+            "ballooning-target" => Ok(Self::BallooningTarget),
             "description" => Ok(Self::Description),
             "startall-onboot-delay" => Ok(Self::StartallOnbootDelay),
             "wakeonlan" => Ok(Self::Wakeonlan),

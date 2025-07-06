@@ -74,6 +74,11 @@ pub struct PostParams {
     #[doc = "Set IO priority when using the BFQ scheduler. For snapshot and suspend mode backups of VMs, this only affects the compressor. A value of 8 means the idle priority is used, otherwise the best-effort priority is used with the specified value."]
     #[doc = ""]
     pub ionice: Option<i64>,
+    #[serde(rename = "job-id")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The ID of the backup job. If set, the 'backup-job' metadata field of the backup notification will be set to this value. Only root@pam can set this parameter."]
+    #[doc = ""]
+    pub job_id: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -122,6 +127,11 @@ pub struct PostParams {
     #[doc = "Deprecated: Do not use"]
     #[doc = ""]
     pub notification_target: Option<String>,
+    #[serde(rename = "pbs-change-detection-mode")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "PBS mode used to detect file changes and switch encoding format for container backups."]
+    #[doc = ""]
+    pub pbs_change_detection_mode: Option<PbsChangeDetectionMode>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Other performance-related settings."]
     #[doc = ""]
@@ -366,6 +376,28 @@ impl TryFrom<&str> for NotificationPolicy {
 impl Default for NotificationPolicy {
     fn default() -> Self {
         Self::Always
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "PBS mode used to detect file changes and switch encoding format for container backups."]
+#[doc = ""]
+pub enum PbsChangeDetectionMode {
+    #[serde(rename = "data")]
+    Data,
+    #[serde(rename = "legacy")]
+    Legacy,
+    #[serde(rename = "metadata")]
+    Metadata,
+}
+impl TryFrom<&str> for PbsChangeDetectionMode {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "data" => Ok(Self::Data),
+            "legacy" => Ok(Self::Legacy),
+            "metadata" => Ok(Self::Metadata),
+            v => Err(format!("Unknown variant {v}")),
+        }
     }
 }
 impl<T> VzdumpClient<T>
