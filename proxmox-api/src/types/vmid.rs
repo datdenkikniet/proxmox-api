@@ -12,7 +12,7 @@ pub struct VmId(
 impl VmId {
     pub fn new(value: i64) -> Option<Self> {
         if (100..=999_999_999).contains(&value) {
-            Some(Self(value as i64))
+            Some(Self(value))
         } else {
             None
         }

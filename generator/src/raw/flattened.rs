@@ -44,7 +44,7 @@ pub struct Collection<'a> {
 }
 
 impl<'a> Collection<'a> {
-    pub fn idx(&self, idx: usize) -> Option<&(PathElement, Node)> {
+    pub fn idx(&self, idx: usize) -> Option<&(PathElement, Node<'_>)> {
         self.values.get(idx)
     }
 
@@ -60,7 +60,7 @@ impl<'a> Collection<'a> {
         Self { values }
     }
 
-    pub fn iter(&self) -> impl Iterator<Item = &'_ Node> {
+    pub fn iter(&self) -> impl Iterator<Item = &'_ Node<'_>> {
         self.values.iter().map(|(_, node)| node)
     }
 
