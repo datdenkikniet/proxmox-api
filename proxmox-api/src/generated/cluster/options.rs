@@ -189,7 +189,7 @@ impl TryFrom<&str> for Console {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "Set the fencing mode of the HA cluster. Hardware mode needs a valid configuration of fence devices in /etc/pve/ha/fence.cfg. With both all two modes are used."]
 #[doc = ""]
 #[doc = "WARNING: 'hardware' and 'both' are EXPERIMENTAL & WIP"]
@@ -200,6 +200,7 @@ pub enum Fencing {
     #[serde(rename = "hardware")]
     Hardware,
     #[serde(rename = "watchdog")]
+    #[default]
     Watchdog,
 }
 impl TryFrom<&str> for Fencing {
@@ -211,11 +212,6 @@ impl TryFrom<&str> for Fencing {
             "watchdog" => Ok(Self::Watchdog),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-impl Default for Fencing {
-    fn default() -> Self {
-        Self::Watchdog
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]

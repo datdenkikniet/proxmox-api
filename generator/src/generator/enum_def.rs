@@ -62,9 +62,12 @@ impl EnumDef {
         default: Option<String>,
         doc: Vec<String>,
     ) -> Self {
-        if let Some(default) = default.as_ref() {
+        let default_derive = if let Some(default) = default.as_ref() {
             assert!(values.contains(default));
-        }
+            Some("Default".to_string())
+        } else {
+            None
+        };
 
         let me = EnumDef {
             name: Arc::new(Mutex::new(name)),
@@ -72,6 +75,7 @@ impl EnumDef {
                 .into_iter()
                 .map(str::to_string)
                 .chain(Some("PartialEq".to_string()))
+                .chain(default_derive)
                 .chain(extra_derives.into_iter().map(|e| e.as_ref().to_string()))
                 .map(|v| v.to_string())
                 .collect(),
@@ -126,10 +130,18 @@ impl ToTokens for EnumDef {
                 None
             };
 
+            let is_default = default.as_ref().map(|s| s.as_str()) == Some(orig.as_str());
+            let default_attr = if is_default {
+                Some(quote!(#[default]))
+            } else {
+                None
+            };
+
             let ident = Ident::new(&v, quote!().span());
 
             quote! {
                 #rename
+                #default_attr
                 #ident,
             }
         });
@@ -159,18 +171,5 @@ impl ToTokens for EnumDef {
                 }
             }
         });
-
-        if let Some(default) = default {
-            let default = Self::to_variant(default);
-            let default_ident = Ident::new(&default, quote!().span());
-
-            tokens.extend(quote! {
-                impl Default for #name {
-                    fn default() -> Self {
-                        Self::#default_ident
-                    }
-                }
-            })
-        }
     }
 }

@@ -394,9 +394,10 @@ pub struct VersionGetOutputNodeNodeVersion {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 pub enum Scope {
     #[serde(rename = "all")]
+    #[default]
     All,
     #[serde(rename = "versions")]
     Versions,
@@ -409,10 +410,5 @@ impl TryFrom<&str> for Scope {
             "versions" => Ok(Self::Versions),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-impl Default for Scope {
-    fn default() -> Self {
-        Self::All
     }
 }

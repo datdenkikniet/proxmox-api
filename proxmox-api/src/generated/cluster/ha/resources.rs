@@ -170,7 +170,7 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "Requested resource state."]
 #[doc = ""]
 #[doc = "Requested resource state. The CRM reads this state and acts accordingly."]
@@ -223,6 +223,7 @@ pub enum State {
     #[serde(rename = "ignored")]
     Ignored,
     #[serde(rename = "started")]
+    #[default]
     Started,
     #[serde(rename = "stopped")]
     Stopped,
@@ -238,11 +239,6 @@ impl TryFrom<&str> for State {
             "stopped" => Ok(Self::Stopped),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-impl Default for State {
-    fn default() -> Self {
-        Self::Started
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]

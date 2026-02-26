@@ -150,7 +150,7 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "The compression algorithm to use."]
 #[doc = ""]
 pub enum Compression {
@@ -163,6 +163,7 @@ pub enum Compression {
     #[serde(rename = "off")]
     Off,
     #[serde(rename = "on")]
+    #[default]
     On,
     #[serde(rename = "zle")]
     Zle,
@@ -182,11 +183,6 @@ impl TryFrom<&str> for Compression {
             "zstd" => Ok(Self::Zstd),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-impl Default for Compression {
-    fn default() -> Self {
-        Self::On
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]

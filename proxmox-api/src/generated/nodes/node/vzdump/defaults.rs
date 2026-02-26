@@ -231,11 +231,12 @@ pub struct GetParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "Compress dump file."]
 #[doc = ""]
 pub enum Compress {
     #[serde(rename = "0")]
+    #[default]
     _0,
     #[serde(rename = "1")]
     _1,
@@ -259,16 +260,12 @@ impl TryFrom<&str> for Compress {
         }
     }
 }
-impl Default for Compress {
-    fn default() -> Self {
-        Self::_0
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "Deprecated: use notification targets/matchers instead. Specify when to send a notification mail"]
 #[doc = ""]
 pub enum Mailnotification {
     #[serde(rename = "always")]
+    #[default]
     Always,
     #[serde(rename = "failure")]
     Failure,
@@ -283,16 +280,12 @@ impl TryFrom<&str> for Mailnotification {
         }
     }
 }
-impl Default for Mailnotification {
-    fn default() -> Self {
-        Self::Always
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "Backup mode."]
 #[doc = ""]
 pub enum Mode {
     #[serde(rename = "snapshot")]
+    #[default]
     Snapshot,
     #[serde(rename = "stop")]
     Stop,
@@ -310,16 +303,12 @@ impl TryFrom<&str> for Mode {
         }
     }
 }
-impl Default for Mode {
-    fn default() -> Self {
-        Self::Snapshot
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "Determine which notification system to use. If set to 'legacy-sendmail', vzdump will consider the mailto/mailnotification parameters and send emails to the specified address(es) via the 'sendmail' command. If set to 'notification-system', a notification will be sent via PVE's notification system, and the mailto and mailnotification will be ignored. If set to 'auto' (default setting), an email will be sent if mailto is set, and the notification system will be used if not."]
 #[doc = ""]
 pub enum NotificationMode {
     #[serde(rename = "auto")]
+    #[default]
     Auto,
     #[serde(rename = "legacy-sendmail")]
     LegacySendmail,
@@ -337,16 +326,12 @@ impl TryFrom<&str> for NotificationMode {
         }
     }
 }
-impl Default for NotificationMode {
-    fn default() -> Self {
-        Self::Auto
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "Deprecated: Do not use"]
 #[doc = ""]
 pub enum NotificationPolicy {
     #[serde(rename = "always")]
+    #[default]
     Always,
     #[serde(rename = "failure")]
     Failure,
@@ -362,10 +347,5 @@ impl TryFrom<&str> for NotificationPolicy {
             "never" => Ok(Self::Never),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-impl Default for NotificationPolicy {
-    fn default() -> Self {
-        Self::Always
     }
 }

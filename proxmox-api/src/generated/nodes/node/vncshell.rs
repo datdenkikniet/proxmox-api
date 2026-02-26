@@ -67,13 +67,14 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "Run specific command or default to login (requires 'root@pam')"]
 #[doc = ""]
 pub enum Cmd {
     #[serde(rename = "ceph_install")]
     CephInstall,
     #[serde(rename = "login")]
+    #[default]
     Login,
     #[serde(rename = "upgrade")]
     Upgrade,
@@ -87,10 +88,5 @@ impl TryFrom<&str> for Cmd {
             "upgrade" => Ok(Self::Upgrade),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-impl Default for Cmd {
-    fn default() -> Self {
-        Self::Login
     }
 }

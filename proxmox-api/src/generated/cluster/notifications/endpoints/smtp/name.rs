@@ -201,7 +201,7 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "Determine which encryption method shall be used for the connection."]
 #[doc = ""]
 pub enum Mode {
@@ -210,6 +210,7 @@ pub enum Mode {
     #[serde(rename = "starttls")]
     Starttls,
     #[serde(rename = "tls")]
+    #[default]
     Tls,
 }
 impl TryFrom<&str> for Mode {
@@ -221,10 +222,5 @@ impl TryFrom<&str> for Mode {
             "tls" => Ok(Self::Tls),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-impl Default for Mode {
-    fn default() -> Self {
-        Self::Tls
     }
 }
