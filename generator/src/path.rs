@@ -7,7 +7,7 @@ pub enum PathElement {
 impl From<&str> for PathElement {
     fn from(value: &str) -> Self {
         if value.starts_with('{') && value.ends_with('}') {
-            Self::Placeholder(value[1..value.len() - 1].to_string())
+            Self::Placeholder(value[1..value.len() - 1].replace('-', "_"))
         } else {
             Self::Literal(value.to_string())
         }
