@@ -90,11 +90,12 @@ pub struct GetParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "OSD device type"]
 #[doc = ""]
 pub enum Type {
     #[serde(rename = "block")]
+    #[default]
     Block,
     #[serde(rename = "db")]
     Db,
@@ -110,10 +111,5 @@ impl TryFrom<&str> for Type {
             "wal" => Ok(Self::Wal),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-impl Default for Type {
-    fn default() -> Self {
-        Self::Block
     }
 }

@@ -939,13 +939,14 @@ impl TryFrom<&str> for Arch {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "Select BIOS implementation."]
 #[doc = ""]
 pub enum Bios {
     #[serde(rename = "ovmf")]
     Ovmf,
     #[serde(rename = "seabios")]
+    #[default]
     Seabios,
 }
 impl TryFrom<&str> for Bios {
@@ -956,11 +957,6 @@ impl TryFrom<&str> for Bios {
             "seabios" => Ok(Self::Seabios),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-impl Default for Bios {
-    fn default() -> Self {
-        Self::Seabios
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
@@ -1219,11 +1215,12 @@ impl TryFrom<&str> for Ostype {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "SCSI controller model"]
 #[doc = ""]
 pub enum Scsihw {
     #[serde(rename = "lsi")]
+    #[default]
     Lsi,
     #[serde(rename = "lsi53c810")]
     Lsi53c810,
@@ -1248,11 +1245,6 @@ impl TryFrom<&str> for Scsihw {
             "virtio-scsi-single" => Ok(Self::VirtioScsiSingle),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-impl Default for Scsihw {
-    fn default() -> Self {
-        Self::Lsi
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]

@@ -300,13 +300,14 @@ pub struct PutParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 pub enum Influxdbproto {
     #[serde(rename = "http")]
     Http,
     #[serde(rename = "https")]
     Https,
     #[serde(rename = "udp")]
+    #[default]
     Udp,
 }
 impl TryFrom<&str> for Influxdbproto {
@@ -318,11 +319,6 @@ impl TryFrom<&str> for Influxdbproto {
             "udp" => Ok(Self::Udp),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-impl Default for Influxdbproto {
-    fn default() -> Self {
-        Self::Udp
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]

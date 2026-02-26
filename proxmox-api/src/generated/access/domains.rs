@@ -309,11 +309,12 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "LDAP protocol mode."]
 #[doc = ""]
 pub enum Mode {
     #[serde(rename = "ldap")]
+    #[default]
     Ldap,
     #[serde(rename = "ldap+starttls")]
     LdapStarttls,
@@ -329,11 +330,6 @@ impl TryFrom<&str> for Mode {
             "ldaps" => Ok(Self::Ldaps),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-impl Default for Mode {
-    fn default() -> Self {
-        Self::Ldap
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]

@@ -559,11 +559,12 @@ impl crate::types::multi::Test for PutParams {
         the_test as _
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "OS architecture type."]
 #[doc = ""]
 pub enum Arch {
     #[serde(rename = "amd64")]
+    #[default]
     Amd64,
     #[serde(rename = "arm64")]
     Arm64,
@@ -590,12 +591,7 @@ impl TryFrom<&str> for Arch {
         }
     }
 }
-impl Default for Arch {
-    fn default() -> Self {
-        Self::Amd64
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "Console mode. By default, the console command tries to open a connection to one of the available tty devices. By setting cmode to 'console' it tries to attach to /dev/console instead. If you set cmode to 'shell', it simply invokes a shell inside the container (no login)."]
 #[doc = ""]
 pub enum Cmode {
@@ -604,6 +600,7 @@ pub enum Cmode {
     #[serde(rename = "shell")]
     Shell,
     #[serde(rename = "tty")]
+    #[default]
     Tty,
 }
 impl TryFrom<&str> for Cmode {
@@ -615,11 +612,6 @@ impl TryFrom<&str> for Cmode {
             "tty" => Ok(Self::Tty),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-impl Default for Cmode {
-    fn default() -> Self {
-        Self::Tty
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]

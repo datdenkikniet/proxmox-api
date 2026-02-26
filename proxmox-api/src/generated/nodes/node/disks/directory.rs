@@ -118,11 +118,12 @@ pub struct PostParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "The desired filesystem."]
 #[doc = ""]
 pub enum Filesystem {
     #[serde(rename = "ext4")]
+    #[default]
     Ext4,
     #[serde(rename = "xfs")]
     Xfs,
@@ -135,11 +136,6 @@ impl TryFrom<&str> for Filesystem {
             "xfs" => Ok(Self::Xfs),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-impl Default for Filesystem {
-    fn default() -> Self {
-        Self::Ext4
     }
 }
 impl<T> DirectoryClient<T>

@@ -159,7 +159,7 @@ pub struct GetParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "List archived, active or all tasks."]
 #[doc = ""]
 pub enum Source {
@@ -168,6 +168,7 @@ pub enum Source {
     #[serde(rename = "all")]
     All,
     #[serde(rename = "archive")]
+    #[default]
     Archive,
 }
 impl TryFrom<&str> for Source {
@@ -179,11 +180,6 @@ impl TryFrom<&str> for Source {
             "archive" => Ok(Self::Archive),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-impl Default for Source {
-    fn default() -> Self {
-        Self::Archive
     }
 }
 impl<T> TasksClient<T>

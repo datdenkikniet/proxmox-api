@@ -248,11 +248,12 @@ impl TryFrom<&str> for Dhcp {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 pub enum VlanProtocol {
     #[serde(rename = "802.1ad")]
     _8021ad,
     #[serde(rename = "802.1q")]
+    #[default]
     _8021q,
 }
 impl TryFrom<&str> for VlanProtocol {
@@ -263,10 +264,5 @@ impl TryFrom<&str> for VlanProtocol {
             "802.1q" => Ok(Self::_8021q),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-impl Default for VlanProtocol {
-    fn default() -> Self {
-        Self::_8021q
     }
 }
