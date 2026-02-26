@@ -1,5 +1,5 @@
-name: Generate JSON definitions & build
-run-name: Generate JSON definitions & build
+name: CI
+run-name: CI
 on:
   pull_request:
   push:
@@ -85,7 +85,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
 
       - name: Validate the formatting
         run: cargo fmt --manifest-path ${{ matrix.definition.manifest }} --check
