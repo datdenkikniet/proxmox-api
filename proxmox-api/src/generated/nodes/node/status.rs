@@ -65,6 +65,50 @@ pub struct BootInfoGetOutputBootInfo {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
+impl CpuinfoGetOutputCpuinfo {
+    pub fn new(cores: i64, cpus: i64, model: String, sockets: i64) -> Self {
+        Self {
+            cores,
+            cpus,
+            model,
+            sockets,
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct CpuinfoGetOutputCpuinfo {
+    #[serde(
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
+    )]
+    #[doc = "The number of physical cores of the CPU."]
+    #[doc = ""]
+    pub cores: i64,
+    #[serde(
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
+    )]
+    #[doc = "The number of logical threads of the CPU."]
+    #[doc = ""]
+    pub cpus: i64,
+    #[doc = "The CPU model"]
+    #[doc = ""]
+    pub model: String,
+    #[serde(
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
+    )]
+    #[doc = "The number of logical threads of the CPU."]
+    #[doc = ""]
+    pub sockets: i64,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 impl CurrentKernelGetOutputCurrentKernel {
     pub fn new(machine: String, release: String, sysname: String, version: String) -> Self {
         Self {
@@ -100,11 +144,23 @@ pub struct CurrentKernelGetOutputCurrentKernel {
 impl GetOutput {
     pub fn new(
         boot_info: BootInfoGetOutputBootInfo,
+        cpu: f64,
+        cpuinfo: CpuinfoGetOutputCpuinfo,
         current_kernel: CurrentKernelGetOutputCurrentKernel,
+        loadavg: Vec<String>,
+        memory: MemoryGetOutputMemory,
+        pveversion: String,
+        rootfs: RootfsGetOutputRootfs,
     ) -> Self {
         Self {
             boot_info,
+            cpu,
+            cpuinfo,
             current_kernel,
+            loadavg,
+            memory,
+            pveversion,
+            rootfs,
             additional_properties: Default::default(),
         }
     }
@@ -115,10 +171,67 @@ pub struct GetOutput {
     #[doc = "Meta-information about the boot mode."]
     #[doc = ""]
     pub boot_info: BootInfoGetOutputBootInfo,
+    #[serde(
+        serialize_with = "crate::types::serialize_number",
+        deserialize_with = "crate::types::deserialize_number"
+    )]
+    #[doc = "The current cpu usage."]
+    #[doc = ""]
+    pub cpu: f64,
+    pub cpuinfo: CpuinfoGetOutputCpuinfo,
     #[serde(rename = "current-kernel")]
-    #[doc = "The uptime of the system in seconds."]
+    #[doc = "Meta-information about the currently booted kernel of this node."]
     #[doc = ""]
     pub current_kernel: CurrentKernelGetOutputCurrentKernel,
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    #[doc = "An array of load avg for 1, 5 and 15 minutes respectively."]
+    #[doc = ""]
+    pub loadavg: Vec<String>,
+    pub memory: MemoryGetOutputMemory,
+    #[doc = "The PVE version string."]
+    #[doc = ""]
+    pub pveversion: String,
+    pub rootfs: RootfsGetOutputRootfs,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+impl MemoryGetOutputMemory {
+    pub fn new(free: i64, total: i64, used: i64) -> Self {
+        Self {
+            free,
+            total,
+            used,
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct MemoryGetOutputMemory {
+    #[serde(
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
+    )]
+    #[doc = "The free memory in bytes."]
+    #[doc = ""]
+    pub free: i64,
+    #[serde(
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
+    )]
+    #[doc = "The total memory in bytes."]
+    #[doc = ""]
+    pub total: i64,
+    #[serde(
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
+    )]
+    #[doc = "The used memory in bytes."]
+    #[doc = ""]
+    pub used: i64,
     #[serde(
         flatten,
         default,
@@ -139,6 +252,54 @@ pub struct PostParams {
     #[doc = "Specify the command."]
     #[doc = ""]
     pub command: Command,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+impl RootfsGetOutputRootfs {
+    pub fn new(avail: i64, free: i64, total: i64, used: i64) -> Self {
+        Self {
+            avail,
+            free,
+            total,
+            used,
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct RootfsGetOutputRootfs {
+    #[serde(
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
+    )]
+    #[doc = "The available bytes in the root filesystem."]
+    #[doc = ""]
+    pub avail: i64,
+    #[serde(
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
+    )]
+    #[doc = "The free bytes on the root filesystem."]
+    #[doc = ""]
+    pub free: i64,
+    #[serde(
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
+    )]
+    #[doc = "The total size of the root filesystem in bytes."]
+    #[doc = ""]
+    pub total: i64,
+    #[serde(
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
+    )]
+    #[doc = "The used bytes in the root filesystem."]
+    #[doc = ""]
+    pub used: i64,
     #[serde(
         flatten,
         default,

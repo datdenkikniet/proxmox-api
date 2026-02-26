@@ -59,6 +59,10 @@ pub struct GetOutput {
     #[doc = ""]
     pub log_ratelimit: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Forward policy."]
+    #[doc = ""]
+    pub policy_forward: Option<PolicyForward>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Input policy."]
     #[doc = ""]
     pub policy_in: Option<PolicyIn>,
@@ -104,6 +108,10 @@ pub struct PutParams {
     #[doc = ""]
     pub log_ratelimit: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Forward policy."]
+    #[doc = ""]
+    pub policy_forward: Option<PolicyForward>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Input policy."]
     #[doc = ""]
     pub policy_in: Option<PolicyIn>,
@@ -117,6 +125,23 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "Forward policy."]
+#[doc = ""]
+pub enum PolicyForward {
+    ACCEPT,
+    DROP,
+}
+impl TryFrom<&str> for PolicyForward {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "ACCEPT" => Ok(Self::ACCEPT),
+            "DROP" => Ok(Self::DROP),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Input policy."]

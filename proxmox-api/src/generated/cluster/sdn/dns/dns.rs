@@ -67,6 +67,10 @@ pub struct PutParams {
     #[doc = ""]
     pub digest: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Certificate SHA 256 fingerprint."]
+    #[doc = ""]
+    pub fingerprint: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
     pub key: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
