@@ -65,6 +65,26 @@ jobs:
       - name: Show line count
         run: wc -l ./ci/PVE-schema.json
 
+  assert-no-diff:
+    name: Assert that running the generator does not generate a diff
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run the generator
+        run: pushd generator && ./generate.sh
+
+      - name: Assert that there is no diff
+        run: |
+          if [[ `git status --porcelain` ]]; then
+            # Changes
+            git diff
+            exit 1
+          else
+            # No changes
+            exit 0
+          fi
+
   check-and-build:
     strategy:
       matrix:
