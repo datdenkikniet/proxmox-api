@@ -61,18 +61,18 @@ path = "./src/cli/main.rs"
 required-features = [ "cli" ]
 
 [dependencies]
-serde = { version = "1.0.197", features = ["derive"] }
+serde = { version = "1.0.228", features = ["derive"] }
 
 # TODO: add a generic catch-all type to the client trait. This way we can
 # make serde_json optional, too!
-serde_json = "1.0.114"
+serde_json = "1.0.149"
 
 # CLI deps
-ureq = {  optional = true, version = "2.10.1"}
+ureq = {  optional = true, version = "2.12.1"}
 serde_urlencoded = { optional = true, version = "0.7.1" }
-log = { optional = true, version = "0.4.21" }
-parking_lot = { optional = true, version = "0.12.1" }
-reqwest = { optional = true, version = "0.12.1", features = ["blocking", "json"] }
-clap = { optional = true, version = "4.5.3", features = ["derive", "env"] }
+log = { optional = true, version = "0.4.29" }
+parking_lot = { optional = true, version = "0.12.5" }
+reqwest = { optional = true, version = "0.12.28", features = ["blocking", "json"] }
+clap = { optional = true, version = "4.5.60", features = ["derive", "env"] }
 pretty_env_logger = { optional = true, version = "0.5.0" }
-rustls = { optional = true, version = "0.23.16", default-features = false, features = ["ring"] }
+rustls = { optional = true, version = "0.23.37", default-features = false, features = ["ring"] }
