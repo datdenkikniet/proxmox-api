@@ -11,7 +11,7 @@ use super::base_access::{AuthState, Ticket, TicketResponse};
 
 #[derive(Debug)]
 pub enum Error {
-    Ureq(ureq::Error),
+    Ureq(Box<ureq::Error>),
     EncounteredErrors(serde_json::Value),
     ResponseWasNotString,
     DecodingFailed(String, serde_json::Error),
@@ -21,7 +21,7 @@ pub enum Error {
 
 impl From<ureq::Error> for Error {
     fn from(value: ureq::Error) -> Self {
-        Self::Ureq(value)
+        Self::Ureq(Box::new(value))
     }
 }
 
@@ -251,8 +251,8 @@ impl crate::client::Client for Client {
 
         log::debug!("JSON response: {json_str}");
 
-        let result: Response<R> = serde_json::from_str(&json_str)
-            .map_err(|e| Error::DecodingFailed(json_str.into(), e))?;
+        let result: Response<R> =
+            serde_json::from_str(&json_str).map_err(|e| Error::DecodingFailed(json_str, e))?;
 
         if let Some(data) = result.data {
             Ok(data)

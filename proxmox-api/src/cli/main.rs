@@ -49,7 +49,7 @@ impl Cli {
                 .as_ref()
                 .expect("Password or token is required.");
 
-            ReqwestClient::new(&self.host, &user, &realm, &password).map_err(err_dbg)
+            ReqwestClient::new(&self.host, user, realm, password).map_err(err_dbg)
         }
     }
 }

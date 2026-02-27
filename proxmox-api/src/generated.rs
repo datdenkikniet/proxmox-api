@@ -1,3 +1,4 @@
+#![allow(clippy::all)]
 #[cfg(feature = "access")]
 pub mod access;
 #[cfg(feature = "cluster")]

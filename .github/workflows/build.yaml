@@ -109,6 +109,9 @@ jobs:
       - name: Validate the formatting
         run: cargo fmt --manifest-path ${{ matrix.definition.manifest }} --check
 
+      - name: Clippy the ${{ matrix.definition.name }}
+        run: cargo clippy --manifest-path ${{ matrix.definition.manifest }} ${{ matrix.definition.args }} -- -Dwarnings
+
       - name: Check the ${{ matrix.definition.name }}
         run: cargo check --locked --manifest-path ${{ matrix.definition.manifest }} ${{ matrix.definition.args }}
 
