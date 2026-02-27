@@ -42,6 +42,7 @@ impl Generator {
         let child_name_literal = self.iter().map(|c| Literal::string(&c.name));
 
         let child_mods = quote! {
+            #![allow(clippy::all)]
             #(
                 #[cfg(feature = #child_name_literal)]
                 pub mod #child_names;

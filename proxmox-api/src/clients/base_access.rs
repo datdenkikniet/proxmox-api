@@ -28,10 +28,12 @@ impl<'a> Ticket<'a> {
 
 #[derive(Debug, Deserialize)]
 pub struct TicketResponse {
+    #[allow(unused)]
     pub username: String,
     #[serde(rename = "CSRFPreventionToken")]
     pub csrf_token: Option<String>,
     #[serde(rename = "clustername")]
+    #[allow(unused)]
     pub cluster_name: Option<String>,
     #[serde(rename = "ticket")]
     pub auth_ticket: Option<String>,
@@ -94,10 +96,7 @@ impl AuthState {
             .as_ref()
             .map(|v| ("Authorization", format!("PVEAPIToken={v}")));
 
-        cookie
-            .into_iter()
-            .chain(csrf.into_iter())
-            .chain(api_token.into_iter())
+        cookie.into_iter().chain(csrf).chain(api_token)
     }
 }
 
