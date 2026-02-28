@@ -63,10 +63,10 @@ pub(crate) fn name_to_ident(name: &str) -> String {
         }
     }
 
-    if let Some(v) = new_name.chars().next() {
-        if v.is_numeric() {
-            new_name = format!("_{new_name}");
-        }
+    if let Some(v) = new_name.chars().next()
+        && v.is_numeric()
+    {
+        new_name = format!("_{new_name}");
     }
 
     let mut prev_was_dash = false;

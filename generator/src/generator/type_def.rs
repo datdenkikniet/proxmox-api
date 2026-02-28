@@ -1,14 +1,14 @@
 use std::collections::BTreeSet;
 
 use proc_macro2::TokenStream;
-use quote::{quote, ToTokens};
-use syn::{spanned::Spanned, Ident};
+use quote::{ToTokens, quote};
+use syn::{Ident, spanned::Spanned};
 
 use crate::raw::KnownFormat;
 
 use super::{
-    field_def::FieldDef, proxmox_api, struct_def::AdditionalProperties, EnumDef, NumItemsDef,
-    StructDef,
+    EnumDef, NumItemsDef, StructDef, field_def::FieldDef, proxmox_api,
+    struct_def::AdditionalProperties,
 };
 
 #[derive(Clone, Copy, Debug, PartialEq)]

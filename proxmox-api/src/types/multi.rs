@@ -10,7 +10,7 @@ use std::{
     marker::PhantomData,
 };
 
-use serde::{de::DeserializeOwned, ser::SerializeMap, Deserializer, Serialize, Serializer};
+use serde::{Deserializer, Serialize, Serializer, de::DeserializeOwned, ser::SerializeMap};
 
 pub trait NumberedItems: Default {
     type Item: DeserializeOwned + Serialize;

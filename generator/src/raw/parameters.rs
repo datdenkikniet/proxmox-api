@@ -3,11 +3,11 @@ use std::{borrow::Cow, collections::BTreeMap};
 use serde::Deserialize;
 
 use crate::{
-    generator::{FieldDef, TypeDef},
     Path, PathElement,
+    generator::{FieldDef, TypeDef},
 };
 
-use super::{ty::IntOrTy, Output, Type};
+use super::{Output, Type, ty::IntOrTy};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Parameters<'a> {

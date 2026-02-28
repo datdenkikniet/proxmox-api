@@ -3,8 +3,8 @@ use std::path::{Path, PathBuf};
 
 use proc_macro2::Literal;
 use quote::ToTokens;
-use syn::spanned::Spanned;
 use syn::Ident;
+use syn::spanned::Spanned;
 
 use crate::{ClientModDef, Generator};
 

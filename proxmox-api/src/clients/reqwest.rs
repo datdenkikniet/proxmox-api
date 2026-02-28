@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
-use reqwest::{blocking::RequestBuilder, Method, StatusCode};
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use reqwest::{Method, StatusCode, blocking::RequestBuilder};
+use serde::{Deserialize, Serialize, de::DeserializeOwned};
 
 use super::base_access::{AuthState, Ticket, TicketResponse};
 

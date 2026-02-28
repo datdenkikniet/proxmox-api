@@ -9,7 +9,7 @@ mod generator;
 pub use generator::{ClientModDef, Generator};
 
 use clap::Parser;
-use raw::{flattened::Collection, TreeNode};
+use raw::{TreeNode, flattened::Collection};
 
 const RENAME_MAP: &[(&str, &str)] = &[
     ("type", "ty"),
@@ -67,10 +67,10 @@ pub(crate) fn name_to_ident(name: &str) -> String {
         }
     }
 
-    if let Some(v) = new_name.chars().next() {
-        if v.is_numeric() {
-            new_name = format!("_{new_name}");
-        }
+    if let Some(v) = new_name.chars().next()
+        && v.is_numeric()
+    {
+        new_name = format!("_{new_name}");
     }
 
     let mut prev_was_dash = false;

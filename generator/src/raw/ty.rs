@@ -5,7 +5,7 @@ use std::{
 
 use serde::{Deserialize, Serialize};
 
-use crate::generator::{clean_doc, AdditionalProperties, FieldDef, PrimitiveTypeDef, TypeDef};
+use crate::generator::{AdditionalProperties, FieldDef, PrimitiveTypeDef, TypeDef, clean_doc};
 
 use super::{Format, KnownFormat, Optional, Output};
 

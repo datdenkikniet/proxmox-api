@@ -2,10 +2,10 @@ use std::sync::Arc;
 
 use parking_lot::Mutex;
 use proc_macro2::Literal;
-use quote::{quote, ToTokens};
-use syn::{spanned::Spanned, Ident};
+use quote::{ToTokens, quote};
+use syn::{Ident, spanned::Spanned};
 
-use super::{proxmox_api, TypeDef};
+use super::{TypeDef, proxmox_api};
 
 #[derive(Clone, Debug)]
 pub struct NumItemsDef {

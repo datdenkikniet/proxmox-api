@@ -1,5 +1,5 @@
 use clap::Parser;
-use proxmox_api::{client::Client, ReqwestClient};
+use proxmox_api::{ReqwestClient, client::Client};
 
 #[derive(Debug, Parser)]
 pub struct Cli {

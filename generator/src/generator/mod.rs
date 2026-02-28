@@ -1,10 +1,10 @@
 use proc_macro2::{Literal, Punct, TokenStream};
-use quote::{quote, ToTokens};
-use syn::{spanned::Spanned, Ident};
+use quote::{ToTokens, quote};
+use syn::{Ident, spanned::Spanned};
 
 use crate::{
-    raw::flattened::{Collection, Node},
     PathElement,
+    raw::flattened::{Collection, Node},
 };
 
 mod enum_def;
@@ -67,12 +67,10 @@ impl Generator {
     fn generate(collection: &Collection) -> Vec<ClientModDef> {
         let mut global_defs = Vec::new();
 
-        let output = collection
+        collection
             .iter()
             .map(|n| Self::generate_client(None, n, &mut global_defs))
-            .collect();
-
-        output
+            .collect()
     }
 
     fn generate_client(

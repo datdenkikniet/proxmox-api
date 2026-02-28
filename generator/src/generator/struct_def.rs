@@ -3,9 +3,9 @@ use std::{ops::Deref, sync::Arc};
 use parking_lot::Mutex;
 use proc_macro2::TokenStream;
 use quote::ToTokens;
-use syn::{spanned::Spanned, Ident};
+use syn::{Ident, spanned::Spanned};
 
-use super::{proxmox_api, proxmox_api_str, FieldDef, TypeDef};
+use super::{FieldDef, TypeDef, proxmox_api, proxmox_api_str};
 
 use quote::quote;
 

@@ -2,15 +2,15 @@ use std::ops::Deref;
 
 use proc_macro2::Literal;
 use proc_macro2::TokenStream;
-use quote::quote;
 use quote::ToTokens;
-use syn::spanned::Spanned;
+use quote::quote;
 use syn::Ident;
+use syn::spanned::Spanned;
 
-use super::proxmox_api_str;
-use super::type_def::PrimitiveTypeDef;
 use super::NumItemsDef;
 use super::TypeDef;
+use super::proxmox_api_str;
+use super::type_def::PrimitiveTypeDef;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct FieldDef {

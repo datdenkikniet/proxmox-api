@@ -26,7 +26,9 @@ impl ModuleDefs {
             TypeDef::Struct(strt) => {
                 if let Some(prev_strt) = self.structs.get(&strt.name()) {
                     if prev_strt != &strt {
-                        panic!("Encountered structs on the same level with exactly the same name that are not equal!\n{strt:#?}\n{prev_strt:#?}");
+                        panic!(
+                            "Encountered structs on the same level with exactly the same name that are not equal!\n{strt:#?}\n{prev_strt:#?}"
+                        );
                     }
                 } else {
                     self.structs.insert(strt.name().to_string(), strt);

@@ -3,8 +3,8 @@ use std::{collections::BTreeSet, sync::Arc};
 use parking_lot::Mutex;
 use proc_macro2::{Literal, TokenStream};
 
-use quote::{quote, ToTokens};
-use syn::{spanned::Spanned, Ident};
+use quote::{ToTokens, quote};
+use syn::{Ident, spanned::Spanned};
 
 #[derive(Clone, Debug)]
 pub struct EnumDef {
@@ -69,7 +69,7 @@ impl EnumDef {
             None
         };
 
-        let me = EnumDef {
+        EnumDef {
             name: Arc::new(Mutex::new(name)),
             derives: super::TypeDef::DEFAULT_DERIVES
                 .into_iter()
@@ -82,9 +82,7 @@ impl EnumDef {
             values,
             default,
             doc,
-        };
-
-        me
+        }
     }
 
     fn to_variant(name: &String) -> String {

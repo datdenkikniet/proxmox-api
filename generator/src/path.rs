@@ -79,10 +79,10 @@ impl Path {
         let mut zipped = (&mut elements).zip(&mut other);
 
         for (l, r) in &mut zipped {
-            if let PathElement::Literal(literal) = l {
-                if literal != r {
-                    return false;
-                }
+            if let PathElement::Literal(literal) = l
+                && literal != r
+            {
+                return false;
             }
         }
 
