@@ -48,6 +48,11 @@ pub struct PostParams {
     #[doc = "Migration traffic is encrypted using an SSH tunnel by default. On secure, completely private networks this can be disabled to increase performance."]
     #[doc = ""]
     pub migration_type: Option<MigrationType>,
+    #[serde(rename = "nets-host-mtu")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Used for migration compat. List of VirtIO network devices and their effective host_mtu setting according to the QEMU object model on the source side of the migration. A value of 0 means that the host_mtu parameter is to be avoided for the corresponding device."]
+    #[doc = ""]
+    pub nets_host_mtu: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

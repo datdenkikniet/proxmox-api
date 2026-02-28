@@ -178,6 +178,7 @@ impl PostParams {
             username: Default::default(),
             vgname: Default::default(),
             volume: Default::default(),
+            zfs_base_path: Default::default(),
             additional_properties: Default::default(),
         }
     }
@@ -274,7 +275,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Default image format."]
     #[doc = ""]
-    pub format: Option<String>,
+    pub format: Option<Format>,
     #[serde(rename = "fs-name")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The Ceph filesystem name."]
@@ -395,7 +396,7 @@ pub struct PostParams {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "For non default port."]
+    #[doc = "Use this port to connect to the storage instead of the default one (for example, with PBS or ESXi). For NFS and CIFS, use the 'options' option to configure the port via the mount options."]
     #[doc = ""]
     pub port: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -507,12 +508,42 @@ pub struct PostParams {
     #[doc = "Glusterfs Volume."]
     #[doc = ""]
     pub volume: Option<String>,
+    #[serde(rename = "zfs-base-path")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Base path where to look for the created ZFS block devices. Set automatically during creation if not specified. Usually '/dev/zvol'."]
+    #[doc = ""]
+    pub zfs_base_path: Option<String>,
     #[serde(
         flatten,
         default,
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "Default image format."]
+#[doc = ""]
+pub enum Format {
+    #[serde(rename = "qcow2")]
+    Qcow2,
+    #[serde(rename = "raw")]
+    Raw,
+    #[serde(rename = "subvol")]
+    Subvol,
+    #[serde(rename = "vmdk")]
+    Vmdk,
+}
+impl TryFrom<&str> for Format {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "qcow2" => Ok(Self::Qcow2),
+            "raw" => Ok(Self::Raw),
+            "subvol" => Ok(Self::Subvol),
+            "vmdk" => Ok(Self::Vmdk),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "Preallocation mode for raw and qcow2 images. Using 'metadata' on raw images results in preallocation=off."]

@@ -1,4 +1,4 @@
-pub mod pciid;
+pub mod pci_id_or_mapping;
 #[derive(Debug, Clone)]
 pub struct PciClient<T> {
     client: T,
@@ -123,7 +123,14 @@ impl<T> PciClient<T>
 where
     T: crate::client::Client,
 {
-    pub fn pciid(&self, pciid: &str) -> pciid::PciidClient<T> {
-        pciid::PciidClient::<T>::new(self.client.clone(), &self.path, pciid)
+    pub fn pci_id_or_mapping(
+        &self,
+        pci_id_or_mapping: &str,
+    ) -> pci_id_or_mapping::PciIdOrMappingClient<T> {
+        pci_id_or_mapping::PciIdOrMappingClient::<T>::new(
+            self.client.clone(),
+            &self.path,
+            pci_id_or_mapping,
+        )
     }
 }

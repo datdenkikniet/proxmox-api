@@ -34,18 +34,25 @@ impl GetOutputItems {
             content: Default::default(),
             cpu: Default::default(),
             disk: Default::default(),
+            diskread: Default::default(),
+            diskwrite: Default::default(),
             hastate: Default::default(),
             level: Default::default(),
+            lock: Default::default(),
             maxcpu: Default::default(),
             maxdisk: Default::default(),
             maxmem: Default::default(),
             mem: Default::default(),
             name: Default::default(),
+            netin: Default::default(),
+            netout: Default::default(),
             node: Default::default(),
             plugintype: Default::default(),
             pool: Default::default(),
             status: Default::default(),
             storage: Default::default(),
+            tags: Default::default(),
+            template: Default::default(),
             uptime: Default::default(),
             vmid: Default::default(),
             additional_properties: Default::default(),
@@ -60,11 +67,11 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The cgroup mode the node operates under (when type == node)."]
+    #[doc = "The cgroup mode the node operates under (for type 'node')."]
     #[doc = ""]
     pub cgroup_mode: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Allowed storage content types (when type == storage)."]
+    #[doc = "Allowed storage content types (for type 'storage')."]
     #[doc = ""]
     pub content: Option<String>,
     #[serde(
@@ -72,7 +79,7 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_number_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "CPU utilization (when type in node,qemu,lxc)."]
+    #[doc = "CPU utilization (for types 'node', 'qemu' and 'lxc')."]
     #[doc = ""]
     pub cpu: Option<f64>,
     #[serde(
@@ -80,9 +87,25 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Used disk space in bytes (when type in storage), used root image spave for VMs (type in qemu,lxc)."]
+    #[doc = "Used disk space in bytes (for type 'storage'), used root image space for VMs (for types 'qemu' and 'lxc')."]
     #[doc = ""]
     pub disk: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The amount of bytes the guest read from its block devices since the guest was started. This info is not available for all storage types. (for types 'qemu' and 'lxc')"]
+    #[doc = ""]
+    pub diskread: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The amount of bytes the guest wrote to its block devices since the guest was started. This info is not available for all storage types. (for types 'qemu' and 'lxc')"]
+    #[doc = ""]
+    pub diskwrite: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "HA service status (for HA managed VMs)."]
     #[doc = ""]
@@ -91,15 +114,19 @@ pub struct GetOutputItems {
     #[doc = ""]
     pub id: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Support level (when type == node)."]
+    #[doc = "Support level (for type 'node')."]
     #[doc = ""]
     pub level: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The guest's current config lock (for types 'qemu' and 'lxc')"]
+    #[doc = ""]
+    pub lock: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
         deserialize_with = "crate::types::deserialize_number_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Number of available CPUs (when type in node,qemu,lxc)."]
+    #[doc = "Number of available CPUs (for types 'node', 'qemu' and 'lxc')."]
     #[doc = ""]
     pub maxcpu: Option<f64>,
     #[serde(
@@ -107,7 +134,7 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Storage size in bytes (when type in storage), root image size for VMs (type in qemu,lxc)."]
+    #[doc = "Storage size in bytes (for type 'storage'), root image size for VMs (for types 'qemu' and 'lxc')."]
     #[doc = ""]
     pub maxdisk: Option<i64>,
     #[serde(
@@ -115,7 +142,7 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Number of available memory in bytes (when type in node,qemu,lxc)."]
+    #[doc = "Number of available memory in bytes (for types 'node', 'qemu' and 'lxc')."]
     #[doc = ""]
     pub maxmem: Option<i64>,
     #[serde(
@@ -123,15 +150,31 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Used memory in bytes (when type in node,qemu,lxc)."]
+    #[doc = "Used memory in bytes (for types 'node', 'qemu' and 'lxc')."]
     #[doc = ""]
     pub mem: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Name of the resource."]
     #[doc = ""]
     pub name: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The cluster node name (when type in node,storage,qemu,lxc)."]
+    #[doc = "The amount of traffic in bytes that was sent to the guest over the network since it was started. (for types 'qemu' and 'lxc')"]
+    #[doc = ""]
+    pub netin: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The amount of traffic in bytes that was sent from the guest over the network since it was started. (for types 'qemu' and 'lxc')"]
+    #[doc = ""]
+    pub netout: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The cluster node name (for types 'node', 'storage', 'qemu', and 'lxc')."]
     #[doc = ""]
     pub node: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -139,7 +182,7 @@ pub struct GetOutputItems {
     #[doc = ""]
     pub plugintype: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The pool name (when type in pool,qemu,lxc)."]
+    #[doc = "The pool name (for types 'pool', 'qemu' and 'lxc')."]
     #[doc = ""]
     pub pool: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -147,9 +190,21 @@ pub struct GetOutputItems {
     #[doc = ""]
     pub status: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The storage identifier (when type == storage)."]
+    #[doc = "The storage identifier (for type 'storage')."]
     #[doc = ""]
     pub storage: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The guest's tags (for types 'qemu' and 'lxc')"]
+    #[doc = ""]
+    pub tags: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Determines if the guest is a template. (for types 'qemu' and 'lxc')"]
+    #[doc = ""]
+    pub template: Option<bool>,
     #[serde(rename = "type")]
     #[doc = "Resource type."]
     #[doc = ""]
@@ -159,11 +214,11 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Node uptime in seconds (when type in node,qemu,lxc)."]
+    #[doc = "Uptime of node or virtual guest in seconds (for types 'node', 'qemu' and 'lxc')."]
     #[doc = ""]
     pub uptime: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The numerical vmid (when type in qemu,lxc)."]
+    #[doc = "The numerical vmid (for types 'qemu' and 'lxc')."]
     #[doc = ""]
     pub vmid: Option<crate::types::VmId>,
     #[serde(
@@ -177,6 +232,8 @@ pub struct GetOutputItems {
 pub struct GetParams {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Resource type."]
+    #[doc = ""]
     pub ty: Option<Type>,
     #[serde(
         flatten,
@@ -186,6 +243,8 @@ pub struct GetParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "Resource type."]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "node")]
     Node,
