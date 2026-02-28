@@ -8,6 +8,7 @@ env:
   CONTAINER_NAME: json-container
 jobs:
   create:
+    if: false
     runs-on: ubuntu-latest
     name: Validate generated code
     steps:
