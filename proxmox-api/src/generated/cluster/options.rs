@@ -66,7 +66,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Datacenter description. Shown in the web-interface datacenter notes panel. This is saved as comment inside the configuration file."]
     #[doc = ""]
-    pub description: Option<String>,
+    pub description: Option<DescriptionStr>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify email address to send notification from (default is root@$hostname)"]
     #[doc = ""]
@@ -84,7 +84,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify external http proxy which is used for downloads (example: 'http://username:password@host:port/')"]
     #[doc = ""]
-    pub http_proxy: Option<String>,
+    pub http_proxy: Option<HttpProxyStr>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Default keybord layout for vnc server."]
     #[doc = ""]
@@ -105,14 +105,10 @@ pub struct PutParams {
     #[doc = "For publicly accessible guests it's recommended that you get your own https://standards.ieee.org/products-programs/regauth/\\\\[OUI from the IEEE\\\\] registered or coordinate with your, or your hosting providers, network admins."]
     #[doc = ""]
     pub mac_prefix: Option<String>,
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Defines how many workers (per node) are maximal started  on actions like 'stopall VMs' or task from the ha-manager."]
     #[doc = ""]
-    pub max_workers: Option<i64>,
+    pub max_workers: Option<MaxWorkersInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "For cluster wide migration settings."]
     #[doc = ""]
@@ -138,7 +134,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of tags that require a `Sys.Modify` on '/' to set and delete. Tags set here that are also in 'user-tag-access' also require `Sys.Modify`."]
     #[doc = ""]
-    pub registered_tags: Option<String>,
+    pub registered_tags: Option<RegisteredTagsStr>,
     #[serde(rename = "tag-style")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Tag style options."]
@@ -394,5 +390,164 @@ impl TryFrom<&str> for Language {
             "zh_TW" => Ok(Self::ZhTW),
             v => Err(format!("Unknown variant {v}")),
         }
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct MaxWorkersInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for MaxWorkersInt {
+    const MIN: Option<i128> = Some(1i128);
+    const MAX: Option<i128> = None::<i128>;
+    const DEFAULT: Option<i128> = None::<i128>;
+    const TYPE_DESCRIPTION: &'static str = "an integer greater than or equal to 1";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for MaxWorkersInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for MaxWorkersInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for MaxWorkersInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct DescriptionStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for DescriptionStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = Some(65536usize);
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = None::<&'static str>;
+    const TYPE_DESCRIPTION: &'static str = "a string with length at most 65536";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for DescriptionStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for DescriptionStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for DescriptionStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_string(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct HttpProxyStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for HttpProxyStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = None::<usize>;
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = Some("http://.*");
+    const TYPE_DESCRIPTION: &'static str =
+        "a string with pattern r\"http://.*\" and no length constraints";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for HttpProxyStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for HttpProxyStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for HttpProxyStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_string(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct RegisteredTagsStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for RegisteredTagsStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = None::<usize>;
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> =
+        Some("(?:(?^i:[a-z0-9_][a-z0-9_\\-\\+\\.]*);)*(?^i:[a-z0-9_][a-z0-9_\\-\\+\\.]*)");
+    const TYPE_DESCRIPTION: &'static str = "a string with pattern r\"(?:(?^i:[a-z0-9_][a-z0-9_\\-\\+\\.]*);)*(?^i:[a-z0-9_][a-z0-9_\\-\\+\\.]*)\" and no length constraints";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for RegisteredTagsStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for RegisteredTagsStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for RegisteredTagsStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_string(deserializer)
     }
 }

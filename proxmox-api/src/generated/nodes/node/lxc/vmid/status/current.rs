@@ -26,7 +26,7 @@ where
     }
 }
 impl GetOutput {
-    pub fn new(ha: HaGetOutputHa, status: Status, vmid: crate::types::VmId) -> Self {
+    pub fn new(ha: HaGetOutputHa, status: Status, vmid: VmidInt) -> Self {
         Self {
             ha,
             status,
@@ -105,7 +105,7 @@ pub struct GetOutput {
     pub uptime: Option<i64>,
     #[doc = "The (unique) ID of the VM."]
     #[doc = ""]
-    pub vmid: crate::types::VmId,
+    pub vmid: VmidInt,
     #[serde(
         flatten,
         default,
@@ -139,5 +139,42 @@ impl TryFrom<&str> for Status {
             "stopped" => Ok(Self::Stopped),
             v => Err(format!("Unknown variant {v}")),
         }
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct VmidInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for VmidInt {
+    const MIN: Option<i128> = Some(100i128);
+    const MAX: Option<i128> = Some(999999999i128);
+    const DEFAULT: Option<i128> = None::<i128>;
+    const TYPE_DESCRIPTION: &'static str = "an integer between 100 and 999999999";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for VmidInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for VmidInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for VmidInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
     }
 }

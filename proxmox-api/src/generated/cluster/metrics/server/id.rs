@@ -68,7 +68,7 @@ pub struct GetOutput {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
-    pub fn new(port: i64, server: String, ty: Type) -> Self {
+    pub fn new(port: PortInt, server: String, ty: Type) -> Self {
         Self {
             port,
             server,
@@ -111,22 +111,14 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub influxdbproto: Option<Influxdbproto>,
     #[serde(rename = "max-body-size")]
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "InfluxDB max-body-size in bytes. Requests are batched up to this size."]
     #[doc = ""]
-    pub max_body_size: Option<i64>,
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
+    pub max_body_size: Option<MaxBodySizeInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "MTU for metrics transmission over UDP"]
     #[doc = ""]
-    pub mtu: Option<i64>,
+    pub mtu: Option<MtuInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The InfluxDB organization. Only necessary when using the http v2 api. Has no meaning when using v2 compatibility api."]
     #[doc = ""]
@@ -135,13 +127,9 @@ pub struct PostParams {
     #[doc = "root graphite path (ex: proxmox.mycluster.mykey)"]
     #[doc = ""]
     pub path: Option<String>,
-    #[serde(
-        serialize_with = "crate::types::serialize_int",
-        deserialize_with = "crate::types::deserialize_int"
-    )]
     #[doc = "server network port"]
     #[doc = ""]
-    pub port: i64,
+    pub port: PortInt,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Protocol to send graphite data. TCP or UDP (default)"]
     #[doc = ""]
@@ -149,14 +137,10 @@ pub struct PostParams {
     #[doc = "server dns name or IP address"]
     #[doc = ""]
     pub server: String,
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "graphite TCP socket timeout (default=1)"]
     #[doc = ""]
-    pub timeout: Option<i64>,
+    pub timeout: Option<TimeoutInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The InfluxDB access token. Only necessary when using the http v2 api. If the v2 compatibility api is used, use 'user:password' instead."]
     #[doc = ""]
@@ -182,7 +166,7 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PutParams {
-    pub fn new(port: i64, server: String) -> Self {
+    pub fn new(port: PortInt, server: String) -> Self {
         Self {
             port,
             server,
@@ -218,11 +202,11 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of settings you want to delete."]
     #[doc = ""]
-    pub delete: Option<String>,
+    pub delete: Option<DeleteStr>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
     #[doc = ""]
-    pub digest: Option<String>,
+    pub digest: Option<DigestStr>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -234,22 +218,14 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub influxdbproto: Option<Influxdbproto>,
     #[serde(rename = "max-body-size")]
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "InfluxDB max-body-size in bytes. Requests are batched up to this size."]
     #[doc = ""]
-    pub max_body_size: Option<i64>,
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
+    pub max_body_size: Option<MaxBodySizeInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "MTU for metrics transmission over UDP"]
     #[doc = ""]
-    pub mtu: Option<i64>,
+    pub mtu: Option<MtuInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The InfluxDB organization. Only necessary when using the http v2 api. Has no meaning when using v2 compatibility api."]
     #[doc = ""]
@@ -258,13 +234,9 @@ pub struct PutParams {
     #[doc = "root graphite path (ex: proxmox.mycluster.mykey)"]
     #[doc = ""]
     pub path: Option<String>,
-    #[serde(
-        serialize_with = "crate::types::serialize_int",
-        deserialize_with = "crate::types::deserialize_int"
-    )]
     #[doc = "server network port"]
     #[doc = ""]
-    pub port: i64,
+    pub port: PortInt,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Protocol to send graphite data. TCP or UDP (default)"]
     #[doc = ""]
@@ -272,14 +244,10 @@ pub struct PutParams {
     #[doc = "server dns name or IP address"]
     #[doc = ""]
     pub server: String,
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "graphite TCP socket timeout (default=1)"]
     #[doc = ""]
-    pub timeout: Option<i64>,
+    pub timeout: Option<TimeoutInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The InfluxDB access token. Only necessary when using the http v2 api. If the v2 compatibility api is used, use 'user:password' instead."]
     #[doc = ""]
@@ -357,5 +325,233 @@ impl TryFrom<&str> for Type {
             "influxdb" => Ok(Self::Influxdb),
             v => Err(format!("Unknown variant {v}")),
         }
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct MaxBodySizeInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for MaxBodySizeInt {
+    const MIN: Option<i128> = Some(1i128);
+    const MAX: Option<i128> = None::<i128>;
+    const DEFAULT: Option<i128> = Some(25000000i128);
+    const TYPE_DESCRIPTION: &'static str = "an integer greater than or equal to 1";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for MaxBodySizeInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for MaxBodySizeInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for MaxBodySizeInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct MtuInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for MtuInt {
+    const MIN: Option<i128> = Some(512i128);
+    const MAX: Option<i128> = Some(65536i128);
+    const DEFAULT: Option<i128> = Some(1500i128);
+    const TYPE_DESCRIPTION: &'static str = "an integer between 512 and 65536";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for MtuInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for MtuInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for MtuInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct PortInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for PortInt {
+    const MIN: Option<i128> = Some(1i128);
+    const MAX: Option<i128> = Some(65536i128);
+    const DEFAULT: Option<i128> = None::<i128>;
+    const TYPE_DESCRIPTION: &'static str = "an integer between 1 and 65536";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for PortInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for PortInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for PortInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct TimeoutInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for TimeoutInt {
+    const MIN: Option<i128> = Some(0i128);
+    const MAX: Option<i128> = None::<i128>;
+    const DEFAULT: Option<i128> = Some(1i128);
+    const TYPE_DESCRIPTION: &'static str = "an integer greater than or equal to 0";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for TimeoutInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for TimeoutInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for TimeoutInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct DeleteStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for DeleteStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = Some(4096usize);
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = None::<&'static str>;
+    const TYPE_DESCRIPTION: &'static str = "a string with length at most 4096";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for DeleteStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for DeleteStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for DeleteStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_string(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct DigestStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for DigestStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = Some(64usize);
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = None::<&'static str>;
+    const TYPE_DESCRIPTION: &'static str = "a string with length at most 64";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for DigestStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for DigestStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for DigestStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_string(deserializer)
     }
 }

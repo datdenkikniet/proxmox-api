@@ -100,46 +100,30 @@ pub struct PutParams {
     #[doc = "The rule to use for mapping object placement in the cluster."]
     #[doc = ""]
     pub crush_rule: Option<String>,
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Minimum number of replicas per object"]
     #[doc = ""]
-    pub min_size: Option<i64>,
+    pub min_size: Option<MinSizeInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The automatic PG scaling mode of the pool."]
     #[doc = ""]
     pub pg_autoscale_mode: Option<PgAutoscaleMode>,
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of placement groups."]
     #[doc = ""]
-    pub pg_num: Option<i64>,
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
+    pub pg_num: Option<PgNumInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Minimal number of placement groups."]
     #[doc = ""]
-    pub pg_num_min: Option<i64>,
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
+    pub pg_num_min: Option<PgNumMinInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of replicas per object"]
     #[doc = ""]
-    pub size: Option<i64>,
+    pub size: Option<SizeInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The estimated target size of the pool for the PG autoscaler."]
     #[doc = ""]
-    pub target_size: Option<String>,
+    pub target_size: Option<TargetSizeStr>,
     #[serde(
         serialize_with = "crate::types::serialize_number_optional",
         deserialize_with = "crate::types::deserialize_number_optional"
@@ -197,6 +181,195 @@ impl TryFrom<&str> for PgAutoscaleMode {
             "warn" => Ok(Self::Warn),
             v => Err(format!("Unknown variant {v}")),
         }
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct MinSizeInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for MinSizeInt {
+    const MIN: Option<i128> = Some(1i128);
+    const MAX: Option<i128> = Some(7i128);
+    const DEFAULT: Option<i128> = None::<i128>;
+    const TYPE_DESCRIPTION: &'static str = "an integer between 1 and 7";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for MinSizeInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for MinSizeInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for MinSizeInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct PgNumInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for PgNumInt {
+    const MIN: Option<i128> = Some(1i128);
+    const MAX: Option<i128> = Some(32768i128);
+    const DEFAULT: Option<i128> = None::<i128>;
+    const TYPE_DESCRIPTION: &'static str = "an integer between 1 and 32768";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for PgNumInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for PgNumInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for PgNumInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct PgNumMinInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for PgNumMinInt {
+    const MIN: Option<i128> = None::<i128>;
+    const MAX: Option<i128> = Some(32768i128);
+    const DEFAULT: Option<i128> = None::<i128>;
+    const TYPE_DESCRIPTION: &'static str = "an integer less than or equal to 32768";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for PgNumMinInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for PgNumMinInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for PgNumMinInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct SizeInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for SizeInt {
+    const MIN: Option<i128> = Some(1i128);
+    const MAX: Option<i128> = Some(7i128);
+    const DEFAULT: Option<i128> = None::<i128>;
+    const TYPE_DESCRIPTION: &'static str = "an integer between 1 and 7";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for SizeInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for SizeInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for SizeInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct TargetSizeStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for TargetSizeStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = None::<usize>;
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = Some("^(\\d+(\\.\\d+)?)([KMGT])?$");
+    const TYPE_DESCRIPTION: &'static str =
+        "a string with pattern r\"^(\\d+(\\.\\d+)?)([KMGT])?$\" and no length constraints";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for TargetSizeStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for TargetSizeStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for TargetSizeStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_string(deserializer)
     }
 }
 impl<T> NameClient<T>

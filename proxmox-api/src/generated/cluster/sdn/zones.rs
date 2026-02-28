@@ -262,14 +262,10 @@ pub struct PostParams {
     #[doc = "Route-Target import"]
     #[doc = ""]
     pub rt_import: Option<String>,
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Service-VLAN Tag"]
     #[doc = ""]
-    pub tag: Option<i64>,
+    pub tag: Option<TagInt>,
     #[serde(rename = "type")]
     #[doc = "Plugin type."]
     #[doc = ""]
@@ -287,14 +283,10 @@ pub struct PostParams {
     #[doc = ""]
     pub vrf_vxlan: Option<i64>,
     #[serde(rename = "vxlan-port")]
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Vxlan tunnel udp port (default 4789)."]
     #[doc = ""]
-    pub vxlan_port: Option<i64>,
+    pub vxlan_port: Option<VxlanPortInt>,
     #[doc = "The SDN zone object identifier."]
     #[doc = ""]
     pub zone: String,
@@ -368,6 +360,80 @@ impl TryFrom<&str> for VlanProtocol {
             "802.1q" => Ok(Self::_8021q),
             v => Err(format!("Unknown variant {v}")),
         }
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct TagInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for TagInt {
+    const MIN: Option<i128> = Some(0i128);
+    const MAX: Option<i128> = None::<i128>;
+    const DEFAULT: Option<i128> = None::<i128>;
+    const TYPE_DESCRIPTION: &'static str = "an integer greater than or equal to 0";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for TagInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for TagInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for TagInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct VxlanPortInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for VxlanPortInt {
+    const MIN: Option<i128> = Some(1i128);
+    const MAX: Option<i128> = Some(65536i128);
+    const DEFAULT: Option<i128> = None::<i128>;
+    const TYPE_DESCRIPTION: &'static str = "an integer between 1 and 65536";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for VxlanPortInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for VxlanPortInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for VxlanPortInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
     }
 }
 impl<T> ZonesClient<T>

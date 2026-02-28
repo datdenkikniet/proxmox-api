@@ -42,14 +42,10 @@ impl PostParams {
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
-    #[serde(
-        serialize_with = "crate::types::serialize_number_optional",
-        deserialize_with = "crate::types::deserialize_number_optional"
-    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Override I/O bandwidth limit (in KiB/s)."]
     #[doc = ""]
-    pub bwlimit: Option<f64>,
+    pub bwlimit: Option<BwlimitNum>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -63,7 +59,7 @@ pub struct PostParams {
     #[doc = ""]
     #[doc = "digest. This can be used to prevent concurrent modifications."]
     #[doc = ""]
-    pub digest: Option<String>,
+    pub digest: Option<DigestStr>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Target Storage."]
     #[doc = ""]
@@ -76,12 +72,12 @@ pub struct PostParams {
     #[doc = ""]
     #[doc = "concurrent modifications."]
     #[doc = ""]
-    pub target_digest: Option<String>,
+    pub target_digest: Option<TargetDigestStr>,
     #[serde(rename = "target-vmid")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The (unique) ID of the VM."]
     #[doc = ""]
-    pub target_vmid: Option<crate::types::VmId>,
+    pub target_vmid: Option<TargetVmidInt>,
     #[serde(rename = "target-volume")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The config key the volume will be moved to. Default is the source volume key."]
@@ -3199,5 +3195,177 @@ impl TryFrom<&str> for Volume {
             "unused99" => Ok(Self::Unused99),
             v => Err(format!("Unknown variant {v}")),
         }
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct TargetVmidInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for TargetVmidInt {
+    const MIN: Option<i128> = Some(100i128);
+    const MAX: Option<i128> = Some(999999999i128);
+    const DEFAULT: Option<i128> = None::<i128>;
+    const TYPE_DESCRIPTION: &'static str = "an integer between 100 and 999999999";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for TargetVmidInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for TargetVmidInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for TargetVmidInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct BwlimitNum(f64);
+impl crate::types::bounded_number::BoundedNumber for BwlimitNum {
+    const MIN: Option<f64> = Some(0f64);
+    const MAX: Option<f64> = None::<f64>;
+    const DEFAULT: Option<f64> = None::<f64>;
+    const TYPE_DESCRIPTION: &'static str = "an number greater than or equal to 0";
+    fn get(&self) -> f64 {
+        self.0
+    }
+    fn new(value: f64) -> Result<Self, crate::types::bounded_number::BoundedNumberError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<f64> for BwlimitNum {
+    type Error = crate::types::bounded_number::BoundedNumberError;
+    fn try_from(value: f64) -> Result<Self, Self::Error> {
+        crate::types::bounded_number::BoundedNumber::new(value)
+    }
+}
+impl std::convert::TryFrom<f32> for BwlimitNum {
+    type Error = crate::types::bounded_number::BoundedNumberError;
+    fn try_from(value: f32) -> Result<Self, Self::Error> {
+        crate::types::bounded_number::BoundedNumber::new(value as f64)
+    }
+}
+impl std::convert::TryFrom<i32> for BwlimitNum {
+    type Error = crate::types::bounded_number::BoundedNumberError;
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        crate::types::bounded_number::BoundedNumber::new(value as f64)
+    }
+}
+impl std::convert::TryFrom<i64> for BwlimitNum {
+    type Error = crate::types::bounded_number::BoundedNumberError;
+    fn try_from(value: i64) -> Result<Self, Self::Error> {
+        crate::types::bounded_number::BoundedNumber::new(value as f64)
+    }
+}
+impl ::serde::Serialize for BwlimitNum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_number(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BwlimitNum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_number(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct DigestStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for DigestStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = Some(40usize);
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = None::<&'static str>;
+    const TYPE_DESCRIPTION: &'static str = "a string with length at most 40";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for DigestStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for DigestStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for DigestStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_string(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct TargetDigestStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for TargetDigestStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = Some(40usize);
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = None::<&'static str>;
+    const TYPE_DESCRIPTION: &'static str = "a string with length at most 40";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for TargetDigestStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for TargetDigestStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for TargetDigestStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_string(deserializer)
     }
 }

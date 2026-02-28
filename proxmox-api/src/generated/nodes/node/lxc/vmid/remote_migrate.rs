@@ -43,14 +43,10 @@ impl PostParams {
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
-    #[serde(
-        serialize_with = "crate::types::serialize_number_optional",
-        deserialize_with = "crate::types::deserialize_number_optional"
-    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Override I/O bandwidth limit (in KiB/s)."]
     #[doc = ""]
-    pub bwlimit: Option<f64>,
+    pub bwlimit: Option<BwlimitNum>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -91,19 +87,144 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The (unique) ID of the VM."]
     #[doc = ""]
-    pub target_vmid: Option<crate::types::VmId>,
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
+    pub target_vmid: Option<TargetVmidInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Timeout in seconds for shutdown for restart migration"]
     #[doc = ""]
-    pub timeout: Option<i64>,
+    pub timeout: Option<TimeoutInt>,
     #[serde(
         flatten,
         default,
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct TargetVmidInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for TargetVmidInt {
+    const MIN: Option<i128> = Some(100i128);
+    const MAX: Option<i128> = Some(999999999i128);
+    const DEFAULT: Option<i128> = None::<i128>;
+    const TYPE_DESCRIPTION: &'static str = "an integer between 100 and 999999999";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for TargetVmidInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for TargetVmidInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for TargetVmidInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct TimeoutInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for TimeoutInt {
+    const MIN: Option<i128> = None::<i128>;
+    const MAX: Option<i128> = None::<i128>;
+    const DEFAULT: Option<i128> = Some(180i128);
+    const TYPE_DESCRIPTION: &'static str = "a valid integer";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for TimeoutInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for TimeoutInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for TimeoutInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct BwlimitNum(f64);
+impl crate::types::bounded_number::BoundedNumber for BwlimitNum {
+    const MIN: Option<f64> = Some(0f64);
+    const MAX: Option<f64> = None::<f64>;
+    const DEFAULT: Option<f64> = None::<f64>;
+    const TYPE_DESCRIPTION: &'static str = "an number greater than or equal to 0";
+    fn get(&self) -> f64 {
+        self.0
+    }
+    fn new(value: f64) -> Result<Self, crate::types::bounded_number::BoundedNumberError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<f64> for BwlimitNum {
+    type Error = crate::types::bounded_number::BoundedNumberError;
+    fn try_from(value: f64) -> Result<Self, Self::Error> {
+        crate::types::bounded_number::BoundedNumber::new(value)
+    }
+}
+impl std::convert::TryFrom<f32> for BwlimitNum {
+    type Error = crate::types::bounded_number::BoundedNumberError;
+    fn try_from(value: f32) -> Result<Self, Self::Error> {
+        crate::types::bounded_number::BoundedNumber::new(value as f64)
+    }
+}
+impl std::convert::TryFrom<i32> for BwlimitNum {
+    type Error = crate::types::bounded_number::BoundedNumberError;
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        crate::types::bounded_number::BoundedNumber::new(value as f64)
+    }
+}
+impl std::convert::TryFrom<i64> for BwlimitNum {
+    type Error = crate::types::bounded_number::BoundedNumberError;
+    fn try_from(value: i64) -> Result<Self, Self::Error> {
+        crate::types::bounded_number::BoundedNumber::new(value as f64)
+    }
+}
+impl ::serde::Serialize for BwlimitNum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_number(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BwlimitNum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_number(deserializer)
+    }
 }

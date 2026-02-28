@@ -5,9 +5,120 @@ use std::{
 
 use serde::{Deserialize, Serialize};
 
-use crate::generator::{clean_doc, AdditionalProperties, FieldDef, PrimitiveTypeDef, TypeDef};
+use crate::generator::{
+    clean_doc, AdditionalProperties, FieldDef, PrimitiveTypeDef, TypeDef, BoundedIntegerDef,
+    BoundedNumberDef, BoundedStringDef,
+};
 
 use super::{Format, KnownFormat, Optional, Output};
+
+fn parse_value_to_i128(value: &serde_json::Value) -> Option<i128> {
+    match value {
+        serde_json::Value::Number(n) => n.as_i64().map(|v| v as i128),
+        serde_json::Value::String(s) => s.parse::<i128>().ok(),
+        _ => None,
+    }
+}
+
+fn extract_integer_bounds(ty: &TypeKind, field_name: &str) -> Option<BoundedIntegerDef> {
+    let TypeKind::Integer {
+        minimum,
+        maximum,
+        default,
+    } = ty
+    else {
+        return None;
+    };
+
+    let has_constraints = minimum.is_some() || maximum.is_some() || default.is_some();
+
+    if !has_constraints {
+        return None;
+    }
+
+    let min = minimum.as_ref().and_then(parse_value_to_i128);
+    let max = maximum.as_ref().and_then(parse_value_to_i128);
+    let default = default.as_ref().and_then(parse_value_to_i128);
+
+    let name = crate::name_to_ident(&format!("{}Int", field_name));
+
+    Some(BoundedIntegerDef {
+        name,
+        min,
+        max,
+        default,
+    })
+}
+
+fn parse_value_to_f64(value: &serde_json::Value) -> Option<f64> {
+    match value {
+        serde_json::Value::Number(n) => n.as_f64(),
+        serde_json::Value::String(s) => s.parse::<f64>().ok(),
+        _ => None,
+    }
+}
+
+fn extract_number_bounds(ty: &TypeKind, field_name: &str) -> Option<BoundedNumberDef> {
+    let TypeKind::Number {
+        minimum,
+        maximum,
+        default,
+    } = ty
+    else {
+        return None;
+    };
+
+    let has_constraints = minimum.is_some() || maximum.is_some() || default.is_some();
+
+    if !has_constraints {
+        return None;
+    }
+
+    let min = minimum.as_ref().and_then(parse_value_to_f64);
+    let max = maximum.as_ref().and_then(parse_value_to_f64);
+    let default = default.as_ref().and_then(parse_value_to_f64);
+
+    let name = crate::name_to_ident(&format!("{}Num", field_name));
+
+    Some(BoundedNumberDef {
+        name,
+        min,
+        max,
+        default,
+    })
+}
+
+fn extract_string_constraints(ty: &TypeKind, field_name: &str) -> Option<BoundedStringDef> {
+    let TypeKind::String {
+        max_length,
+        min_length,
+        pattern,
+        enum_values: None,
+        default,
+    } = ty
+    else {
+        return None;
+    };
+
+    let has_constraints = pattern.is_some() || min_length.is_some() || max_length.is_some();
+    if !has_constraints {
+        return None;
+    }
+
+    let pattern = pattern.as_ref().map(|pattern| pattern.to_string());
+
+    let name = crate::name_to_ident(&format!("{}Str", field_name));
+
+    Some(BoundedStringDef {
+        name: name,
+        min_length: min_length.map(|min| min as usize),
+        max_length: max_length.map(|max| max as usize),
+        pattern: pattern,
+        default_val: default
+            .as_ref()
+            .map(|cow_str: &Cow<'_, str>| String::from(cow_str.clone())),
+    })
+}
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Default)]
 pub struct Type<'a> {
@@ -101,12 +212,26 @@ impl Type<'_> {
                         };
 
                         TypeDef::new_enum(name, no_derives, enum_values, default, self.doc())
+                    } else if let Some(bounded) = extract_string_constraints(ty, field_name) {
+                        TypeDef::BoundedString(bounded)
                     } else {
                         TypeDef::Primitive(PrimitiveTypeDef::String)
                     }
                 }
-                TypeKind::Number { .. } => TypeDef::Primitive(PrimitiveTypeDef::Number),
-                TypeKind::Integer { .. } => TypeDef::Primitive(PrimitiveTypeDef::Integer),
+                TypeKind::Number { .. } => {
+                    if let Some(bounded) = extract_number_bounds(ty, field_name) {
+                        TypeDef::BoundedNumber(bounded)
+                    } else {
+                        TypeDef::Primitive(PrimitiveTypeDef::Number)
+                    }
+                }
+                TypeKind::Integer { .. } => {
+                    if let Some(bounded) = extract_integer_bounds(ty, field_name) {
+                        TypeDef::BoundedInteger(bounded)
+                    } else {
+                        TypeDef::Primitive(PrimitiveTypeDef::Integer)
+                    }
+                }
                 TypeKind::Boolean { .. } => TypeDef::Primitive(PrimitiveTypeDef::Boolean),
                 TypeKind::Array { items } => {
                     let mut output =

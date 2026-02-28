@@ -65,7 +65,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A semicolon-seperated list of things to remove when they or the user vanishes during a sync. The following values are possible: 'entry' removes the user/group when not returned from the sync. 'properties' removes the set properties on existing user/group that do not appear in the source (even custom ones). 'acl' removes acls when the user/group is not returned from the sync. Instead of a list it also can be 'none' (the default)."]
     #[doc = ""]
-    pub remove_vanished: Option<String>,
+    pub remove_vanished: Option<RemoveVanishedStr>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Select what to sync."]
     #[doc = ""]
@@ -97,5 +97,46 @@ impl TryFrom<&str> for Scope {
             "users" => Ok(Self::Users),
             v => Err(format!("Unknown variant {v}")),
         }
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct RemoveVanishedStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for RemoveVanishedStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = None::<usize>;
+    const DEFAULT: Option<&'static str> = Some("none");
+    const PATTERN: Option<&'static str> =
+        Some("(?:(?:(?:acl|properties|entry);)*(?:acl|properties|entry))|none");
+    const TYPE_DESCRIPTION: &'static str = "a string with pattern r\"(?:(?:(?:acl|properties|entry);)*(?:acl|properties|entry))|none\" and no length constraints";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for RemoveVanishedStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for RemoveVanishedStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for RemoveVanishedStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_string(deserializer)
     }
 }

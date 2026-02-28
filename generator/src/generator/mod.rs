@@ -28,7 +28,9 @@ mod num_items_def;
 pub(crate) use num_items_def::NumItemsDef;
 
 mod type_def;
-pub(crate) use type_def::{PrimitiveTypeDef, TypeDef};
+pub(crate) use type_def::{
+    BoundedIntegerDef, BoundedNumberDef, BoundedStringDef, PrimitiveTypeDef, TypeDef,
+};
 
 pub fn proxmox_api(path: TokenStream) -> TokenStream {
     quote! { crate::#path }

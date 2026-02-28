@@ -4,7 +4,7 @@ description = "Rust bindings for the Proxmox VE HTTP API"
 categories = [ "virtualization", "api-bindings" ]
 keywords = [ "proxmox", "proxmoxve" ]
 version = "0.1.2-pre"
-edition = "2021"
+edition = "2024"
 authors = [ "Johannes Cornelis Draaijer <jcdra1@gmail.com>" ]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/datdenkikniet/proxmox-api"
@@ -76,3 +76,4 @@ reqwest = { optional = true, version = "0.12.1", features = ["blocking", "json"]
 clap = { optional = true, version = "4.5.3", features = ["derive", "env"] }
 pretty_env_logger = { optional = true, version = "0.5.0" }
 rustls = { optional = true, version = "0.23.16", default-features = false, features = ["ring"] }
+regex = "1.12.3"
