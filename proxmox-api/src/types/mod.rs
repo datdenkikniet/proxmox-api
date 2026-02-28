@@ -3,6 +3,20 @@ pub use bool::{
     deserialize_bool, deserialize_bool_optional, serialize_bool, serialize_bool_optional, Bool,
 };
 
+pub mod bounded_integer;
+pub mod bounded_string;
+pub use bounded_integer::{
+    BoundedInteger, BoundedIntegerError, deserialize_bounded_integer, serialize_bounded_integer,
+};
+pub use bounded_string::{
+    BoundedString, BoundedStringError, deserialize_bounded_string, serialize_bounded_string,
+};
+
+pub mod bounded_number;
+pub use bounded_number::{
+    BoundedNumber, BoundedNumberError, deserialize_bounded_number, serialize_bounded_number,
+};
+
 mod integer;
 pub use integer::{
     deserialize_int, deserialize_int_optional, serialize_int, serialize_int_optional, Integer,

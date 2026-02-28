@@ -38,7 +38,7 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(status: Status, vmid: crate::types::VmId) -> Self {
+    pub fn new(status: Status, vmid: VmidInt) -> Self {
         Self {
             status,
             vmid,
@@ -113,7 +113,7 @@ pub struct GetOutputItems {
     pub uptime: Option<i64>,
     #[doc = "The (unique) ID of the VM."]
     #[doc = ""]
-    pub vmid: crate::types::VmId,
+    pub vmid: VmidInt,
     #[serde(
         flatten,
         default,
@@ -122,7 +122,7 @@ pub struct GetOutputItems {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
-    pub fn new(ostemplate: String, vmid: crate::types::VmId) -> Self {
+    pub fn new(ostemplate: OstemplateStr, vmid: VmidInt) -> Self {
         Self {
             ostemplate,
             vmid,
@@ -176,14 +176,10 @@ pub struct PostParams {
     #[doc = "OS architecture type."]
     #[doc = ""]
     pub arch: Option<Arch>,
-    #[serde(
-        serialize_with = "crate::types::serialize_number_optional",
-        deserialize_with = "crate::types::deserialize_number_optional"
-    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Override I/O bandwidth limit (in KiB/s)."]
     #[doc = ""]
-    pub bwlimit: Option<f64>,
+    pub bwlimit: Option<BwlimitNum>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Console mode. By default, the console command tries to open a connection to one of the available tty devices. By setting cmode to 'console' it tries to attach to /dev/console instead. If you set cmode to 'shell', it simply invokes a shell inside the container (no login)."]
     #[doc = ""]
@@ -196,34 +192,22 @@ pub struct PostParams {
     #[doc = "Attach a console device (/dev/console) to the container."]
     #[doc = ""]
     pub console: Option<bool>,
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The number of cores assigned to the container. A container can use all available cores by default."]
     #[doc = ""]
-    pub cores: Option<i64>,
-    #[serde(
-        serialize_with = "crate::types::serialize_number_optional",
-        deserialize_with = "crate::types::deserialize_number_optional"
-    )]
+    pub cores: Option<CoresInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Limit of CPU usage."]
     #[doc = ""]
     #[doc = "NOTE: If the computer has 2 CPUs, it has a total of '2' CPU time. Value '0' indicates no CPU limit."]
     #[doc = ""]
-    pub cpulimit: Option<f64>,
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
+    pub cpulimit: Option<CpulimitNum>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "CPU weight for a container, will be clamped to \\\\[1, 10000\\\\] in cgroup v2."]
     #[doc = ""]
     #[doc = "CPU weight for a container. Argument is used in the kernel fair scheduler. The larger the number is, the more CPU time this container gets. Number is relative to the weights of all the other running guests."]
     #[doc = ""]
-    pub cpuunits: Option<i64>,
+    pub cpuunits: Option<CpuunitsInt>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -235,7 +219,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the Container. Shown in the web-interface CT's summary. This is saved as comment inside the configuration file."]
     #[doc = ""]
-    pub description: Option<String>,
+    pub description: Option<DescriptionStr>,
     #[serde(rename = "dev[n]")]
     #[serde(
         serialize_with = "crate::types::serialize_multi::<NumberedDevs, _>",
@@ -265,7 +249,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set a host name for the container."]
     #[doc = ""]
-    pub hostname: Option<String>,
+    pub hostname: Option<HostnameStr>,
     #[serde(rename = "ignore-unpack-errors")]
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -279,14 +263,10 @@ pub struct PostParams {
     #[doc = "Lock/unlock the container."]
     #[doc = ""]
     pub lock: Option<Lock>,
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of RAM for the container in MB."]
     #[doc = ""]
-    pub memory: Option<i64>,
+    pub memory: Option<MemoryInt>,
     #[serde(rename = "mp[n]")]
     #[serde(
         serialize_with = "crate::types::serialize_multi::<NumberedMps, _>",
@@ -321,7 +301,7 @@ pub struct PostParams {
     pub onboot: Option<bool>,
     #[doc = "The OS template or backup file."]
     #[doc = ""]
-    pub ostemplate: String,
+    pub ostemplate: OstemplateStr,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "OS type. This is used to setup configuration inside the container, and corresponds to lxc setup scripts in /usr/share/lxc/config/\\\\<ostype\\\\>.common.conf. Value 'unmanaged' can be used to skip and OS specific setup."]
     #[doc = ""]
@@ -329,7 +309,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Sets root password inside container."]
     #[doc = ""]
-    pub password: Option<String>,
+    pub password: Option<PasswordStr>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Add the VM to the specified pool."]
     #[doc = ""]
@@ -379,14 +359,10 @@ pub struct PostParams {
     #[doc = "Default Storage."]
     #[doc = ""]
     pub storage: Option<String>,
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Amount of SWAP for the container in MB."]
     #[doc = ""]
-    pub swap: Option<i64>,
+    pub swap: Option<SwapInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Tags of the Container. This is only meta information."]
     #[doc = ""]
@@ -403,14 +379,10 @@ pub struct PostParams {
     #[doc = "Time zone to use in the container. If option isn't set, then nothing will be done. Can be set to 'host' to match the host time zone, or an arbitrary time zone option from /usr/share/zoneinfo/zone.tab"]
     #[doc = ""]
     pub timezone: Option<String>,
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specify the number of tty available to the container"]
     #[doc = ""]
-    pub tty: Option<i64>,
+    pub tty: Option<TtyInt>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -439,7 +411,7 @@ pub struct PostParams {
     pub unuseds: ::std::collections::HashMap<u32, String>,
     #[doc = "The (unique) ID of the VM."]
     #[doc = ""]
-    pub vmid: crate::types::VmId,
+    pub vmid: VmidInt,
     #[serde(
         flatten,
         deserialize_with = "crate::types::multi::deserialize_additional_data::<'_, PostParams, _, _>"
@@ -650,6 +622,498 @@ struct NumberedUnuseds;
 impl crate::types::multi::NumberedItems for NumberedUnuseds {
     type Item = String;
     const PREFIX: &'static str = "unused";
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct CoresInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for CoresInt {
+    const MIN: Option<i128> = Some(1i128);
+    const MAX: Option<i128> = Some(8192i128);
+    const DEFAULT: Option<i128> = None::<i128>;
+    const TYPE_DESCRIPTION: &'static str = "an integer between 1 and 8192";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for CoresInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for CoresInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CoresInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct CpuunitsInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for CpuunitsInt {
+    const MIN: Option<i128> = Some(0i128);
+    const MAX: Option<i128> = Some(500000i128);
+    const DEFAULT: Option<i128> = None::<i128>;
+    const TYPE_DESCRIPTION: &'static str = "an integer between 0 and 500000";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for CpuunitsInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for CpuunitsInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CpuunitsInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct MemoryInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for MemoryInt {
+    const MIN: Option<i128> = Some(16i128);
+    const MAX: Option<i128> = None::<i128>;
+    const DEFAULT: Option<i128> = Some(512i128);
+    const TYPE_DESCRIPTION: &'static str = "an integer greater than or equal to 16";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for MemoryInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for MemoryInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for MemoryInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct SwapInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for SwapInt {
+    const MIN: Option<i128> = Some(0i128);
+    const MAX: Option<i128> = None::<i128>;
+    const DEFAULT: Option<i128> = Some(512i128);
+    const TYPE_DESCRIPTION: &'static str = "an integer greater than or equal to 0";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for SwapInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for SwapInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for SwapInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct TtyInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for TtyInt {
+    const MIN: Option<i128> = Some(0i128);
+    const MAX: Option<i128> = Some(6i128);
+    const DEFAULT: Option<i128> = Some(2i128);
+    const TYPE_DESCRIPTION: &'static str = "an integer between 0 and 6";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for TtyInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for TtyInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for TtyInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct VmidInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for VmidInt {
+    const MIN: Option<i128> = Some(100i128);
+    const MAX: Option<i128> = Some(999999999i128);
+    const DEFAULT: Option<i128> = None::<i128>;
+    const TYPE_DESCRIPTION: &'static str = "an integer between 100 and 999999999";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for VmidInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for VmidInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for VmidInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct BwlimitNum(f64);
+impl crate::types::bounded_number::BoundedNumber for BwlimitNum {
+    const MIN: Option<f64> = Some(0f64);
+    const MAX: Option<f64> = None::<f64>;
+    const DEFAULT: Option<f64> = None::<f64>;
+    const TYPE_DESCRIPTION: &'static str = "an number greater than or equal to 0";
+    fn get(&self) -> f64 {
+        self.0
+    }
+    fn new(value: f64) -> Result<Self, crate::types::bounded_number::BoundedNumberError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<f64> for BwlimitNum {
+    type Error = crate::types::bounded_number::BoundedNumberError;
+    fn try_from(value: f64) -> Result<Self, Self::Error> {
+        crate::types::bounded_number::BoundedNumber::new(value)
+    }
+}
+impl std::convert::TryFrom<f32> for BwlimitNum {
+    type Error = crate::types::bounded_number::BoundedNumberError;
+    fn try_from(value: f32) -> Result<Self, Self::Error> {
+        crate::types::bounded_number::BoundedNumber::new(value as f64)
+    }
+}
+impl std::convert::TryFrom<i32> for BwlimitNum {
+    type Error = crate::types::bounded_number::BoundedNumberError;
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        crate::types::bounded_number::BoundedNumber::new(value as f64)
+    }
+}
+impl std::convert::TryFrom<i64> for BwlimitNum {
+    type Error = crate::types::bounded_number::BoundedNumberError;
+    fn try_from(value: i64) -> Result<Self, Self::Error> {
+        crate::types::bounded_number::BoundedNumber::new(value as f64)
+    }
+}
+impl ::serde::Serialize for BwlimitNum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_number(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BwlimitNum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_number(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct CpulimitNum(f64);
+impl crate::types::bounded_number::BoundedNumber for CpulimitNum {
+    const MIN: Option<f64> = Some(0f64);
+    const MAX: Option<f64> = Some(8192f64);
+    const DEFAULT: Option<f64> = Some(0f64);
+    const TYPE_DESCRIPTION: &'static str = "an number between 0 and 8192";
+    fn get(&self) -> f64 {
+        self.0
+    }
+    fn new(value: f64) -> Result<Self, crate::types::bounded_number::BoundedNumberError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<f64> for CpulimitNum {
+    type Error = crate::types::bounded_number::BoundedNumberError;
+    fn try_from(value: f64) -> Result<Self, Self::Error> {
+        crate::types::bounded_number::BoundedNumber::new(value)
+    }
+}
+impl std::convert::TryFrom<f32> for CpulimitNum {
+    type Error = crate::types::bounded_number::BoundedNumberError;
+    fn try_from(value: f32) -> Result<Self, Self::Error> {
+        crate::types::bounded_number::BoundedNumber::new(value as f64)
+    }
+}
+impl std::convert::TryFrom<i32> for CpulimitNum {
+    type Error = crate::types::bounded_number::BoundedNumberError;
+    fn try_from(value: i32) -> Result<Self, Self::Error> {
+        crate::types::bounded_number::BoundedNumber::new(value as f64)
+    }
+}
+impl std::convert::TryFrom<i64> for CpulimitNum {
+    type Error = crate::types::bounded_number::BoundedNumberError;
+    fn try_from(value: i64) -> Result<Self, Self::Error> {
+        crate::types::bounded_number::BoundedNumber::new(value as f64)
+    }
+}
+impl ::serde::Serialize for CpulimitNum {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_number(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CpulimitNum {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_number(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct DescriptionStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for DescriptionStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = Some(8192usize);
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = None::<&'static str>;
+    const TYPE_DESCRIPTION: &'static str = "a string with length at most 8192";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for DescriptionStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for DescriptionStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for DescriptionStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_string(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct HostnameStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for HostnameStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = Some(255usize);
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = None::<&'static str>;
+    const TYPE_DESCRIPTION: &'static str = "a string with length at most 255";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for HostnameStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for HostnameStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for HostnameStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_string(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct OstemplateStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for OstemplateStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = Some(255usize);
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = None::<&'static str>;
+    const TYPE_DESCRIPTION: &'static str = "a string with length at most 255";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for OstemplateStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for OstemplateStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for OstemplateStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_string(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct PasswordStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for PasswordStr {
+    const MIN_LENGTH: Option<usize> = Some(5usize);
+    const MAX_LENGTH: Option<usize> = None::<usize>;
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = None::<&'static str>;
+    const TYPE_DESCRIPTION: &'static str = "a string with length at least 5";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for PasswordStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for PasswordStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for PasswordStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_string(deserializer)
+    }
 }
 impl<T> LxcClient<T>
 where

@@ -26,7 +26,7 @@ where
     }
 }
 impl PostParams {
-    pub fn new(content: Content, filename: String) -> Self {
+    pub fn new(content: Content, filename: FilenameStr) -> Self {
         Self {
             content,
             filename,
@@ -53,11 +53,11 @@ pub struct PostParams {
     pub content: Content,
     #[doc = "The name of the file to create. Caution: This will be normalized!"]
     #[doc = ""]
-    pub filename: String,
+    pub filename: FilenameStr,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The source file name. This parameter is usually set by the REST handler. You can only overwrite it when connecting to the trusted port on localhost."]
     #[doc = ""]
-    pub tmpfilename: Option<String>,
+    pub tmpfilename: Option<TmpfilenameStr>,
     #[serde(
         flatten,
         default,
@@ -113,5 +113,86 @@ impl TryFrom<&str> for Content {
             "vztmpl" => Ok(Self::Vztmpl),
             v => Err(format!("Unknown variant {v}")),
         }
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct FilenameStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for FilenameStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = Some(255usize);
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = None::<&'static str>;
+    const TYPE_DESCRIPTION: &'static str = "a string with length at most 255";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for FilenameStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for FilenameStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for FilenameStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_string(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct TmpfilenameStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for TmpfilenameStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = None::<usize>;
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = Some("/var/tmp/pveupload-[0-9a-f]+");
+    const TYPE_DESCRIPTION: &'static str =
+        "a string with pattern r\"/var/tmp/pveupload-[0-9a-f]+\" and no length constraints";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for TmpfilenameStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for TmpfilenameStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for TmpfilenameStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_string(deserializer)
     }
 }

@@ -65,7 +65,7 @@ pub struct GetParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The name of the snapshot."]
     #[doc = ""]
-    pub snapname: Option<String>,
+    pub snapname: Option<SnapnameStr>,
     #[serde(
         flatten,
         default,
@@ -93,5 +93,45 @@ impl TryFrom<&str> for Feature {
             "snapshot" => Ok(Self::Snapshot),
             v => Err(format!("Unknown variant {v}")),
         }
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct SnapnameStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for SnapnameStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = Some(40usize);
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = None::<&'static str>;
+    const TYPE_DESCRIPTION: &'static str = "a string with length at most 40";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for SnapnameStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for SnapnameStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for SnapnameStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::deserialize_bounded_string(deserializer)
     }
 }

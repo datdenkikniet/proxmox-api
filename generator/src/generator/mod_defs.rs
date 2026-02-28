@@ -5,13 +5,18 @@ use std::collections::BTreeMap;
 
 use quote::ToTokens;
 
-use super::{EnumDef, NumItemsDef, StructDef, TypeDef};
+use super::{
+    BoundedIntegerDef, BoundedNumberDef, BoundedStringDef, EnumDef, NumItemsDef, StructDef, TypeDef,
+};
 
 #[derive(Debug, Clone, Default)]
 pub struct ModuleDefs {
     enums: BTreeMap<String, EnumDef>,
     structs: BTreeMap<String, StructDef>,
     num_items: BTreeMap<String, NumItemsDef>,
+    bounded_integers: BTreeMap<String, BoundedIntegerDef>,
+    bounded_numbers: BTreeMap<String, BoundedNumberDef>,
+    bounded_strings: BTreeMap<String, BoundedStringDef>,
 }
 
 impl Extend<TypeDef> for ModuleDefs {
@@ -74,6 +79,42 @@ impl ModuleDefs {
                 }
             }
             TypeDef::Array(_) | TypeDef::Primitive(_) | TypeDef::KnownType { .. } => {}
+            TypeDef::BoundedInteger(def) => {
+                if let Some(prev_def) = self.bounded_integers.get(&def.name) {
+                    if prev_def != &def {
+                        panic!(
+                            "Encountered bounded integers with the same name that are not equal!\n{def:#?}\n{prev_def:#?}"
+                        );
+                    }
+                } else {
+                    self.bounded_integers
+                        .insert(def.name.to_string(), def.clone());
+                }
+            }
+            TypeDef::BoundedNumber(def) => {
+                if let Some(prev_def) = self.bounded_numbers.get(&def.name) {
+                    if prev_def != &def {
+                        panic!(
+                            "Encountered bounded numbers with the same name that are not equal!\n{def:#?}\n{prev_def:#?}"
+                        );
+                    }
+                } else {
+                    self.bounded_numbers
+                        .insert(def.name.to_string(), def.clone());
+                }
+            }
+            TypeDef::BoundedString(def) => {
+                if let Some(prev_def) = self.bounded_strings.get(&def.name) {
+                    if prev_def != &def {
+                        panic!(
+                            "Encountered bounded strings with the same name that are not equal!\n{def:#?}\n{prev_def:#?}"
+                        );
+                    }
+                } else {
+                    self.bounded_strings
+                        .insert(def.name.to_string(), def.clone());
+                }
+            }
         }
     }
 }
@@ -83,6 +124,9 @@ impl ToTokens for ModuleDefs {
         let structs = self.structs.values();
         let enums = self.enums.values();
         let items = self.num_items.values();
+        let bounded_integers = self.bounded_integers.values();
+        let bounded_numbers = self.bounded_numbers.values();
+        let bounded_strings = self.bounded_strings.values();
 
         tokens.extend(quote::quote! {
             #(#structs)*
@@ -90,6 +134,12 @@ impl ToTokens for ModuleDefs {
             #(#enums)*
 
             #(#items)*
+
+            #(#bounded_integers)*
+
+            #(#bounded_numbers)*
+
+            #(#bounded_strings)*
         });
     }
 }
