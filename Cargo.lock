@@ -1002,6 +1002,7 @@ dependencies = [
  "log",
  "parking_lot",
  "pretty_env_logger",
+ "regex",
  "reqwest",
  "rustls",
  "serde",
