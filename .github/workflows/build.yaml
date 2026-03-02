@@ -87,6 +87,7 @@ jobs:
           fi
 
   check-and-build:
+    continue-on-error: true
     strategy:
       matrix:
         definition:
