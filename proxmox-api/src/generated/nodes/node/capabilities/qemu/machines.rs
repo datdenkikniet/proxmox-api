@@ -31,12 +31,17 @@ impl GetOutputItems {
             id,
             ty,
             version,
+            changes: Default::default(),
             additional_properties: Default::default(),
         }
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Notable changes of a version, currently only set for +pveX versions."]
+    #[doc = ""]
+    pub changes: Option<String>,
     #[doc = "Full name of machine type and version."]
     #[doc = ""]
     pub id: String,

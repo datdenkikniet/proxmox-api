@@ -37,9 +37,20 @@ where
     }
 }
 impl GetOutput {
-    pub fn new(running: bool) -> Self {
+    pub fn new(
+        local_disks: Vec<LocalDisksGetOutputLocalDisksItems>,
+        local_resources: Vec<String>,
+        mapped_resource_info: MappedResourceInfoGetOutputMappedResourceInfo,
+        mapped_resources: Vec<String>,
+        running: bool,
+    ) -> Self {
         Self {
+            local_disks,
+            local_resources,
+            mapped_resource_info,
+            mapped_resources,
             running,
+            allowed_nodes: Default::default(),
             not_allowed_nodes: Default::default(),
             additional_properties: Default::default(),
         }
@@ -47,14 +58,37 @@ impl GetOutput {
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutput {
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    #[doc = "List of nodes allowed for migration."]
+    #[doc = ""]
+    pub allowed_nodes: Vec<String>,
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    #[doc = "List local disks including CD-Rom, unused and not referenced disks"]
+    #[doc = ""]
+    pub local_disks: Vec<LocalDisksGetOutputLocalDisksItems>,
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    #[doc = "List local resources (e.g. pci, usb) that block migration."]
+    #[doc = ""]
+    pub local_resources: Vec<String>,
+    #[serde(rename = "mapped-resource-info")]
+    #[doc = "Object of mapped resources with additional information such if they're live migratable."]
+    #[doc = ""]
+    pub mapped_resource_info: MappedResourceInfoGetOutputMappedResourceInfo,
+    #[serde(rename = "mapped-resources")]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    #[doc = "List of mapped resources e.g. pci, usb. Deprecated, use 'mapped-resource-info' instead."]
+    #[doc = ""]
+    pub mapped_resources: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "List not allowed nodes with additional informations, only passed if VM is offline"]
+    #[doc = "List of not allowed nodes with additional information."]
     #[doc = ""]
     pub not_allowed_nodes: Option<NotAllowedNodesGetOutputNotAllowedNodes>,
     #[serde(
         serialize_with = "crate::types::serialize_bool",
         deserialize_with = "crate::types::deserialize_bool"
     )]
+    #[doc = "Determines if the VM is running."]
+    #[doc = ""]
     pub running: bool,
     #[serde(
         flatten,
@@ -76,8 +110,65 @@ pub struct GetParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
+impl LocalDisksGetOutputLocalDisksItems {
+    pub fn new(cdrom: bool, is_unused: bool, size: i64, volid: String) -> Self {
+        Self {
+            cdrom,
+            is_unused,
+            size,
+            volid,
+            additional_properties: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct LocalDisksGetOutputLocalDisksItems {
+    #[serde(
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
+    )]
+    #[doc = "True if the disk is a cdrom."]
+    #[doc = ""]
+    pub cdrom: bool,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
+    )]
+    #[doc = "True if the disk is unused."]
+    #[doc = ""]
+    pub is_unused: bool,
+    #[serde(
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
+    )]
+    #[doc = "The size of the disk in bytes."]
+    #[doc = ""]
+    pub size: i64,
+    #[doc = "The volid of the disk."]
+    #[doc = ""]
+    pub volid: String,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct MappedResourceInfoGetOutputMappedResourceInfo {
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct NotAllowedNodesGetOutputNotAllowedNodes {
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    #[doc = "A list of not available storages."]
+    #[doc = ""]
+    pub unavailable_storages: Vec<String>,
     #[serde(
         flatten,
         default,

@@ -176,6 +176,11 @@ pub struct PostParams {
     #[doc = "Deprecated: Do not use"]
     #[doc = ""]
     pub notification_target: Option<String>,
+    #[serde(rename = "pbs-change-detection-mode")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "PBS mode used to detect file changes and switch encoding format for container backups."]
+    #[doc = ""]
+    pub pbs_change_detection_mode: Option<PbsChangeDetectionMode>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Other performance-related settings."]
     #[doc = ""]
@@ -407,6 +412,28 @@ impl TryFrom<&str> for NotificationPolicy {
             "always" => Ok(Self::Always),
             "failure" => Ok(Self::Failure),
             "never" => Ok(Self::Never),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "PBS mode used to detect file changes and switch encoding format for container backups."]
+#[doc = ""]
+pub enum PbsChangeDetectionMode {
+    #[serde(rename = "data")]
+    Data,
+    #[serde(rename = "legacy")]
+    Legacy,
+    #[serde(rename = "metadata")]
+    Metadata,
+}
+impl TryFrom<&str> for PbsChangeDetectionMode {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "data" => Ok(Self::Data),
+            "legacy" => Ok(Self::Legacy),
+            "metadata" => Ok(Self::Metadata),
             v => Err(format!("Unknown variant {v}")),
         }
     }

@@ -106,7 +106,7 @@ pub struct PostParams {
     #[doc = ""]
     pub privs: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "You can optionally pass the realm using this parameter. Normally the realm is simply added to the username \\\\<username\\\\>@\\\\<relam\\\\>."]
+    #[doc = "You can optionally pass the realm using this parameter. Normally the realm is simply added to the username \\\\<username\\\\>@\\\\<realm\\\\>."]
     #[doc = ""]
     pub realm: Option<String>,
     #[serde(rename = "tfa-challenge")]

@@ -151,7 +151,7 @@ pub struct GetOutput {
     #[doc = ""]
     pub features: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Script that will be exectued during various steps in the containers lifetime."]
+    #[doc = "Script that will be executed during various steps in the containers lifetime."]
     #[doc = ""]
     pub hookscript: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -406,7 +406,7 @@ pub struct PutParams {
     #[doc = ""]
     pub features: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Script that will be exectued during various steps in the containers lifetime."]
+    #[doc = "Script that will be executed during various steps in the containers lifetime."]
     #[doc = ""]
     pub hookscript: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]

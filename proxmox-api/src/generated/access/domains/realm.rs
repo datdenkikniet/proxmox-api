@@ -155,6 +155,29 @@ pub struct PutParams {
     #[doc = "LDAP attribute representing a groups name. If not set or found, the first value of the DN will be used as name."]
     #[doc = ""]
     pub group_name_attr: Option<String>,
+    #[serde(rename = "groups-autocreate")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Automatically create groups if they do not exist."]
+    #[doc = ""]
+    pub groups_autocreate: Option<bool>,
+    #[serde(rename = "groups-claim")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "OpenID claim used to retrieve groups with."]
+    #[doc = ""]
+    pub groups_claim: Option<String>,
+    #[serde(rename = "groups-overwrite")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "All groups will be overwritten for the user on login."]
+    #[doc = ""]
+    pub groups_overwrite: Option<bool>,
     #[serde(rename = "issuer-url")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "OpenID Issuer Url"]
@@ -180,6 +203,15 @@ pub struct PutParams {
     #[doc = "Specifies whether the Authorization Server prompts the End-User for reauthentication and consent."]
     #[doc = ""]
     pub prompt: Option<String>,
+    #[serde(rename = "query-userinfo")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Enables querying the userinfo endpoint for claims values."]
+    #[doc = ""]
+    pub query_userinfo: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specifies the scopes (user details) that should be authorized and returned, for example 'email' or 'profile'."]
     #[doc = ""]

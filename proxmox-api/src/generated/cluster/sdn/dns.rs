@@ -79,6 +79,7 @@ impl PostParams {
             key,
             ty,
             url,
+            fingerprint: Default::default(),
             reversemaskv6: Default::default(),
             reversev6mask: Default::default(),
             ttl: Default::default(),
@@ -91,6 +92,10 @@ pub struct PostParams {
     #[doc = "The SDN dns object identifier."]
     #[doc = ""]
     pub dns: String,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Certificate SHA 256 fingerprint."]
+    #[doc = ""]
+    pub fingerprint: Option<String>,
     pub key: String,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",

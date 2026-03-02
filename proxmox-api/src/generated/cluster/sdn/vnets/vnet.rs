@@ -1,3 +1,4 @@
+pub mod firewall;
 pub mod ips;
 pub mod subnets;
 #[derive(Debug, Clone)]
@@ -97,6 +98,15 @@ pub struct PutParams {
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
     #[doc = ""]
     pub digest: Option<String>,
+    #[serde(rename = "isolate-ports")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "If true, sets the isolated property for all members of this VNet"]
+    #[doc = ""]
+    pub isolate_ports: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -123,6 +133,14 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+impl<T> VnetClient<T>
+where
+    T: crate::client::Client,
+{
+    pub fn firewall(&self) -> firewall::FirewallClient<T> {
+        firewall::FirewallClient::<T>::new(self.client.clone(), &self.path)
+    }
 }
 impl<T> VnetClient<T>
 where

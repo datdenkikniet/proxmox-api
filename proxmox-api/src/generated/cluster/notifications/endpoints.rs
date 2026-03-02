@@ -1,6 +1,7 @@
 pub mod gotify;
 pub mod sendmail;
 pub mod smtp;
+pub mod webhook;
 #[derive(Debug, Clone)]
 pub struct EndpointsClient<T> {
     client: T,
@@ -59,5 +60,13 @@ where
 {
     pub fn smtp(&self) -> smtp::SmtpClient<T> {
         smtp::SmtpClient::<T>::new(self.client.clone(), &self.path)
+    }
+}
+impl<T> EndpointsClient<T>
+where
+    T: crate::client::Client,
+{
+    pub fn webhook(&self) -> webhook::WebhookClient<T> {
+        webhook::WebhookClient::<T>::new(self.client.clone(), &self.path)
     }
 }

@@ -33,17 +33,25 @@ impl GetOutput {
             vmid,
             agent: Default::default(),
             clipboard: Default::default(),
+            cpu: Default::default(),
             cpus: Default::default(),
+            diskread: Default::default(),
+            diskwrite: Default::default(),
             lock: Default::default(),
             maxdisk: Default::default(),
             maxmem: Default::default(),
+            mem: Default::default(),
             name: Default::default(),
+            netin: Default::default(),
+            netout: Default::default(),
             pid: Default::default(),
             qmpstatus: Default::default(),
             running_machine: Default::default(),
             running_qemu: Default::default(),
+            serial: Default::default(),
             spice: Default::default(),
             tags: Default::default(),
+            template: Default::default(),
             uptime: Default::default(),
             additional_properties: Default::default(),
         }
@@ -68,9 +76,33 @@ pub struct GetOutput {
         deserialize_with = "crate::types::deserialize_number_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Current CPU usage."]
+    #[doc = ""]
+    pub cpu: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum usable CPUs."]
     #[doc = ""]
     pub cpus: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The amount of bytes the guest read from it's block devices since the guest was started. (Note: This info is not available for all storage types.)"]
+    #[doc = ""]
+    pub diskread: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The amount of bytes the guest wrote from it's block devices since the guest was started. (Note: This info is not available for all storage types.)"]
+    #[doc = ""]
+    pub diskwrite: Option<i64>,
     #[doc = "HA manager service status."]
     #[doc = ""]
     pub ha: HaGetOutputHa,
@@ -94,8 +126,16 @@ pub struct GetOutput {
     #[doc = "Maximum memory in bytes."]
     #[doc = ""]
     pub maxmem: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "VM name."]
+    #[doc = "Currently used memory in bytes."]
+    #[doc = ""]
+    pub mem: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "VM (host)name."]
     #[doc = ""]
     pub name: Option<String>,
     #[serde(
@@ -103,7 +143,23 @@ pub struct GetOutput {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "PID of running qemu process."]
+    #[doc = "The amount of traffic in bytes that was sent to the guest over the network since it was started."]
+    #[doc = ""]
+    pub netin: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The amount of traffic in bytes that was sent from the guest over the network since it was started."]
+    #[doc = ""]
+    pub netout: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "PID of the QEMU process, if the VM is running."]
     #[doc = ""]
     pub pid: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -117,9 +173,17 @@ pub struct GetOutput {
     pub running_machine: Option<String>,
     #[serde(rename = "running-qemu")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The currently running QEMU version (if running)."]
+    #[doc = "The QEMU version the VM is currently using (if running)."]
     #[doc = ""]
     pub running_qemu: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Guest has serial device configured."]
+    #[doc = ""]
+    pub serial: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -136,11 +200,19 @@ pub struct GetOutput {
     #[doc = ""]
     pub tags: Option<String>,
     #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Determines if the guest is a template."]
+    #[doc = ""]
+    pub template: Option<bool>,
+    #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Uptime."]
+    #[doc = "Uptime in seconds."]
     #[doc = ""]
     pub uptime: Option<i64>,
     #[doc = "The (unique) ID of the VM."]

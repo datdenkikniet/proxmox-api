@@ -77,6 +77,7 @@ impl PostParams {
         Self {
             ipam,
             ty,
+            fingerprint: Default::default(),
             section: Default::default(),
             token: Default::default(),
             url: Default::default(),
@@ -86,6 +87,10 @@ impl PostParams {
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostParams {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Certificate SHA 256 fingerprint."]
+    #[doc = ""]
+    pub fingerprint: Option<String>,
     #[doc = "The SDN ipam object identifier."]
     #[doc = ""]
     pub ipam: String,

@@ -18,7 +18,7 @@ impl<T> DownloadUrlClient<T>
 where
     T: crate::client::Client,
 {
-    #[doc = "Download templates and ISO images by using an URL."]
+    #[doc = "Download templates, ISO images, OVAs and VM images by using an URL."]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
@@ -114,6 +114,8 @@ impl TryFrom<&str> for ChecksumAlgorithm {
 #[doc = "Content type."]
 #[doc = ""]
 pub enum Content {
+    #[serde(rename = "import")]
+    Import,
     #[serde(rename = "iso")]
     Iso,
     #[serde(rename = "vztmpl")]
@@ -123,6 +125,7 @@ impl TryFrom<&str> for Content {
     type Error = String;
     fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
         match value {
+            "import" => Ok(Self::Import),
             "iso" => Ok(Self::Iso),
             "vztmpl" => Ok(Self::Vztmpl),
             v => Err(format!("Unknown variant {v}")),

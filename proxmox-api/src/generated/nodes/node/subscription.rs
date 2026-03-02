@@ -58,14 +58,81 @@ where
         self.client.put(&path, &params)
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+impl GetOutput {
+    pub fn new(status: Status) -> Self {
+        Self {
+            status,
+            checktime: Default::default(),
+            key: Default::default(),
+            level: Default::default(),
+            message: Default::default(),
+            nextduedate: Default::default(),
+            productname: Default::default(),
+            regdate: Default::default(),
+            serverid: Default::default(),
+            signature: Default::default(),
+            sockets: Default::default(),
+            url: Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutput {
     #[serde(
-        flatten,
-        default,
-        skip_serializing_if = "::std::collections::HashMap::is_empty"
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
     )]
-    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Timestamp of the last check done."]
+    #[doc = ""]
+    pub checktime: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The subscription key, if set and permitted to access."]
+    #[doc = ""]
+    pub key: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "A short code for the subscription level."]
+    #[doc = ""]
+    pub level: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "A more human readable status message."]
+    #[doc = ""]
+    pub message: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Next due date of the set subscription."]
+    #[doc = ""]
+    pub nextduedate: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Human readable productname of the set subscription."]
+    #[doc = ""]
+    pub productname: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Register date of the set subscription."]
+    #[doc = ""]
+    pub regdate: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The server ID, if permitted to access."]
+    #[doc = ""]
+    pub serverid: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Signature for offline keys"]
+    #[doc = ""]
+    pub signature: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The number of sockets for this host."]
+    #[doc = ""]
+    pub sockets: Option<i64>,
+    #[doc = "The current subscription status."]
+    #[doc = ""]
+    pub status: Status,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "URL to the web shop."]
+    #[doc = ""]
+    pub url: Option<String>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct PostParams {
@@ -103,4 +170,35 @@ pub struct PutParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "The current subscription status."]
+#[doc = ""]
+pub enum Status {
+    #[serde(rename = "active")]
+    Active,
+    #[serde(rename = "expired")]
+    Expired,
+    #[serde(rename = "invalid")]
+    Invalid,
+    #[serde(rename = "new")]
+    New,
+    #[serde(rename = "notfound")]
+    Notfound,
+    #[serde(rename = "suspended")]
+    Suspended,
+}
+impl TryFrom<&str> for Status {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "active" => Ok(Self::Active),
+            "expired" => Ok(Self::Expired),
+            "invalid" => Ok(Self::Invalid),
+            "new" => Ok(Self::New),
+            "notfound" => Ok(Self::Notfound),
+            "suspended" => Ok(Self::Suspended),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

@@ -30,7 +30,8 @@ impl GetOutput {
         id: String,
         node: String,
         pid: i64,
-        starttime: f64,
+        pstart: i64,
+        starttime: i64,
         status: Status,
         ty: String,
         upid: String,
@@ -40,6 +41,7 @@ impl GetOutput {
             id,
             node,
             pid,
+            pstart,
             starttime,
             status,
             ty,
@@ -62,10 +64,15 @@ pub struct GetOutput {
     )]
     pub pid: i64,
     #[serde(
-        serialize_with = "crate::types::serialize_number",
-        deserialize_with = "crate::types::deserialize_number"
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
     )]
-    pub starttime: f64,
+    pub pstart: i64,
+    #[serde(
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
+    )]
+    pub starttime: i64,
     pub status: Status,
     #[serde(rename = "type")]
     pub ty: String,

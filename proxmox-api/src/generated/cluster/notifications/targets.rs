@@ -101,6 +101,8 @@ pub enum Type {
     Sendmail,
     #[serde(rename = "smtp")]
     Smtp,
+    #[serde(rename = "webhook")]
+    Webhook,
 }
 impl TryFrom<&str> for Type {
     type Error = String;
@@ -109,6 +111,7 @@ impl TryFrom<&str> for Type {
             "gotify" => Ok(Self::Gotify),
             "sendmail" => Ok(Self::Sendmail),
             "smtp" => Ok(Self::Smtp),
+            "webhook" => Ok(Self::Webhook),
             v => Err(format!("Unknown variant {v}")),
         }
     }

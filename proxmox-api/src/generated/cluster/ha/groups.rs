@@ -79,7 +79,7 @@ pub struct PostParams {
     pub group: String,
     #[doc = "List of cluster node names with optional priority."]
     #[doc = ""]
-    #[doc = "List of cluster node members, where a priority can be given to each node. A resource bound to a group will run on the available nodes with the highest priority. If there are more nodes in the highest priority class, the services will get distributed to those nodes. The priorities have a relative meaning only."]
+    #[doc = "List of cluster node members, where a priority can be given to each node. A resource bound to a group will run on the available nodes with the highest priority. If there are more nodes in the highest priority class, the services will get distributed to those nodes. The priorities have a relative meaning only. The higher the number, the higher the priority."]
     #[doc = ""]
     pub nodes: String,
     #[serde(

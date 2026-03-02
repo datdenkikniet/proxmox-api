@@ -33,4 +33,6 @@ pub struct Info<'a> {
         skip_serializing_if = "Option::is_none"
     )]
     pub proxy_to: Option<Cow<'a, str>>,
+    #[serde(default)]
+    pub download_allowed: Option<u32>,
 }

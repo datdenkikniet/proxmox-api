@@ -159,6 +159,8 @@ pub struct PostParams {
     #[doc = ""]
     pub filename: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Format of the image."]
+    #[doc = ""]
     pub format: Option<Format>,
     #[doc = "Size in kilobyte (1024 bytes). Optional suffixes 'M' (megabyte, 1024K) and 'G' (gigabyte, 1024M)"]
     #[doc = ""]
@@ -198,6 +200,8 @@ pub struct VerificationGetOutputItemsVerification {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "Format of the image."]
+#[doc = ""]
 pub enum Format {
     #[serde(rename = "qcow2")]
     Qcow2,
@@ -205,6 +209,8 @@ pub enum Format {
     Raw,
     #[serde(rename = "subvol")]
     Subvol,
+    #[serde(rename = "vmdk")]
+    Vmdk,
 }
 impl TryFrom<&str> for Format {
     type Error = String;
@@ -213,6 +219,7 @@ impl TryFrom<&str> for Format {
             "qcow2" => Ok(Self::Qcow2),
             "raw" => Ok(Self::Raw),
             "subvol" => Ok(Self::Subvol),
+            "vmdk" => Ok(Self::Vmdk),
             v => Err(format!("Unknown variant {v}")),
         }
     }

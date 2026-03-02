@@ -42,16 +42,24 @@ impl GetOutputItems {
         Self {
             status,
             vmid,
+            cpu: Default::default(),
             cpus: Default::default(),
+            diskread: Default::default(),
+            diskwrite: Default::default(),
             lock: Default::default(),
             maxdisk: Default::default(),
             maxmem: Default::default(),
+            mem: Default::default(),
             name: Default::default(),
+            netin: Default::default(),
+            netout: Default::default(),
             pid: Default::default(),
             qmpstatus: Default::default(),
             running_machine: Default::default(),
             running_qemu: Default::default(),
+            serial: Default::default(),
             tags: Default::default(),
+            template: Default::default(),
             uptime: Default::default(),
             additional_properties: Default::default(),
         }
@@ -64,9 +72,33 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_number_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Current CPU usage."]
+    #[doc = ""]
+    pub cpu: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum usable CPUs."]
     #[doc = ""]
     pub cpus: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The amount of bytes the guest read from it's block devices since the guest was started. (Note: This info is not available for all storage types.)"]
+    #[doc = ""]
+    pub diskread: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The amount of bytes the guest wrote from it's block devices since the guest was started. (Note: This info is not available for all storage types.)"]
+    #[doc = ""]
+    pub diskwrite: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The current config lock, if any."]
     #[doc = ""]
@@ -87,8 +119,16 @@ pub struct GetOutputItems {
     #[doc = "Maximum memory in bytes."]
     #[doc = ""]
     pub maxmem: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "VM name."]
+    #[doc = "Currently used memory in bytes."]
+    #[doc = ""]
+    pub mem: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "VM (host)name."]
     #[doc = ""]
     pub name: Option<String>,
     #[serde(
@@ -96,7 +136,23 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "PID of running qemu process."]
+    #[doc = "The amount of traffic in bytes that was sent to the guest over the network since it was started."]
+    #[doc = ""]
+    pub netin: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The amount of traffic in bytes that was sent from the guest over the network since it was started."]
+    #[doc = ""]
+    pub netout: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "PID of the QEMU process, if the VM is running."]
     #[doc = ""]
     pub pid: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -110,9 +166,17 @@ pub struct GetOutputItems {
     pub running_machine: Option<String>,
     #[serde(rename = "running-qemu")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The currently running QEMU version (if running)."]
+    #[doc = "The QEMU version the VM is currently using (if running)."]
     #[doc = ""]
     pub running_qemu: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Guest has serial device configured."]
+    #[doc = ""]
+    pub serial: Option<bool>,
     #[doc = "QEMU process status."]
     #[doc = ""]
     pub status: Status,
@@ -121,11 +185,19 @@ pub struct GetOutputItems {
     #[doc = ""]
     pub tags: Option<String>,
     #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Determines if the guest is a template."]
+    #[doc = ""]
+    pub template: Option<bool>,
+    #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Uptime."]
+    #[doc = "Uptime in seconds."]
     #[doc = ""]
     pub uptime: Option<i64>,
     #[doc = "The (unique) ID of the VM."]
@@ -162,6 +234,7 @@ impl PostParams {
             acpi: Default::default(),
             affinity: Default::default(),
             agent: Default::default(),
+            amd_sev: Default::default(),
             arch: Default::default(),
             archive: Default::default(),
             args: Default::default(),
@@ -191,6 +264,7 @@ impl PostParams {
             hotplug: Default::default(),
             hugepages: Default::default(),
             ides: Default::default(),
+            import_working_storage: Default::default(),
             ipconfigs: Default::default(),
             ivshmem: Default::default(),
             keephugepages: Default::default(),
@@ -241,6 +315,7 @@ impl PostParams {
             vcpus: Default::default(),
             vga: Default::default(),
             virtios: Default::default(),
+            virtiofss: Default::default(),
             vmgenid: Default::default(),
             vmstatestorage: Default::default(),
             watchdog: Default::default(),
@@ -266,6 +341,11 @@ pub struct PostParams {
     #[doc = "Enable/disable communication with the QEMU Guest Agent and its properties."]
     #[doc = ""]
     pub agent: Option<String>,
+    #[serde(rename = "amd-sev")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Secure Encrypted Virtualization (SEV) features by AMD CPUs"]
+    #[doc = ""]
+    pub amd_sev: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Virtual processor architecture. Defaults to the host."]
     #[doc = ""]
@@ -450,6 +530,11 @@ pub struct PostParams {
     #[doc = "Use volume as IDE hard disk or CD-ROM (n is 0 to 3). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
     #[doc = ""]
     pub ides: ::std::collections::HashMap<u32, String>,
+    #[serde(rename = "import-working-storage")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "A file-based storage with 'images' content-type enabled, which is used as an intermediary extraction storage during import. Defaults to the source storage."]
+    #[doc = ""]
+    pub import_working_storage: Option<String>,
     #[serde(rename = "ipconfig[n]")]
     #[serde(
         serialize_with = "crate::types::serialize_multi::<NumberedIpconfigs, _>",
@@ -532,7 +617,7 @@ pub struct PostParams {
         deserialize_with = "crate::types::deserialize_number_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Set maximum tolerated downtime (in seconds) for migrations."]
+    #[doc = "Set maximum tolerated downtime (in seconds) for migrations. Should the migration not be able to converge in the very end, because too much newly dirtied RAM needs to be transferred, the limit will be increased automatically step-by-step until migration can converge."]
     #[doc = ""]
     pub migrate_downtime: Option<f64>,
     #[serde(
@@ -859,6 +944,16 @@ pub struct PostParams {
     #[doc = "Use volume as VIRTIO hard disk (n is 0 to 15). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
     #[doc = ""]
     pub virtios: ::std::collections::HashMap<u32, String>,
+    #[serde(rename = "virtiofs[n]")]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedVirtiofss, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedVirtiofss, _>"
+    )]
+    #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
+    #[serde(flatten)]
+    #[doc = "Configuration for sharing a directory between host and guest using Virtio-fs."]
+    #[doc = ""]
+    pub virtiofss: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set VM Generation ID. Use '1' to autogenerate on create or update, pass '0' to disable explicitly."]
     #[doc = ""]
@@ -913,6 +1008,8 @@ impl crate::types::multi::Test for PostParams {
                 <NumberedUsbs as crate::types::multi::NumberedItems>::key_matches
                     as fn(&str) -> bool,
                 <NumberedVirtios as crate::types::multi::NumberedItems>::key_matches
+                    as fn(&str) -> bool,
+                <NumberedVirtiofss as crate::types::multi::NumberedItems>::key_matches
                     as fn(&str) -> bool,
             ];
             array.iter().any(|f| f(input))
@@ -1331,6 +1428,12 @@ struct NumberedUsbs;
 impl crate::types::multi::NumberedItems for NumberedUsbs {
     type Item = String;
     const PREFIX: &'static str = "usb";
+}
+#[derive(Default)]
+struct NumberedVirtiofss;
+impl crate::types::multi::NumberedItems for NumberedVirtiofss {
+    type Item = String;
+    const PREFIX: &'static str = "virtiofs";
 }
 #[derive(Default)]
 struct NumberedVirtios;
