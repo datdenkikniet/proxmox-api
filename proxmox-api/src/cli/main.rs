@@ -74,7 +74,7 @@ fn main() -> std::io::Result<()> {
 
 #[cfg(feature = "nodes")]
 fn nodes(client: &impl Client) {
-    use proxmox_api::{nodes::NodesClient, types::VmId};
+    use proxmox_api::{nodes::NodesClient, types::VmId, types::bounded_integer::BoundedInteger};
 
     let nodes_client = NodesClient::new(client);
 
