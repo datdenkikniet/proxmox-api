@@ -14,40 +14,18 @@ use super::{Format, KnownFormat, Optional, Output};
 
 fn parse_value_to_i128(value: &serde_json::Value) -> Option<i128> {
     match value {
-        serde_json::Value::Number(n) => n.as_i64().map(|v| v as i128),
+        serde_json::Value::Number(n) => n.as_i128(),
         serde_json::Value::String(s) => s.parse::<i128>().ok(),
         _ => None,
     }
 }
 
-fn extract_integer_bounds(ty: &TypeKind, field_name: &str) -> Option<BoundedIntegerDef> {
-    let TypeKind::Integer {
-        minimum,
-        maximum,
-        default,
-    } = ty
-    else {
-        return None;
-    };
-
-    let has_constraints = minimum.is_some() || maximum.is_some() || default.is_some();
-
-    if !has_constraints {
-        return None;
-    }
-
-    let min = minimum.as_ref().and_then(parse_value_to_i128);
-    let max = maximum.as_ref().and_then(parse_value_to_i128);
-    let default = default.as_ref().and_then(parse_value_to_i128);
-
-    let name = crate::name_to_ident(&format!("{}Int", field_name));
-
-    Some(BoundedIntegerDef {
-        name,
-        min,
-        max,
-        default,
-    })
+fn parse_optional_i128<'de, D>(deserializer: D) -> Result<Option<i128>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    let value = Option::<serde_json::Value>::deserialize(deserializer)?;
+    Ok(value.as_ref().and_then(parse_value_to_i128))
 }
 
 fn parse_value_to_f64(value: &serde_json::Value) -> Option<f64> {
@@ -58,66 +36,28 @@ fn parse_value_to_f64(value: &serde_json::Value) -> Option<f64> {
     }
 }
 
-fn extract_number_bounds(ty: &TypeKind, field_name: &str) -> Option<BoundedNumberDef> {
-    let TypeKind::Number {
-        minimum,
-        maximum,
-        default,
-    } = ty
-    else {
-        return None;
-    };
-
-    let has_constraints = minimum.is_some() || maximum.is_some() || default.is_some();
-
-    if !has_constraints {
-        return None;
-    }
-
-    let min = minimum.as_ref().and_then(parse_value_to_f64);
-    let max = maximum.as_ref().and_then(parse_value_to_f64);
-    let default = default.as_ref().and_then(parse_value_to_f64);
-
-    let name = crate::name_to_ident(&format!("{}Num", field_name));
-
-    Some(BoundedNumberDef {
-        name,
-        min,
-        max,
-        default,
-    })
+fn parse_optional_f64<'de, D>(deserializer: D) -> Result<Option<f64>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    let value = Option::<serde_json::Value>::deserialize(deserializer)?;
+    Ok(value.as_ref().and_then(parse_value_to_f64))
 }
 
-fn extract_string_constraints(ty: &TypeKind, field_name: &str) -> Option<BoundedStringDef> {
-    let TypeKind::String {
-        max_length,
-        min_length,
-        pattern,
-        enum_values: None,
-        default,
-    } = ty
-    else {
-        return None;
-    };
-
-    let has_constraints = pattern.is_some() || min_length.is_some() || max_length.is_some();
-    if !has_constraints {
-        return None;
+fn parse_value_to_bool(value: &serde_json::Value) -> Option<bool> {
+    match value {
+        serde_json::Value::Bool(b) => Some(*b),
+        serde_json::Value::String(s) => s.parse::<bool>().ok(),
+        _ => None,
     }
+}
 
-    let pattern = pattern.as_ref().map(|pattern| pattern.to_string());
-
-    let name = crate::name_to_ident(&format!("{}Str", field_name));
-
-    Some(BoundedStringDef {
-        name,
-        min_length: min_length.map(|min| min as usize),
-        max_length: max_length.map(|max| max as usize),
-        pattern,
-        default_val: default
-            .as_ref()
-            .map(|cow_str: &Cow<'_, str>| String::from(cow_str.clone())),
-    })
+fn parse_optional_bool<'de, D>(deserializer: D) -> Result<Option<bool>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    let value = Option::<serde_json::Value>::deserialize(deserializer)?;
+    Ok(value.as_ref().and_then(parse_value_to_bool))
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Default)]
@@ -184,6 +124,9 @@ impl Type<'_> {
         let output_type = if let Some(ty) = self.ty.as_ref() {
             match ty {
                 TypeKind::String {
+                    max_length,
+                    min_length,
+                    pattern,
                     enum_values,
                     default,
                     ..
@@ -212,26 +155,44 @@ impl Type<'_> {
                         };
 
                         TypeDef::new_enum(name, no_derives, enum_values, default, self.doc())
-                    } else if let Some(bounded) = extract_string_constraints(ty, field_name) {
-                        TypeDef::BoundedString(bounded)
-                    } else {
+                    } else if let (None | Some(0), None, None) = (min_length, max_length, pattern) {
                         TypeDef::Primitive(PrimitiveTypeDef::String)
-                    }
-                }
-                TypeKind::Number { .. } => {
-                    if let Some(bounded) = extract_number_bounds(ty, field_name) {
-                        TypeDef::BoundedNumber(bounded)
                     } else {
-                        TypeDef::Primitive(PrimitiveTypeDef::Number)
+                        TypeDef::BoundedString(BoundedStringDef {
+                            name: crate::name_to_ident(&format!("{}Str", field_name)),
+                            min_length: min_length.map(|v| v as usize),
+                            max_length: max_length.map(|v| v as usize),
+                            pattern: pattern.as_ref().map(Cow::to_string),
+                            default_val: default.as_ref().map(Cow::to_string),
+                        })
                     }
                 }
-                TypeKind::Integer { .. } => {
-                    if let Some(bounded) = extract_integer_bounds(ty, field_name) {
-                        TypeDef::BoundedInteger(bounded)
-                    } else {
-                        TypeDef::Primitive(PrimitiveTypeDef::Integer)
-                    }
-                }
+                TypeKind::Number {
+                    minimum,
+                    maximum,
+                    default,
+                } => match (minimum, maximum, default) {
+                    (None, None, None) => TypeDef::Primitive(PrimitiveTypeDef::Number),
+                    _ => TypeDef::BoundedNumber(BoundedNumberDef {
+                        name: crate::name_to_ident(&format!("{}Num", field_name)),
+                        min: *minimum,
+                        max: *maximum,
+                        default: *default,
+                    }),
+                },
+                TypeKind::Integer {
+                    minimum,
+                    maximum,
+                    default,
+                } => match (minimum, maximum, default) {
+                    (None, None, None) => TypeDef::Primitive(PrimitiveTypeDef::Integer),
+                    _ => TypeDef::BoundedInteger(BoundedIntegerDef {
+                        name: crate::name_to_ident(&format!("{}Int", field_name)),
+                        min: *minimum,
+                        max: *maximum,
+                        default: *default,
+                    }),
+                },
                 TypeKind::Boolean { .. } => TypeDef::Primitive(PrimitiveTypeDef::Boolean),
                 TypeKind::Array { items } => {
                     let mut output =
@@ -380,26 +341,56 @@ pub enum TypeKind<'a> {
         default: Option<Cow<'a, str>>,
     },
     Number {
-        #[serde(default, alias = "min", skip_serializing_if = "Option::is_none")]
-        minimum: Option<serde_json::Value>,
-        #[serde(default, alias = "max", skip_serializing_if = "Option::is_none")]
-        maximum: Option<serde_json::Value>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        default: Option<serde_json::Value>,
+        #[serde(
+            deserialize_with = "parse_optional_f64",
+            default,
+            alias = "min",
+            skip_serializing_if = "Option::is_none"
+        )]
+        minimum: Option<f64>,
+        #[serde(
+            deserialize_with = "parse_optional_f64",
+            default,
+            alias = "max",
+            skip_serializing_if = "Option::is_none"
+        )]
+        maximum: Option<f64>,
+        #[serde(
+            deserialize_with = "parse_optional_f64",
+            default,
+            skip_serializing_if = "Option::is_none"
+        )]
+        default: Option<f64>,
     },
     Integer {
         // Is sometimes a string containing a u32
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        minimum: Option<serde_json::Value>,
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        maximum: Option<serde_json::Value>,
+        #[serde(
+            default,
+            deserialize_with = "parse_optional_i128",
+            skip_serializing_if = "Option::is_none"
+        )]
+        minimum: Option<i128>,
+        #[serde(
+            default,
+            deserialize_with = "parse_optional_i128",
+            skip_serializing_if = "Option::is_none"
+        )]
+        maximum: Option<i128>,
         // Is sometimes a string description
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        default: Option<serde_json::Value>,
+        #[serde(
+            default,
+            deserialize_with = "parse_optional_i128",
+            skip_serializing_if = "Option::is_none"
+        )]
+        default: Option<i128>,
     },
     Boolean {
-        #[serde(default, skip_serializing_if = "Option::is_none")]
-        default: Option<serde_json::Value>,
+        #[serde(
+            deserialize_with = "parse_optional_bool",
+            default,
+            skip_serializing_if = "Option::is_none"
+        )]
+        default: Option<bool>,
     },
     Array {
         items: Box<Type<'a>>,
