@@ -77,7 +77,7 @@ pub trait BoundedString {
     }
 }
 
-use serde::{Deserializer, Serializer};
+use serde::{Deserialize, Deserializer, Serializer};
 
 pub fn serialize_bounded_string<T, S>(value: &T, serializer: S) -> Result<S::Ok, S::Error>
 where
@@ -92,57 +92,12 @@ where
     D: Deserializer<'de>,
     T: BoundedString + TryFrom<String, Error = BoundedStringError>,
 {
-    struct Visitor<T> {
-        _phantom: std::marker::PhantomData<T>,
-    }
-
-    impl<T> Default for Visitor<T> {
-        fn default() -> Self {
-            Self {
-                _phantom: std::marker::PhantomData,
-            }
-        }
-    }
-
-    impl<'de, T> serde::de::Visitor<'de> for Visitor<T>
-    where
-        T: BoundedString + TryFrom<String, Error = BoundedStringError>,
-    {
-        type Value = T;
-
-        fn expecting(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-            write!(f, "{}", T::TYPE_DESCRIPTION)
-        }
-
-        fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
-        where
-            E: serde::de::Error,
-        {
-            T::try_from(v.to_string()).map_err(|e| {
-                E::custom(format!(
-                    "Invalid value {} for {} with error type: {}",
-                    v,
-                    T::TYPE_DESCRIPTION,
-                    e
-                ))
-            })
-        }
-
-        fn visit_string<E>(self, v: String) -> Result<Self::Value, E>
-        where
-            E: serde::de::Error,
-        {
-            let v_clone = v.clone();
-            T::try_from(v).map_err(|e| {
-                E::custom(format!(
-                    "Invalid value {} for {} with error type: {}",
-                    v_clone,
-                    T::TYPE_DESCRIPTION,
-                    e
-                ))
-            })
-        }
-    }
-
-    deserializer.deserialize_str(Visitor::default())
+    let value = String::deserialize(deserializer)?;
+    T::try_from(value).map_err(|e| {
+        serde::de::Error::custom(format!(
+            "could not parse as {} with error: {}",
+            T::TYPE_DESCRIPTION,
+            e
+        ))
+    })
 }

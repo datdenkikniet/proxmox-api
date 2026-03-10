@@ -47,7 +47,7 @@ pub trait BoundedNumber {
     }
 }
 
-use serde::{Deserializer, Serializer};
+use serde::{Deserialize, Deserializer, Serializer};
 
 pub fn serialize_bounded_number<T, S>(value: &T, serializer: S) -> Result<S::Ok, S::Error>
 where
@@ -57,77 +57,29 @@ where
     serializer.serialize_f64(value.get())
 }
 
+fn parse_value_to_f64(value: &serde_json::Value) -> Option<f64> {
+    match value {
+        serde_json::Value::Number(n) => n.as_f64(),
+        serde_json::Value::String(s) => s.parse::<f64>().ok(),
+        _ => None,
+    }
+}
+
 pub fn deserialize_bounded_number<'de, T, D>(deserializer: D) -> Result<T, D::Error>
 where
     D: Deserializer<'de>,
     T: BoundedNumber + TryFrom<f64, Error = BoundedNumberError>,
 {
-    struct Visitor<T> {
-        _phantom: std::marker::PhantomData<T>,
-    }
-
-    impl<T> Default for Visitor<T> {
-        fn default() -> Self {
-            Self {
-                _phantom: std::marker::PhantomData,
-            }
-        }
-    }
-
-    impl<'de, T> serde::de::Visitor<'de> for Visitor<T>
-    where
-        T: BoundedNumber + TryFrom<f64, Error = BoundedNumberError>,
-    {
-        type Value = T;
-
-        fn expecting(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-            write!(f, "{}", T::TYPE_DESCRIPTION)
-        }
-
-        fn visit_f64<E>(self, v: f64) -> Result<Self::Value, E>
-        where
-            E: serde::de::Error,
-        {
-            T::try_from(v).map_err(|e| {
-                E::custom(format!(
-                    "invalid value {} for {} with error type: {}",
-                    v,
-                    T::TYPE_DESCRIPTION,
-                    e
-                ))
-            })
-        }
-
-        fn visit_i64<E>(self, v: i64) -> Result<Self::Value, E>
-        where
-            E: serde::de::Error,
-        {
-            self.visit_f64(v as f64)
-        }
-
-        fn visit_u64<E>(self, v: u64) -> Result<Self::Value, E>
-        where
-            E: serde::de::Error,
-        {
-            self.visit_f64(v as f64)
-        }
-
-        fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
-        where
-            E: serde::de::Error,
-        {
-            let v_clone = &v;
-            let parsed: f64 = v.parse().map_err(|e| {
-                E::custom(format!(
-                    "could not parse {} as {} with error type {}",
-                    v_clone,
-                    T::TYPE_DESCRIPTION,
-                    e
-                ))
-            })?;
-            self.visit_f64(parsed)
-        }
-    }
-
-    deserializer.deserialize_any(Visitor::default())
+    let value = Option::<serde_json::Value>::deserialize(deserializer)?;
+    let f64_value = value
+        .as_ref()
+        .and_then(parse_value_to_f64)
+        .ok_or_else(|| serde::de::Error::custom("could not parse value as f64"))?;
+    T::try_from(f64_value).map_err(|e| {
+        serde::de::Error::custom(format!(
+            "could not parse as {} with error: {}",
+            T::TYPE_DESCRIPTION,
+            e
+        ))
+    })
 }
