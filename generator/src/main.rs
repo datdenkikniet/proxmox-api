@@ -44,19 +44,19 @@ fn main() -> std::io::Result<()> {
         let file = std::fs::OpenOptions::new()
             .read(true)
             .open(input_path)
-            .unwrap();
+            .expect("Failed to open input file");
 
         let mut reader = BufReader::new(file);
 
         let mut output = Vec::new();
-        lzma_rs::xz_decompress(&mut reader, &mut output).unwrap();
+        lzma_rs::xz_decompress(&mut reader, &mut output).expect("Failed to decompress xz file");
 
-        String::from_utf8(output).unwrap()
+        String::from_utf8(output).expect("Decompressed data is not valid UTF-8")
     } else {
-        std::fs::read_to_string(input_path).unwrap()
+        std::fs::read_to_string(input_path).expect("Failed to read input file")
     };
 
-    let tree: Vec<TreeNode> = serde_json::from_str(&str).unwrap();
+    let tree: Vec<TreeNode> = serde_json::from_str(&str).expect("Failed to parse JSON input");
 
     let collection = Collection::from_nodes(&tree);
     let generator = Generator::new(&collection);
