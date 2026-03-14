@@ -17,16 +17,10 @@ pub struct EnumDef {
 
 impl PartialEq for EnumDef {
     fn eq(&self, other: &Self) -> bool {
-        let equal = *self.name.lock() == *other.name.lock()
+        *self.name.lock() == *other.name.lock()
             && self.derives == other.derives
             && self.values == other.values
-            && self.default == other.default;
-
-        if equal && other.doc != self.doc {
-            eprintln!("Found enums that were equal besides on docs.");
-        }
-
-        equal
+            && self.default == other.default
     }
 }
 
