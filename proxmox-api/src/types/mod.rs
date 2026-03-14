@@ -18,10 +18,22 @@ pub use multi::{deserialize_additional_data, deserialize_multi, serialize_multi}
 mod mac_addr;
 pub use mac_addr::MacAddr;
 
+mod non_zero_pos_integer;
+pub use non_zero_pos_integer::{
+    NonZeroUnsignedInteger, deserialize_non_zero_pos_int, deserialize_non_zero_pos_int_optional,
+    serialize_non_zero_pos_int, serialize_non_zero_pos_int_optional,
+};
+
 mod number;
 pub use number::{
     Number, deserialize_number, deserialize_number_optional, serialize_number,
     serialize_number_optional,
+};
+
+mod unsigned_integer;
+pub use unsigned_integer::{
+    UnsignedInteger, deserialize_unsigned_int, deserialize_unsigned_int_optional,
+    serialize_unsigned_int, serialize_unsigned_int_optional,
 };
 
 mod vmid;

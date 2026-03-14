@@ -296,6 +296,14 @@ impl Generator {
             Some(PrimitiveTypeDef::String) | None => {
                 quote!(self.client.#fn_name(#defer_signature))
             }
+            Some(PrimitiveTypeDef::UnsignedInteger) => {
+                let uint_ty = proxmox_api(quote!(types::UnsignedInteger));
+                quote!(Ok(self.client.#fn_name::<_, #uint_ty>(#defer_signature)?.get()))
+            }
+            Some(PrimitiveTypeDef::NonZeroUnsignedInteger) => {
+                let nzuint_ty = proxmox_api(quote!(types::NonZeroUnsignedInteger));
+                quote!(Ok(self.client.#fn_name::<_, #nzuint_ty>(#defer_signature)?.get()))
+            }
         }
     }
 

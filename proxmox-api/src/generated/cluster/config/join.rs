@@ -79,7 +79,7 @@ impl NodelistGetOutputNodelistItems {
         name: String,
         pve_addr: ::std::net::IpAddr,
         pve_fp: PveFpStr,
-        quorum_votes: QuorumVotesInt,
+        quorum_votes: u64,
     ) -> Self {
         Self {
             name,
@@ -97,15 +97,23 @@ pub struct NodelistGetOutputNodelistItems {
     #[doc = "The cluster node name."]
     #[doc = ""]
     pub name: String,
+    #[serde(
+        serialize_with = "crate::types::serialize_non_zero_pos_int_optional",
+        deserialize_with = "crate::types::deserialize_non_zero_pos_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node id for this node."]
     #[doc = ""]
-    pub nodeid: Option<NodeidInt>,
+    pub nodeid: Option<std::num::NonZeroU64>,
     pub pve_addr: ::std::net::IpAddr,
     #[doc = "Certificate SHA 256 fingerprint."]
     #[doc = ""]
     pub pve_fp: PveFpStr,
-    pub quorum_votes: QuorumVotesInt,
+    #[serde(
+        serialize_with = "crate::types::serialize_unsigned_int",
+        deserialize_with = "crate::types::deserialize_unsigned_int"
+    )]
+    pub quorum_votes: u64,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Address and priority information of a single corosync link. (up to 8 links supported; link0..link7)"]
     #[doc = ""]
@@ -157,17 +165,25 @@ pub struct PostParams {
     #[doc = "Address and priority information of a single corosync link. (up to 8 links supported; link0..link7)"]
     #[doc = ""]
     pub links: ::std::collections::HashMap<u32, String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_non_zero_pos_int_optional",
+        deserialize_with = "crate::types::deserialize_non_zero_pos_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Node id for this node."]
     #[doc = ""]
-    pub nodeid: Option<NodeidInt>,
+    pub nodeid: Option<std::num::NonZeroU64>,
     #[doc = "Superuser (root) password of peer node."]
     #[doc = ""]
     pub password: PasswordStr,
+    #[serde(
+        serialize_with = "crate::types::serialize_unsigned_int_optional",
+        deserialize_with = "crate::types::deserialize_unsigned_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Number of votes for this node"]
     #[doc = ""]
-    pub votes: Option<VotesInt>,
+    pub votes: Option<u64>,
     #[serde(
         flatten,
         deserialize_with = "crate::types::multi::deserialize_additional_data::<'_, PostParams, _, _>"
@@ -200,117 +216,6 @@ struct NumberedLinks;
 impl crate::types::multi::NumberedItems for NumberedLinks {
     type Item = String;
     const PREFIX: &'static str = "link";
-}
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
-pub struct NodeidInt(i128);
-impl crate::types::bounded_integer::BoundedInteger for NodeidInt {
-    const MIN: Option<i128> = Some(1i128);
-    const MAX: Option<i128> = None::<i128>;
-    const DEFAULT: Option<i128> = None::<i128>;
-    const TYPE_DESCRIPTION: &'static str = "an integer greater than or equal to 1";
-    fn get(&self) -> i128 {
-        self.0
-    }
-    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
-        Self::validate(value)?;
-        Ok(Self(value))
-    }
-}
-impl std::convert::TryFrom<i128> for NodeidInt {
-    type Error = crate::types::bounded_integer::BoundedIntegerError;
-    fn try_from(value: i128) -> Result<Self, Self::Error> {
-        crate::types::bounded_integer::BoundedInteger::new(value)
-    }
-}
-impl ::serde::Serialize for NodeidInt {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: ::serde::Serializer,
-    {
-        crate::types::bounded_integer::serialize_bounded_integer(self, serializer)
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for NodeidInt {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        crate::types::bounded_integer::deserialize_bounded_integer(deserializer)
-    }
-}
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
-pub struct QuorumVotesInt(i128);
-impl crate::types::bounded_integer::BoundedInteger for QuorumVotesInt {
-    const MIN: Option<i128> = Some(0i128);
-    const MAX: Option<i128> = None::<i128>;
-    const DEFAULT: Option<i128> = None::<i128>;
-    const TYPE_DESCRIPTION: &'static str = "an integer greater than or equal to 0";
-    fn get(&self) -> i128 {
-        self.0
-    }
-    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
-        Self::validate(value)?;
-        Ok(Self(value))
-    }
-}
-impl std::convert::TryFrom<i128> for QuorumVotesInt {
-    type Error = crate::types::bounded_integer::BoundedIntegerError;
-    fn try_from(value: i128) -> Result<Self, Self::Error> {
-        crate::types::bounded_integer::BoundedInteger::new(value)
-    }
-}
-impl ::serde::Serialize for QuorumVotesInt {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: ::serde::Serializer,
-    {
-        crate::types::bounded_integer::serialize_bounded_integer(self, serializer)
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for QuorumVotesInt {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        crate::types::bounded_integer::deserialize_bounded_integer(deserializer)
-    }
-}
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
-pub struct VotesInt(i128);
-impl crate::types::bounded_integer::BoundedInteger for VotesInt {
-    const MIN: Option<i128> = Some(0i128);
-    const MAX: Option<i128> = None::<i128>;
-    const DEFAULT: Option<i128> = None::<i128>;
-    const TYPE_DESCRIPTION: &'static str = "an integer greater than or equal to 0";
-    fn get(&self) -> i128 {
-        self.0
-    }
-    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
-        Self::validate(value)?;
-        Ok(Self(value))
-    }
-}
-impl std::convert::TryFrom<i128> for VotesInt {
-    type Error = crate::types::bounded_integer::BoundedIntegerError;
-    fn try_from(value: i128) -> Result<Self, Self::Error> {
-        crate::types::bounded_integer::BoundedInteger::new(value)
-    }
-}
-impl ::serde::Serialize for VotesInt {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: ::serde::Serializer,
-    {
-        crate::types::bounded_integer::serialize_bounded_integer(self, serializer)
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for VotesInt {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        crate::types::bounded_integer::deserialize_bounded_integer(deserializer)
-    }
 }
 #[derive(Debug, Clone, PartialEq, PartialOrd)]
 pub struct FingerprintStr {

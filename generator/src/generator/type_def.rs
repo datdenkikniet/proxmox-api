@@ -16,6 +16,8 @@ pub enum PrimitiveTypeDef {
     String,
     Number,
     Integer,
+    UnsignedInteger,
+    NonZeroUnsignedInteger,
     Boolean,
 }
 
@@ -26,6 +28,8 @@ impl ToTokens for PrimitiveTypeDef {
             PrimitiveTypeDef::Number => quote!(f64),
             PrimitiveTypeDef::Integer => quote!(i64),
             PrimitiveTypeDef::Boolean => quote!(bool),
+            PrimitiveTypeDef::UnsignedInteger => quote!(u64),
+            PrimitiveTypeDef::NonZeroUnsignedInteger => quote!(std::num::NonZeroU64),
         };
 
         tokens.extend(this_tokens)

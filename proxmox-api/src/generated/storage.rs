@@ -322,10 +322,14 @@ pub struct PostParams {
     #[doc = "Maximal number of protected backups per guest. Use '-1' for unlimited."]
     #[doc = ""]
     pub max_protected_backups: Option<MaxProtectedBackupsInt>,
+    #[serde(
+        serialize_with = "crate::types::serialize_unsigned_int_optional",
+        deserialize_with = "crate::types::deserialize_unsigned_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Deprecated: use 'prune-backups' instead. Maximal number of backup files per VM. Use '0' for unlimited."]
     #[doc = ""]
-    pub maxfiles: Option<MaxfilesInt>,
+    pub maxfiles: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -670,43 +674,6 @@ impl ::serde::Serialize for MaxProtectedBackupsInt {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for MaxProtectedBackupsInt {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        crate::types::bounded_integer::deserialize_bounded_integer(deserializer)
-    }
-}
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
-pub struct MaxfilesInt(i128);
-impl crate::types::bounded_integer::BoundedInteger for MaxfilesInt {
-    const MIN: Option<i128> = Some(0i128);
-    const MAX: Option<i128> = None::<i128>;
-    const DEFAULT: Option<i128> = None::<i128>;
-    const TYPE_DESCRIPTION: &'static str = "an integer greater than or equal to 0";
-    fn get(&self) -> i128 {
-        self.0
-    }
-    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
-        Self::validate(value)?;
-        Ok(Self(value))
-    }
-}
-impl std::convert::TryFrom<i128> for MaxfilesInt {
-    type Error = crate::types::bounded_integer::BoundedIntegerError;
-    fn try_from(value: i128) -> Result<Self, Self::Error> {
-        crate::types::bounded_integer::BoundedInteger::new(value)
-    }
-}
-impl ::serde::Serialize for MaxfilesInt {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: ::serde::Serializer,
-    {
-        crate::types::bounded_integer::serialize_bounded_integer(self, serializer)
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for MaxfilesInt {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,

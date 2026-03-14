@@ -196,10 +196,14 @@ pub struct PutParams {
     #[doc = "Route-Target import"]
     #[doc = ""]
     pub rt_import: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_unsigned_int_optional",
+        deserialize_with = "crate::types::deserialize_unsigned_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Service-VLAN Tag"]
     #[doc = ""]
-    pub tag: Option<TagInt>,
+    pub tag: Option<u64>,
     #[serde(rename = "vlan-protocol")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub vlan_protocol: Option<VlanProtocol>,
@@ -256,43 +260,6 @@ impl TryFrom<&str> for VlanProtocol {
             "802.1q" => Ok(Self::_8021q),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
-pub struct TagInt(i128);
-impl crate::types::bounded_integer::BoundedInteger for TagInt {
-    const MIN: Option<i128> = Some(0i128);
-    const MAX: Option<i128> = None::<i128>;
-    const DEFAULT: Option<i128> = None::<i128>;
-    const TYPE_DESCRIPTION: &'static str = "an integer greater than or equal to 0";
-    fn get(&self) -> i128 {
-        self.0
-    }
-    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
-        Self::validate(value)?;
-        Ok(Self(value))
-    }
-}
-impl std::convert::TryFrom<i128> for TagInt {
-    type Error = crate::types::bounded_integer::BoundedIntegerError;
-    fn try_from(value: i128) -> Result<Self, Self::Error> {
-        crate::types::bounded_integer::BoundedInteger::new(value)
-    }
-}
-impl ::serde::Serialize for TagInt {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: ::serde::Serializer,
-    {
-        crate::types::bounded_integer::serialize_bounded_integer(self, serializer)
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for TagInt {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        crate::types::bounded_integer::deserialize_bounded_integer(deserializer)
     }
 }
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]

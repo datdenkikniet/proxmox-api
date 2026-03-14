@@ -71,10 +71,14 @@ pub struct GetOutputItems {
     #[doc = "CPU utilization (when type in node,qemu,lxc)."]
     #[doc = ""]
     pub cpu: Option<CpuNum>,
+    #[serde(
+        serialize_with = "crate::types::serialize_unsigned_int_optional",
+        deserialize_with = "crate::types::deserialize_unsigned_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Used disk space in bytes (when type in storage), used root image spave for VMs (type in qemu,lxc)."]
     #[doc = ""]
-    pub disk: Option<DiskInt>,
+    pub disk: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "HA service status (for HA managed VMs)."]
     #[doc = ""]
@@ -90,10 +94,14 @@ pub struct GetOutputItems {
     #[doc = "Number of available CPUs (when type in node,qemu,lxc)."]
     #[doc = ""]
     pub maxcpu: Option<MaxcpuNum>,
+    #[serde(
+        serialize_with = "crate::types::serialize_unsigned_int_optional",
+        deserialize_with = "crate::types::deserialize_unsigned_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Storage size in bytes (when type in storage), root image size for VMs (type in qemu,lxc)."]
     #[doc = ""]
-    pub maxdisk: Option<MaxdiskInt>,
+    pub maxdisk: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
@@ -102,10 +110,14 @@ pub struct GetOutputItems {
     #[doc = "Number of available memory in bytes (when type in node,qemu,lxc)."]
     #[doc = ""]
     pub maxmem: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_unsigned_int_optional",
+        deserialize_with = "crate::types::deserialize_unsigned_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Used memory in bytes (when type in node,qemu,lxc)."]
     #[doc = ""]
-    pub mem: Option<MemInt>,
+    pub mem: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Name of the resource."]
     #[doc = ""]
@@ -220,117 +232,6 @@ impl TryFrom<&str> for Type2 {
             "storage" => Ok(Self::Storage),
             v => Err(format!("Unknown variant {v}")),
         }
-    }
-}
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
-pub struct DiskInt(i128);
-impl crate::types::bounded_integer::BoundedInteger for DiskInt {
-    const MIN: Option<i128> = Some(0i128);
-    const MAX: Option<i128> = None::<i128>;
-    const DEFAULT: Option<i128> = None::<i128>;
-    const TYPE_DESCRIPTION: &'static str = "an integer greater than or equal to 0";
-    fn get(&self) -> i128 {
-        self.0
-    }
-    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
-        Self::validate(value)?;
-        Ok(Self(value))
-    }
-}
-impl std::convert::TryFrom<i128> for DiskInt {
-    type Error = crate::types::bounded_integer::BoundedIntegerError;
-    fn try_from(value: i128) -> Result<Self, Self::Error> {
-        crate::types::bounded_integer::BoundedInteger::new(value)
-    }
-}
-impl ::serde::Serialize for DiskInt {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: ::serde::Serializer,
-    {
-        crate::types::bounded_integer::serialize_bounded_integer(self, serializer)
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for DiskInt {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        crate::types::bounded_integer::deserialize_bounded_integer(deserializer)
-    }
-}
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
-pub struct MaxdiskInt(i128);
-impl crate::types::bounded_integer::BoundedInteger for MaxdiskInt {
-    const MIN: Option<i128> = Some(0i128);
-    const MAX: Option<i128> = None::<i128>;
-    const DEFAULT: Option<i128> = None::<i128>;
-    const TYPE_DESCRIPTION: &'static str = "an integer greater than or equal to 0";
-    fn get(&self) -> i128 {
-        self.0
-    }
-    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
-        Self::validate(value)?;
-        Ok(Self(value))
-    }
-}
-impl std::convert::TryFrom<i128> for MaxdiskInt {
-    type Error = crate::types::bounded_integer::BoundedIntegerError;
-    fn try_from(value: i128) -> Result<Self, Self::Error> {
-        crate::types::bounded_integer::BoundedInteger::new(value)
-    }
-}
-impl ::serde::Serialize for MaxdiskInt {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: ::serde::Serializer,
-    {
-        crate::types::bounded_integer::serialize_bounded_integer(self, serializer)
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for MaxdiskInt {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        crate::types::bounded_integer::deserialize_bounded_integer(deserializer)
-    }
-}
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
-pub struct MemInt(i128);
-impl crate::types::bounded_integer::BoundedInteger for MemInt {
-    const MIN: Option<i128> = Some(0i128);
-    const MAX: Option<i128> = None::<i128>;
-    const DEFAULT: Option<i128> = None::<i128>;
-    const TYPE_DESCRIPTION: &'static str = "an integer greater than or equal to 0";
-    fn get(&self) -> i128 {
-        self.0
-    }
-    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
-        Self::validate(value)?;
-        Ok(Self(value))
-    }
-}
-impl std::convert::TryFrom<i128> for MemInt {
-    type Error = crate::types::bounded_integer::BoundedIntegerError;
-    fn try_from(value: i128) -> Result<Self, Self::Error> {
-        crate::types::bounded_integer::BoundedInteger::new(value)
-    }
-}
-impl ::serde::Serialize for MemInt {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: ::serde::Serializer,
-    {
-        crate::types::bounded_integer::serialize_bounded_integer(self, serializer)
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for MemInt {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        crate::types::bounded_integer::deserialize_bounded_integer(deserializer)
     }
 }
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]

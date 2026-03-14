@@ -185,7 +185,13 @@ impl Type<'_> {
                     maximum,
                     default,
                 } => match (minimum, maximum, default) {
-                    (None, None, None) => TypeDef::Primitive(PrimitiveTypeDef::Integer),
+                    (None, None, None | Some(0)) => TypeDef::Primitive(PrimitiveTypeDef::Integer),
+                    (Some(0), None, None | Some(0)) => {
+                        TypeDef::Primitive(PrimitiveTypeDef::UnsignedInteger)
+                    }
+                    (Some(1), None, None | Some(1)) => {
+                        TypeDef::Primitive(PrimitiveTypeDef::NonZeroUnsignedInteger)
+                    }
                     _ => TypeDef::BoundedInteger(BoundedIntegerDef {
                         name: crate::name_to_ident(&format!("{}Int", field_name)),
                         min: *minimum,

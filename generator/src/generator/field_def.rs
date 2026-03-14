@@ -127,6 +127,8 @@ impl ToTokens for FieldDef {
                 PrimitiveTypeDef::Number => ser_des("number"),
                 PrimitiveTypeDef::Integer => ser_des("int"),
                 PrimitiveTypeDef::Boolean => ser_des("bool"),
+                PrimitiveTypeDef::UnsignedInteger => ser_des("unsigned_int"),
+                PrimitiveTypeDef::NonZeroUnsignedInteger => ser_des("non_zero_pos_int"),
             }
         } else {
             None
