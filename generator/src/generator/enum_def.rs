@@ -23,7 +23,7 @@ impl PartialEq for EnumDef {
             && self.default == other.default;
 
         if equal && other.doc != self.doc {
-            eprintln!("Found enums that were equal besides on docs.");
+            log::warn!("Found enums that were equal besides on docs.");
         }
 
         equal

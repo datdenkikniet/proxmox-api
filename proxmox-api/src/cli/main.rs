@@ -59,7 +59,7 @@ fn main() -> std::io::Result<()> {
 
     let cli = Cli::parse();
 
-    println!("{cli:?}");
+    log::debug!("CLI args: {cli:?}");
 
     let client = cli.client()?;
 

@@ -36,6 +36,10 @@ impl Cli {
 }
 
 fn main() -> std::io::Result<()> {
+    env_logger::Builder::from_default_env()
+        .filter_level(log::LevelFilter::Info)
+        .init();
+
     let cli = Cli::parse();
 
     let input_path = cli.input_path();

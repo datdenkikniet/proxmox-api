@@ -66,7 +66,7 @@ impl Generator {
         let my_dir = path.join(def.name);
 
         let my_file = my_dir.with_extension("rs");
-        println!("Writing new file {:?}", my_file);
+        log::info!("Writing new file {:?}", my_file);
         let mut my_file = Self::open_rw_truncate(my_file)?;
 
         let child_names = def
