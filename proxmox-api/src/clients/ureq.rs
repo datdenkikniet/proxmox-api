@@ -263,7 +263,7 @@ impl crate::client::Client for Client {
             // data (e.g. LXC container network interfaces), so return an empty array
             // if we got a non-error response to an array endpoint, but it was empty.
             serde_json::from_value(serde_json::Value::Array(vec![]))
-                .or_else(|_| Err(Error::UnknownFailure))
+                .map_err(|_| Error::UnknownFailure)
         }
     }
 }
