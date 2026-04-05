@@ -447,6 +447,10 @@ impl TypeDef {
             KnownFormat::MacAddr(allow_multicast) => {
                 proxmox_api(quote!(types::MacAddr<#allow_multicast>))
             }
+            KnownFormat::Unknown(format) => {
+                log::warn!("Unknown format '{}', using fallback type", format);
+                fallback.to_token_stream()
+            }
             _ => fallback.to_token_stream(),
         }
     }

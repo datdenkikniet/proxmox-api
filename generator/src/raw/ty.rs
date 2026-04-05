@@ -280,7 +280,7 @@ impl Type<'_> {
                         .unwrap_or(true);
                     KnownFormat::MacAddr(allow_ig_bit)
                 }
-                format => *format,
+                format => format.clone(),
             };
 
             TypeDef::KnownType { format, fallback }

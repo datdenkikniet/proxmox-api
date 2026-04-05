@@ -12,7 +12,7 @@ pub enum Format<'a> {
     Properties(BTreeMap<Cow<'a, str>, Type<'a>>),
 }
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub enum KnownFormat {
     String,
@@ -162,6 +162,6 @@ pub enum KnownFormat {
     PveIpv4Config,
     PveIpv6Config,
 
-    #[serde(other)]
-    Unknown,
+    #[serde(untagged)]
+    Unknown(String),
 }
