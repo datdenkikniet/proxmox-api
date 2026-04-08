@@ -12,6 +12,8 @@ use crate::generator::{
 
 use super::{Format, KnownFormat, Optional, Output};
 
+const ENUM_NAME_OVERRIDES: &[(&str, &str)] = &[("cdrom-image-ignored", "warning_type")];
+
 fn parse_value_to_i128(value: &serde_json::Value) -> Option<i128> {
     match value {
         serde_json::Value::Number(n) => n.as_i128(),
@@ -145,14 +147,16 @@ impl Type<'_> {
                             .collect();
                         let no_derives = Option::<&str>::None;
 
-                        // TODO: Fix this ugly hack...
-                        // Would be nice to find a better workaround that doesn't require one-offs
-                        // and also doesn't require global state...
-                        let name = if enum_values.contains("cdrom-image-ignored") {
-                            crate::name_to_ident("warning_type")
-                        } else {
-                            crate::name_to_ident(field_name)
-                        };
+                        let name = ENUM_NAME_OVERRIDES
+                            .iter()
+                            .find_map(|(needle, replacement)| {
+                                if enum_values.contains(*needle) {
+                                    Some(crate::name_to_ident(replacement))
+                                } else {
+                                    None
+                                }
+                            })
+                            .unwrap_or_else(|| crate::name_to_ident(field_name));
 
                         TypeDef::new_enum(name, no_derives, enum_values, default, self.doc())
                     } else if let (None | Some(0), None, None) = (min_length, max_length, pattern) {
