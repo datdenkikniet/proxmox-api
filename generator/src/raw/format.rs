@@ -1,4 +1,8 @@
-use std::{borrow::Cow, collections::BTreeMap};
+use std::{
+    borrow::Cow,
+    collections::{BTreeMap, HashSet},
+    hash::Hash,
+};
 
 use serde::{Deserialize, Serialize};
 
@@ -12,9 +16,47 @@ pub enum Format<'a> {
     Properties(BTreeMap<Cow<'a, str>, Type<'a>>),
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-#[serde(rename_all = "kebab-case")]
-pub enum KnownFormat {
+macro_rules ! known_format {
+    ($(
+        $(#[serde($($serde_body:tt)*)])?
+        $name:ident,
+    )*) => {
+        #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
+        #[serde(rename_all = "kebab-case")]
+        pub enum KnownFormat {
+            $(
+                $(#[serde($($serde_body)*)])?
+                $name,
+            )*
+            MacAddr(#[serde(skip)] bool),
+            #[serde(untagged)]
+            Unknown(String),
+        }
+
+        impl std::fmt::Display for KnownFormat {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                match self {
+                    $(
+                        Self::$name => f.write_str(stringify!($name)),
+                    )*
+                    Self::MacAddr(false) => f.write_str("MacAddr(false)"),
+                    Self::MacAddr(true) => f.write_str("MacAddr(true)"),
+                    Self::Unknown(_) => f.write_str("Unknown"),
+                }
+            }
+        }
+
+        pub static ALL_KNOWN_FORMATS: std::sync::LazyLock<HashSet<KnownFormat>> = std::sync::LazyLock::new(|| HashSet::from([
+            $(
+                KnownFormat::$name,
+            )*
+            KnownFormat::MacAddr(false),
+            KnownFormat::MacAddr(true),
+        ]));
+    }
+}
+
+known_format!(
     String,
     Ipv4,
     #[serde(rename = "ipv4mask")]
@@ -54,16 +96,13 @@ pub enum KnownFormat {
     GraphitePath,
     #[serde(rename = "urlencoded")]
     UrlEncoded,
-
     LxcIpWithLlIfaceList,
     PemCertificate,
     PemCertificateChain,
     PemString,
-    MacAddr(#[serde(skip)] bool),
     MacPrefix,
     RealmSyncOptions,
     DiskSize,
-
     // PVE specific
     PveAcmeDomain,
     PveAcmeDomainList,
@@ -101,7 +140,6 @@ pub enum KnownFormat {
     PveHotplugFeatures,
     PveStartupOrder,
     PveTagList,
-
     #[serde(rename = "pve-poolid")]
     PvePoolId,
     #[serde(rename = "pve-userid")]
@@ -124,7 +162,6 @@ pub enum KnownFormat {
     PveConfigId,
     #[serde(rename = "pve-configid-list")]
     PveConfigIdList,
-
     PveStoragePortalDns,
     PveStorageServer,
     PveStorageId,
@@ -137,10 +174,8 @@ pub enum KnownFormat {
     PveStorageOptions,
     #[serde(rename = "pve-storage-vgname")]
     PveStorageVgName,
-
     #[serde(rename = "pve-cpuset")]
     PveCpuSet,
-
     PveQmBoot,
     #[serde(rename = "pve-qm-bootdisk")]
     PveQmBootDisk,
@@ -153,7 +188,6 @@ pub enum KnownFormat {
     PveQmIpConfig,
     PveQmSmbios1,
     PveQmUsbDevice,
-
     PveSdnBgpRtList,
     PveSdnControllerId,
     PveSdnDhcpRange,
@@ -163,17 +197,12 @@ pub enum KnownFormat {
     PveSdnSubnetId,
     PveSdnVnetId,
     PveSdnZoneId,
-
     PveFwConntrackHelper,
     PveFwSportSpec,
     PveFwDportSpec,
     PveFwAddrSpec,
     PveFwProtocolSpec,
     PveFwIcmpTypeSpec,
-
     PveIpv4Config,
     PveIpv6Config,
-
-    #[serde(untagged)]
-    Unknown(String),
-}
+);

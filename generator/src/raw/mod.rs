@@ -4,7 +4,7 @@ use std::{borrow::Cow, collections::BTreeMap};
 pub mod flattened;
 
 mod format;
-pub use format::{Format, KnownFormat};
+pub use format::{ALL_KNOWN_FORMATS, Format, KnownFormat};
 
 mod info;
 pub use info::Info;
@@ -22,7 +22,7 @@ mod returns;
 pub use returns::Returns;
 
 mod ty;
-pub use ty::{Type, TypeKind};
+pub use ty::{IntOrTy, Type, TypeKind};
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(deny_unknown_fields)]

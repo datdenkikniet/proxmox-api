@@ -11,6 +11,9 @@ pub use generator::{ClientModDef, Generator};
 mod name_utils;
 use name_utils::{name_to_ident, name_to_underscore_name};
 
+mod tracker;
+use tracker::FormatTracker;
+
 use clap::Parser;
 use raw::{TreeNode, flattened::Collection};
 
@@ -65,8 +68,16 @@ fn main() -> std::io::Result<()> {
     let collection = Collection::from_nodes(&tree);
     let generator = Generator::new(&collection);
 
-    match cli {
+    let generation_result = match cli {
         Cli::Recursive { file, .. } => generator.generate_file_tree(file),
         Cli::NonRecursive { file, .. } => generator.generate_single_file(file),
+    };
+
+    if generation_result.is_ok() {
+        let mut format_tracker = FormatTracker::new();
+        format_tracker.analyze_known_formats(&collection);
+        format_tracker.print_unused();
     }
+
+    generation_result
 }
