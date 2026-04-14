@@ -42,9 +42,17 @@ impl Client {
         )
     }
 
-    fn new_empty(host: &str, user: &str, realm: &str) -> Self {
+    pub fn new(
+        host: &str,
+        user: &str,
+        realm: &str,
+        client: Option<reqwest::blocking::Client>,
+    ) -> Self {
         Self {
-            client: Self::client(),
+            client: match client {
+                None => Self::client(),
+                Some(client) => Arc::new(client),
+            },
             host: host.to_string(),
             user: user.into(),
             realm: realm.into(),
@@ -52,27 +60,16 @@ impl Client {
         }
     }
 
-    pub fn new_with_api_token(
-        host: &str,
-        user: &str,
-        realm: &str,
-        token_id: &str,
-        token: &str,
-    ) -> Result<Self, Error> {
-        let me = Self::new_empty(host, user, realm);
-
+    pub fn with_api_token(self, token_id: &str, token: &str) -> Self {
         // PVEAPIToken=USER@REALM!TOKENID=UUID
-        me.auth_state.set_api_token(user, realm, token_id, token);
-
-        Ok(me)
+        self.auth_state
+            .set_api_token(&self.user, &self.realm, token_id, token);
+        self
     }
 
-    pub fn new(host: &str, user: &str, realm: &str, password: &str) -> Result<Self, Error> {
-        let me = Self::new_empty(host, user, realm);
-
-        me.login(password)?;
-
-        Ok(me)
+    pub fn with_login(self, password: &str) -> Result<Self, Error> {
+        self.login(password)?;
+        Ok(self)
     }
 
     fn route(&self, path: &str) -> String {

@@ -41,15 +41,16 @@ impl Cli {
         if let Some(token) = &self.token {
             let token_id = self.token_id.as_ref().ok_or(err("API token requires ID"))?;
 
-            ReqwestClient::new_with_api_token(&self.host, user, realm, token_id, token)
-                .map_err(err_dbg)
+            Ok(ReqwestClient::new(&self.host, user, realm, None).with_api_token(token_id, token))
         } else {
             let password = self
                 .password
                 .as_ref()
                 .expect("Password or token is required.");
 
-            ReqwestClient::new(&self.host, user, realm, password).map_err(err_dbg)
+            ReqwestClient::new(&self.host, user, realm, None)
+                .with_login(password)
+                .map_err(err_dbg)
         }
     }
 }
