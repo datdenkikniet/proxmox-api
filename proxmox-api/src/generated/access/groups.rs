@@ -41,9 +41,9 @@ impl GetOutputItems {
     pub fn new(groupid: String) -> Self {
         Self {
             groupid,
-            comment: Default::default(),
-            users: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            users: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -67,8 +67,8 @@ impl PostParams {
     pub fn new(groupid: String) -> Self {
         Self {
             groupid,
-            comment: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

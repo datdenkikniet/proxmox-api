@@ -43,7 +43,7 @@ impl GetOutputItems {
             roleid,
             ty,
             ugid,
-            propagate: Default::default(),
+            propagate: ::std::default::Default::default(),
         }
     }
 }
@@ -70,12 +70,12 @@ impl PutParams {
         Self {
             path,
             roles,
-            delete: Default::default(),
-            groups: Default::default(),
-            propagate: Default::default(),
-            tokens: Default::default(),
-            users: Default::default(),
-            additional_properties: Default::default(),
+            delete: ::std::default::Default::default(),
+            groups: ::std::default::Default::default(),
+            propagate: ::std::default::Default::default(),
+            tokens: ::std::default::Default::default(),
+            users: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

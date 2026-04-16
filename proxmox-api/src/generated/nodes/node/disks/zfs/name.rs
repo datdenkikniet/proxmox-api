@@ -41,11 +41,11 @@ impl ChildrenGetOutputChildrenItems {
         Self {
             msg,
             name,
-            cksum: Default::default(),
-            read: Default::default(),
-            state: Default::default(),
-            write: Default::default(),
-            additional_properties: Default::default(),
+            cksum: ::std::default::Default::default(),
+            read: ::std::default::Default::default(),
+            state: ::std::default::Default::default(),
+            write: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -125,10 +125,10 @@ impl GetOutput {
             errors,
             name,
             state,
-            action: Default::default(),
-            scan: Default::default(),
-            status: Default::default(),
-            additional_properties: Default::default(),
+            action: ::std::default::Default::default(),
+            scan: ::std::default::Default::default(),
+            status: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

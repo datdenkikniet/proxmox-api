@@ -70,6 +70,11 @@ pub struct PostParams {
     #[doc = "Set IO priority when using the BFQ scheduler. For snapshot and suspend mode backups of VMs, this only affects the compressor. A value of 8 means the idle priority is used, otherwise the best-effort priority is used with the specified value."]
     #[doc = ""]
     pub ionice: Option<IoniceInt>,
+    #[serde(rename = "job-id")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The ID of the backup job. If set, the 'backup-job' metadata field of the backup notification will be set to this value. Only root@pam can set this parameter."]
+    #[doc = ""]
+    pub job_id: Option<JobIdStr>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximal time to wait for the global lock (minutes)."]
     #[doc = ""]
@@ -104,16 +109,11 @@ pub struct PostParams {
     #[doc = "Determine which notification system to use. If set to 'legacy-sendmail', vzdump will consider the mailto/mailnotification parameters and send emails to the specified address(es) via the 'sendmail' command. If set to 'notification-system', a notification will be sent via PVE's notification system, and the mailto and mailnotification will be ignored. If set to 'auto' (default setting), an email will be sent if mailto is set, and the notification system will be used if not."]
     #[doc = ""]
     pub notification_mode: Option<NotificationMode>,
-    #[serde(rename = "notification-policy")]
+    #[serde(rename = "pbs-change-detection-mode")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Deprecated: Do not use"]
+    #[doc = "PBS mode used to detect file changes and switch encoding format for container backups."]
     #[doc = ""]
-    pub notification_policy: Option<NotificationPolicy>,
-    #[serde(rename = "notification-target")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Deprecated: Do not use"]
-    #[doc = ""]
-    pub notification_target: Option<String>,
+    pub pbs_change_detection_mode: Option<PbsChangeDetectionMode>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Other performance-related settings."]
     #[doc = ""]
@@ -309,25 +309,24 @@ impl TryFrom<&str> for NotificationMode {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
-#[doc = "Deprecated: Do not use"]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "PBS mode used to detect file changes and switch encoding format for container backups."]
 #[doc = ""]
-pub enum NotificationPolicy {
-    #[serde(rename = "always")]
-    #[default]
-    Always,
-    #[serde(rename = "failure")]
-    Failure,
-    #[serde(rename = "never")]
-    Never,
+pub enum PbsChangeDetectionMode {
+    #[serde(rename = "data")]
+    Data,
+    #[serde(rename = "legacy")]
+    Legacy,
+    #[serde(rename = "metadata")]
+    Metadata,
 }
-impl TryFrom<&str> for NotificationPolicy {
+impl TryFrom<&str> for PbsChangeDetectionMode {
     type Error = String;
     fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
         match value {
-            "always" => Ok(Self::Always),
-            "failure" => Ok(Self::Failure),
-            "never" => Ok(Self::Never),
+            "data" => Ok(Self::Data),
+            "legacy" => Ok(Self::Legacy),
+            "metadata" => Ok(Self::Metadata),
             v => Err(format!("Unknown variant {v}")),
         }
     }
@@ -478,6 +477,46 @@ impl<'de> ::serde::Deserialize<'de> for ZstdInt {
         D: ::serde::Deserializer<'de>,
     {
         crate::types::bounded_integer::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct JobIdStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for JobIdStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = Some(50usize);
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = Some("\\S+");
+    const TYPE_DESCRIPTION: &'static str = "a string with pattern r\"\\S+\" and length at most 50";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for JobIdStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for JobIdStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::bounded_string::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for JobIdStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::bounded_string::deserialize_bounded_string(deserializer)
     }
 }
 #[derive(Debug, Clone, PartialEq, PartialOrd)]

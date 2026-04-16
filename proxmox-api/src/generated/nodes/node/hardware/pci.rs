@@ -1,4 +1,4 @@
-pub mod pciid;
+pub mod pci_id_or_mapping;
 #[derive(Debug, Clone)]
 pub struct PciClient<T> {
     client: T,
@@ -34,14 +34,14 @@ impl GetOutputItems {
             id,
             iommugroup,
             vendor,
-            device_name: Default::default(),
-            mdev: Default::default(),
-            subsystem_device: Default::default(),
-            subsystem_device_name: Default::default(),
-            subsystem_vendor: Default::default(),
-            subsystem_vendor_name: Default::default(),
-            vendor_name: Default::default(),
-            additional_properties: Default::default(),
+            device_name: ::std::default::Default::default(),
+            mdev: ::std::default::Default::default(),
+            subsystem_device: ::std::default::Default::default(),
+            subsystem_device_name: ::std::default::Default::default(),
+            subsystem_vendor: ::std::default::Default::default(),
+            subsystem_vendor_name: ::std::default::Default::default(),
+            vendor_name: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -123,7 +123,14 @@ impl<T> PciClient<T>
 where
     T: crate::client::Client,
 {
-    pub fn pciid(&self, pciid: &str) -> pciid::PciidClient<T> {
-        pciid::PciidClient::<T>::new(self.client.clone(), &self.path, pciid)
+    pub fn pci_id_or_mapping(
+        &self,
+        pci_id_or_mapping: &str,
+    ) -> pci_id_or_mapping::PciIdOrMappingClient<T> {
+        pci_id_or_mapping::PciIdOrMappingClient::<T>::new(
+            self.client.clone(),
+            &self.path,
+            pci_id_or_mapping,
+        )
     }
 }

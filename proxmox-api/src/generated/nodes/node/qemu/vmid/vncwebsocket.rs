@@ -18,7 +18,7 @@ impl<T> VncwebsocketClient<T>
 where
     T: crate::client::Client,
 {
-    #[doc = "Opens a weksocket for VNC traffic."]
+    #[doc = "Opens a websocket for VNC traffic."]
     #[doc = ""]
     pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
@@ -29,7 +29,7 @@ impl GetOutput {
     pub fn new(port: String) -> Self {
         Self {
             port,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -48,7 +48,7 @@ impl GetParams {
         Self {
             port,
             vncticket,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

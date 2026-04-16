@@ -8,6 +8,7 @@ pub mod roles;
 pub mod tfa;
 pub mod ticket;
 pub mod users;
+pub mod vncticket;
 #[derive(Debug, Clone)]
 pub struct AccessClient<T> {
     client: T,
@@ -39,7 +40,7 @@ impl GetOutputItems {
     pub fn new(subdir: String) -> Self {
         Self {
             subdir,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -115,6 +116,14 @@ where
 {
     pub fn ticket(&self) -> ticket::TicketClient<T> {
         ticket::TicketClient::<T>::new(self.client.clone(), &self.path)
+    }
+}
+impl<T> AccessClient<T>
+where
+    T: crate::client::Client,
+{
+    pub fn vncticket(&self) -> vncticket::VncticketClient<T> {
+        vncticket::VncticketClient::<T>::new(self.client.clone(), &self.path)
     }
 }
 impl<T> AccessClient<T>

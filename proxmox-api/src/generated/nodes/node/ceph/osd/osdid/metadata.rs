@@ -41,7 +41,7 @@ impl DevicesGetOutputDevicesItems {
             size,
             support_discard,
             ty,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -86,7 +86,7 @@ impl GetOutput {
         Self {
             devices,
             osd,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -132,7 +132,7 @@ impl OsdGetOutputOsd {
             osd_objectstore,
             pid,
             version,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

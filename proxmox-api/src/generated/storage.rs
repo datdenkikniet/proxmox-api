@@ -41,7 +41,7 @@ where
 pub struct ConfigPostOutputConfig {
     #[serde(rename = "encryption-key")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The, possible auto-generated, encryption-key."]
+    #[doc = "The, possibly auto-generated, encryption-key."]
     #[doc = ""]
     pub encryption_key: Option<String>,
     #[serde(
@@ -55,7 +55,7 @@ impl GetOutputItems {
     pub fn new(storage: String) -> Self {
         Self {
             storage,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -88,15 +88,15 @@ impl PostOutput {
         Self {
             storage,
             ty,
-            config: Default::default(),
-            additional_properties: Default::default(),
+            config: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PostOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Partial, possible server generated, configuration properties."]
+    #[doc = "Partial, possibly server generated, configuration properties."]
     #[doc = ""]
     pub config: Option<ConfigPostOutputConfig>,
     #[doc = "The ID of the created storage."]
@@ -118,67 +118,66 @@ impl PostParams {
         Self {
             storage,
             ty,
-            authsupported: Default::default(),
-            base: Default::default(),
-            blocksize: Default::default(),
-            bwlimit: Default::default(),
-            comstar_hg: Default::default(),
-            comstar_tg: Default::default(),
-            content: Default::default(),
-            content_dirs: Default::default(),
-            create_base_path: Default::default(),
-            create_subdirs: Default::default(),
-            data_pool: Default::default(),
-            datastore: Default::default(),
-            disable: Default::default(),
-            domain: Default::default(),
-            encryption_key: Default::default(),
-            export: Default::default(),
-            fingerprint: Default::default(),
-            format: Default::default(),
-            fs_name: Default::default(),
-            fuse: Default::default(),
-            is_mountpoint: Default::default(),
-            iscsiprovider: Default::default(),
-            keyring: Default::default(),
-            krbd: Default::default(),
-            lio_tpg: Default::default(),
-            master_pubkey: Default::default(),
-            max_protected_backups: Default::default(),
-            maxfiles: Default::default(),
-            mkdir: Default::default(),
-            monhost: Default::default(),
-            mountpoint: Default::default(),
-            namespace: Default::default(),
-            nocow: Default::default(),
-            nodes: Default::default(),
-            nowritecache: Default::default(),
-            options: Default::default(),
-            password: Default::default(),
-            path: Default::default(),
-            pool: Default::default(),
-            port: Default::default(),
-            portal: Default::default(),
-            preallocation: Default::default(),
-            prune_backups: Default::default(),
-            saferemove: Default::default(),
-            saferemove_throughput: Default::default(),
-            server: Default::default(),
-            server2: Default::default(),
-            share: Default::default(),
-            shared: Default::default(),
-            skip_cert_verification: Default::default(),
-            smbversion: Default::default(),
-            sparse: Default::default(),
-            subdir: Default::default(),
-            tagged_only: Default::default(),
-            target: Default::default(),
-            thinpool: Default::default(),
-            transport: Default::default(),
-            username: Default::default(),
-            vgname: Default::default(),
-            volume: Default::default(),
-            additional_properties: Default::default(),
+            authsupported: ::std::default::Default::default(),
+            base: ::std::default::Default::default(),
+            blocksize: ::std::default::Default::default(),
+            bwlimit: ::std::default::Default::default(),
+            comstar_hg: ::std::default::Default::default(),
+            comstar_tg: ::std::default::Default::default(),
+            content: ::std::default::Default::default(),
+            content_dirs: ::std::default::Default::default(),
+            create_base_path: ::std::default::Default::default(),
+            create_subdirs: ::std::default::Default::default(),
+            data_pool: ::std::default::Default::default(),
+            datastore: ::std::default::Default::default(),
+            disable: ::std::default::Default::default(),
+            domain: ::std::default::Default::default(),
+            encryption_key: ::std::default::Default::default(),
+            export: ::std::default::Default::default(),
+            fingerprint: ::std::default::Default::default(),
+            format: ::std::default::Default::default(),
+            fs_name: ::std::default::Default::default(),
+            fuse: ::std::default::Default::default(),
+            is_mountpoint: ::std::default::Default::default(),
+            iscsiprovider: ::std::default::Default::default(),
+            keyring: ::std::default::Default::default(),
+            krbd: ::std::default::Default::default(),
+            lio_tpg: ::std::default::Default::default(),
+            master_pubkey: ::std::default::Default::default(),
+            max_protected_backups: ::std::default::Default::default(),
+            mkdir: ::std::default::Default::default(),
+            monhost: ::std::default::Default::default(),
+            mountpoint: ::std::default::Default::default(),
+            namespace: ::std::default::Default::default(),
+            nocow: ::std::default::Default::default(),
+            nodes: ::std::default::Default::default(),
+            nowritecache: ::std::default::Default::default(),
+            options: ::std::default::Default::default(),
+            password: ::std::default::Default::default(),
+            path: ::std::default::Default::default(),
+            pool: ::std::default::Default::default(),
+            port: ::std::default::Default::default(),
+            portal: ::std::default::Default::default(),
+            preallocation: ::std::default::Default::default(),
+            prune_backups: ::std::default::Default::default(),
+            saferemove: ::std::default::Default::default(),
+            saferemove_stepsize: ::std::default::Default::default(),
+            saferemove_throughput: ::std::default::Default::default(),
+            server: ::std::default::Default::default(),
+            share: ::std::default::Default::default(),
+            shared: ::std::default::Default::default(),
+            skip_cert_verification: ::std::default::Default::default(),
+            smbversion: ::std::default::Default::default(),
+            snapshot_as_volume_chain: ::std::default::Default::default(),
+            sparse: ::std::default::Default::default(),
+            subdir: ::std::default::Default::default(),
+            tagged_only: ::std::default::Default::default(),
+            target: ::std::default::Default::default(),
+            thinpool: ::std::default::Default::default(),
+            username: ::std::default::Default::default(),
+            vgname: ::std::default::Default::default(),
+            zfs_base_path: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -274,7 +273,7 @@ pub struct PostParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Default image format."]
     #[doc = ""]
-    pub format: Option<String>,
+    pub format: Option<Format>,
     #[serde(rename = "fs-name")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The Ceph filesystem name."]
@@ -322,14 +321,6 @@ pub struct PostParams {
     #[doc = "Maximal number of protected backups per guest. Use '-1' for unlimited."]
     #[doc = ""]
     pub max_protected_backups: Option<MaxProtectedBackupsInt>,
-    #[serde(
-        serialize_with = "crate::types::serialize_unsigned_int_optional",
-        deserialize_with = "crate::types::deserialize_unsigned_int_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Deprecated: use 'prune-backups' instead. Maximal number of backup files per VM. Use '0' for unlimited."]
-    #[doc = ""]
-    pub maxfiles: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -387,7 +378,7 @@ pub struct PostParams {
     #[doc = ""]
     pub pool: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "For non default port."]
+    #[doc = "Use this port to connect to the storage instead of the default one (for example, with PBS or ESXi). For NFS and CIFS, use the 'options' option to configure the port via the mount options."]
     #[doc = ""]
     pub port: Option<PortInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -411,6 +402,11 @@ pub struct PostParams {
     #[doc = "Zero-out data when removing LVs."]
     #[doc = ""]
     pub saferemove: Option<bool>,
+    #[serde(rename = "saferemove-stepsize")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Wipe step size in MiB. It will be capped to the maximum supported by the storage."]
+    #[doc = ""]
+    pub saferemove_stepsize: Option<SaferemoveStepsizeInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Wipe throughput (cstream -t parameter value)."]
     #[doc = ""]
@@ -419,10 +415,6 @@ pub struct PostParams {
     #[doc = "Server IP or DNS name."]
     #[doc = ""]
     pub server: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Backup volfile server IP or DNS name."]
-    #[doc = ""]
-    pub server2: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "CIFS share."]
     #[doc = ""]
@@ -448,6 +440,15 @@ pub struct PostParams {
     #[doc = "SMB protocol version. 'default' if not set, negotiates the highest SMB2+ version supported by both the client and server."]
     #[doc = ""]
     pub smbversion: Option<Smbversion>,
+    #[serde(rename = "snapshot-as-volume-chain")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Enable support for creating storage-vendor agnostic snapshot through volume backing-chains."]
+    #[doc = ""]
+    pub snapshot_as_volume_chain: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -479,10 +480,6 @@ pub struct PostParams {
     #[doc = "LVM thin pool LV name."]
     #[doc = ""]
     pub thinpool: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Gluster transport: tcp or rdma"]
-    #[doc = ""]
-    pub transport: Option<Transport>,
     #[serde(rename = "type")]
     #[doc = "Storage type."]
     #[doc = ""]
@@ -495,16 +492,42 @@ pub struct PostParams {
     #[doc = "Volume group name."]
     #[doc = ""]
     pub vgname: Option<String>,
+    #[serde(rename = "zfs-base-path")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Glusterfs Volume."]
+    #[doc = "Base path where to look for the created ZFS block devices. Set automatically during creation if not specified. Usually '/dev/zvol'."]
     #[doc = ""]
-    pub volume: Option<String>,
+    pub zfs_base_path: Option<String>,
     #[serde(
         flatten,
         default,
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "Default image format."]
+#[doc = ""]
+pub enum Format {
+    #[serde(rename = "qcow2")]
+    Qcow2,
+    #[serde(rename = "raw")]
+    Raw,
+    #[serde(rename = "subvol")]
+    Subvol,
+    #[serde(rename = "vmdk")]
+    Vmdk,
+}
+impl TryFrom<&str> for Format {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "qcow2" => Ok(Self::Qcow2),
+            "raw" => Ok(Self::Raw),
+            "subvol" => Ok(Self::Subvol),
+            "vmdk" => Ok(Self::Vmdk),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "Preallocation mode for raw and qcow2 images. Using 'metadata' on raw images results in preallocation=off."]
@@ -565,28 +588,6 @@ impl TryFrom<&str> for Smbversion {
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
-#[doc = "Gluster transport: tcp or rdma"]
-#[doc = ""]
-pub enum Transport {
-    #[serde(rename = "rdma")]
-    Rdma,
-    #[serde(rename = "tcp")]
-    Tcp,
-    #[serde(rename = "unix")]
-    Unix,
-}
-impl TryFrom<&str> for Transport {
-    type Error = String;
-    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
-        match value {
-            "rdma" => Ok(Self::Rdma),
-            "tcp" => Ok(Self::Tcp),
-            "unix" => Ok(Self::Unix),
-            v => Err(format!("Unknown variant {v}")),
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Only list storage of specific type"]
 #[doc = ""]
 pub enum Type {
@@ -600,8 +601,6 @@ pub enum Type {
     Dir,
     #[serde(rename = "esxi")]
     Esxi,
-    #[serde(rename = "glusterfs")]
-    Glusterfs,
     #[serde(rename = "iscsi")]
     Iscsi,
     #[serde(rename = "iscsidirect")]
@@ -630,7 +629,6 @@ impl TryFrom<&str> for Type {
             "cifs" => Ok(Self::Cifs),
             "dir" => Ok(Self::Dir),
             "esxi" => Ok(Self::Esxi),
-            "glusterfs" => Ok(Self::Glusterfs),
             "iscsi" => Ok(Self::Iscsi),
             "iscsidirect" => Ok(Self::Iscsidirect),
             "lvm" => Ok(Self::Lvm),
@@ -711,6 +709,43 @@ impl ::serde::Serialize for PortInt {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for PortInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::bounded_integer::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct SaferemoveStepsizeInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for SaferemoveStepsizeInt {
+    const MIN: Option<i128> = None::<i128>;
+    const MAX: Option<i128> = None::<i128>;
+    const DEFAULT: Option<i128> = Some(32i128);
+    const TYPE_DESCRIPTION: &'static str = "a valid integer";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for SaferemoveStepsizeInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for SaferemoveStepsizeInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::bounded_integer::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for SaferemoveStepsizeInt {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,

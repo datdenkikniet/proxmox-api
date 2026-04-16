@@ -29,8 +29,8 @@ impl GetOutputItems {
     pub fn new(store: String) -> Self {
         Self {
             store,
-            comment: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -56,9 +56,9 @@ impl GetParams {
             password,
             server,
             username,
-            fingerprint: Default::default(),
-            port: Default::default(),
-            additional_properties: Default::default(),
+            fingerprint: ::std::default::Default::default(),
+            port: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

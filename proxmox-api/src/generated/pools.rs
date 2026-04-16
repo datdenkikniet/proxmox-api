@@ -63,7 +63,7 @@ impl DeleteParams {
     pub fn new(poolid: String) -> Self {
         Self {
             poolid,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -81,9 +81,9 @@ impl GetOutputItems {
     pub fn new(poolid: String) -> Self {
         Self {
             poolid,
-            comment: Default::default(),
-            members: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            members: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -121,9 +121,9 @@ impl MembersGetOutputItemsMembersItems {
             id,
             node,
             ty,
-            storage: Default::default(),
-            vmid: Default::default(),
-            additional_properties: Default::default(),
+            storage: ::std::default::Default::default(),
+            vmid: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -152,8 +152,8 @@ impl PostParams {
     pub fn new(poolid: String) -> Self {
         Self {
             poolid,
-            comment: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -173,12 +173,12 @@ impl PutParams {
     pub fn new(poolid: String) -> Self {
         Self {
             poolid,
-            allow_move: Default::default(),
-            comment: Default::default(),
-            delete: Default::default(),
-            storage: Default::default(),
-            vms: Default::default(),
-            additional_properties: Default::default(),
+            allow_move: ::std::default::Default::default(),
+            comment: ::std::default::Default::default(),
+            delete: ::std::default::Default::default(),
+            storage: ::std::default::Default::default(),
+            vms: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

@@ -41,7 +41,7 @@ impl GetOutputItems {
     pub fn new(sid: String) -> Self {
         Self {
             sid,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -73,13 +73,14 @@ impl PostParams {
     pub fn new(sid: String) -> Self {
         Self {
             sid,
-            comment: Default::default(),
-            group: Default::default(),
-            max_relocate: Default::default(),
-            max_restart: Default::default(),
-            state: Default::default(),
-            ty: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            failback: ::std::default::Default::default(),
+            group: ::std::default::Default::default(),
+            max_relocate: ::std::default::Default::default(),
+            max_restart: ::std::default::Default::default(),
+            state: ::std::default::Default::default(),
+            ty: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -89,6 +90,14 @@ pub struct PostParams {
     #[doc = "Description."]
     #[doc = ""]
     pub comment: Option<CommentStr>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Automatically migrate HA resource to the node with the highest priority according to their node affinity  rules, if a node with a higher priority than the current node comes online."]
+    #[doc = ""]
+    pub failback: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The HA group identifier."]
     #[doc = ""]

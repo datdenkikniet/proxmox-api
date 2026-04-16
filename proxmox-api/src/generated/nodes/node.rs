@@ -16,6 +16,7 @@ pub mod migrateall;
 pub mod netstat;
 pub mod network;
 pub mod qemu;
+pub mod query_oci_repo_tags;
 pub mod query_url_metadata;
 pub mod replication;
 pub mod report;
@@ -354,6 +355,14 @@ where
 {
     pub fn aplinfo(&self) -> aplinfo::AplinfoClient<T> {
         aplinfo::AplinfoClient::<T>::new(self.client.clone(), &self.path)
+    }
+}
+impl<T> NodeClient<T>
+where
+    T: crate::client::Client,
+{
+    pub fn query_oci_repo_tags(&self) -> query_oci_repo_tags::QueryOciRepoTagsClient<T> {
+        query_oci_repo_tags::QueryOciRepoTagsClient::<T>::new(self.client.clone(), &self.path)
     }
 }
 impl<T> NodeClient<T>

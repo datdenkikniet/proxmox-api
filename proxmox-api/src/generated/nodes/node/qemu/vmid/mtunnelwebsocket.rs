@@ -43,7 +43,7 @@ impl GetParams {
         Self {
             socket,
             ticket,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

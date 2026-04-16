@@ -29,16 +29,16 @@ impl PostParams {
     pub fn new(newid: NewidInt) -> Self {
         Self {
             newid,
-            bwlimit: Default::default(),
-            description: Default::default(),
-            format: Default::default(),
-            full: Default::default(),
-            name: Default::default(),
-            pool: Default::default(),
-            snapname: Default::default(),
-            storage: Default::default(),
-            target: Default::default(),
-            additional_properties: Default::default(),
+            bwlimit: ::std::default::Default::default(),
+            description: ::std::default::Default::default(),
+            format: ::std::default::Default::default(),
+            full: ::std::default::Default::default(),
+            name: ::std::default::Default::default(),
+            pool: ::std::default::Default::default(),
+            snapname: ::std::default::Default::default(),
+            storage: ::std::default::Default::default(),
+            target: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

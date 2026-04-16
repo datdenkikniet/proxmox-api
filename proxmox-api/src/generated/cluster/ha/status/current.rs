@@ -31,15 +31,16 @@ impl GetOutputItems {
             id,
             node,
             status,
-            crm_state: Default::default(),
-            max_relocate: Default::default(),
-            max_restart: Default::default(),
-            quorate: Default::default(),
-            request_state: Default::default(),
-            sid: Default::default(),
-            state: Default::default(),
-            timestamp: Default::default(),
-            additional_properties: Default::default(),
+            crm_state: ::std::default::Default::default(),
+            failback: ::std::default::Default::default(),
+            max_relocate: ::std::default::Default::default(),
+            max_restart: ::std::default::Default::default(),
+            quorate: ::std::default::Default::default(),
+            request_state: ::std::default::Default::default(),
+            sid: ::std::default::Default::default(),
+            state: ::std::default::Default::default(),
+            timestamp: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -49,6 +50,14 @@ pub struct GetOutputItems {
     #[doc = "For type 'service'. Service state as seen by the CRM."]
     #[doc = ""]
     pub crm_state: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The HA resource is automatically migrated to the node with the highest priority according to their node affinity rule, if a node with a higher priority than the current node comes online."]
+    #[doc = ""]
+    pub failback: Option<bool>,
     #[doc = "Status entry ID (quorum, master, lrm:\\\\<node\\\\>, service:\\\\<sid\\\\>)."]
     #[doc = ""]
     pub id: String,

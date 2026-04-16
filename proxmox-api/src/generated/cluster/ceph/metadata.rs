@@ -37,7 +37,7 @@ impl GetOutput {
             mgr,
             mon,
             node,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -93,7 +93,7 @@ impl IdGetOutputMdsId {
             mem_swap_kb,
             mem_total_kb,
             name,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -158,7 +158,7 @@ impl IdGetOutputMgrId {
             mem_swap_kb,
             mem_total_kb,
             name,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -223,7 +223,7 @@ impl IdGetOutputMonId {
             mem_swap_kb,
             mem_total_kb,
             name,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -272,7 +272,7 @@ impl MdsGetOutputMds {
     pub fn new(_id: IdGetOutputMdsId) -> Self {
         Self {
             _id,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -293,7 +293,7 @@ impl MgrGetOutputMgr {
     pub fn new(_id: IdGetOutputMgrId) -> Self {
         Self {
             _id,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -314,7 +314,7 @@ impl MonGetOutputMon {
     pub fn new(_id: IdGetOutputMonId) -> Self {
         Self {
             _id,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -335,7 +335,7 @@ impl NodeGetOutputNode {
     pub fn new(_node: NodeGetOutputNodeNode) -> Self {
         Self {
             _node,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -355,7 +355,7 @@ impl NodeGetOutputNodeNode {
         Self {
             buildcommit,
             version,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -378,7 +378,7 @@ impl VersionGetOutputNodeNodeVersion {
     pub fn new(str: String) -> Self {
         Self {
             str,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

@@ -40,10 +40,10 @@ impl PostOutput {
     pub fn new(username: String) -> Self {
         Self {
             username,
-            csrfpreventiontoken: Default::default(),
-            clustername: Default::default(),
-            ticket: Default::default(),
-            additional_properties: Default::default(),
+            csrfpreventiontoken: ::std::default::Default::default(),
+            clustername: ::std::default::Default::default(),
+            ticket: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -69,13 +69,13 @@ impl PostParams {
         Self {
             password,
             username,
-            new_format: Default::default(),
-            otp: Default::default(),
-            path: Default::default(),
-            privs: Default::default(),
-            realm: Default::default(),
-            tfa_challenge: Default::default(),
-            additional_properties: Default::default(),
+            new_format: ::std::default::Default::default(),
+            otp: ::std::default::Default::default(),
+            path: ::std::default::Default::default(),
+            privs: ::std::default::Default::default(),
+            realm: ::std::default::Default::default(),
+            tfa_challenge: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -106,7 +106,7 @@ pub struct PostParams {
     #[doc = ""]
     pub privs: Option<PrivsStr>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "You can optionally pass the realm using this parameter. Normally the realm is simply added to the username \\\\<username\\\\>@\\\\<relam\\\\>."]
+    #[doc = "You can optionally pass the realm using this parameter. Normally the realm is simply added to the username \\\\<username\\\\>@\\\\<realm\\\\>."]
     #[doc = ""]
     pub realm: Option<RealmStr>,
     #[serde(rename = "tfa-challenge")]

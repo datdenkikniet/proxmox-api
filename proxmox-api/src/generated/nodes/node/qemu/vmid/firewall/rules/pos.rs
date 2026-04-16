@@ -66,47 +66,63 @@ impl GetOutput {
             action,
             pos,
             ty,
-            comment: Default::default(),
-            dest: Default::default(),
-            dport: Default::default(),
-            enable: Default::default(),
-            icmp_type: Default::default(),
-            iface: Default::default(),
-            ipversion: Default::default(),
-            log: Default::default(),
-            macro_def: Default::default(),
-            proto: Default::default(),
-            source: Default::default(),
-            sport: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            dest: ::std::default::Default::default(),
+            dport: ::std::default::Default::default(),
+            enable: ::std::default::Default::default(),
+            icmp_type: ::std::default::Default::default(),
+            iface: ::std::default::Default::default(),
+            ipversion: ::std::default::Default::default(),
+            log: ::std::default::Default::default(),
+            macro_def: ::std::default::Default::default(),
+            proto: ::std::default::Default::default(),
+            source: ::std::default::Default::default(),
+            sport: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutput {
+    #[doc = "Rule action ('ACCEPT', 'DROP', 'REJECT') or security group name"]
+    #[doc = ""]
     pub action: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Descriptive comment"]
+    #[doc = ""]
     pub comment: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Restrict packet destination address"]
+    #[doc = ""]
     pub dest: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Restrict TCP/UDP destination port"]
+    #[doc = ""]
     pub dport: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Flag to enable/disable a rule"]
+    #[doc = ""]
     pub enable: Option<i64>,
     #[serde(rename = "icmp-type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Specify icmp-type. Only valid if proto equals 'icmp' or 'icmpv6'/'ipv6-icmp'"]
+    #[doc = ""]
     pub icmp_type: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Network interface name. You have to use network configuration key names for VMs and containers"]
+    #[doc = ""]
     pub iface: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "IP version (4 or 6) - automatically determined from source/dest addresses"]
+    #[doc = ""]
     pub ipversion: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Log level for firewall rule"]
@@ -114,19 +130,31 @@ pub struct GetOutput {
     pub log: Option<Log>,
     #[serde(rename = "macro")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Use predefined standard macro"]
+    #[doc = ""]
     pub macro_def: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_int",
         deserialize_with = "crate::types::deserialize_int"
     )]
+    #[doc = "Rule position in the ruleset"]
+    #[doc = ""]
     pub pos: i64,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "IP protocol. You can use protocol names ('tcp'/'udp') or simple numbers, as defined in '/etc/protocols'"]
+    #[doc = ""]
     pub proto: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Restrict packet source address"]
+    #[doc = ""]
     pub source: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Restrict TCP/UDP source port"]
+    #[doc = ""]
     pub sport: Option<String>,
     #[serde(rename = "type")]
+    #[doc = "Rule type"]
+    #[doc = ""]
     pub ty: String,
     #[serde(
         flatten,
@@ -263,6 +291,8 @@ impl TryFrom<&str> for Log {
 #[doc = "Rule type."]
 #[doc = ""]
 pub enum Type {
+    #[serde(rename = "forward")]
+    Forward,
     #[serde(rename = "group")]
     Group,
     #[serde(rename = "in")]
@@ -274,6 +304,7 @@ impl TryFrom<&str> for Type {
     type Error = String;
     fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
         match value {
+            "forward" => Ok(Self::Forward),
             "group" => Ok(Self::Group),
             "in" => Ok(Self::In),
             "out" => Ok(Self::Out),

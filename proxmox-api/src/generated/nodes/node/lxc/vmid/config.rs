@@ -40,38 +40,40 @@ impl GetOutput {
     pub fn new(digest: String) -> Self {
         Self {
             digest,
-            arch: Default::default(),
-            cmode: Default::default(),
-            console: Default::default(),
-            cores: Default::default(),
-            cpulimit: Default::default(),
-            cpuunits: Default::default(),
-            debug: Default::default(),
-            description: Default::default(),
-            devs: Default::default(),
-            features: Default::default(),
-            hookscript: Default::default(),
-            hostname: Default::default(),
-            lock: Default::default(),
-            lxc: Default::default(),
-            memory: Default::default(),
-            mps: Default::default(),
-            nameserver: Default::default(),
-            nets: Default::default(),
-            onboot: Default::default(),
-            ostype: Default::default(),
-            protection: Default::default(),
-            rootfs: Default::default(),
-            searchdomain: Default::default(),
-            startup: Default::default(),
-            swap: Default::default(),
-            tags: Default::default(),
-            template: Default::default(),
-            timezone: Default::default(),
-            tty: Default::default(),
-            unprivileged: Default::default(),
-            unuseds: Default::default(),
-            additional_properties: Default::default(),
+            arch: ::std::default::Default::default(),
+            cmode: ::std::default::Default::default(),
+            console: ::std::default::Default::default(),
+            cores: ::std::default::Default::default(),
+            cpulimit: ::std::default::Default::default(),
+            cpuunits: ::std::default::Default::default(),
+            debug: ::std::default::Default::default(),
+            description: ::std::default::Default::default(),
+            devs: ::std::default::Default::default(),
+            entrypoint: ::std::default::Default::default(),
+            env: ::std::default::Default::default(),
+            features: ::std::default::Default::default(),
+            hookscript: ::std::default::Default::default(),
+            hostname: ::std::default::Default::default(),
+            lock: ::std::default::Default::default(),
+            lxc: ::std::default::Default::default(),
+            memory: ::std::default::Default::default(),
+            mps: ::std::default::Default::default(),
+            nameserver: ::std::default::Default::default(),
+            nets: ::std::default::Default::default(),
+            onboot: ::std::default::Default::default(),
+            ostype: ::std::default::Default::default(),
+            protection: ::std::default::Default::default(),
+            rootfs: ::std::default::Default::default(),
+            searchdomain: ::std::default::Default::default(),
+            startup: ::std::default::Default::default(),
+            swap: ::std::default::Default::default(),
+            tags: ::std::default::Default::default(),
+            template: ::std::default::Default::default(),
+            timezone: ::std::default::Default::default(),
+            tty: ::std::default::Default::default(),
+            unprivileged: ::std::default::Default::default(),
+            unuseds: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -135,11 +137,19 @@ pub struct GetOutput {
     #[doc = ""]
     pub digest: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Command to run as init, optionally with arguments; may start with an absolute path, relative path, or a binary in $PATH."]
+    #[doc = ""]
+    pub entrypoint: Option<EntrypointStr>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The container runtime environment as NUL-separated list. Replaces any lxc.environment.runtime entries in the config."]
+    #[doc = ""]
+    pub env: Option<EnvStr>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow containers access to advanced features."]
     #[doc = ""]
     pub features: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Script that will be exectued during various steps in the containers lifetime."]
+    #[doc = "Script that will be executed during various steps in the containers lifetime."]
     #[doc = ""]
     pub hookscript: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -243,7 +253,7 @@ pub struct GetOutput {
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Makes the container run as unprivileged user. (Should not be modified manually.)"]
+    #[doc = "Makes the container run as unprivileged user. For creation, the default is 1. For restore, the default is the value from the backup. (Should not be modified manually.)"]
     #[doc = ""]
     pub unprivileged: Option<bool>,
     #[serde(rename = "unused[n]")]
@@ -366,11 +376,19 @@ pub struct PutParams {
     #[doc = ""]
     pub digest: Option<DigestStr>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Command to run as init, optionally with arguments; may start with an absolute path, relative path, or a binary in $PATH."]
+    #[doc = ""]
+    pub entrypoint: Option<EntrypointStr>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The container runtime environment as NUL-separated list. Replaces any lxc.environment.runtime entries in the config."]
+    #[doc = ""]
+    pub env: Option<EnvStr>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow containers access to advanced features."]
     #[doc = ""]
     pub features: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Script that will be exectued during various steps in the containers lifetime."]
+    #[doc = "Script that will be executed during various steps in the containers lifetime."]
     #[doc = ""]
     pub hookscript: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -474,7 +492,7 @@ pub struct PutParams {
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Makes the container run as unprivileged user. (Should not be modified manually.)"]
+    #[doc = "Makes the container run as unprivileged user. For creation, the default is 1. For restore, the default is the value from the backup. (Should not be modified manually.)"]
     #[doc = ""]
     pub unprivileged: Option<bool>,
     #[serde(rename = "unused[n]")]
@@ -992,6 +1010,89 @@ impl ::serde::Serialize for DigestStr {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for DigestStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::bounded_string::deserialize_bounded_string(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct EntrypointStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for EntrypointStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = None::<usize>;
+    const DEFAULT: Option<&'static str> = Some("/sbin/init");
+    const PATTERN: Option<&'static str> = Some("(?^:[^\\x00-\\x08\\x10-\\x1F\\x7F]+)");
+    const TYPE_DESCRIPTION: &'static str =
+        "a string with pattern r\"(?^:[^\\x00-\\x08\\x10-\\x1F\\x7F]+)\" and no length constraints";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for EntrypointStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for EntrypointStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::bounded_string::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for EntrypointStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::bounded_string::deserialize_bounded_string(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct EnvStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for EnvStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = None::<usize>;
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = Some(
+        "(?^:(?:\\w+=[^\\x00-\\x08\\x10-\\x1F\\x7F]*)(?:\\0\\w+=[^\\x00-\\x08\\x10-\\x1F\\x7F]*)*)",
+    );
+    const TYPE_DESCRIPTION: &'static str = "a string with pattern r\"(?^:(?:\\w+=[^\\x00-\\x08\\x10-\\x1F\\x7F]*)(?:\\0\\w+=[^\\x00-\\x08\\x10-\\x1F\\x7F]*)*)\" and no length constraints";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for EnvStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for EnvStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::bounded_string::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for EnvStr {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,

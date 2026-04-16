@@ -60,10 +60,10 @@ impl PutParams {
     pub fn new(map: Vec<String>) -> Self {
         Self {
             map,
-            delete: Default::default(),
-            description: Default::default(),
-            digest: Default::default(),
-            additional_properties: Default::default(),
+            delete: ::std::default::Default::default(),
+            description: ::std::default::Default::default(),
+            digest: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

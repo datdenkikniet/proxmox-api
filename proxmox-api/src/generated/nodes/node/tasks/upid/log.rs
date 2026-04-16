@@ -30,7 +30,7 @@ impl GetOutputItems {
         Self {
             n,
             t,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -64,7 +64,7 @@ pub struct GetParams {
     #[doc = ""]
     pub download: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The amount of lines to read from the tasklog."]
+    #[doc = "The number of lines to read from the tasklog."]
     #[doc = ""]
     pub limit: Option<LimitInt>,
     #[serde(

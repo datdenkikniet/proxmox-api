@@ -30,8 +30,8 @@ impl GetOutputItems {
         Self {
             ty,
             vmid,
-            name: Default::default(),
-            additional_properties: Default::default(),
+            name: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

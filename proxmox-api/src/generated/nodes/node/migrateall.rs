@@ -29,10 +29,10 @@ impl PostParams {
     pub fn new(target: String) -> Self {
         Self {
             target,
-            maxworkers: Default::default(),
-            vms: Default::default(),
-            with_local_disks: Default::default(),
-            additional_properties: Default::default(),
+            maxworkers: ::std::default::Default::default(),
+            vms: ::std::default::Default::default(),
+            with_local_disks: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

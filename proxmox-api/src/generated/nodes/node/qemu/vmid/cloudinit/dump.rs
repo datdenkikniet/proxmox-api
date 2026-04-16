@@ -29,7 +29,7 @@ impl GetParams {
     pub fn new(ty: Type) -> Self {
         Self {
             ty,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

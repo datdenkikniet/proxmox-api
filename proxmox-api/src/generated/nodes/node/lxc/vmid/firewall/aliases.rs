@@ -43,8 +43,8 @@ impl GetOutputItems {
             cidr,
             digest,
             name,
-            comment: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -69,8 +69,8 @@ impl PostParams {
         Self {
             cidr,
             name,
-            comment: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

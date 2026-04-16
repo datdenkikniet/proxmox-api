@@ -66,8 +66,8 @@ impl GetOutputItems {
             mark,
             ty,
             volid,
-            vmid: Default::default(),
-            additional_properties: Default::default(),
+            vmid: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

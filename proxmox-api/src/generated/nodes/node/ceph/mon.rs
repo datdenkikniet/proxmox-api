@@ -30,16 +30,16 @@ impl GetOutputItems {
     pub fn new(name: String) -> Self {
         Self {
             name,
-            addr: Default::default(),
-            ceph_version: Default::default(),
-            ceph_version_short: Default::default(),
-            direxists: Default::default(),
-            host: Default::default(),
-            quorum: Default::default(),
-            rank: Default::default(),
-            service: Default::default(),
-            state: Default::default(),
-            additional_properties: Default::default(),
+            addr: ::std::default::Default::default(),
+            ceph_version: ::std::default::Default::default(),
+            ceph_version_short: ::std::default::Default::default(),
+            direxists: ::std::default::Default::default(),
+            host: ::std::default::Default::default(),
+            quorum: ::std::default::Default::default(),
+            rank: ::std::default::Default::default(),
+            service: ::std::default::Default::default(),
+            state: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

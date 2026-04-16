@@ -29,13 +29,13 @@ impl GetOutput {
     pub fn new(exited: bool) -> Self {
         Self {
             exited,
-            err_data: Default::default(),
-            err_truncated: Default::default(),
-            exitcode: Default::default(),
-            out_data: Default::default(),
-            out_truncated: Default::default(),
-            signal: Default::default(),
-            additional_properties: Default::default(),
+            err_data: ::std::default::Default::default(),
+            err_truncated: ::std::default::Default::default(),
+            exitcode: ::std::default::Default::default(),
+            out_data: ::std::default::Default::default(),
+            out_truncated: ::std::default::Default::default(),
+            signal: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -103,7 +103,7 @@ impl GetParams {
     pub fn new(pid: i64) -> Self {
         Self {
             pid,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

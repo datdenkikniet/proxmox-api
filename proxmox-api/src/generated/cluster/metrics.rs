@@ -1,3 +1,4 @@
+pub mod export;
 pub mod server;
 #[derive(Debug, Clone)]
 pub struct MetricsClient<T> {
@@ -41,5 +42,13 @@ where
 {
     pub fn server(&self) -> server::ServerClient<T> {
         server::ServerClient::<T>::new(self.client.clone(), &self.path)
+    }
+}
+impl<T> MetricsClient<T>
+where
+    T: crate::client::Client,
+{
+    pub fn export(&self) -> export::ExportClient<T> {
+        export::ExportClient::<T>::new(self.client.clone(), &self.path)
     }
 }

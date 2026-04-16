@@ -2,6 +2,7 @@ pub mod agent;
 pub mod clone;
 pub mod cloudinit;
 pub mod config;
+pub mod dbus_vmstate;
 pub mod feature;
 pub mod firewall;
 pub mod migrate;
@@ -99,7 +100,7 @@ impl GetOutputItems {
     pub fn new(subdir: String) -> Self {
         Self {
             subdir,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -311,5 +312,13 @@ where
 {
     pub fn mtunnelwebsocket(&self) -> mtunnelwebsocket::MtunnelwebsocketClient<T> {
         mtunnelwebsocket::MtunnelwebsocketClient::<T>::new(self.client.clone(), &self.path)
+    }
+}
+impl<T> VmidClient<T>
+where
+    T: crate::client::Client,
+{
+    pub fn dbus_vmstate(&self) -> dbus_vmstate::DbusVmstateClient<T> {
+        dbus_vmstate::DbusVmstateClient::<T>::new(self.client.clone(), &self.path)
     }
 }

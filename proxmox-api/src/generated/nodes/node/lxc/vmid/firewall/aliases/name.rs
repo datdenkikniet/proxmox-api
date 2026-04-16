@@ -73,10 +73,10 @@ impl PutParams {
     pub fn new(cidr: String) -> Self {
         Self {
             cidr,
-            comment: Default::default(),
-            digest: Default::default(),
-            rename: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            digest: ::std::default::Default::default(),
+            rename: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

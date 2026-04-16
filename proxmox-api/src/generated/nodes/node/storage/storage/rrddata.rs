@@ -38,8 +38,8 @@ impl GetParams {
     pub fn new(timeframe: Timeframe) -> Self {
         Self {
             timeframe,
-            cf: Default::default(),
-            additional_properties: Default::default(),
+            cf: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

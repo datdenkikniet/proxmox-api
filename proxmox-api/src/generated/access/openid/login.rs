@@ -31,7 +31,7 @@ impl PostParams {
             code,
             redirect_url,
             state,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

@@ -41,9 +41,9 @@ impl GetOutputItems {
     pub fn new(roleid: String) -> Self {
         Self {
             roleid,
-            privs: Default::default(),
-            special: Default::default(),
-            additional_properties: Default::default(),
+            privs: ::std::default::Default::default(),
+            special: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -69,8 +69,8 @@ impl PostParams {
     pub fn new(roleid: String) -> Self {
         Self {
             roleid,
-            privs: Default::default(),
-            additional_properties: Default::default(),
+            privs: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

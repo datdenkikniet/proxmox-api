@@ -52,7 +52,7 @@ impl ErrorsGetOutputErrorsItems {
         Self {
             error,
             path,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -83,7 +83,7 @@ impl FilesGetOutputFilesItems {
             file_type,
             path,
             repositories,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -125,7 +125,7 @@ impl GetOutput {
             files,
             infos,
             standard_repos,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -165,8 +165,8 @@ impl InfosGetOutputInfosItems {
             kind,
             message,
             path,
-            property: Default::default(),
-            additional_properties: Default::default(),
+            property: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -200,7 +200,7 @@ impl OptionsGetOutputFilesItemsRepositoriesItemsOptionsItems {
         Self {
             key,
             values,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -223,9 +223,9 @@ impl PostParams {
         Self {
             index,
             path,
-            digest: Default::default(),
-            enabled: Default::default(),
-            additional_properties: Default::default(),
+            digest: ::std::default::Default::default(),
+            enabled: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -264,8 +264,8 @@ impl PutParams {
     pub fn new(handle: String) -> Self {
         Self {
             handle,
-            digest: Default::default(),
-            additional_properties: Default::default(),
+            digest: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -299,10 +299,10 @@ impl RepositoriesGetOutputFilesItemsRepositoriesItems {
             suites,
             types,
             uris,
-            comment: Default::default(),
-            components: Default::default(),
-            options: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            components: ::std::default::Default::default(),
+            options: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -362,8 +362,8 @@ impl StandardReposGetOutputStandardReposItems {
         Self {
             handle,
             name,
-            status: Default::default(),
-            additional_properties: Default::default(),
+            status: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

@@ -29,8 +29,8 @@ impl PutParams {
     pub fn new(key: String) -> Self {
         Self {
             key,
-            skiplock: Default::default(),
-            additional_properties: Default::default(),
+            skiplock: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

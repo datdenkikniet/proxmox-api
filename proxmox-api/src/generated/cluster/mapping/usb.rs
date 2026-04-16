@@ -43,7 +43,7 @@ impl GetOutputItems {
             description,
             id,
             map,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -85,8 +85,8 @@ impl PostParams {
         Self {
             id,
             map,
-            description: Default::default(),
-            additional_properties: Default::default(),
+            description: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

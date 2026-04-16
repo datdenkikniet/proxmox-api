@@ -29,8 +29,8 @@ impl GetOutput {
     pub fn new(safe: bool) -> Self {
         Self {
             safe,
-            status: Default::default(),
-            additional_properties: Default::default(),
+            status: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -60,7 +60,7 @@ impl GetParams {
             action,
             id,
             service,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

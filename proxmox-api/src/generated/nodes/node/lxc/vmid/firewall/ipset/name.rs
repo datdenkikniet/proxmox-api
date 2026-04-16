@@ -70,9 +70,9 @@ impl GetOutputItems {
         Self {
             cidr,
             digest,
-            comment: Default::default(),
-            nomatch: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            nomatch: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -101,9 +101,9 @@ impl PostParams {
     pub fn new(cidr: String) -> Self {
         Self {
             cidr,
-            comment: Default::default(),
-            nomatch: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            nomatch: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

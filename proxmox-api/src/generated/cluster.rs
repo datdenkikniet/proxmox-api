@@ -1,6 +1,7 @@
 pub mod acme;
 pub mod backup;
 pub mod backup_info;
+pub mod bulk_action;
 pub mod ceph;
 pub mod config;
 pub mod firewall;
@@ -147,6 +148,14 @@ where
 {
     pub fn mapping(&self) -> mapping::MappingClient<T> {
         mapping::MappingClient::<T>::new(self.client.clone(), &self.path)
+    }
+}
+impl<T> ClusterClient<T>
+where
+    T: crate::client::Client,
+{
+    pub fn bulk_action(&self) -> bulk_action::BulkActionClient<T> {
+        bulk_action::BulkActionClient::<T>::new(self.client.clone(), &self.path)
     }
 }
 impl<T> ClusterClient<T>

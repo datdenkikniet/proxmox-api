@@ -40,7 +40,7 @@ impl PutParams {
     pub fn new(value: bool) -> Self {
         Self {
             value,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

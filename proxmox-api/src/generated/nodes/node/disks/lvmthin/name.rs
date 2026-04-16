@@ -29,9 +29,9 @@ impl DeleteParams {
     pub fn new(volume_group: String) -> Self {
         Self {
             volume_group,
-            cleanup_config: Default::default(),
-            cleanup_disks: Default::default(),
-            additional_properties: Default::default(),
+            cleanup_config: ::std::default::Default::default(),
+            cleanup_disks: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

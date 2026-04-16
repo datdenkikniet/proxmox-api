@@ -78,9 +78,9 @@ impl GetOutput {
             path,
             size,
             used,
-            notes: Default::default(),
-            protected: Default::default(),
-            additional_properties: Default::default(),
+            notes: ::std::default::Default::default(),
+            protected: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -129,8 +129,8 @@ impl PostParams {
     pub fn new(target: String) -> Self {
         Self {
             target,
-            target_node: Default::default(),
-            additional_properties: Default::default(),
+            target_node: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

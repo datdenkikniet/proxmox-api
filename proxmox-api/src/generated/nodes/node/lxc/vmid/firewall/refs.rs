@@ -32,8 +32,8 @@ impl GetOutputItems {
             reference,
             scope,
             ty,
-            comment: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

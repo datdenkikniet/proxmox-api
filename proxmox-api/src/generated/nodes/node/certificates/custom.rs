@@ -118,10 +118,10 @@ impl PostParams {
     pub fn new(certificates: String) -> Self {
         Self {
             certificates,
-            force: Default::default(),
-            key: Default::default(),
-            restart: Default::default(),
-            additional_properties: Default::default(),
+            force: ::std::default::Default::default(),
+            key: ::std::default::Default::default(),
+            restart: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

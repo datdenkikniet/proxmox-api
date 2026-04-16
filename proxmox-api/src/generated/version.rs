@@ -31,8 +31,8 @@ impl GetOutput {
             release,
             repoid,
             version,
-            console: Default::default(),
-            additional_properties: Default::default(),
+            console: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

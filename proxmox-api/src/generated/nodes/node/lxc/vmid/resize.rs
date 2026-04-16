@@ -30,8 +30,8 @@ impl PutParams {
         Self {
             disk,
             size,
-            digest: Default::default(),
-            additional_properties: Default::default(),
+            digest: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

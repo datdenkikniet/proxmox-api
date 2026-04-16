@@ -51,7 +51,7 @@ impl GetOutput {
     pub fn new(members: Vec<MembersGetOutputMembersItems>) -> Self {
         Self {
             members,
-            comment: Default::default(),
+            comment: ::std::default::Default::default(),
         }
     }
 }
@@ -80,9 +80,9 @@ impl MembersGetOutputMembersItems {
             id,
             node,
             ty,
-            storage: Default::default(),
-            vmid: Default::default(),
-            additional_properties: Default::default(),
+            storage: ::std::default::Default::default(),
+            vmid: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

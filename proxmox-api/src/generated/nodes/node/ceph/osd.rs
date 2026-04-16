@@ -50,14 +50,14 @@ impl PostParams {
     pub fn new(dev: String) -> Self {
         Self {
             dev,
-            crush_device_class: Default::default(),
-            db_dev: Default::default(),
-            db_dev_size: Default::default(),
-            encrypted: Default::default(),
-            osds_per_device: Default::default(),
-            wal_dev: Default::default(),
-            wal_dev_size: Default::default(),
-            additional_properties: Default::default(),
+            crush_device_class: ::std::default::Default::default(),
+            db_dev: ::std::default::Default::default(),
+            db_dev_size: ::std::default::Default::default(),
+            encrypted: ::std::default::Default::default(),
+            osds_per_device: ::std::default::Default::default(),
+            wal_dev: ::std::default::Default::default(),
+            wal_dev_size: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

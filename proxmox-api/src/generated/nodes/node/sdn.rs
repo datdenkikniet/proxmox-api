@@ -1,3 +1,5 @@
+pub mod fabrics;
+pub mod vnets;
 pub mod zones;
 #[derive(Debug, Clone)]
 pub struct SdnClient<T> {
@@ -39,7 +41,23 @@ impl<T> SdnClient<T>
 where
     T: crate::client::Client,
 {
+    pub fn fabrics(&self) -> fabrics::FabricsClient<T> {
+        fabrics::FabricsClient::<T>::new(self.client.clone(), &self.path)
+    }
+}
+impl<T> SdnClient<T>
+where
+    T: crate::client::Client,
+{
     pub fn zones(&self) -> zones::ZonesClient<T> {
         zones::ZonesClient::<T>::new(self.client.clone(), &self.path)
+    }
+}
+impl<T> SdnClient<T>
+where
+    T: crate::client::Client,
+{
+    pub fn vnets(&self) -> vnets::VnetsClient<T> {
+        vnets::VnetsClient::<T>::new(self.client.clone(), &self.path)
     }
 }

@@ -29,7 +29,7 @@ impl GetOutputItems {
     pub fn new(name: String) -> Self {
         Self {
             name,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

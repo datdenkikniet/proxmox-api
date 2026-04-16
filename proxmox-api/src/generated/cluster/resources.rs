@@ -30,25 +30,38 @@ impl GetOutputItems {
         Self {
             id,
             ty,
-            cgroup_mode: Default::default(),
-            content: Default::default(),
-            cpu: Default::default(),
-            disk: Default::default(),
-            hastate: Default::default(),
-            level: Default::default(),
-            maxcpu: Default::default(),
-            maxdisk: Default::default(),
-            maxmem: Default::default(),
-            mem: Default::default(),
-            name: Default::default(),
-            node: Default::default(),
-            plugintype: Default::default(),
-            pool: Default::default(),
-            status: Default::default(),
-            storage: Default::default(),
-            uptime: Default::default(),
-            vmid: Default::default(),
-            additional_properties: Default::default(),
+            cgroup_mode: ::std::default::Default::default(),
+            content: ::std::default::Default::default(),
+            cpu: ::std::default::Default::default(),
+            disk: ::std::default::Default::default(),
+            diskread: ::std::default::Default::default(),
+            diskwrite: ::std::default::Default::default(),
+            hastate: ::std::default::Default::default(),
+            level: ::std::default::Default::default(),
+            lock: ::std::default::Default::default(),
+            maxcpu: ::std::default::Default::default(),
+            maxdisk: ::std::default::Default::default(),
+            maxmem: ::std::default::Default::default(),
+            mem: ::std::default::Default::default(),
+            memhost: ::std::default::Default::default(),
+            name: ::std::default::Default::default(),
+            netin: ::std::default::Default::default(),
+            netout: ::std::default::Default::default(),
+            network: ::std::default::Default::default(),
+            network_type: ::std::default::Default::default(),
+            node: ::std::default::Default::default(),
+            plugintype: ::std::default::Default::default(),
+            pool: ::std::default::Default::default(),
+            protocol: ::std::default::Default::default(),
+            sdn: ::std::default::Default::default(),
+            status: ::std::default::Default::default(),
+            storage: ::std::default::Default::default(),
+            tags: ::std::default::Default::default(),
+            template: ::std::default::Default::default(),
+            uptime: ::std::default::Default::default(),
+            vmid: ::std::default::Default::default(),
+            zone_type: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -60,15 +73,15 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The cgroup mode the node operates under (when type == node)."]
+    #[doc = "The cgroup mode the node operates under (for type 'node')."]
     #[doc = ""]
     pub cgroup_mode: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Allowed storage content types (when type == storage)."]
+    #[doc = "Allowed storage content types (for type 'storage')."]
     #[doc = ""]
     pub content: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "CPU utilization (when type in node,qemu,lxc)."]
+    #[doc = "CPU utilization (for types 'node', 'qemu' and 'lxc')."]
     #[doc = ""]
     pub cpu: Option<CpuNum>,
     #[serde(
@@ -76,9 +89,25 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_unsigned_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Used disk space in bytes (when type in storage), used root image spave for VMs (type in qemu,lxc)."]
+    #[doc = "Used disk space in bytes (for type 'storage'), used root image space for VMs (for types 'qemu' and 'lxc')."]
     #[doc = ""]
     pub disk: Option<u64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The number of bytes the guest read from its block devices since the guest was started. This info is not available for all storage types. (for types 'qemu' and 'lxc')"]
+    #[doc = ""]
+    pub diskread: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The number of bytes the guest wrote to its block devices since the guest was started. This info is not available for all storage types. (for types 'qemu' and 'lxc')"]
+    #[doc = ""]
+    pub diskwrite: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "HA service status (for HA managed VMs)."]
     #[doc = ""]
@@ -87,11 +116,15 @@ pub struct GetOutputItems {
     #[doc = ""]
     pub id: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Support level (when type == node)."]
+    #[doc = "Support level (for type 'node')."]
     #[doc = ""]
     pub level: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Number of available CPUs (when type in node,qemu,lxc)."]
+    #[doc = "The guest's current config lock (for types 'qemu' and 'lxc')"]
+    #[doc = ""]
+    pub lock: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Number of available CPUs (for types 'node', 'qemu' and 'lxc')."]
     #[doc = ""]
     pub maxcpu: Option<MaxcpuNum>,
     #[serde(
@@ -99,7 +132,7 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_unsigned_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Storage size in bytes (when type in storage), root image size for VMs (type in qemu,lxc)."]
+    #[doc = "Storage size in bytes (for type 'storage'), root image size for VMs (for types 'qemu' and 'lxc')."]
     #[doc = ""]
     pub maxdisk: Option<u64>,
     #[serde(
@@ -107,7 +140,7 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Number of available memory in bytes (when type in node,qemu,lxc)."]
+    #[doc = "Number of available memory in bytes (for types 'node', 'qemu' and 'lxc')."]
     #[doc = ""]
     pub maxmem: Option<i64>,
     #[serde(
@@ -115,15 +148,48 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_unsigned_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Used memory in bytes (when type in node,qemu,lxc)."]
+    #[doc = "Used memory in bytes (for types 'node', 'qemu' and 'lxc')."]
     #[doc = ""]
     pub mem: Option<u64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_unsigned_int_optional",
+        deserialize_with = "crate::types::deserialize_unsigned_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Used memory in bytes from the point of view of the host (for types 'qemu')."]
+    #[doc = ""]
+    pub memhost: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Name of the resource."]
     #[doc = ""]
     pub name: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The cluster node name (when type in node,storage,qemu,lxc)."]
+    #[doc = "The amount of traffic in bytes that was sent to the guest over the network since it was started. (for types 'qemu' and 'lxc')"]
+    #[doc = ""]
+    pub netin: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The amount of traffic in bytes that was sent from the guest over the network since it was started. (for types 'qemu' and 'lxc')"]
+    #[doc = ""]
+    pub netout: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The name of a Network entity (for type 'network')."]
+    #[doc = ""]
+    pub network: Option<String>,
+    #[serde(rename = "network-type")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The type of network resource (for type 'network')."]
+    #[doc = ""]
+    pub network_type: Option<NetworkType>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The cluster node name (for types 'node', 'storage', 'qemu', and 'lxc')."]
     #[doc = ""]
     pub node: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -131,17 +197,37 @@ pub struct GetOutputItems {
     #[doc = ""]
     pub plugintype: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The pool name (when type in pool,qemu,lxc)."]
+    #[doc = "The pool name (for types 'pool', 'qemu' and 'lxc')."]
     #[doc = ""]
     pub pool: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The protocol of a fabric (for type 'network', network-type 'fabric')."]
+    #[doc = ""]
+    pub protocol: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The name of an SDN entity (for type 'sdn')"]
+    #[doc = ""]
+    pub sdn: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Resource type dependent status."]
     #[doc = ""]
     pub status: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The storage identifier (when type == storage)."]
+    #[doc = "The storage identifier (for type 'storage')."]
     #[doc = ""]
     pub storage: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The guest's tags (for types 'qemu' and 'lxc')"]
+    #[doc = ""]
+    pub tags: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Determines if the guest is a template. (for types 'qemu' and 'lxc')"]
+    #[doc = ""]
+    pub template: Option<bool>,
     #[serde(rename = "type")]
     #[doc = "Resource type."]
     #[doc = ""]
@@ -151,13 +237,18 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Node uptime in seconds (when type in node,qemu,lxc)."]
+    #[doc = "Uptime of node or virtual guest in seconds (for types 'node', 'qemu' and 'lxc')."]
     #[doc = ""]
     pub uptime: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The numerical vmid (when type in qemu,lxc)."]
+    #[doc = "The numerical vmid (for types 'qemu' and 'lxc')."]
     #[doc = ""]
     pub vmid: Option<VmidInt>,
+    #[serde(rename = "zone-type")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The type of an SDN zone (for type 'sdn')."]
+    #[doc = ""]
+    pub zone_type: Option<String>,
     #[serde(
         flatten,
         default,
@@ -169,6 +260,8 @@ pub struct GetOutputItems {
 pub struct GetParams {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Resource type."]
+    #[doc = ""]
     pub ty: Option<Type>,
     #[serde(
         flatten,
@@ -178,6 +271,27 @@ pub struct GetParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "The type of network resource (for type 'network')."]
+#[doc = ""]
+pub enum NetworkType {
+    #[serde(rename = "fabric")]
+    Fabric,
+    #[serde(rename = "zone")]
+    Zone,
+}
+impl TryFrom<&str> for NetworkType {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "fabric" => Ok(Self::Fabric),
+            "zone" => Ok(Self::Zone),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "Resource type."]
+#[doc = ""]
 pub enum Type {
     #[serde(rename = "node")]
     Node,
@@ -206,6 +320,8 @@ impl TryFrom<&str> for Type {
 pub enum Type2 {
     #[serde(rename = "lxc")]
     Lxc,
+    #[serde(rename = "network")]
+    Network,
     #[serde(rename = "node")]
     Node,
     #[serde(rename = "openvz")]
@@ -224,6 +340,7 @@ impl TryFrom<&str> for Type2 {
     fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
         match value {
             "lxc" => Ok(Self::Lxc),
+            "network" => Ok(Self::Network),
             "node" => Ok(Self::Node),
             "openvz" => Ok(Self::Openvz),
             "pool" => Ok(Self::Pool),

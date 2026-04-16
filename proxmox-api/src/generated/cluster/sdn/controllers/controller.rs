@@ -20,9 +20,9 @@ where
 {
     #[doc = "Delete sdn controller object configuration."]
     #[doc = ""]
-    pub fn delete(&self) -> Result<(), T::Error> {
+    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
-        self.client.delete(&path, &())
+        self.client.delete(&path, &params)
     }
 }
 impl<T> ControllerClient<T>
@@ -31,7 +31,7 @@ where
 {
     #[doc = "Read sdn controller configuration."]
     #[doc = ""]
-    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+    pub fn get(&self, params: GetParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params)
     }
@@ -48,7 +48,12 @@ where
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
-pub struct GetOutput {
+pub struct DeleteParams {
+    #[serde(rename = "lock-token")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "the token for unlocking the global SDN configuration"]
+    #[doc = ""]
+    pub lock_token: Option<String>,
     #[serde(
         flatten,
         default,
@@ -93,6 +98,8 @@ pub struct PutParams {
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Consider different AS paths of equal length for multipath computation."]
+    #[doc = ""]
     pub bgp_multipath_as_path_relax: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of settings you want to delete."]
@@ -107,7 +114,7 @@ pub struct PutParams {
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Enable ebgp. (remote-as external)"]
+    #[doc = "Enable eBGP (remote-as external)."]
     #[doc = ""]
     pub ebgp: Option<bool>,
     #[serde(rename = "ebgp-multihop")]
@@ -116,24 +123,35 @@ pub struct PutParams {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Set maximum amount of hops for eBGP peers."]
+    #[doc = ""]
     pub ebgp_multihop: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "SDN fabric to use as underlay for this EVPN controller."]
+    #[doc = ""]
+    pub fabric: Option<String>,
     #[serde(rename = "isis-domain")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "ISIS domain."]
+    #[doc = "Name of the IS-IS domain."]
     #[doc = ""]
     pub isis_domain: Option<String>,
     #[serde(rename = "isis-ifaces")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "ISIS interface."]
+    #[doc = "Comma-separated list of interfaces where IS-IS should be active."]
     #[doc = ""]
     pub isis_ifaces: Option<String>,
     #[serde(rename = "isis-net")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "ISIS network entity title."]
+    #[doc = "Network Entity title for this node in the IS-IS network."]
     #[doc = ""]
     pub isis_net: Option<String>,
+    #[serde(rename = "lock-token")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "source loopback interface."]
+    #[doc = "the token for unlocking the global SDN configuration"]
+    #[doc = ""]
+    pub lock_token: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Name of the loopback/dummy interface that provides the Router-IP."]
     #[doc = ""]
     pub loopback: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -155,9 +173,9 @@ pub struct PutParams {
 pub struct AsnInt(i128);
 impl crate::types::bounded_integer::BoundedInteger for AsnInt {
     const MIN: Option<i128> = Some(0i128);
-    const MAX: Option<i128> = Some(4294967296i128);
+    const MAX: Option<i128> = Some(4294967295i128);
     const DEFAULT: Option<i128> = None::<i128>;
-    const TYPE_DESCRIPTION: &'static str = "an integer between 0 and 4294967296";
+    const TYPE_DESCRIPTION: &'static str = "an integer between 0 and 4294967295";
     fn get(&self) -> i128 {
         self.0
     }

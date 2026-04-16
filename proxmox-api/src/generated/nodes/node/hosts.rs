@@ -40,8 +40,8 @@ impl GetOutput {
     pub fn new(data: String) -> Self {
         Self {
             data,
-            digest: Default::default(),
-            additional_properties: Default::default(),
+            digest: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -65,8 +65,8 @@ impl PostParams {
     pub fn new(data: String) -> Self {
         Self {
             data,
-            digest: Default::default(),
-            additional_properties: Default::default(),
+            digest: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

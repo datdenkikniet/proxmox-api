@@ -42,9 +42,9 @@ impl GetOutputItems {
         Self {
             description,
             name,
-            parent: Default::default(),
-            snaptime: Default::default(),
-            additional_properties: Default::default(),
+            parent: ::std::default::Default::default(),
+            snaptime: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -79,8 +79,8 @@ impl PostParams {
     pub fn new(snapname: SnapnameStr) -> Self {
         Self {
             snapname,
-            description: Default::default(),
-            additional_properties: Default::default(),
+            description: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

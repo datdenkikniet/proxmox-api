@@ -47,8 +47,59 @@ where
         self.client.put(&path, &params)
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+impl GetOutput {
+    pub fn new(plugin: String, ty: Type) -> Self {
+        Self {
+            plugin,
+            ty,
+            api: ::std::default::Default::default(),
+            data: ::std::default::Default::default(),
+            digest: ::std::default::Default::default(),
+            disable: ::std::default::Default::default(),
+            nodes: ::std::default::Default::default(),
+            validation_delay: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutput {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "API plugin name"]
+    #[doc = ""]
+    pub api: Option<Api>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "DNS plugin data. (base64 encoded)"]
+    #[doc = ""]
+    pub data: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
+    #[doc = ""]
+    pub digest: Option<DigestStr>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Flag to disable the config."]
+    #[doc = ""]
+    pub disable: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "List of cluster node names."]
+    #[doc = ""]
+    pub nodes: Option<String>,
+    #[doc = "Unique identifier for ACME plugin instance."]
+    #[doc = ""]
+    pub plugin: String,
+    #[serde(rename = "type")]
+    #[doc = "ACME challenge type."]
+    #[doc = ""]
+    pub ty: Type,
+    #[serde(rename = "validation-delay")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Extra delay in seconds to wait before requesting validation. Allows to cope with a long TTL of DNS records."]
+    #[doc = ""]
+    pub validation_delay: Option<ValidationDelayInt>,
     #[serde(
         flatten,
         default,
@@ -114,6 +165,8 @@ pub enum Api {
     Ad,
     #[serde(rename = "ali")]
     Ali,
+    #[serde(rename = "alviy")]
+    Alviy,
     #[serde(rename = "anx")]
     Anx,
     #[serde(rename = "artfiles")]
@@ -130,6 +183,8 @@ pub enum Api {
     Azion,
     #[serde(rename = "azure")]
     Azure,
+    #[serde(rename = "beget")]
+    Beget,
     #[serde(rename = "bookmyname")]
     Bookmyname,
     #[serde(rename = "bunny")]
@@ -170,8 +225,6 @@ pub enum Api {
     Dnsimple,
     #[serde(rename = "dnsservices")]
     Dnsservices,
-    #[serde(rename = "do")]
-    Do,
     #[serde(rename = "doapi")]
     Doapi,
     #[serde(rename = "domeneshop")]
@@ -194,6 +247,8 @@ pub enum Api {
     Dynv6,
     #[serde(rename = "easydns")]
     Easydns,
+    #[serde(rename = "edgecenter")]
+    Edgecenter,
     #[serde(rename = "edgedns")]
     Edgedns,
     #[serde(rename = "euserv")]
@@ -204,6 +259,8 @@ pub enum Api {
     Fornex,
     #[serde(rename = "freedns")]
     Freedns,
+    #[serde(rename = "freemyip")]
+    Freemyip,
     #[serde(rename = "gandi_livedns")]
     GandiLivedns,
     #[serde(rename = "gcloud")]
@@ -218,6 +275,8 @@ pub enum Api {
     Googledomains,
     #[serde(rename = "he")]
     He,
+    #[serde(rename = "he_ddns")]
+    HeDdns,
     #[serde(rename = "hetzner")]
     Hetzner,
     #[serde(rename = "hexonet")]
@@ -236,6 +295,8 @@ pub enum Api {
     Inwx,
     #[serde(rename = "ionos")]
     Ionos,
+    #[serde(rename = "ionos_cloud")]
+    IonosCloud,
     #[serde(rename = "ipv64")]
     Ipv64,
     #[serde(rename = "ispconfig")]
@@ -258,6 +319,8 @@ pub enum Api {
     Leaseweb,
     #[serde(rename = "lexicon")]
     Lexicon,
+    #[serde(rename = "limacity")]
+    Limacity,
     #[serde(rename = "linode")]
     Linode,
     #[serde(rename = "linode_v4")]
@@ -272,6 +335,8 @@ pub enum Api {
     Me,
     #[serde(rename = "miab")]
     Miab,
+    #[serde(rename = "mijnhost")]
+    Mijnhost,
     #[serde(rename = "misaka")]
     Misaka,
     #[serde(rename = "myapi")]
@@ -314,6 +379,8 @@ pub enum Api {
     Nw,
     #[serde(rename = "oci")]
     Oci,
+    #[serde(rename = "omglol")]
+    Omglol,
     #[serde(rename = "one")]
     One,
     #[serde(rename = "online")]
@@ -356,10 +423,14 @@ pub enum Api {
     Servercow,
     #[serde(rename = "simply")]
     Simply,
+    #[serde(rename = "technitium")]
+    Technitium,
     #[serde(rename = "tele3")]
     Tele3,
     #[serde(rename = "tencent")]
     Tencent,
+    #[serde(rename = "timeweb")]
+    Timeweb,
     #[serde(rename = "transip")]
     Transip,
     #[serde(rename = "udr")]
@@ -380,16 +451,20 @@ pub enum Api {
     Vultr,
     #[serde(rename = "websupport")]
     Websupport,
+    #[serde(rename = "west_cn")]
+    WestCn,
     #[serde(rename = "world4you")]
     World4you,
-    #[serde(rename = "yandex")]
-    Yandex,
+    #[serde(rename = "yandex360")]
+    Yandex360,
     #[serde(rename = "yc")]
     Yc,
     #[serde(rename = "zilore")]
     Zilore,
     #[serde(rename = "zone")]
     Zone,
+    #[serde(rename = "zoneedit")]
+    Zoneedit,
     #[serde(rename = "zonomi")]
     Zonomi,
 }
@@ -403,6 +478,7 @@ impl TryFrom<&str> for Api {
             "active24" => Ok(Self::Active24),
             "ad" => Ok(Self::Ad),
             "ali" => Ok(Self::Ali),
+            "alviy" => Ok(Self::Alviy),
             "anx" => Ok(Self::Anx),
             "artfiles" => Ok(Self::Artfiles),
             "arvan" => Ok(Self::Arvan),
@@ -411,6 +487,7 @@ impl TryFrom<&str> for Api {
             "aws" => Ok(Self::Aws),
             "azion" => Ok(Self::Azion),
             "azure" => Ok(Self::Azure),
+            "beget" => Ok(Self::Beget),
             "bookmyname" => Ok(Self::Bookmyname),
             "bunny" => Ok(Self::Bunny),
             "cf" => Ok(Self::Cf),
@@ -431,7 +508,6 @@ impl TryFrom<&str> for Api {
             "dnshome" => Ok(Self::Dnshome),
             "dnsimple" => Ok(Self::Dnsimple),
             "dnsservices" => Ok(Self::Dnsservices),
-            "do" => Ok(Self::Do),
             "doapi" => Ok(Self::Doapi),
             "domeneshop" => Ok(Self::Domeneshop),
             "dp" => Ok(Self::Dp),
@@ -443,11 +519,13 @@ impl TryFrom<&str> for Api {
             "dynu" => Ok(Self::Dynu),
             "dynv6" => Ok(Self::Dynv6),
             "easydns" => Ok(Self::Easydns),
+            "edgecenter" => Ok(Self::Edgecenter),
             "edgedns" => Ok(Self::Edgedns),
             "euserv" => Ok(Self::Euserv),
             "exoscale" => Ok(Self::Exoscale),
             "fornex" => Ok(Self::Fornex),
             "freedns" => Ok(Self::Freedns),
+            "freemyip" => Ok(Self::Freemyip),
             "gandi_livedns" => Ok(Self::GandiLivedns),
             "gcloud" => Ok(Self::Gcloud),
             "gcore" => Ok(Self::Gcore),
@@ -455,6 +533,7 @@ impl TryFrom<&str> for Api {
             "geoscaling" => Ok(Self::Geoscaling),
             "googledomains" => Ok(Self::Googledomains),
             "he" => Ok(Self::He),
+            "he_ddns" => Ok(Self::HeDdns),
             "hetzner" => Ok(Self::Hetzner),
             "hexonet" => Ok(Self::Hexonet),
             "hostingde" => Ok(Self::Hostingde),
@@ -464,6 +543,7 @@ impl TryFrom<&str> for Api {
             "internetbs" => Ok(Self::Internetbs),
             "inwx" => Ok(Self::Inwx),
             "ionos" => Ok(Self::Ionos),
+            "ionos_cloud" => Ok(Self::IonosCloud),
             "ipv64" => Ok(Self::Ipv64),
             "ispconfig" => Ok(Self::Ispconfig),
             "jd" => Ok(Self::Jd),
@@ -475,6 +555,7 @@ impl TryFrom<&str> for Api {
             "la" => Ok(Self::La),
             "leaseweb" => Ok(Self::Leaseweb),
             "lexicon" => Ok(Self::Lexicon),
+            "limacity" => Ok(Self::Limacity),
             "linode" => Ok(Self::Linode),
             "linode_v4" => Ok(Self::LinodeV4),
             "loopia" => Ok(Self::Loopia),
@@ -482,6 +563,7 @@ impl TryFrom<&str> for Api {
             "maradns" => Ok(Self::Maradns),
             "me" => Ok(Self::Me),
             "miab" => Ok(Self::Miab),
+            "mijnhost" => Ok(Self::Mijnhost),
             "misaka" => Ok(Self::Misaka),
             "myapi" => Ok(Self::Myapi),
             "mydevil" => Ok(Self::Mydevil),
@@ -503,6 +585,7 @@ impl TryFrom<&str> for Api {
             "nsupdate" => Ok(Self::Nsupdate),
             "nw" => Ok(Self::Nw),
             "oci" => Ok(Self::Oci),
+            "omglol" => Ok(Self::Omglol),
             "one" => Ok(Self::One),
             "online" => Ok(Self::Online),
             "openprovider" => Ok(Self::Openprovider),
@@ -524,8 +607,10 @@ impl TryFrom<&str> for Api {
             "selfhost" => Ok(Self::Selfhost),
             "servercow" => Ok(Self::Servercow),
             "simply" => Ok(Self::Simply),
+            "technitium" => Ok(Self::Technitium),
             "tele3" => Ok(Self::Tele3),
             "tencent" => Ok(Self::Tencent),
+            "timeweb" => Ok(Self::Timeweb),
             "transip" => Ok(Self::Transip),
             "udr" => Ok(Self::Udr),
             "ultra" => Ok(Self::Ultra),
@@ -536,12 +621,33 @@ impl TryFrom<&str> for Api {
             "vscale" => Ok(Self::Vscale),
             "vultr" => Ok(Self::Vultr),
             "websupport" => Ok(Self::Websupport),
+            "west_cn" => Ok(Self::WestCn),
             "world4you" => Ok(Self::World4you),
-            "yandex" => Ok(Self::Yandex),
+            "yandex360" => Ok(Self::Yandex360),
             "yc" => Ok(Self::Yc),
             "zilore" => Ok(Self::Zilore),
             "zone" => Ok(Self::Zone),
+            "zoneedit" => Ok(Self::Zoneedit),
             "zonomi" => Ok(Self::Zonomi),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "ACME challenge type."]
+#[doc = ""]
+pub enum Type {
+    #[serde(rename = "dns")]
+    Dns,
+    #[serde(rename = "standalone")]
+    Standalone,
+}
+impl TryFrom<&str> for Type {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "dns" => Ok(Self::Dns),
+            "standalone" => Ok(Self::Standalone),
             v => Err(format!("Unknown variant {v}")),
         }
     }

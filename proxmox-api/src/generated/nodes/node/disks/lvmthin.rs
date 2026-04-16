@@ -53,7 +53,7 @@ impl GetOutputItems {
             metadata_used,
             used,
             vg,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -105,8 +105,8 @@ impl PostParams {
         Self {
             device,
             name,
-            add_storage: Default::default(),
-            additional_properties: Default::default(),
+            add_storage: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

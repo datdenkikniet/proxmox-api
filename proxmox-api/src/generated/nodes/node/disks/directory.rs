@@ -51,7 +51,7 @@ impl GetOutputItems {
             path,
             ty,
             unitfile,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -85,9 +85,9 @@ impl PostParams {
         Self {
             device,
             name,
-            add_storage: Default::default(),
-            filesystem: Default::default(),
-            additional_properties: Default::default(),
+            add_storage: ::std::default::Default::default(),
+            filesystem: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

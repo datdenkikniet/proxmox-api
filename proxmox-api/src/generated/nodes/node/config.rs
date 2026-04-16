@@ -52,6 +52,11 @@ pub struct GetOutput {
     #[doc = "ACME domain and validation plugin"]
     #[doc = ""]
     pub acmedomains: ::std::collections::HashMap<u32, String>,
+    #[serde(rename = "ballooning-target")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "RAM usage target for ballooning (in percent of total memory)"]
+    #[doc = ""]
+    pub ballooning_target: Option<BallooningTargetInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Description for the Node. Shown in the web-interface node notes panel. This is saved as comment inside the configuration file."]
     #[doc = ""]
@@ -116,6 +121,11 @@ pub struct PutParams {
     #[doc = "ACME domain and validation plugin"]
     #[doc = ""]
     pub acmedomains: ::std::collections::HashMap<u32, String>,
+    #[serde(rename = "ballooning-target")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "RAM usage target for ballooning (in percent of total memory)"]
+    #[doc = ""]
+    pub ballooning_target: Option<BallooningTargetInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "A list of settings you want to delete."]
     #[doc = ""]
@@ -173,6 +183,8 @@ pub enum Property {
     Acmedomain4,
     #[serde(rename = "acmedomain5")]
     Acmedomain5,
+    #[serde(rename = "ballooning-target")]
+    BallooningTarget,
     #[serde(rename = "description")]
     Description,
     #[serde(rename = "startall-onboot-delay")]
@@ -191,6 +203,7 @@ impl TryFrom<&str> for Property {
             "acmedomain3" => Ok(Self::Acmedomain3),
             "acmedomain4" => Ok(Self::Acmedomain4),
             "acmedomain5" => Ok(Self::Acmedomain5),
+            "ballooning-target" => Ok(Self::BallooningTarget),
             "description" => Ok(Self::Description),
             "startall-onboot-delay" => Ok(Self::StartallOnbootDelay),
             "wakeonlan" => Ok(Self::Wakeonlan),
@@ -203,6 +216,43 @@ struct NumberedAcmedomains;
 impl crate::types::multi::NumberedItems for NumberedAcmedomains {
     type Item = String;
     const PREFIX: &'static str = "acmedomain";
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct BallooningTargetInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for BallooningTargetInt {
+    const MIN: Option<i128> = Some(0i128);
+    const MAX: Option<i128> = Some(100i128);
+    const DEFAULT: Option<i128> = Some(80i128);
+    const TYPE_DESCRIPTION: &'static str = "an integer between 0 and 100";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for BallooningTargetInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for BallooningTargetInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::bounded_integer::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for BallooningTargetInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::bounded_integer::deserialize_bounded_integer(deserializer)
+    }
 }
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
 pub struct StartallOnbootDelayInt(i128);

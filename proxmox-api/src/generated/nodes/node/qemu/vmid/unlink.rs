@@ -29,8 +29,8 @@ impl PutParams {
     pub fn new(idlist: String) -> Self {
         Self {
             idlist,
-            force: Default::default(),
-            additional_properties: Default::default(),
+            force: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

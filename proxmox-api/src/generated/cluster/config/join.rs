@@ -86,9 +86,9 @@ impl NodelistGetOutputNodelistItems {
             pve_addr,
             pve_fp,
             quorum_votes,
-            nodeid: Default::default(),
-            ring0_addr: Default::default(),
-            additional_properties: Default::default(),
+            nodeid: ::std::default::Default::default(),
+            ring0_addr: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -131,11 +131,11 @@ impl PostParams {
             fingerprint,
             hostname,
             password,
-            force: Default::default(),
-            links: Default::default(),
-            nodeid: Default::default(),
-            votes: Default::default(),
-            additional_properties: Default::default(),
+            force: ::std::default::Default::default(),
+            links: ::std::default::Default::default(),
+            nodeid: ::std::default::Default::default(),
+            votes: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

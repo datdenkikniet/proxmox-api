@@ -49,9 +49,9 @@ impl GetOutput {
             create_args,
             source,
             ty,
-            disks: Default::default(),
-            net: Default::default(),
-            warnings: Default::default(),
+            disks: ::std::default::Default::default(),
+            net: ::std::default::Default::default(),
+            warnings: ::std::default::Default::default(),
         }
     }
 }
@@ -85,7 +85,7 @@ impl GetParams {
     pub fn new(volume: String) -> Self {
         Self {
             volume,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -114,9 +114,9 @@ impl WarningsGetOutputWarningsItems {
     pub fn new(ty: WarningType) -> Self {
         Self {
             ty,
-            key: Default::default(),
-            value: Default::default(),
-            additional_properties: Default::default(),
+            key: ::std::default::Default::default(),
+            value: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -185,6 +185,8 @@ pub enum WarningType {
     GuestIsRunning,
     #[serde(rename = "nvme-unsupported")]
     NvmeUnsupported,
+    #[serde(rename = "ova-needs-extracting")]
+    OvaNeedsExtracting,
     #[serde(rename = "ovmf-with-lsi-unsupported")]
     OvmfWithLsiUnsupported,
     #[serde(rename = "serial-port-socket-only")]
@@ -198,6 +200,7 @@ impl TryFrom<&str> for WarningType {
             "efi-state-lost" => Ok(Self::EfiStateLost),
             "guest-is-running" => Ok(Self::GuestIsRunning),
             "nvme-unsupported" => Ok(Self::NvmeUnsupported),
+            "ova-needs-extracting" => Ok(Self::OvaNeedsExtracting),
             "ovmf-with-lsi-unsupported" => Ok(Self::OvmfWithLsiUnsupported),
             "serial-port-socket-only" => Ok(Self::SerialPortSocketOnly),
             v => Err(format!("Unknown variant {v}")),

@@ -218,7 +218,8 @@ impl Generator {
                         quote!(&str)
                     };
 
-                    let next_val_ident = Ident::new(p, quote!().span());
+                    let next_val_name = crate::name_to_underscore_name(p);
+                    let next_val_ident = Ident::new(&next_val_name, quote!().span());
                     (
                         quote! { #child_fn_name(&self, #next_val_ident: #next_val_ty) -> #defer },
                         quote! { #defer::new(self.client.clone(), &self.path, #next_val_ident)},
@@ -308,7 +309,8 @@ impl Generator {
     }
 
     fn make_placeholder_constructor(has_parent: bool, placeholder: &str) -> TokenStream {
-        let placeholder_ident = Ident::new(placeholder, quote!().span());
+        let placeholder_name = crate::name_to_underscore_name(placeholder);
+        let placeholder_ident = Ident::new(&placeholder_name, quote!().span());
 
         let placeholder_ty = if placeholder == "vmid" {
             proxmox_api(quote!(types::VmId))

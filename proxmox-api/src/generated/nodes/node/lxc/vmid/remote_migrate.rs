@@ -31,13 +31,13 @@ impl PostParams {
             target_bridge,
             target_endpoint,
             target_storage,
-            bwlimit: Default::default(),
-            delete: Default::default(),
-            online: Default::default(),
-            restart: Default::default(),
-            target_vmid: Default::default(),
-            timeout: Default::default(),
-            additional_properties: Default::default(),
+            bwlimit: ::std::default::Default::default(),
+            delete: ::std::default::Default::default(),
+            online: ::std::default::Default::default(),
+            restart: ::std::default::Default::default(),
+            target_vmid: ::std::default::Default::default(),
+            timeout: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

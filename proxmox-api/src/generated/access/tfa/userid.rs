@@ -44,8 +44,8 @@ impl GetOutputItems {
             description,
             id,
             ty,
-            enable: Default::default(),
-            additional_properties: Default::default(),
+            enable: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -87,9 +87,9 @@ impl PostOutput {
     pub fn new(id: String) -> Self {
         Self {
             id,
-            challenge: Default::default(),
-            recovery: Default::default(),
-            additional_properties: Default::default(),
+            challenge: ::std::default::Default::default(),
+            recovery: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -117,12 +117,12 @@ impl PostParams {
     pub fn new(ty: Type) -> Self {
         Self {
             ty,
-            challenge: Default::default(),
-            description: Default::default(),
-            password: Default::default(),
-            totp: Default::default(),
-            value: Default::default(),
-            additional_properties: Default::default(),
+            challenge: ::std::default::Default::default(),
+            description: ::std::default::Default::default(),
+            password: ::std::default::Default::default(),
+            totp: ::std::default::Default::default(),
+            value: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

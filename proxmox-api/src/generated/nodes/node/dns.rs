@@ -59,10 +59,10 @@ impl PutParams {
     pub fn new(search: String) -> Self {
         Self {
             search,
-            dns1: Default::default(),
-            dns2: Default::default(),
-            dns3: Default::default(),
-            additional_properties: Default::default(),
+            dns1: ::std::default::Default::default(),
+            dns2: ::std::default::Default::default(),
+            dns3: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

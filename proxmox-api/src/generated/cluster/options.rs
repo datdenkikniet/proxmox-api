@@ -51,6 +51,11 @@ pub struct PutParams {
     #[doc = "Set I/O bandwidth limit for various operations (in KiB/s)."]
     #[doc = ""]
     pub bwlimit: Option<String>,
+    #[serde(rename = "consent-text")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Consent text that is displayed before logging in."]
+    #[doc = ""]
+    pub consent_text: Option<ConsentTextStr>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Select the default Console viewer. You can either use the builtin java applet (VNC; deprecated and maps to html5), an external virt-viewer comtatible application (SPICE), an HTML5 based vnc viewer (noVNC), or an HTML5 based console client (xtermjs). If the selected viewer is not available (e.g. SPICE not activated for the VM), the fallback is noVNC."]
     #[doc = ""]
@@ -139,6 +144,10 @@ pub struct PutParams {
     #[doc = "A list of tags that require a `Sys.Modify` on '/' to set and delete. Tags set here that are also in 'user-tag-access' also require `Sys.Modify`."]
     #[doc = ""]
     pub registered_tags: Option<RegisteredTagsStr>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "For cluster wide replication settings."]
+    #[doc = ""]
+    pub replication: Option<String>,
     #[serde(rename = "tag-style")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Tag style options."]
@@ -394,6 +403,46 @@ impl TryFrom<&str> for Language {
             "zh_TW" => Ok(Self::ZhTW),
             v => Err(format!("Unknown variant {v}")),
         }
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct ConsentTextStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for ConsentTextStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = Some(65536usize);
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = None::<&'static str>;
+    const TYPE_DESCRIPTION: &'static str = "a string with length at most 65536";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for ConsentTextStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for ConsentTextStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::bounded_string::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for ConsentTextStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::bounded_string::deserialize_bounded_string(deserializer)
     }
 }
 #[derive(Debug, Clone, PartialEq, PartialOrd)]

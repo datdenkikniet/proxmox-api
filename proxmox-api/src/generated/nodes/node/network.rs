@@ -54,13 +54,318 @@ where
 {
     #[doc = "Reload network configuration"]
     #[doc = ""]
-    pub fn put(&self) -> Result<String, T::Error> {
+    pub fn put(&self, params: PutParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
-        self.client.put(&path, &())
+        self.client.put(&path, &params)
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+impl GetOutputItems {
+    pub fn new(iface: IfaceStr, ty: Type2) -> Self {
+        Self {
+            iface,
+            ty,
+            active: ::std::default::Default::default(),
+            address: ::std::default::Default::default(),
+            address6: ::std::default::Default::default(),
+            autostart: ::std::default::Default::default(),
+            bond_primary: ::std::default::Default::default(),
+            bond_mode: ::std::default::Default::default(),
+            bond_xmit_hash_policy: ::std::default::Default::default(),
+            bridge_access: ::std::default::Default::default(),
+            bridge_arp_nd_suppress: ::std::default::Default::default(),
+            bridge_learning: ::std::default::Default::default(),
+            bridge_multicast_flood: ::std::default::Default::default(),
+            bridge_unicast_flood: ::std::default::Default::default(),
+            bridge_ports: ::std::default::Default::default(),
+            bridge_vids: ::std::default::Default::default(),
+            bridge_vlan_aware: ::std::default::Default::default(),
+            cidr: ::std::default::Default::default(),
+            cidr6: ::std::default::Default::default(),
+            comments: ::std::default::Default::default(),
+            comments6: ::std::default::Default::default(),
+            exists: ::std::default::Default::default(),
+            families: ::std::default::Default::default(),
+            gateway: ::std::default::Default::default(),
+            gateway6: ::std::default::Default::default(),
+            link_type: ::std::default::Default::default(),
+            method: ::std::default::Default::default(),
+            method6: ::std::default::Default::default(),
+            mtu: ::std::default::Default::default(),
+            netmask: ::std::default::Default::default(),
+            netmask6: ::std::default::Default::default(),
+            options: ::std::default::Default::default(),
+            options6: ::std::default::Default::default(),
+            ovs_bonds: ::std::default::Default::default(),
+            ovs_bridge: ::std::default::Default::default(),
+            ovs_options: ::std::default::Default::default(),
+            ovs_ports: ::std::default::Default::default(),
+            ovs_tag: ::std::default::Default::default(),
+            priority: ::std::default::Default::default(),
+            slaves: ::std::default::Default::default(),
+            uplink_id: ::std::default::Default::default(),
+            vlan_id: ::std::default::Default::default(),
+            vlan_protocol: ::std::default::Default::default(),
+            vlan_raw_device: ::std::default::Default::default(),
+            vxlan_id: ::std::default::Default::default(),
+            vxlan_local_tunnelip: ::std::default::Default::default(),
+            vxlan_physdev: ::std::default::Default::default(),
+            vxlan_svcnodeip: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Set to true if the interface is active."]
+    #[doc = ""]
+    pub active: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "IP address."]
+    #[doc = ""]
+    pub address: Option<::std::net::Ipv4Addr>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "IP address."]
+    #[doc = ""]
+    pub address6: Option<::std::net::Ipv6Addr>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Automatically start interface on boot."]
+    #[doc = ""]
+    pub autostart: Option<bool>,
+    #[serde(rename = "bond-primary")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Specify the primary interface for active-backup bond."]
+    #[doc = ""]
+    pub bond_primary: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Bonding mode."]
+    #[doc = ""]
+    pub bond_mode: Option<BondMode>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Selects the transmit hash policy to use for slave selection in balance-xor and 802.3ad modes."]
+    #[doc = ""]
+    pub bond_xmit_hash_policy: Option<BondXmitHashPolicy>,
+    #[serde(rename = "bridge-access")]
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The bridge port access VLAN."]
+    #[doc = ""]
+    pub bridge_access: Option<i64>,
+    #[serde(rename = "bridge-arp-nd-suppress")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Bridge port ARP/ND suppress flag."]
+    #[doc = ""]
+    pub bridge_arp_nd_suppress: Option<bool>,
+    #[serde(rename = "bridge-learning")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Bridge port learning flag."]
+    #[doc = ""]
+    pub bridge_learning: Option<bool>,
+    #[serde(rename = "bridge-multicast-flood")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Bridge port multicast flood flag."]
+    #[doc = ""]
+    pub bridge_multicast_flood: Option<bool>,
+    #[serde(rename = "bridge-unicast-flood")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Bridge port unicast flood flag."]
+    #[doc = ""]
+    pub bridge_unicast_flood: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Specify the interfaces you want to add to your bridge."]
+    #[doc = ""]
+    pub bridge_ports: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Specify the allowed VLANs. For example: '2 4 100-200'. Only used if the bridge is VLAN aware."]
+    #[doc = ""]
+    pub bridge_vids: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Enable bridge vlan support."]
+    #[doc = ""]
+    pub bridge_vlan_aware: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "IPv4 CIDR."]
+    #[doc = ""]
+    pub cidr: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "IPv6 CIDR."]
+    #[doc = ""]
+    pub cidr6: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Comments"]
+    #[doc = ""]
+    pub comments: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Comments"]
+    #[doc = ""]
+    pub comments6: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Set to true if the interface physically exists."]
+    #[doc = ""]
+    pub exists: Option<bool>,
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    #[doc = "The network families."]
+    #[doc = ""]
+    pub families: Vec<Families>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Default gateway address."]
+    #[doc = ""]
+    pub gateway: Option<::std::net::Ipv4Addr>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Default ipv6 gateway address."]
+    #[doc = ""]
+    pub gateway6: Option<::std::net::Ipv6Addr>,
+    #[doc = "Network interface name."]
+    #[doc = ""]
+    pub iface: IfaceStr,
+    #[serde(rename = "link-type")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The link type."]
+    #[doc = ""]
+    pub link_type: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The network configuration method for IPv4."]
+    #[doc = ""]
+    pub method: Option<Method>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The network configuration method for IPv6."]
+    #[doc = ""]
+    pub method6: Option<Method6>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "MTU."]
+    #[doc = ""]
+    pub mtu: Option<MtuInt>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Network mask."]
+    #[doc = ""]
+    pub netmask: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Network mask."]
+    #[doc = ""]
+    pub netmask6: Option<Netmask6Int>,
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    #[doc = "A list of additional interface options for IPv4."]
+    #[doc = ""]
+    pub options: Vec<String>,
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    #[doc = "A list of additional interface options for IPv6."]
+    #[doc = ""]
+    pub options6: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Specify the interfaces used by the bonding device."]
+    #[doc = ""]
+    pub ovs_bonds: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The OVS bridge associated with a OVS port. This is required when you create an OVS port."]
+    #[doc = ""]
+    pub ovs_bridge: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "OVS interface options."]
+    #[doc = ""]
+    pub ovs_options: Option<OvsOptionsStr>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Specify the interfaces you want to add to your bridge."]
+    #[doc = ""]
+    pub ovs_ports: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Specify a VLan tag (used by OVSPort, OVSIntPort, OVSBond)"]
+    #[doc = ""]
+    pub ovs_tag: Option<OvsTagInt>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The order of the interface."]
+    #[doc = ""]
+    pub priority: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Specify the interfaces used by the bonding device."]
+    #[doc = ""]
+    pub slaves: Option<String>,
+    #[serde(rename = "type")]
+    #[doc = "Network interface type"]
+    #[doc = ""]
+    pub ty: Type2,
+    #[serde(rename = "uplink-id")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The uplink ID."]
+    #[doc = ""]
+    pub uplink_id: Option<String>,
+    #[serde(rename = "vlan-id")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "vlan-id for a custom named vlan interface (ifupdown2 only)."]
+    #[doc = ""]
+    pub vlan_id: Option<VlanIdInt>,
+    #[serde(rename = "vlan-protocol")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The VLAN protocol."]
+    #[doc = ""]
+    pub vlan_protocol: Option<VlanProtocol>,
+    #[serde(rename = "vlan-raw-device")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Specify the raw interface for the vlan interface."]
+    #[doc = ""]
+    pub vlan_raw_device: Option<String>,
+    #[serde(rename = "vxlan-id")]
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The VXLAN ID."]
+    #[doc = ""]
+    pub vxlan_id: Option<i64>,
+    #[serde(rename = "vxlan-local-tunnelip")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The VXLAN local tunnel IP."]
+    #[doc = ""]
+    pub vxlan_local_tunnelip: Option<String>,
+    #[serde(rename = "vxlan-physdev")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The physical device for the VXLAN tunnel."]
+    #[doc = ""]
+    pub vxlan_physdev: Option<String>,
+    #[serde(rename = "vxlan-svcnodeip")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The VXLAN SVC node IP."]
+    #[doc = ""]
+    pub vxlan_svcnodeip: Option<String>,
     #[serde(
         flatten,
         default,
@@ -83,36 +388,37 @@ pub struct GetParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
-    pub fn new(iface: IfaceStr, ty: Type2) -> Self {
+    pub fn new(iface: IfaceStr, ty: Type3) -> Self {
         Self {
             iface,
             ty,
-            address: Default::default(),
-            address6: Default::default(),
-            autostart: Default::default(),
-            bond_primary: Default::default(),
-            bond_mode: Default::default(),
-            bond_xmit_hash_policy: Default::default(),
-            bridge_ports: Default::default(),
-            bridge_vlan_aware: Default::default(),
-            cidr: Default::default(),
-            cidr6: Default::default(),
-            comments: Default::default(),
-            comments6: Default::default(),
-            gateway: Default::default(),
-            gateway6: Default::default(),
-            mtu: Default::default(),
-            netmask: Default::default(),
-            netmask6: Default::default(),
-            ovs_bonds: Default::default(),
-            ovs_bridge: Default::default(),
-            ovs_options: Default::default(),
-            ovs_ports: Default::default(),
-            ovs_tag: Default::default(),
-            slaves: Default::default(),
-            vlan_id: Default::default(),
-            vlan_raw_device: Default::default(),
-            additional_properties: Default::default(),
+            address: ::std::default::Default::default(),
+            address6: ::std::default::Default::default(),
+            autostart: ::std::default::Default::default(),
+            bond_primary: ::std::default::Default::default(),
+            bond_mode: ::std::default::Default::default(),
+            bond_xmit_hash_policy: ::std::default::Default::default(),
+            bridge_ports: ::std::default::Default::default(),
+            bridge_vids: ::std::default::Default::default(),
+            bridge_vlan_aware: ::std::default::Default::default(),
+            cidr: ::std::default::Default::default(),
+            cidr6: ::std::default::Default::default(),
+            comments: ::std::default::Default::default(),
+            comments6: ::std::default::Default::default(),
+            gateway: ::std::default::Default::default(),
+            gateway6: ::std::default::Default::default(),
+            mtu: ::std::default::Default::default(),
+            netmask: ::std::default::Default::default(),
+            netmask6: ::std::default::Default::default(),
+            ovs_bonds: ::std::default::Default::default(),
+            ovs_bridge: ::std::default::Default::default(),
+            ovs_options: ::std::default::Default::default(),
+            ovs_ports: ::std::default::Default::default(),
+            ovs_tag: ::std::default::Default::default(),
+            slaves: ::std::default::Default::default(),
+            vlan_id: ::std::default::Default::default(),
+            vlan_raw_device: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -151,6 +457,10 @@ pub struct PostParams {
     #[doc = "Specify the interfaces you want to add to your bridge."]
     #[doc = ""]
     pub bridge_ports: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Specify the allowed VLANs. For example: '2 4 100-200'. Only used if the bridge is VLAN aware."]
+    #[doc = ""]
+    pub bridge_vids: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -225,7 +535,7 @@ pub struct PostParams {
     #[serde(rename = "type")]
     #[doc = "Network interface type"]
     #[doc = ""]
-    pub ty: Type2,
+    pub ty: Type3,
     #[serde(rename = "vlan-id")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "vlan-id for a custom named vlan interface (ifupdown2 only)."]
@@ -236,6 +546,24 @@ pub struct PostParams {
     #[doc = "Specify the raw interface for the vlan interface."]
     #[doc = ""]
     pub vlan_raw_device: Option<String>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct PutParams {
+    #[serde(rename = "regenerate-frr")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Whether FRR config generation should get skipped or not."]
+    #[doc = ""]
+    pub regenerate_frr: Option<bool>,
     #[serde(
         flatten,
         default,
@@ -309,6 +637,81 @@ impl TryFrom<&str> for BondXmitHashPolicy {
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "A network family."]
+#[doc = ""]
+pub enum Families {
+    #[serde(rename = "inet")]
+    Inet,
+    #[serde(rename = "inet6")]
+    Inet6,
+}
+impl TryFrom<&str> for Families {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "inet" => Ok(Self::Inet),
+            "inet6" => Ok(Self::Inet6),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "The network configuration method for IPv4."]
+#[doc = ""]
+pub enum Method {
+    #[serde(rename = "auto")]
+    Auto,
+    #[serde(rename = "dhcp")]
+    Dhcp,
+    #[serde(rename = "loopback")]
+    Loopback,
+    #[serde(rename = "manual")]
+    Manual,
+    #[serde(rename = "static")]
+    Static,
+}
+impl TryFrom<&str> for Method {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "auto" => Ok(Self::Auto),
+            "dhcp" => Ok(Self::Dhcp),
+            "loopback" => Ok(Self::Loopback),
+            "manual" => Ok(Self::Manual),
+            "static" => Ok(Self::Static),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "The network configuration method for IPv6."]
+#[doc = ""]
+pub enum Method6 {
+    #[serde(rename = "auto")]
+    Auto,
+    #[serde(rename = "dhcp")]
+    Dhcp,
+    #[serde(rename = "loopback")]
+    Loopback,
+    #[serde(rename = "manual")]
+    Manual,
+    #[serde(rename = "static")]
+    Static,
+}
+impl TryFrom<&str> for Method6 {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "auto" => Ok(Self::Auto),
+            "dhcp" => Ok(Self::Dhcp),
+            "loopback" => Ok(Self::Loopback),
+            "manual" => Ok(Self::Manual),
+            "static" => Ok(Self::Static),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Only list specific interface types."]
 #[doc = ""]
 pub enum Type {
@@ -328,8 +731,14 @@ pub enum Type {
     Bridge,
     #[serde(rename = "eth")]
     Eth,
+    #[serde(rename = "fabric")]
+    Fabric,
+    #[serde(rename = "include_sdn")]
+    IncludeSdn,
     #[serde(rename = "vlan")]
     Vlan,
+    #[serde(rename = "vnet")]
+    Vnet,
 }
 impl TryFrom<&str> for Type {
     type Error = String;
@@ -345,7 +754,10 @@ impl TryFrom<&str> for Type {
             "bond" => Ok(Self::Bond),
             "bridge" => Ok(Self::Bridge),
             "eth" => Ok(Self::Eth),
+            "fabric" => Ok(Self::Fabric),
+            "include_sdn" => Ok(Self::IncludeSdn),
             "vlan" => Ok(Self::Vlan),
+            "vnet" => Ok(Self::Vnet),
             v => Err(format!("Unknown variant {v}")),
         }
     }
@@ -366,10 +778,14 @@ pub enum Type2 {
     Bridge,
     #[serde(rename = "eth")]
     Eth,
+    #[serde(rename = "fabric")]
+    Fabric,
     #[serde(rename = "unknown")]
     Unknown,
     #[serde(rename = "vlan")]
     Vlan,
+    #[serde(rename = "vnet")]
+    Vnet,
 }
 impl TryFrom<&str> for Type2 {
     type Error = String;
@@ -383,8 +799,74 @@ impl TryFrom<&str> for Type2 {
             "bond" => Ok(Self::Bond),
             "bridge" => Ok(Self::Bridge),
             "eth" => Ok(Self::Eth),
+            "fabric" => Ok(Self::Fabric),
             "unknown" => Ok(Self::Unknown),
             "vlan" => Ok(Self::Vlan),
+            "vnet" => Ok(Self::Vnet),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "Network interface type"]
+#[doc = ""]
+pub enum Type3 {
+    OVSBond,
+    OVSBridge,
+    OVSIntPort,
+    OVSPort,
+    #[serde(rename = "alias")]
+    Alias,
+    #[serde(rename = "bond")]
+    Bond,
+    #[serde(rename = "bridge")]
+    Bridge,
+    #[serde(rename = "eth")]
+    Eth,
+    #[serde(rename = "fabric")]
+    Fabric,
+    #[serde(rename = "unknown")]
+    Unknown,
+    #[serde(rename = "vlan")]
+    Vlan,
+    #[serde(rename = "vnet")]
+    Vnet,
+}
+impl TryFrom<&str> for Type3 {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "OVSBond" => Ok(Self::OVSBond),
+            "OVSBridge" => Ok(Self::OVSBridge),
+            "OVSIntPort" => Ok(Self::OVSIntPort),
+            "OVSPort" => Ok(Self::OVSPort),
+            "alias" => Ok(Self::Alias),
+            "bond" => Ok(Self::Bond),
+            "bridge" => Ok(Self::Bridge),
+            "eth" => Ok(Self::Eth),
+            "fabric" => Ok(Self::Fabric),
+            "unknown" => Ok(Self::Unknown),
+            "vlan" => Ok(Self::Vlan),
+            "vnet" => Ok(Self::Vnet),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "The VLAN protocol."]
+#[doc = ""]
+pub enum VlanProtocol {
+    #[serde(rename = "802.1ad")]
+    _8021ad,
+    #[serde(rename = "802.1q")]
+    _8021q,
+}
+impl TryFrom<&str> for VlanProtocol {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "802.1ad" => Ok(Self::_8021ad),
+            "802.1q" => Ok(Self::_8021q),
             v => Err(format!("Unknown variant {v}")),
         }
     }

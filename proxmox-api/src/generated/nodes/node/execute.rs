@@ -38,7 +38,7 @@ impl PostParams {
     pub fn new(commands: String) -> Self {
         Self {
             commands,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

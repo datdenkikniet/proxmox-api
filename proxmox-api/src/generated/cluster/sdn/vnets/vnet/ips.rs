@@ -52,8 +52,8 @@ impl DeleteParams {
         Self {
             ip,
             zone,
-            mac: Default::default(),
-            additional_properties: Default::default(),
+            mac: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -83,8 +83,8 @@ impl PostParams {
         Self {
             ip,
             zone,
-            mac: Default::default(),
-            additional_properties: Default::default(),
+            mac: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -114,9 +114,9 @@ impl PutParams {
         Self {
             ip,
             zone,
-            mac: Default::default(),
-            vmid: Default::default(),
-            additional_properties: Default::default(),
+            mac: ::std::default::Default::default(),
+            vmid: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

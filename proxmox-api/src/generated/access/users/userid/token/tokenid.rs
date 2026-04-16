@@ -190,6 +190,10 @@ pub struct PutOutput {
 pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub comment: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "A list of settings you want to delete."]
+    #[doc = ""]
+    pub delete: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_unsigned_int_optional",
         deserialize_with = "crate::types::deserialize_unsigned_int_optional"

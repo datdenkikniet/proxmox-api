@@ -18,7 +18,7 @@ impl<T> GroupClient<T>
 where
     T: crate::client::Client,
 {
-    #[doc = "Delete ha group configuration."]
+    #[doc = "Delete ha group configuration. (deprecated in favor of HA rules)"]
     #[doc = ""]
     pub fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
@@ -29,7 +29,7 @@ impl<T> GroupClient<T>
 where
     T: crate::client::Client,
 {
-    #[doc = "Read ha group configuration."]
+    #[doc = "Read ha group configuration. (deprecated in favor of HA rules)"]
     #[doc = ""]
     pub fn get(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
@@ -40,7 +40,7 @@ impl<T> GroupClient<T>
 where
     T: crate::client::Client,
 {
-    #[doc = "Update ha group configuration."]
+    #[doc = "Update ha group configuration. (deprecated in favor of HA rules)"]
     #[doc = ""]
     pub fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
@@ -64,7 +64,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "List of cluster node names with optional priority."]
     #[doc = ""]
-    #[doc = "List of cluster node members, where a priority can be given to each node. A resource bound to a group will run on the available nodes with the highest priority. If there are more nodes in the highest priority class, the services will get distributed to those nodes. The priorities have a relative meaning only."]
+    #[doc = "List of cluster node members, where a priority can be given to each node. A resource will run on the available nodes with the highest priority. If there are more nodes in the highest priority class, the resources will get distributed to those nodes. The priorities have a relative meaning only. The higher the number, the higher the priority."]
     #[doc = ""]
     pub nodes: Option<String>,
     #[serde(

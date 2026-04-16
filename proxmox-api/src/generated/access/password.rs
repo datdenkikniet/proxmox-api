@@ -30,8 +30,8 @@ impl PutParams {
         Self {
             password,
             userid,
-            confirmation_password: Default::default(),
-            additional_properties: Default::default(),
+            confirmation_password: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -100,11 +100,11 @@ pub struct PasswordStr {
     value: String,
 }
 impl crate::types::bounded_string::BoundedString for PasswordStr {
-    const MIN_LENGTH: Option<usize> = Some(5usize);
+    const MIN_LENGTH: Option<usize> = Some(8usize);
     const MAX_LENGTH: Option<usize> = Some(64usize);
     const DEFAULT: Option<&'static str> = None::<&'static str>;
     const PATTERN: Option<&'static str> = None::<&'static str>;
-    const TYPE_DESCRIPTION: &'static str = "a string with length between 5 and 64";
+    const TYPE_DESCRIPTION: &'static str = "a string with length between 8 and 64";
     fn get_value(&self) -> &str {
         &self.value
     }

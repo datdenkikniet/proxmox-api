@@ -48,8 +48,8 @@ impl GetParams {
     pub fn new(url: UrlStr) -> Self {
         Self {
             url,
-            verify_certificates: Default::default(),
-            additional_properties: Default::default(),
+            verify_certificates: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

@@ -41,19 +41,19 @@ impl GetOutputItems {
     pub fn new(userid: UseridStr) -> Self {
         Self {
             userid,
-            comment: Default::default(),
-            email: Default::default(),
-            enable: Default::default(),
-            expire: Default::default(),
-            firstname: Default::default(),
-            groups: Default::default(),
-            keys: Default::default(),
-            lastname: Default::default(),
-            realm_type: Default::default(),
-            tfa_locked_until: Default::default(),
-            tokens: Default::default(),
-            totp_locked: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            email: ::std::default::Default::default(),
+            enable: ::std::default::Default::default(),
+            expire: ::std::default::Default::default(),
+            firstname: ::std::default::Default::default(),
+            groups: ::std::default::Default::default(),
+            keys: ::std::default::Default::default(),
+            lastname: ::std::default::Default::default(),
+            realm_type: ::std::default::Default::default(),
+            tfa_locked_until: ::std::default::Default::default(),
+            tokens: ::std::default::Default::default(),
+            totp_locked: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -153,16 +153,16 @@ impl PostParams {
     pub fn new(userid: UseridStr) -> Self {
         Self {
             userid,
-            comment: Default::default(),
-            email: Default::default(),
-            enable: Default::default(),
-            expire: Default::default(),
-            firstname: Default::default(),
-            groups: Default::default(),
-            keys: Default::default(),
-            lastname: Default::default(),
-            password: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            email: ::std::default::Default::default(),
+            enable: ::std::default::Default::default(),
+            expire: ::std::default::Default::default(),
+            firstname: ::std::default::Default::default(),
+            groups: ::std::default::Default::default(),
+            keys: ::std::default::Default::default(),
+            lastname: ::std::default::Default::default(),
+            password: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -216,10 +216,10 @@ impl TokensGetOutputItemsTokensItems {
     pub fn new(tokenid: TokenidStr) -> Self {
         Self {
             tokenid,
-            comment: Default::default(),
-            expire: Default::default(),
-            privsep: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            expire: ::std::default::Default::default(),
+            privsep: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -459,11 +459,11 @@ pub struct PasswordStr {
     value: String,
 }
 impl crate::types::bounded_string::BoundedString for PasswordStr {
-    const MIN_LENGTH: Option<usize> = Some(5usize);
+    const MIN_LENGTH: Option<usize> = Some(8usize);
     const MAX_LENGTH: Option<usize> = Some(64usize);
     const DEFAULT: Option<&'static str> = None::<&'static str>;
     const PATTERN: Option<&'static str> = None::<&'static str>;
-    const TYPE_DESCRIPTION: &'static str = "a string with length between 5 and 64";
+    const TYPE_DESCRIPTION: &'static str = "a string with length between 8 and 64";
     fn get_value(&self) -> &str {
         &self.value
     }

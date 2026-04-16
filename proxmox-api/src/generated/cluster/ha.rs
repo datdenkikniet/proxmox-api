@@ -1,5 +1,6 @@
 pub mod groups;
 pub mod resources;
+pub mod rules;
 pub mod status;
 #[derive(Debug, Clone)]
 pub struct HaClient<T> {
@@ -32,7 +33,7 @@ impl GetOutputItems {
     pub fn new(id: String) -> Self {
         Self {
             id,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -60,6 +61,14 @@ where
 {
     pub fn groups(&self) -> groups::GroupsClient<T> {
         groups::GroupsClient::<T>::new(self.client.clone(), &self.path)
+    }
+}
+impl<T> HaClient<T>
+where
+    T: crate::client::Client,
+{
+    pub fn rules(&self) -> rules::RulesClient<T> {
+        rules::RulesClient::<T>::new(self.client.clone(), &self.path)
     }
 }
 impl<T> HaClient<T>

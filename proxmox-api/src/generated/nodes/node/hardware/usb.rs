@@ -45,11 +45,11 @@ impl GetOutputItems {
             prodid,
             speed,
             vendid,
-            manufacturer: Default::default(),
-            product: Default::default(),
-            serial: Default::default(),
-            usbpath: Default::default(),
-            additional_properties: Default::default(),
+            manufacturer: ::std::default::Default::default(),
+            product: ::std::default::Default::default(),
+            serial: ::std::default::Default::default(),
+            usbpath: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

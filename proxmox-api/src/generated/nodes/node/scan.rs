@@ -1,5 +1,4 @@
 pub mod cifs;
-pub mod glusterfs;
 pub mod iscsi;
 pub mod lvm;
 pub mod lvmthin;
@@ -37,7 +36,7 @@ impl GetOutputItems {
     pub fn new(method: String) -> Self {
         Self {
             method,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -73,14 +72,6 @@ where
 {
     pub fn pbs(&self) -> pbs::PbsClient<T> {
         pbs::PbsClient::<T>::new(self.client.clone(), &self.path)
-    }
-}
-impl<T> ScanClient<T>
-where
-    T: crate::client::Client,
-{
-    pub fn glusterfs(&self) -> glusterfs::GlusterfsClient<T> {
-        glusterfs::GlusterfsClient::<T>::new(self.client.clone(), &self.path)
     }
 }
 impl<T> ScanClient<T>

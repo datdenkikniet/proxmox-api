@@ -30,7 +30,7 @@ impl PostParams {
         Self {
             realm,
             redirect_url,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

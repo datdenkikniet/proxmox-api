@@ -20,9 +20,9 @@ where
 {
     #[doc = "Delete sdn subnet object configuration."]
     #[doc = ""]
-    pub fn delete(&self) -> Result<(), T::Error> {
+    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
-        self.client.delete(&path, &())
+        self.client.delete(&path, &params)
     }
 }
 impl<T> SubnetClient<T>
@@ -46,6 +46,20 @@ where
         let path = self.path.to_string();
         self.client.put(&path, &params)
     }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct DeleteParams {
+    #[serde(rename = "lock-token")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "the token for unlocking the global SDN configuration"]
+    #[doc = ""]
+    pub lock_token: Option<String>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
 pub struct GetOutput {
@@ -109,6 +123,11 @@ pub struct PutParams {
     #[doc = "Subnet Gateway: Will be assign on vnet for layer3 zones"]
     #[doc = ""]
     pub gateway: Option<::std::net::IpAddr>,
+    #[serde(rename = "lock-token")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "the token for unlocking the global SDN configuration"]
+    #[doc = ""]
+    pub lock_token: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

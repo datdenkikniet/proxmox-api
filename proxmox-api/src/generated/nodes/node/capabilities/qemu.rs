@@ -1,5 +1,7 @@
 pub mod cpu;
+pub mod cpu_flags;
 pub mod machines;
+pub mod migration;
 #[derive(Debug, Clone)]
 pub struct QemuClient<T> {
     client: T,
@@ -48,7 +50,23 @@ impl<T> QemuClient<T>
 where
     T: crate::client::Client,
 {
+    pub fn cpu_flags(&self) -> cpu_flags::CpuFlagsClient<T> {
+        cpu_flags::CpuFlagsClient::<T>::new(self.client.clone(), &self.path)
+    }
+}
+impl<T> QemuClient<T>
+where
+    T: crate::client::Client,
+{
     pub fn machines(&self) -> machines::MachinesClient<T> {
         machines::MachinesClient::<T>::new(self.client.clone(), &self.path)
+    }
+}
+impl<T> QemuClient<T>
+where
+    T: crate::client::Client,
+{
+    pub fn migration(&self) -> migration::MigrationClient<T> {
+        migration::MigrationClient::<T>::new(self.client.clone(), &self.path)
     }
 }

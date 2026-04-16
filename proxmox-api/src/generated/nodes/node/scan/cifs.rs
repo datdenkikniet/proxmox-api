@@ -30,7 +30,7 @@ impl GetOutputItems {
         Self {
             description,
             share,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -53,10 +53,10 @@ impl GetParams {
     pub fn new(server: String) -> Self {
         Self {
             server,
-            domain: Default::default(),
-            password: Default::default(),
-            username: Default::default(),
-            additional_properties: Default::default(),
+            domain: ::std::default::Default::default(),
+            password: ::std::default::Default::default(),
+            username: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

@@ -42,7 +42,7 @@ impl PostOutput {
             corosync_authkey,
             corosync_conf,
             warnings,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

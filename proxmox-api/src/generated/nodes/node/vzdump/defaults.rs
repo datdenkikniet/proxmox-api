@@ -106,16 +106,11 @@ pub struct GetOutput {
     #[doc = "Determine which notification system to use. If set to 'legacy-sendmail', vzdump will consider the mailto/mailnotification parameters and send emails to the specified address(es) via the 'sendmail' command. If set to 'notification-system', a notification will be sent via PVE's notification system, and the mailto and mailnotification will be ignored. If set to 'auto' (default setting), an email will be sent if mailto is set, and the notification system will be used if not."]
     #[doc = ""]
     pub notification_mode: Option<NotificationMode>,
-    #[serde(rename = "notification-policy")]
+    #[serde(rename = "pbs-change-detection-mode")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Deprecated: Do not use"]
+    #[doc = "PBS mode used to detect file changes and switch encoding format for container backups."]
     #[doc = ""]
-    pub notification_policy: Option<NotificationPolicy>,
-    #[serde(rename = "notification-target")]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Deprecated: Do not use"]
-    #[doc = ""]
-    pub notification_target: Option<String>,
+    pub pbs_change_detection_mode: Option<PbsChangeDetectionMode>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Other performance-related settings."]
     #[doc = ""]
@@ -310,25 +305,24 @@ impl TryFrom<&str> for NotificationMode {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
-#[doc = "Deprecated: Do not use"]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "PBS mode used to detect file changes and switch encoding format for container backups."]
 #[doc = ""]
-pub enum NotificationPolicy {
-    #[serde(rename = "always")]
-    #[default]
-    Always,
-    #[serde(rename = "failure")]
-    Failure,
-    #[serde(rename = "never")]
-    Never,
+pub enum PbsChangeDetectionMode {
+    #[serde(rename = "data")]
+    Data,
+    #[serde(rename = "legacy")]
+    Legacy,
+    #[serde(rename = "metadata")]
+    Metadata,
 }
-impl TryFrom<&str> for NotificationPolicy {
+impl TryFrom<&str> for PbsChangeDetectionMode {
     type Error = String;
     fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
         match value {
-            "always" => Ok(Self::Always),
-            "failure" => Ok(Self::Failure),
-            "never" => Ok(Self::Never),
+            "data" => Ok(Self::Data),
+            "legacy" => Ok(Self::Legacy),
+            "metadata" => Ok(Self::Metadata),
             v => Err(format!("Unknown variant {v}")),
         }
     }

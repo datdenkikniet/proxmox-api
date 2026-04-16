@@ -38,29 +38,105 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(controller: String, ty: String) -> Self {
+    pub fn new(controller: String, ty: Type) -> Self {
         Self {
             controller,
             ty,
-            pending: Default::default(),
-            state: Default::default(),
-            additional_properties: Default::default(),
+            asn: ::std::default::Default::default(),
+            bgp_multipath_as_relax: ::std::default::Default::default(),
+            digest: ::std::default::Default::default(),
+            ebgp: ::std::default::Default::default(),
+            ebgp_multihop: ::std::default::Default::default(),
+            isis_domain: ::std::default::Default::default(),
+            isis_ifaces: ::std::default::Default::default(),
+            isis_net: ::std::default::Default::default(),
+            loopback: ::std::default::Default::default(),
+            node: ::std::default::Default::default(),
+            peers: ::std::default::Default::default(),
+            pending: ::std::default::Default::default(),
+            state: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
-    pub controller: String,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The local ASN of the controller. BGP & EVPN only."]
+    #[doc = ""]
+    pub asn: Option<AsnInt>,
+    #[serde(rename = "bgp-multipath-as-relax")]
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub pending: Option<bool>,
+    #[doc = "Consider different AS paths of equal length for multipath computation. BGP only."]
+    #[doc = ""]
+    pub bgp_multipath_as_relax: Option<bool>,
+    #[doc = "Name of the controller."]
+    #[doc = ""]
+    pub controller: String,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub state: Option<String>,
+    #[doc = "Digest of the controller section."]
+    #[doc = ""]
+    pub digest: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Enable eBGP (remote-as external). BGP only."]
+    #[doc = ""]
+    pub ebgp: Option<bool>,
+    #[serde(rename = "ebgp-multihop")]
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Set maximum amount of hops for eBGP peers. Needs ebgp set to 1. BGP only."]
+    #[doc = ""]
+    pub ebgp_multihop: Option<i64>,
+    #[serde(rename = "isis-domain")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Name of the IS-IS domain. IS-IS only."]
+    #[doc = ""]
+    pub isis_domain: Option<String>,
+    #[serde(rename = "isis-ifaces")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Comma-separated list of interfaces where IS-IS should be active. IS-IS only."]
+    #[doc = ""]
+    pub isis_ifaces: Option<String>,
+    #[serde(rename = "isis-net")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Network Entity title for this node in the IS-IS network. IS-IS only."]
+    #[doc = ""]
+    pub isis_net: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Name of the loopback/dummy interface that provides the Router-IP. BGP only."]
+    #[doc = ""]
+    pub loopback: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Node(s) where this controller is active."]
+    #[doc = ""]
+    pub node: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Comma-separated list of the peers IP addresses."]
+    #[doc = ""]
+    pub peers: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Changes that have not yet been applied to the running configuration."]
+    #[doc = ""]
+    pub pending: Option<PendingGetOutputItemsPending>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "State of the SDN configuration object."]
+    #[doc = ""]
+    pub state: Option<State>,
     #[serde(rename = "type")]
-    pub ty: String,
+    #[doc = "Type of the controller"]
+    #[doc = ""]
+    pub ty: Type,
     #[serde(
         flatten,
         default,
@@ -98,22 +174,90 @@ pub struct GetParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct PendingGetOutputItemsPending {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The local ASN of the controller. BGP & EVPN only."]
+    #[doc = ""]
+    pub asn: Option<AsnInt>,
+    #[serde(rename = "bgp-multipath-as-relax")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Consider different AS paths of equal length for multipath computation. BGP only."]
+    #[doc = ""]
+    pub bgp_multipath_as_relax: Option<bool>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Enable eBGP (remote-as external). BGP only."]
+    #[doc = ""]
+    pub ebgp: Option<bool>,
+    #[serde(rename = "ebgp-multihop")]
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Set maximum amount of hops for eBGP peers. Needs ebgp set to 1. BGP only."]
+    #[doc = ""]
+    pub ebgp_multihop: Option<i64>,
+    #[serde(rename = "isis-domain")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Name of the IS-IS domain. IS-IS only."]
+    #[doc = ""]
+    pub isis_domain: Option<String>,
+    #[serde(rename = "isis-ifaces")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Comma-separated list of interfaces where IS-IS should be active. IS-IS only."]
+    #[doc = ""]
+    pub isis_ifaces: Option<String>,
+    #[serde(rename = "isis-net")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Network Entity title for this node in the IS-IS network. IS-IS only."]
+    #[doc = ""]
+    pub isis_net: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Name of the loopback/dummy interface that provides the Router-IP. BGP only."]
+    #[doc = ""]
+    pub loopback: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Node(s) where this controller is active."]
+    #[doc = ""]
+    pub node: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Comma-separated list of the peers IP addresses."]
+    #[doc = ""]
+    pub peers: Option<String>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 impl PostParams {
     pub fn new(controller: String, ty: Type) -> Self {
         Self {
             controller,
             ty,
-            asn: Default::default(),
-            bgp_multipath_as_path_relax: Default::default(),
-            ebgp: Default::default(),
-            ebgp_multihop: Default::default(),
-            isis_domain: Default::default(),
-            isis_ifaces: Default::default(),
-            isis_net: Default::default(),
-            loopback: Default::default(),
-            node: Default::default(),
-            peers: Default::default(),
-            additional_properties: Default::default(),
+            asn: ::std::default::Default::default(),
+            bgp_multipath_as_path_relax: ::std::default::Default::default(),
+            ebgp: ::std::default::Default::default(),
+            ebgp_multihop: ::std::default::Default::default(),
+            fabric: ::std::default::Default::default(),
+            isis_domain: ::std::default::Default::default(),
+            isis_ifaces: ::std::default::Default::default(),
+            isis_net: ::std::default::Default::default(),
+            lock_token: ::std::default::Default::default(),
+            loopback: ::std::default::Default::default(),
+            node: ::std::default::Default::default(),
+            peers: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -129,6 +273,8 @@ pub struct PostParams {
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Consider different AS paths of equal length for multipath computation."]
+    #[doc = ""]
     pub bgp_multipath_as_path_relax: Option<bool>,
     #[doc = "The SDN controller object identifier."]
     #[doc = ""]
@@ -138,7 +284,7 @@ pub struct PostParams {
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Enable ebgp. (remote-as external)"]
+    #[doc = "Enable eBGP (remote-as external)."]
     #[doc = ""]
     pub ebgp: Option<bool>,
     #[serde(rename = "ebgp-multihop")]
@@ -147,24 +293,35 @@ pub struct PostParams {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Set maximum amount of hops for eBGP peers."]
+    #[doc = ""]
     pub ebgp_multihop: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "SDN fabric to use as underlay for this EVPN controller."]
+    #[doc = ""]
+    pub fabric: Option<String>,
     #[serde(rename = "isis-domain")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "ISIS domain."]
+    #[doc = "Name of the IS-IS domain."]
     #[doc = ""]
     pub isis_domain: Option<String>,
     #[serde(rename = "isis-ifaces")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "ISIS interface."]
+    #[doc = "Comma-separated list of interfaces where IS-IS should be active."]
     #[doc = ""]
     pub isis_ifaces: Option<String>,
     #[serde(rename = "isis-net")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "ISIS network entity title."]
+    #[doc = "Network Entity title for this node in the IS-IS network."]
     #[doc = ""]
     pub isis_net: Option<String>,
+    #[serde(rename = "lock-token")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "source loopback interface."]
+    #[doc = "the token for unlocking the global SDN configuration"]
+    #[doc = ""]
+    pub lock_token: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Name of the loopback/dummy interface that provides the Router-IP."]
     #[doc = ""]
     pub loopback: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -185,6 +342,28 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "State of the SDN configuration object."]
+#[doc = ""]
+pub enum State {
+    #[serde(rename = "changed")]
+    Changed,
+    #[serde(rename = "deleted")]
+    Deleted,
+    #[serde(rename = "new")]
+    New,
+}
+impl TryFrom<&str> for State {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "changed" => Ok(Self::Changed),
+            "deleted" => Ok(Self::Deleted),
+            "new" => Ok(Self::New),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Only list sdn controllers of specific type"]
@@ -215,9 +394,9 @@ impl TryFrom<&str> for Type {
 pub struct AsnInt(i128);
 impl crate::types::bounded_integer::BoundedInteger for AsnInt {
     const MIN: Option<i128> = Some(0i128);
-    const MAX: Option<i128> = Some(4294967296i128);
+    const MAX: Option<i128> = Some(4294967295i128);
     const DEFAULT: Option<i128> = None::<i128>;
-    const TYPE_DESCRIPTION: &'static str = "an integer between 0 and 4294967296";
+    const TYPE_DESCRIPTION: &'static str = "an integer between 0 and 4294967295";
     fn get(&self) -> i128 {
         self.0
     }

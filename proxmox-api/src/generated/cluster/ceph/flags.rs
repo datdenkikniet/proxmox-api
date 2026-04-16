@@ -43,7 +43,7 @@ impl GetOutputItems {
             description,
             name,
             value,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

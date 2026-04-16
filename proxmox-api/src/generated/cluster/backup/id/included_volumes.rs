@@ -30,9 +30,9 @@ impl ChildrenGetOutputChildrenItems {
         Self {
             id,
             ty,
-            children: Default::default(),
-            name: Default::default(),
-            additional_properties: Default::default(),
+            children: ::std::default::Default::default(),
+            name: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -71,7 +71,7 @@ impl ChildrenGetOutputChildrenItemsChildrenItems {
             included,
             name,
             reason,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -104,7 +104,7 @@ impl GetOutput {
     pub fn new(children: Vec<ChildrenGetOutputChildrenItems>) -> Self {
         Self {
             children,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

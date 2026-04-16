@@ -42,8 +42,8 @@ impl GetOutputItems {
         Self {
             digest,
             name,
-            comment: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -68,10 +68,10 @@ impl PostParams {
     pub fn new(name: NameStr) -> Self {
         Self {
             name,
-            comment: Default::default(),
-            digest: Default::default(),
-            rename: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            digest: ::std::default::Default::default(),
+            rename: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

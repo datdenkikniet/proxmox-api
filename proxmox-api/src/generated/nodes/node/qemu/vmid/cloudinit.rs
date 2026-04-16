@@ -41,10 +41,10 @@ impl GetOutputItems {
     pub fn new(key: String) -> Self {
         Self {
             key,
-            delete: Default::default(),
-            pending: Default::default(),
-            value: Default::default(),
-            additional_properties: Default::default(),
+            delete: ::std::default::Default::default(),
+            pending: ::std::default::Default::default(),
+            value: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

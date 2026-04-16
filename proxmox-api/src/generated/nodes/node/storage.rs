@@ -26,20 +26,47 @@ where
         self.client.get(&path, &params)
     }
 }
+impl FormatsGetOutputItemsFormats {
+    pub fn new(default: Default, supported: Vec<Supported>) -> Self {
+        Self {
+            default,
+            supported,
+            additional_properties: ::std::default::Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct FormatsGetOutputItemsFormats {
+    #[doc = "The default format of the storage."]
+    #[doc = ""]
+    pub default: Default,
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    #[doc = "The list of supported formats"]
+    #[doc = ""]
+    pub supported: Vec<Supported>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 impl GetOutputItems {
     pub fn new(content: String, storage: String, ty: String) -> Self {
         Self {
             content,
             storage,
             ty,
-            active: Default::default(),
-            avail: Default::default(),
-            enabled: Default::default(),
-            shared: Default::default(),
-            total: Default::default(),
-            used: Default::default(),
-            used_fraction: Default::default(),
-            additional_properties: Default::default(),
+            active: ::std::default::Default::default(),
+            avail: ::std::default::Default::default(),
+            enabled: ::std::default::Default::default(),
+            formats: ::std::default::Default::default(),
+            select_existing: ::std::default::Default::default(),
+            shared: ::std::default::Default::default(),
+            total: ::std::default::Default::default(),
+            used: ::std::default::Default::default(),
+            used_fraction: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -72,6 +99,18 @@ pub struct GetOutputItems {
     #[doc = "Set when storage is enabled (not disabled)."]
     #[doc = ""]
     pub enabled: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Lists the supported and default format. Use 'formats' instead. Only included if 'format' parameter is set."]
+    #[doc = ""]
+    pub formats: Option<FormatsGetOutputItemsFormats>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Instead of creating new volumes, one must select one that is already existing. Only included if 'format' parameter is set."]
+    #[doc = ""]
+    pub select_existing: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -154,6 +193,54 @@ pub struct GetParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "The default format of the storage."]
+#[doc = ""]
+pub enum Default {
+    #[serde(rename = "qcow2")]
+    Qcow2,
+    #[serde(rename = "raw")]
+    Raw,
+    #[serde(rename = "subvol")]
+    Subvol,
+    #[serde(rename = "vmdk")]
+    Vmdk,
+}
+impl TryFrom<&str> for Default {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "qcow2" => Ok(Self::Qcow2),
+            "raw" => Ok(Self::Raw),
+            "subvol" => Ok(Self::Subvol),
+            "vmdk" => Ok(Self::Vmdk),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+pub enum Supported {
+    #[serde(rename = "qcow2")]
+    Qcow2,
+    #[serde(rename = "raw")]
+    Raw,
+    #[serde(rename = "subvol")]
+    Subvol,
+    #[serde(rename = "vmdk")]
+    Vmdk,
+}
+impl TryFrom<&str> for Supported {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "qcow2" => Ok(Self::Qcow2),
+            "raw" => Ok(Self::Raw),
+            "subvol" => Ok(Self::Subvol),
+            "vmdk" => Ok(Self::Vmdk),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 impl<T> StorageClient<T>
 where

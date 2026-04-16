@@ -51,14 +51,14 @@ impl GetOutput {
     pub fn new(name: String) -> Self {
         Self {
             name,
-            author: Default::default(),
-            comment: Default::default(),
-            digest: Default::default(),
-            disable: Default::default(),
-            from_address: Default::default(),
-            mailto: Default::default(),
-            mailto_user: Default::default(),
-            additional_properties: Default::default(),
+            author: ::std::default::Default::default(),
+            comment: ::std::default::Default::default(),
+            digest: ::std::default::Default::default(),
+            disable: ::std::default::Default::default(),
+            from_address: ::std::default::Default::default(),
+            mailto: ::std::default::Default::default(),
+            mailto_user: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

@@ -33,8 +33,8 @@ impl EntriesGetOutputItemsEntriesItems {
             description,
             id,
             ty,
-            enable: Default::default(),
-            additional_properties: Default::default(),
+            enable: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -77,9 +77,9 @@ impl GetOutputItems {
         Self {
             entries,
             userid,
-            tfa_locked_until: Default::default(),
-            totp_locked: Default::default(),
-            additional_properties: Default::default(),
+            tfa_locked_until: ::std::default::Default::default(),
+            totp_locked: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

@@ -27,14 +27,15 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(state: String) -> Self {
+    pub fn new(name: String, state: String) -> Self {
         Self {
+            name,
             state,
-            addr: Default::default(),
-            host: Default::default(),
-            rank: Default::default(),
-            standby_replay: Default::default(),
-            additional_properties: Default::default(),
+            addr: ::std::default::Default::default(),
+            host: ::std::default::Default::default(),
+            rank: ::std::default::Default::default(),
+            standby_replay: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -44,6 +45,9 @@ pub struct GetOutputItems {
     pub addr: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub host: Option<String>,
+    #[doc = "The name (ID) for the MDS"]
+    #[doc = ""]
+    pub name: String,
     #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"

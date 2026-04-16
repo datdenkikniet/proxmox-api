@@ -54,10 +54,10 @@ impl PostParams {
     pub fn new(clustername: ClusternameStr) -> Self {
         Self {
             clustername,
-            links: Default::default(),
-            nodeid: Default::default(),
-            votes: Default::default(),
-            additional_properties: Default::default(),
+            links: ::std::default::Default::default(),
+            nodeid: ::std::default::Default::default(),
+            votes: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

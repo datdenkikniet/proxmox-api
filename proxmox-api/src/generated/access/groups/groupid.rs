@@ -51,7 +51,7 @@ impl GetOutput {
     pub fn new(members: Vec<MembersStr>) -> Self {
         Self {
             members,
-            comment: Default::default(),
+            comment: ::std::default::Default::default(),
         }
     }
 }

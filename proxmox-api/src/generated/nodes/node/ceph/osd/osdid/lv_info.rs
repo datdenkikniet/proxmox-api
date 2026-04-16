@@ -41,7 +41,7 @@ impl GetOutput {
             lv_size,
             lv_uuid,
             vg_name,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

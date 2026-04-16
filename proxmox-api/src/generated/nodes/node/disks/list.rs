@@ -41,14 +41,14 @@ impl GetOutputItems {
             osdid,
             osdid_list,
             size,
-            health: Default::default(),
-            model: Default::default(),
-            parent: Default::default(),
-            serial: Default::default(),
-            used: Default::default(),
-            vendor: Default::default(),
-            wwn: Default::default(),
-            additional_properties: Default::default(),
+            health: ::std::default::Default::default(),
+            model: ::std::default::Default::default(),
+            parent: ::std::default::Default::default(),
+            serial: ::std::default::Default::default(),
+            used: ::std::default::Default::default(),
+            vendor: ::std::default::Default::default(),
+            wwn: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

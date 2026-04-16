@@ -39,8 +39,8 @@ impl PostParams {
         Self {
             password,
             username,
-            crypted: Default::default(),
-            additional_properties: Default::default(),
+            crypted: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

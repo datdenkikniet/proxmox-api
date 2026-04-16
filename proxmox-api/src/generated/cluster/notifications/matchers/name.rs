@@ -51,16 +51,16 @@ impl GetOutput {
     pub fn new(name: String) -> Self {
         Self {
             name,
-            comment: Default::default(),
-            digest: Default::default(),
-            disable: Default::default(),
-            invert_match: Default::default(),
-            match_calendar: Default::default(),
-            match_field: Default::default(),
-            match_severity: Default::default(),
-            mode: Default::default(),
-            target: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            digest: ::std::default::Default::default(),
+            disable: ::std::default::Default::default(),
+            invert_match: ::std::default::Default::default(),
+            match_calendar: ::std::default::Default::default(),
+            match_field: ::std::default::Default::default(),
+            match_severity: ::std::default::Default::default(),
+            mode: ::std::default::Default::default(),
+            target: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

@@ -76,12 +76,13 @@ impl PostParams {
         Self {
             subnet,
             ty,
-            dhcp_dns_server: Default::default(),
-            dhcp_range: Default::default(),
-            dnszoneprefix: Default::default(),
-            gateway: Default::default(),
-            snat: Default::default(),
-            additional_properties: Default::default(),
+            dhcp_dns_server: ::std::default::Default::default(),
+            dhcp_range: ::std::default::Default::default(),
+            dnszoneprefix: ::std::default::Default::default(),
+            gateway: ::std::default::Default::default(),
+            lock_token: ::std::default::Default::default(),
+            snat: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -105,6 +106,11 @@ pub struct PostParams {
     #[doc = "Subnet Gateway: Will be assign on vnet for layer3 zones"]
     #[doc = ""]
     pub gateway: Option<::std::net::IpAddr>,
+    #[serde(rename = "lock-token")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "the token for unlocking the global SDN configuration"]
+    #[doc = ""]
+    pub lock_token: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"

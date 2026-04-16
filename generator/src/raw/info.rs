@@ -33,4 +33,8 @@ pub struct Info<'a> {
         skip_serializing_if = "Option::is_none"
     )]
     pub proxy_to: Option<Cow<'a, str>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub expose_credentials: Option<u32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub download_allowed: Option<serde_json::Value>,
 }

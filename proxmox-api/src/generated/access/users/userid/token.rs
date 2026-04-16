@@ -30,10 +30,10 @@ impl GetOutputItems {
     pub fn new(tokenid: TokenidStr) -> Self {
         Self {
             tokenid,
-            comment: Default::default(),
-            expire: Default::default(),
-            privsep: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            expire: ::std::default::Default::default(),
+            privsep: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

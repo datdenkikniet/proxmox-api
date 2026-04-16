@@ -30,8 +30,8 @@ impl PostParams {
         Self {
             content,
             file,
-            encode: Default::default(),
-            additional_properties: Default::default(),
+            encode: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

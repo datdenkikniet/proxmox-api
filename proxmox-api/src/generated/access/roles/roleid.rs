@@ -308,6 +308,41 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub vm_console: Option<bool>,
+    #[serde(rename = "VM.GuestAgent.Audit")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub vm_guestagent_audit: Option<bool>,
+    #[serde(rename = "VM.GuestAgent.FileRead")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub vm_guestagent_fileread: Option<bool>,
+    #[serde(rename = "VM.GuestAgent.FileSystemMgmt")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub vm_guestagent_filesystemmgmt: Option<bool>,
+    #[serde(rename = "VM.GuestAgent.FileWrite")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub vm_guestagent_filewrite: Option<bool>,
+    #[serde(rename = "VM.GuestAgent.Unrestricted")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub vm_guestagent_unrestricted: Option<bool>,
     #[serde(rename = "VM.Migrate")]
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -315,13 +350,6 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub vm_migrate: Option<bool>,
-    #[serde(rename = "VM.Monitor")]
-    #[serde(
-        serialize_with = "crate::types::serialize_bool_optional",
-        deserialize_with = "crate::types::deserialize_bool_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub vm_monitor: Option<bool>,
     #[serde(rename = "VM.PowerMgmt")]
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
@@ -329,6 +357,13 @@ pub struct GetOutput {
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     pub vm_powermgmt: Option<bool>,
+    #[serde(rename = "VM.Replicate")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    pub vm_replicate: Option<bool>,
     #[serde(rename = "VM.Snapshot")]
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",

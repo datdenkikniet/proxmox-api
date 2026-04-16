@@ -43,9 +43,9 @@ impl GetOutputItems {
             name,
             origin,
             server,
-            comment: Default::default(),
-            disable: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            disable: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -85,9 +85,9 @@ impl PostParams {
             name,
             server,
             token,
-            comment: Default::default(),
-            disable: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            disable: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

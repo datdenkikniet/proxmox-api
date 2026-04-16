@@ -31,7 +31,7 @@ impl GetOutputItems {
     pub fn new(ty: String) -> Self {
         Self {
             ty,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

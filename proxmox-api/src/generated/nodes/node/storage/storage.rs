@@ -2,6 +2,7 @@ pub mod content;
 pub mod download_url;
 pub mod file_restore;
 pub mod import_metadata;
+pub mod oci_registry_pull;
 pub mod prunebackups;
 pub mod rrd;
 pub mod rrddata;
@@ -36,7 +37,7 @@ impl GetOutputItems {
     pub fn new(subdir: String) -> Self {
         Self {
             subdir,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -112,6 +113,14 @@ where
 {
     pub fn download_url(&self) -> download_url::DownloadUrlClient<T> {
         download_url::DownloadUrlClient::<T>::new(self.client.clone(), &self.path)
+    }
+}
+impl<T> StorageClient<T>
+where
+    T: crate::client::Client,
+{
+    pub fn oci_registry_pull(&self) -> oci_registry_pull::OciRegistryPullClient<T> {
+        oci_registry_pull::OciRegistryPullClient::<T>::new(self.client.clone(), &self.path)
     }
 }
 impl<T> StorageClient<T>

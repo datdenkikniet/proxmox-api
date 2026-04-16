@@ -29,15 +29,15 @@ impl PostParams {
     pub fn new(disk: Disk) -> Self {
         Self {
             disk,
-            bwlimit: Default::default(),
-            delete: Default::default(),
-            digest: Default::default(),
-            format: Default::default(),
-            storage: Default::default(),
-            target_digest: Default::default(),
-            target_disk: Default::default(),
-            target_vmid: Default::default(),
-            additional_properties: Default::default(),
+            bwlimit: ::std::default::Default::default(),
+            delete: ::std::default::Default::default(),
+            digest: ::std::default::Default::default(),
+            format: ::std::default::Default::default(),
+            storage: ::std::default::Default::default(),
+            target_digest: ::std::default::Default::default(),
+            target_disk: ::std::default::Default::default(),
+            target_vmid: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -60,9 +60,7 @@ pub struct PostParams {
     #[doc = ""]
     pub delete: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Prevent changes if current configuration file has different SHA1"]
-    #[doc = ""]
-    #[doc = ".\" digest. This can be used to prevent concurrent modifications."]
+    #[doc = "Prevent changes if current configuration file has different SHA1 digest. This can be used to prevent concurrent modifications."]
     #[doc = ""]
     pub digest: Option<DigestStr>,
     #[doc = "The disk you want to move."]
@@ -78,9 +76,7 @@ pub struct PostParams {
     pub storage: Option<String>,
     #[serde(rename = "target-digest")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Prevent changes if the current config file of the target VM has a"]
-    #[doc = ""]
-    #[doc = ".\" different SHA1 digest. This can be used to detect concurrent modifications."]
+    #[doc = "Prevent changes if the current config file of the target VM has a different SHA1 digest. This can be used to detect concurrent modifications."]
     #[doc = ""]
     pub target_digest: Option<TargetDigestStr>,
     #[serde(rename = "target-disk")]

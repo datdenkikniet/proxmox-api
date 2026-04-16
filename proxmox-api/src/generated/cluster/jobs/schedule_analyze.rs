@@ -30,7 +30,7 @@ impl GetOutputItems {
         Self {
             timestamp,
             utc,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -57,9 +57,9 @@ impl GetParams {
     pub fn new(schedule: ScheduleStr) -> Self {
         Self {
             schedule,
-            iterations: Default::default(),
-            starttime: Default::default(),
-            additional_properties: Default::default(),
+            iterations: ::std::default::Default::default(),
+            starttime: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

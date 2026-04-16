@@ -50,12 +50,12 @@ impl PostParams {
     pub fn new(contact: String) -> Self {
         Self {
             contact,
-            directory: Default::default(),
-            eab_hmac_key: Default::default(),
-            eab_kid: Default::default(),
-            name: Default::default(),
-            tos_url: Default::default(),
-            additional_properties: Default::default(),
+            directory: ::std::default::Default::default(),
+            eab_hmac_key: ::std::default::Default::default(),
+            eab_kid: ::std::default::Default::default(),
+            name: ::std::default::Default::default(),
+            tos_url: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

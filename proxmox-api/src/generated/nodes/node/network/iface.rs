@@ -52,7 +52,7 @@ impl GetOutput {
         Self {
             method,
             ty,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -72,33 +72,34 @@ impl PutParams {
     pub fn new(ty: Type) -> Self {
         Self {
             ty,
-            address: Default::default(),
-            address6: Default::default(),
-            autostart: Default::default(),
-            bond_primary: Default::default(),
-            bond_mode: Default::default(),
-            bond_xmit_hash_policy: Default::default(),
-            bridge_ports: Default::default(),
-            bridge_vlan_aware: Default::default(),
-            cidr: Default::default(),
-            cidr6: Default::default(),
-            comments: Default::default(),
-            comments6: Default::default(),
-            delete: Default::default(),
-            gateway: Default::default(),
-            gateway6: Default::default(),
-            mtu: Default::default(),
-            netmask: Default::default(),
-            netmask6: Default::default(),
-            ovs_bonds: Default::default(),
-            ovs_bridge: Default::default(),
-            ovs_options: Default::default(),
-            ovs_ports: Default::default(),
-            ovs_tag: Default::default(),
-            slaves: Default::default(),
-            vlan_id: Default::default(),
-            vlan_raw_device: Default::default(),
-            additional_properties: Default::default(),
+            address: ::std::default::Default::default(),
+            address6: ::std::default::Default::default(),
+            autostart: ::std::default::Default::default(),
+            bond_primary: ::std::default::Default::default(),
+            bond_mode: ::std::default::Default::default(),
+            bond_xmit_hash_policy: ::std::default::Default::default(),
+            bridge_ports: ::std::default::Default::default(),
+            bridge_vids: ::std::default::Default::default(),
+            bridge_vlan_aware: ::std::default::Default::default(),
+            cidr: ::std::default::Default::default(),
+            cidr6: ::std::default::Default::default(),
+            comments: ::std::default::Default::default(),
+            comments6: ::std::default::Default::default(),
+            delete: ::std::default::Default::default(),
+            gateway: ::std::default::Default::default(),
+            gateway6: ::std::default::Default::default(),
+            mtu: ::std::default::Default::default(),
+            netmask: ::std::default::Default::default(),
+            netmask6: ::std::default::Default::default(),
+            ovs_bonds: ::std::default::Default::default(),
+            ovs_bridge: ::std::default::Default::default(),
+            ovs_options: ::std::default::Default::default(),
+            ovs_ports: ::std::default::Default::default(),
+            ovs_tag: ::std::default::Default::default(),
+            slaves: ::std::default::Default::default(),
+            vlan_id: ::std::default::Default::default(),
+            vlan_raw_device: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -137,6 +138,10 @@ pub struct PutParams {
     #[doc = "Specify the interfaces you want to add to your bridge."]
     #[doc = ""]
     pub bridge_ports: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Specify the allowed VLANs. For example: '2 4 100-200'. Only used if the bridge is VLAN aware."]
+    #[doc = ""]
+    pub bridge_vids: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -311,10 +316,14 @@ pub enum Type {
     Bridge,
     #[serde(rename = "eth")]
     Eth,
+    #[serde(rename = "fabric")]
+    Fabric,
     #[serde(rename = "unknown")]
     Unknown,
     #[serde(rename = "vlan")]
     Vlan,
+    #[serde(rename = "vnet")]
+    Vnet,
 }
 impl TryFrom<&str> for Type {
     type Error = String;
@@ -328,8 +337,10 @@ impl TryFrom<&str> for Type {
             "bond" => Ok(Self::Bond),
             "bridge" => Ok(Self::Bridge),
             "eth" => Ok(Self::Eth),
+            "fabric" => Ok(Self::Fabric),
             "unknown" => Ok(Self::Unknown),
             "vlan" => Ok(Self::Vlan),
+            "vnet" => Ok(Self::Vnet),
             v => Err(format!("Unknown variant {v}")),
         }
     }

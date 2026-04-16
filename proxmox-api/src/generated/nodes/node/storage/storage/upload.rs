@@ -18,7 +18,7 @@ impl<T> UploadClient<T>
 where
     T: crate::client::Client,
 {
-    #[doc = "Upload templates and ISO images."]
+    #[doc = "Upload templates, ISO images, OVAs and VM images."]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
@@ -30,10 +30,10 @@ impl PostParams {
         Self {
             content,
             filename,
-            checksum: Default::default(),
-            checksum_algorithm: Default::default(),
-            tmpfilename: Default::default(),
-            additional_properties: Default::default(),
+            checksum: ::std::default::Default::default(),
+            checksum_algorithm: ::std::default::Default::default(),
+            tmpfilename: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -100,6 +100,8 @@ impl TryFrom<&str> for ChecksumAlgorithm {
 #[doc = "Content type."]
 #[doc = ""]
 pub enum Content {
+    #[serde(rename = "import")]
+    Import,
     #[serde(rename = "iso")]
     Iso,
     #[serde(rename = "vztmpl")]
@@ -109,6 +111,7 @@ impl TryFrom<&str> for Content {
     type Error = String;
     fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
         match value {
+            "import" => Ok(Self::Import),
             "iso" => Ok(Self::Iso),
             "vztmpl" => Ok(Self::Vztmpl),
             v => Err(format!("Unknown variant {v}")),

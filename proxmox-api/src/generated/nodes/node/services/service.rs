@@ -34,7 +34,7 @@ impl GetOutputItems {
     pub fn new(subdir: String) -> Self {
         Self {
             subdir,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

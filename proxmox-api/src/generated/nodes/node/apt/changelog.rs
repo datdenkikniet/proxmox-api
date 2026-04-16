@@ -29,8 +29,8 @@ impl GetParams {
     pub fn new(name: String) -> Self {
         Self {
             name,
-            version: Default::default(),
-            additional_properties: Default::default(),
+            version: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

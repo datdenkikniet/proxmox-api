@@ -67,8 +67,8 @@ impl GetOutput {
             description,
             id,
             ty,
-            enable: Default::default(),
-            additional_properties: Default::default(),
+            enable: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

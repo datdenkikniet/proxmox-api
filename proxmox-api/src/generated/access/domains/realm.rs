@@ -155,6 +155,29 @@ pub struct PutParams {
     #[doc = "LDAP attribute representing a groups name. If not set or found, the first value of the DN will be used as name."]
     #[doc = ""]
     pub group_name_attr: Option<GroupNameAttrStr>,
+    #[serde(rename = "groups-autocreate")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Automatically create groups if they do not exist."]
+    #[doc = ""]
+    pub groups_autocreate: Option<bool>,
+    #[serde(rename = "groups-claim")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "OpenID claim used to retrieve groups with."]
+    #[doc = ""]
+    pub groups_claim: Option<GroupsClaimStr>,
+    #[serde(rename = "groups-overwrite")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "All groups will be overwritten for the user on login."]
+    #[doc = ""]
+    pub groups_overwrite: Option<bool>,
     #[serde(rename = "issuer-url")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "OpenID Issuer Url"]
@@ -176,6 +199,15 @@ pub struct PutParams {
     #[doc = "Specifies whether the Authorization Server prompts the End-User for reauthentication and consent."]
     #[doc = ""]
     pub prompt: Option<PromptStr>,
+    #[serde(rename = "query-userinfo")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Enables querying the userinfo endpoint for claims values."]
+    #[doc = ""]
+    pub query_userinfo: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Specifies the scopes (user details) that should be authorized and returned, for example 'email' or 'profile'."]
     #[doc = ""]
@@ -835,6 +867,47 @@ impl ::serde::Serialize for GroupNameAttrStr {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for GroupNameAttrStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::bounded_string::deserialize_bounded_string(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct GroupsClaimStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for GroupsClaimStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = Some(256usize);
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = Some("(?^:[A-Za-z0-9\\.\\-_]+)");
+    const TYPE_DESCRIPTION: &'static str =
+        "a string with pattern r\"(?^:[A-Za-z0-9\\.\\-_]+)\" and length at most 256";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for GroupsClaimStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for GroupsClaimStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::bounded_string::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for GroupsClaimStr {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,

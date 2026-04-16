@@ -79,14 +79,14 @@ impl GetOutputItems {
             pool_name,
             size,
             ty,
-            application_metadata: Default::default(),
-            autoscale_status: Default::default(),
-            pg_autoscale_mode: Default::default(),
-            pg_num_final: Default::default(),
-            pg_num_min: Default::default(),
-            target_size: Default::default(),
-            target_size_ratio: Default::default(),
-            additional_properties: Default::default(),
+            application_metadata: ::std::default::Default::default(),
+            autoscale_status: ::std::default::Default::default(),
+            pg_autoscale_mode: ::std::default::Default::default(),
+            pg_num_final: ::std::default::Default::default(),
+            pg_num_min: ::std::default::Default::default(),
+            target_size: ::std::default::Default::default(),
+            target_size_ratio: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -169,21 +169,21 @@ pub struct GetOutputItems {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 impl PostParams {
-    pub fn new(name: String) -> Self {
+    pub fn new(name: NameStr) -> Self {
         Self {
             name,
-            add_storages: Default::default(),
-            application: Default::default(),
-            crush_rule: Default::default(),
-            erasure_coding: Default::default(),
-            min_size: Default::default(),
-            pg_autoscale_mode: Default::default(),
-            pg_num: Default::default(),
-            pg_num_min: Default::default(),
-            size: Default::default(),
-            target_size: Default::default(),
-            target_size_ratio: Default::default(),
-            additional_properties: Default::default(),
+            add_storages: ::std::default::Default::default(),
+            application: ::std::default::Default::default(),
+            crush_rule: ::std::default::Default::default(),
+            erasure_coding: ::std::default::Default::default(),
+            min_size: ::std::default::Default::default(),
+            pg_autoscale_mode: ::std::default::Default::default(),
+            pg_num: ::std::default::Default::default(),
+            pg_num_min: ::std::default::Default::default(),
+            size: ::std::default::Default::default(),
+            target_size: ::std::default::Default::default(),
+            target_size_ratio: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -216,7 +216,7 @@ pub struct PostParams {
     pub min_size: Option<MinSizeInt>,
     #[doc = "The name of the pool. It must be unique."]
     #[doc = ""]
-    pub name: String,
+    pub name: NameStr,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The automatic PG scaling mode of the pool."]
     #[doc = ""]
@@ -464,6 +464,47 @@ impl<'de> ::serde::Deserialize<'de> for SizeInt {
         D: ::serde::Deserializer<'de>,
     {
         crate::types::bounded_integer::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct NameStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for NameStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = None::<usize>;
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = Some("(?^:^[^:/\\s]+$)");
+    const TYPE_DESCRIPTION: &'static str =
+        "a string with pattern r\"(?^:^[^:/\\s]+$)\" and no length constraints";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for NameStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for NameStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::bounded_string::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for NameStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::bounded_string::deserialize_bounded_string(deserializer)
     }
 }
 #[derive(Debug, Clone, PartialEq, PartialOrd)]

@@ -50,7 +50,7 @@ impl PostParams {
         Self {
             storage,
             template,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

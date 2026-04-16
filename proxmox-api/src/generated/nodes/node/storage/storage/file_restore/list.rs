@@ -32,9 +32,9 @@ impl GetOutputItems {
             leaf,
             text,
             ty,
-            mtime: Default::default(),
-            size: Default::default(),
-            additional_properties: Default::default(),
+            mtime: ::std::default::Default::default(),
+            size: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -85,7 +85,7 @@ impl GetParams {
         Self {
             filepath,
             volume,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

@@ -29,14 +29,14 @@ impl PostParams {
     pub fn new(volume: Volume) -> Self {
         Self {
             volume,
-            bwlimit: Default::default(),
-            delete: Default::default(),
-            digest: Default::default(),
-            storage: Default::default(),
-            target_digest: Default::default(),
-            target_vmid: Default::default(),
-            target_volume: Default::default(),
-            additional_properties: Default::default(),
+            bwlimit: ::std::default::Default::default(),
+            delete: ::std::default::Default::default(),
+            digest: ::std::default::Default::default(),
+            storage: ::std::default::Default::default(),
+            target_digest: ::std::default::Default::default(),
+            target_vmid: ::std::default::Default::default(),
+            target_volume: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

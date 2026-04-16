@@ -61,7 +61,7 @@ impl PutParams {
     pub fn new(timezone: String) -> Self {
         Self {
             timezone,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

@@ -29,7 +29,7 @@ impl GetOutput {
     pub fn new(port: String) -> Self {
         Self {
             port,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -48,7 +48,7 @@ impl GetParams {
         Self {
             port,
             vncticket,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

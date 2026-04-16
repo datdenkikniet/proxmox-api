@@ -30,7 +30,7 @@ impl GetOutputItems {
         Self {
             descr,
             macro_def,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

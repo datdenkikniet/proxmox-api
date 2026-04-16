@@ -29,7 +29,7 @@ impl GetOutputItems {
     pub fn new(lv: String) -> Self {
         Self {
             lv,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -49,7 +49,7 @@ impl GetParams {
     pub fn new(vg: VgStr) -> Self {
         Self {
             vg,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

@@ -44,8 +44,8 @@ impl ChildrenGetOutputChildrenItems {
             leaf,
             name,
             size,
-            children: Default::default(),
-            additional_properties: Default::default(),
+            children: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -91,7 +91,7 @@ impl ChildrenGetOutputChildrenItemsChildrenItems {
             leaf,
             name,
             size,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -131,7 +131,7 @@ impl GetOutput {
         Self {
             children,
             leaf,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -156,8 +156,8 @@ impl PostParams {
         Self {
             device,
             name,
-            add_storage: Default::default(),
-            additional_properties: Default::default(),
+            add_storage: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

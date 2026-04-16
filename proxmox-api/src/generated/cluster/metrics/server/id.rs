@@ -73,19 +73,27 @@ impl PostParams {
             port,
             server,
             ty,
-            api_path_prefix: Default::default(),
-            bucket: Default::default(),
-            disable: Default::default(),
-            influxdbproto: Default::default(),
-            max_body_size: Default::default(),
-            mtu: Default::default(),
-            organization: Default::default(),
-            path: Default::default(),
-            proto: Default::default(),
-            timeout: Default::default(),
-            token: Default::default(),
-            verify_certificate: Default::default(),
-            additional_properties: Default::default(),
+            api_path_prefix: ::std::default::Default::default(),
+            bucket: ::std::default::Default::default(),
+            disable: ::std::default::Default::default(),
+            influxdbproto: ::std::default::Default::default(),
+            max_body_size: ::std::default::Default::default(),
+            mtu: ::std::default::Default::default(),
+            organization: ::std::default::Default::default(),
+            otel_compression: ::std::default::Default::default(),
+            otel_headers: ::std::default::Default::default(),
+            otel_max_body_size: ::std::default::Default::default(),
+            otel_path: ::std::default::Default::default(),
+            otel_protocol: ::std::default::Default::default(),
+            otel_resource_attributes: ::std::default::Default::default(),
+            otel_timeout: ::std::default::Default::default(),
+            otel_verify_ssl: ::std::default::Default::default(),
+            path: ::std::default::Default::default(),
+            proto: ::std::default::Default::default(),
+            timeout: ::std::default::Default::default(),
+            token: ::std::default::Default::default(),
+            verify_certificate: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -123,6 +131,50 @@ pub struct PostParams {
     #[doc = "The InfluxDB organization. Only necessary when using the http v2 api. Has no meaning when using v2 compatibility api."]
     #[doc = ""]
     pub organization: Option<String>,
+    #[serde(rename = "otel-compression")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Compression algorithm for requests"]
+    #[doc = ""]
+    pub otel_compression: Option<OtelCompression>,
+    #[serde(rename = "otel-headers")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Custom HTTP headers (JSON format, base64 encoded)"]
+    #[doc = ""]
+    pub otel_headers: Option<OtelHeadersStr>,
+    #[serde(rename = "otel-max-body-size")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Maximum request body size in bytes"]
+    #[doc = ""]
+    pub otel_max_body_size: Option<OtelMaxBodySizeInt>,
+    #[serde(rename = "otel-path")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "OTLP endpoint path"]
+    #[doc = ""]
+    pub otel_path: Option<String>,
+    #[serde(rename = "otel-protocol")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "HTTP protocol"]
+    #[doc = ""]
+    pub otel_protocol: Option<OtelProtocol>,
+    #[serde(rename = "otel-resource-attributes")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Additional resource attributes as JSON, base64 encoded"]
+    #[doc = ""]
+    pub otel_resource_attributes: Option<OtelResourceAttributesStr>,
+    #[serde(rename = "otel-timeout")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "HTTP request timeout in seconds"]
+    #[doc = ""]
+    pub otel_timeout: Option<OtelTimeoutInt>,
+    #[serde(rename = "otel-verify-ssl")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Verify SSL certificates"]
+    #[doc = ""]
+    pub otel_verify_ssl: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "root graphite path (ex: proxmox.mycluster.mykey)"]
     #[doc = ""]
@@ -170,21 +222,29 @@ impl PutParams {
         Self {
             port,
             server,
-            api_path_prefix: Default::default(),
-            bucket: Default::default(),
-            delete: Default::default(),
-            digest: Default::default(),
-            disable: Default::default(),
-            influxdbproto: Default::default(),
-            max_body_size: Default::default(),
-            mtu: Default::default(),
-            organization: Default::default(),
-            path: Default::default(),
-            proto: Default::default(),
-            timeout: Default::default(),
-            token: Default::default(),
-            verify_certificate: Default::default(),
-            additional_properties: Default::default(),
+            api_path_prefix: ::std::default::Default::default(),
+            bucket: ::std::default::Default::default(),
+            delete: ::std::default::Default::default(),
+            digest: ::std::default::Default::default(),
+            disable: ::std::default::Default::default(),
+            influxdbproto: ::std::default::Default::default(),
+            max_body_size: ::std::default::Default::default(),
+            mtu: ::std::default::Default::default(),
+            organization: ::std::default::Default::default(),
+            otel_compression: ::std::default::Default::default(),
+            otel_headers: ::std::default::Default::default(),
+            otel_max_body_size: ::std::default::Default::default(),
+            otel_path: ::std::default::Default::default(),
+            otel_protocol: ::std::default::Default::default(),
+            otel_resource_attributes: ::std::default::Default::default(),
+            otel_timeout: ::std::default::Default::default(),
+            otel_verify_ssl: ::std::default::Default::default(),
+            path: ::std::default::Default::default(),
+            proto: ::std::default::Default::default(),
+            timeout: ::std::default::Default::default(),
+            token: ::std::default::Default::default(),
+            verify_certificate: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -230,6 +290,50 @@ pub struct PutParams {
     #[doc = "The InfluxDB organization. Only necessary when using the http v2 api. Has no meaning when using v2 compatibility api."]
     #[doc = ""]
     pub organization: Option<String>,
+    #[serde(rename = "otel-compression")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Compression algorithm for requests"]
+    #[doc = ""]
+    pub otel_compression: Option<OtelCompression>,
+    #[serde(rename = "otel-headers")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Custom HTTP headers (JSON format, base64 encoded)"]
+    #[doc = ""]
+    pub otel_headers: Option<OtelHeadersStr>,
+    #[serde(rename = "otel-max-body-size")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Maximum request body size in bytes"]
+    #[doc = ""]
+    pub otel_max_body_size: Option<OtelMaxBodySizeInt>,
+    #[serde(rename = "otel-path")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "OTLP endpoint path"]
+    #[doc = ""]
+    pub otel_path: Option<String>,
+    #[serde(rename = "otel-protocol")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "HTTP protocol"]
+    #[doc = ""]
+    pub otel_protocol: Option<OtelProtocol>,
+    #[serde(rename = "otel-resource-attributes")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Additional resource attributes as JSON, base64 encoded"]
+    #[doc = ""]
+    pub otel_resource_attributes: Option<OtelResourceAttributesStr>,
+    #[serde(rename = "otel-timeout")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "HTTP request timeout in seconds"]
+    #[doc = ""]
+    pub otel_timeout: Option<OtelTimeoutInt>,
+    #[serde(rename = "otel-verify-ssl")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Verify SSL certificates"]
+    #[doc = ""]
+    pub otel_verify_ssl: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "root graphite path (ex: proxmox.mycluster.mykey)"]
     #[doc = ""]
@@ -289,6 +393,46 @@ impl TryFrom<&str> for Influxdbproto {
         }
     }
 }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
+#[doc = "Compression algorithm for requests"]
+#[doc = ""]
+pub enum OtelCompression {
+    #[serde(rename = "gzip")]
+    #[default]
+    Gzip,
+    #[serde(rename = "none")]
+    None,
+}
+impl TryFrom<&str> for OtelCompression {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "gzip" => Ok(Self::Gzip),
+            "none" => Ok(Self::None),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
+#[doc = "HTTP protocol"]
+#[doc = ""]
+pub enum OtelProtocol {
+    #[serde(rename = "http")]
+    Http,
+    #[serde(rename = "https")]
+    #[default]
+    Https,
+}
+impl TryFrom<&str> for OtelProtocol {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "http" => Ok(Self::Http),
+            "https" => Ok(Self::Https),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "Protocol to send graphite data. TCP or UDP (default)"]
 #[doc = ""]
@@ -316,6 +460,8 @@ pub enum Type {
     Graphite,
     #[serde(rename = "influxdb")]
     Influxdb,
+    #[serde(rename = "opentelemetry")]
+    Opentelemetry,
 }
 impl TryFrom<&str> for Type {
     type Error = String;
@@ -323,6 +469,7 @@ impl TryFrom<&str> for Type {
         match value {
             "graphite" => Ok(Self::Graphite),
             "influxdb" => Ok(Self::Influxdb),
+            "opentelemetry" => Ok(Self::Opentelemetry),
             v => Err(format!("Unknown variant {v}")),
         }
     }
@@ -394,6 +541,80 @@ impl ::serde::Serialize for MtuInt {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for MtuInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::bounded_integer::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct OtelMaxBodySizeInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for OtelMaxBodySizeInt {
+    const MIN: Option<i128> = Some(1024i128);
+    const MAX: Option<i128> = None::<i128>;
+    const DEFAULT: Option<i128> = Some(10000000i128);
+    const TYPE_DESCRIPTION: &'static str = "an integer greater than or equal to 1024";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for OtelMaxBodySizeInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for OtelMaxBodySizeInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::bounded_integer::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for OtelMaxBodySizeInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::bounded_integer::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct OtelTimeoutInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for OtelTimeoutInt {
+    const MIN: Option<i128> = Some(1i128);
+    const MAX: Option<i128> = Some(10i128);
+    const DEFAULT: Option<i128> = Some(5i128);
+    const TYPE_DESCRIPTION: &'static str = "an integer between 1 and 10";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for OtelTimeoutInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for OtelTimeoutInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::bounded_integer::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for OtelTimeoutInt {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,
@@ -548,6 +769,86 @@ impl ::serde::Serialize for DigestStr {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for DigestStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::bounded_string::deserialize_bounded_string(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct OtelHeadersStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for OtelHeadersStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = Some(1024usize);
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = None::<&'static str>;
+    const TYPE_DESCRIPTION: &'static str = "a string with length at most 1024";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for OtelHeadersStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for OtelHeadersStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::bounded_string::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for OtelHeadersStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::bounded_string::deserialize_bounded_string(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct OtelResourceAttributesStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for OtelResourceAttributesStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = Some(1024usize);
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = None::<&'static str>;
+    const TYPE_DESCRIPTION: &'static str = "a string with length at most 1024";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for OtelResourceAttributesStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for OtelResourceAttributesStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::bounded_string::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for OtelResourceAttributesStr {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,

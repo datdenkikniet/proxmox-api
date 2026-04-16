@@ -29,8 +29,8 @@ impl GetOutput {
     pub fn new(content: String) -> Self {
         Self {
             content,
-            truncated: Default::default(),
-            additional_properties: Default::default(),
+            truncated: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -58,7 +58,7 @@ impl GetParams {
     pub fn new(file: String) -> Self {
         Self {
             file,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

@@ -29,7 +29,7 @@ impl PostOutput {
     pub fn new(pid: i64) -> Self {
         Self {
             pid,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -53,8 +53,8 @@ impl PostParams {
     pub fn new(command: Vec<String>) -> Self {
         Self {
             command,
-            input_data: Default::default(),
-            additional_properties: Default::default(),
+            input_data: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

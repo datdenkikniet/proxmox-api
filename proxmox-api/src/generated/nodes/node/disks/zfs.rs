@@ -55,7 +55,7 @@ impl GetOutputItems {
             health,
             name,
             size,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -101,11 +101,11 @@ impl PostParams {
             devices,
             name,
             raidlevel,
-            add_storage: Default::default(),
-            ashift: Default::default(),
-            compression: Default::default(),
-            draid_config: Default::default(),
-            additional_properties: Default::default(),
+            add_storage: ::std::default::Default::default(),
+            ashift: ::std::default::Default::default(),
+            compression: ::std::default::Default::default(),
+            draid_config: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

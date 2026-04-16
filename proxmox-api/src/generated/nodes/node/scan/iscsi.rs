@@ -30,7 +30,7 @@ impl GetOutputItems {
         Self {
             portal,
             target,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -53,7 +53,7 @@ impl GetParams {
     pub fn new(portal: String) -> Self {
         Self {
             portal,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

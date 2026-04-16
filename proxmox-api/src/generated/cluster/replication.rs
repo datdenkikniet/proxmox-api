@@ -37,8 +37,78 @@ where
         self.client.post(&path, &params)
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+impl GetOutputItems {
+    pub fn new(guest: i64, id: IdStr, jobnum: i64, target: String, ty: Type) -> Self {
+        Self {
+            guest,
+            id,
+            jobnum,
+            target,
+            ty,
+            comment: ::std::default::Default::default(),
+            disable: ::std::default::Default::default(),
+            rate: ::std::default::Default::default(),
+            remove_job: ::std::default::Default::default(),
+            schedule: ::std::default::Default::default(),
+            source: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Description."]
+    #[doc = ""]
+    pub comment: Option<CommentStr>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Flag to disable/deactivate the entry."]
+    #[doc = ""]
+    pub disable: Option<bool>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
+    )]
+    #[doc = "Guest ID."]
+    #[doc = ""]
+    pub guest: i64,
+    #[doc = "Replication Job ID. The ID is composed of a Guest ID and a job number, separated by a hyphen, i.e. '\\\\<GUEST\\\\>-\\\\<JOBNUM\\\\>'."]
+    #[doc = ""]
+    pub id: IdStr,
+    #[serde(
+        serialize_with = "crate::types::serialize_int",
+        deserialize_with = "crate::types::deserialize_int"
+    )]
+    #[doc = "Unique, sequential ID assigned to each job."]
+    #[doc = ""]
+    pub jobnum: i64,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Rate limit in mbps (megabytes per second) as floating point number."]
+    #[doc = ""]
+    pub rate: Option<RateNum>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Mark the replication job for removal. The job will remove all local replication snapshots. When set to 'full', it also tries to remove replicated volumes on the target. The job then removes itself from the configuration file."]
+    #[doc = ""]
+    pub remove_job: Option<RemoveJob>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Storage replication schedule. The format is a subset of `systemd` calendar events."]
+    #[doc = ""]
+    pub schedule: Option<ScheduleStr>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "For internal use, to detect if the guest was stolen."]
+    #[doc = ""]
+    pub source: Option<String>,
+    #[doc = "Target node."]
+    #[doc = ""]
+    pub target: String,
+    #[serde(rename = "type")]
+    #[doc = "Section type."]
+    #[doc = ""]
+    pub ty: Type,
     #[serde(
         flatten,
         default,
@@ -52,13 +122,13 @@ impl PostParams {
             id,
             target,
             ty,
-            comment: Default::default(),
-            disable: Default::default(),
-            rate: Default::default(),
-            remove_job: Default::default(),
-            schedule: Default::default(),
-            source: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            disable: ::std::default::Default::default(),
+            rate: ::std::default::Default::default(),
+            remove_job: ::std::default::Default::default(),
+            schedule: ::std::default::Default::default(),
+            source: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

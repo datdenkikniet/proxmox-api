@@ -19,7 +19,7 @@ impl<T> GroupsClient<T>
 where
     T: crate::client::Client,
 {
-    #[doc = "Get HA groups."]
+    #[doc = "Get HA groups. (deprecated in favor of HA rules)"]
     #[doc = ""]
     pub fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
@@ -30,7 +30,7 @@ impl<T> GroupsClient<T>
 where
     T: crate::client::Client,
 {
-    #[doc = "Create a new HA group."]
+    #[doc = "Create a new HA group. (deprecated in favor of HA rules)"]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
@@ -41,7 +41,7 @@ impl GetOutputItems {
     pub fn new(group: String) -> Self {
         Self {
             group,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -60,11 +60,11 @@ impl PostParams {
         Self {
             group,
             nodes,
-            comment: Default::default(),
-            nofailback: Default::default(),
-            restricted: Default::default(),
-            ty: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            nofailback: ::std::default::Default::default(),
+            restricted: ::std::default::Default::default(),
+            ty: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -79,7 +79,7 @@ pub struct PostParams {
     pub group: String,
     #[doc = "List of cluster node names with optional priority."]
     #[doc = ""]
-    #[doc = "List of cluster node members, where a priority can be given to each node. A resource bound to a group will run on the available nodes with the highest priority. If there are more nodes in the highest priority class, the services will get distributed to those nodes. The priorities have a relative meaning only."]
+    #[doc = "List of cluster node members, where a priority can be given to each node. A resource will run on the available nodes with the highest priority. If there are more nodes in the highest priority class, the resources will get distributed to those nodes. The priorities have a relative meaning only. The higher the number, the higher the priority."]
     #[doc = ""]
     pub nodes: String,
     #[serde(

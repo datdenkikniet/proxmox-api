@@ -30,8 +30,8 @@ impl GetParams {
         Self {
             filepath,
             volume,
-            tar: Default::default(),
-            additional_properties: Default::default(),
+            tar: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

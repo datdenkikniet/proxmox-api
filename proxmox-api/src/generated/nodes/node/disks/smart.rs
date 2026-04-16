@@ -29,9 +29,9 @@ impl GetOutput {
     pub fn new(health: String) -> Self {
         Self {
             health,
-            text: Default::default(),
-            ty: Default::default(),
-            additional_properties: Default::default(),
+            text: ::std::default::Default::default(),
+            ty: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -54,8 +54,8 @@ impl GetParams {
     pub fn new(disk: DiskStr) -> Self {
         Self {
             disk,
-            healthonly: Default::default(),
-            additional_properties: Default::default(),
+            healthonly: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

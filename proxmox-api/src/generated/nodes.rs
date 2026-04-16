@@ -31,14 +31,14 @@ impl GetOutputItems {
         Self {
             node,
             status,
-            cpu: Default::default(),
-            level: Default::default(),
-            maxcpu: Default::default(),
-            maxmem: Default::default(),
-            mem: Default::default(),
-            ssl_fingerprint: Default::default(),
-            uptime: Default::default(),
-            additional_properties: Default::default(),
+            cpu: ::std::default::Default::default(),
+            level: ::std::default::Default::default(),
+            maxcpu: ::std::default::Default::default(),
+            maxmem: ::std::default::Default::default(),
+            mem: ::std::default::Default::default(),
+            ssl_fingerprint: ::std::default::Default::default(),
+            uptime: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

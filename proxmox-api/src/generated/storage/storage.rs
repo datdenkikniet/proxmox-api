@@ -51,7 +51,7 @@ where
 pub struct ConfigPutOutputConfig {
     #[serde(rename = "encryption-key")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The, possible auto-generated, encryption-key."]
+    #[doc = "The, possibly auto-generated, encryption-key."]
     #[doc = ""]
     pub encryption_key: Option<String>,
     #[serde(
@@ -75,15 +75,15 @@ impl PutOutput {
         Self {
             storage,
             ty,
-            config: Default::default(),
-            additional_properties: Default::default(),
+            config: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct PutOutput {
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Partial, possible server generated, configuration properties."]
+    #[doc = "Partial, possibly server generated, configuration properties."]
     #[doc = ""]
     pub config: Option<ConfigPutOutputConfig>,
     #[doc = "The ID of the created storage."]
@@ -184,7 +184,7 @@ pub struct PutParams {
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Default image format."]
     #[doc = ""]
-    pub format: Option<String>,
+    pub format: Option<Format>,
     #[serde(rename = "fs-name")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The Ceph filesystem name."]
@@ -228,14 +228,6 @@ pub struct PutParams {
     #[doc = "Maximal number of protected backups per guest. Use '-1' for unlimited."]
     #[doc = ""]
     pub max_protected_backups: Option<MaxProtectedBackupsInt>,
-    #[serde(
-        serialize_with = "crate::types::serialize_unsigned_int_optional",
-        deserialize_with = "crate::types::deserialize_unsigned_int_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Deprecated: use 'prune-backups' instead. Maximal number of backup files per VM. Use '0' for unlimited."]
-    #[doc = ""]
-    pub maxfiles: Option<u64>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -289,7 +281,7 @@ pub struct PutParams {
     #[doc = ""]
     pub pool: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "For non default port."]
+    #[doc = "Use this port to connect to the storage instead of the default one (for example, with PBS or ESXi). For NFS and CIFS, use the 'options' option to configure the port via the mount options."]
     #[doc = ""]
     pub port: Option<PortInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -309,6 +301,11 @@ pub struct PutParams {
     #[doc = "Zero-out data when removing LVs."]
     #[doc = ""]
     pub saferemove: Option<bool>,
+    #[serde(rename = "saferemove-stepsize")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Wipe step size in MiB. It will be capped to the maximum supported by the storage."]
+    #[doc = ""]
+    pub saferemove_stepsize: Option<SaferemoveStepsizeInt>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Wipe throughput (cstream -t parameter value)."]
     #[doc = ""]
@@ -317,10 +314,6 @@ pub struct PutParams {
     #[doc = "Server IP or DNS name."]
     #[doc = ""]
     pub server: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Backup volfile server IP or DNS name."]
-    #[doc = ""]
-    pub server2: Option<String>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -342,6 +335,15 @@ pub struct PutParams {
     #[doc = "SMB protocol version. 'default' if not set, negotiates the highest SMB2+ version supported by both the client and server."]
     #[doc = ""]
     pub smbversion: Option<Smbversion>,
+    #[serde(rename = "snapshot-as-volume-chain")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Enable support for creating storage-vendor agnostic snapshot through volume backing-chains."]
+    #[doc = ""]
+    pub snapshot_as_volume_chain: Option<bool>,
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
@@ -363,19 +365,45 @@ pub struct PutParams {
     #[doc = ""]
     pub tagged_only: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Gluster transport: tcp or rdma"]
-    #[doc = ""]
-    pub transport: Option<Transport>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "RBD Id."]
     #[doc = ""]
     pub username: Option<String>,
+    #[serde(rename = "zfs-base-path")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Base path where to look for the created ZFS block devices. Set automatically during creation if not specified. Usually '/dev/zvol'."]
+    #[doc = ""]
+    pub zfs_base_path: Option<String>,
     #[serde(
         flatten,
         default,
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "Default image format."]
+#[doc = ""]
+pub enum Format {
+    #[serde(rename = "qcow2")]
+    Qcow2,
+    #[serde(rename = "raw")]
+    Raw,
+    #[serde(rename = "subvol")]
+    Subvol,
+    #[serde(rename = "vmdk")]
+    Vmdk,
+}
+impl TryFrom<&str> for Format {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "qcow2" => Ok(Self::Qcow2),
+            "raw" => Ok(Self::Raw),
+            "subvol" => Ok(Self::Subvol),
+            "vmdk" => Ok(Self::Vmdk),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "Preallocation mode for raw and qcow2 images. Using 'metadata' on raw images results in preallocation=off."]
@@ -436,28 +464,6 @@ impl TryFrom<&str> for Smbversion {
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
-#[doc = "Gluster transport: tcp or rdma"]
-#[doc = ""]
-pub enum Transport {
-    #[serde(rename = "rdma")]
-    Rdma,
-    #[serde(rename = "tcp")]
-    Tcp,
-    #[serde(rename = "unix")]
-    Unix,
-}
-impl TryFrom<&str> for Transport {
-    type Error = String;
-    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
-        match value {
-            "rdma" => Ok(Self::Rdma),
-            "tcp" => Ok(Self::Tcp),
-            "unix" => Ok(Self::Unix),
-            v => Err(format!("Unknown variant {v}")),
-        }
-    }
-}
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
 #[doc = "The type of the created storage."]
 #[doc = ""]
 pub enum Type {
@@ -471,8 +477,6 @@ pub enum Type {
     Dir,
     #[serde(rename = "esxi")]
     Esxi,
-    #[serde(rename = "glusterfs")]
-    Glusterfs,
     #[serde(rename = "iscsi")]
     Iscsi,
     #[serde(rename = "iscsidirect")]
@@ -501,7 +505,6 @@ impl TryFrom<&str> for Type {
             "cifs" => Ok(Self::Cifs),
             "dir" => Ok(Self::Dir),
             "esxi" => Ok(Self::Esxi),
-            "glusterfs" => Ok(Self::Glusterfs),
             "iscsi" => Ok(Self::Iscsi),
             "iscsidirect" => Ok(Self::Iscsidirect),
             "lvm" => Ok(Self::Lvm),
@@ -582,6 +585,43 @@ impl ::serde::Serialize for PortInt {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for PortInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::bounded_integer::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct SaferemoveStepsizeInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for SaferemoveStepsizeInt {
+    const MIN: Option<i128> = None::<i128>;
+    const MAX: Option<i128> = None::<i128>;
+    const DEFAULT: Option<i128> = Some(32i128);
+    const TYPE_DESCRIPTION: &'static str = "a valid integer";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for SaferemoveStepsizeInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for SaferemoveStepsizeInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::bounded_integer::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for SaferemoveStepsizeInt {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,

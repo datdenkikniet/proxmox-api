@@ -90,7 +90,7 @@ impl ToTokens for StructDef {
             let default_fields = optional_fields.map(|f| {
                 let name = f.name();
                 let name = Ident::new(&name, quote!().span());
-                quote!(#name: Default::default())
+                quote!(#name: ::std::default::Default::default())
             });
 
             let args = non_optional_fields.clone().map(|f| {
@@ -108,7 +108,7 @@ impl ToTokens for StructDef {
 
             let additional_props = additional_props_ty
                 .as_ref()
-                .map(|_| quote!(additional_properties: Default::default(),))
+                .map(|_| quote!(additional_properties: ::std::default::Default::default(),))
                 .into_iter();
 
             tokens.extend(quote! {

@@ -18,6 +18,17 @@ impl<T> MigrateClient<T>
 where
     T: crate::client::Client,
 {
+    #[doc = "Get preconditions for migration."]
+    #[doc = ""]
+    pub fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
+        let path = self.path.to_string();
+        self.client.get(&path, &params)
+    }
+}
+impl<T> MigrateClient<T>
+where
+    T: crate::client::Client,
+{
     #[doc = "Migrate the container to another node. Creates a new migration task."]
     #[doc = ""]
     pub fn post(&self, params: PostParams) -> Result<String, T::Error> {
@@ -25,16 +36,110 @@ where
         self.client.post(&path, &params)
     }
 }
+impl BlockingHaResourcesGetOutputNotAllowedNodesBlockingHaResourcesItems {
+    pub fn new(cause: Cause, sid: String) -> Self {
+        Self {
+            cause,
+            sid,
+            additional_properties: ::std::default::Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct BlockingHaResourcesGetOutputNotAllowedNodesBlockingHaResourcesItems {
+    #[doc = "The reason why the HA resource is blocking the migration."]
+    #[doc = ""]
+    pub cause: Cause,
+    #[doc = "The blocking HA resource id"]
+    #[doc = ""]
+    pub sid: String,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+impl GetOutput {
+    pub fn new(running: bool) -> Self {
+        Self {
+            running,
+            allowed_nodes: ::std::default::Default::default(),
+            dependent_ha_resources: ::std::default::Default::default(),
+            not_allowed_nodes: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
+pub struct GetOutput {
+    #[serde(rename = "allowed-nodes")]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    #[doc = "List of nodes allowed for migration."]
+    #[doc = ""]
+    pub allowed_nodes: Vec<String>,
+    #[serde(rename = "dependent-ha-resources")]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    #[doc = "HA resources, which will be migrated to the same target node as the VM, because these are in positive affinity with the VM."]
+    #[doc = ""]
+    pub dependent_ha_resources: Vec<String>,
+    #[serde(rename = "not-allowed-nodes")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "List of not allowed nodes with additional information."]
+    #[doc = ""]
+    pub not_allowed_nodes: Option<NotAllowedNodesGetOutputNotAllowedNodes>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool",
+        deserialize_with = "crate::types::deserialize_bool"
+    )]
+    #[doc = "Determines if the container is running."]
+    #[doc = ""]
+    pub running: bool,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct GetParams {
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Target node."]
+    #[doc = ""]
+    pub target: Option<String>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct NotAllowedNodesGetOutputNotAllowedNodes {
+    #[serde(rename = "blocking-ha-resources")]
+    #[serde(skip_serializing_if = "::std::vec::Vec::is_empty", default)]
+    #[doc = "HA resources, which are blocking the container from being migrated to the node."]
+    #[doc = ""]
+    pub blocking_ha_resources:
+        Vec<BlockingHaResourcesGetOutputNotAllowedNodesBlockingHaResourcesItems>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 impl PostParams {
     pub fn new(target: String) -> Self {
         Self {
             target,
-            bwlimit: Default::default(),
-            online: Default::default(),
-            restart: Default::default(),
-            target_storage: Default::default(),
-            timeout: Default::default(),
-            additional_properties: Default::default(),
+            bwlimit: ::std::default::Default::default(),
+            online: ::std::default::Default::default(),
+            restart: ::std::default::Default::default(),
+            target_storage: ::std::default::Default::default(),
+            timeout: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -78,6 +183,22 @@ pub struct PostParams {
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "The reason why the HA resource is blocking the migration."]
+#[doc = ""]
+pub enum Cause {
+    #[serde(rename = "resource-affinity")]
+    ResourceAffinity,
+}
+impl TryFrom<&str> for Cause {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "resource-affinity" => Ok(Self::ResourceAffinity),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
 pub struct TimeoutInt(i128);

@@ -38,7 +38,7 @@ impl GetParams {
     pub fn new(config_keys: ConfigKeysStr) -> Self {
         Self {
             config_keys,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

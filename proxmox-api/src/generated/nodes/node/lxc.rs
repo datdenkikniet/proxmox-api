@@ -42,15 +42,28 @@ impl GetOutputItems {
         Self {
             status,
             vmid,
-            cpus: Default::default(),
-            lock: Default::default(),
-            maxdisk: Default::default(),
-            maxmem: Default::default(),
-            maxswap: Default::default(),
-            name: Default::default(),
-            tags: Default::default(),
-            uptime: Default::default(),
-            additional_properties: Default::default(),
+            cpu: ::std::default::Default::default(),
+            cpus: ::std::default::Default::default(),
+            disk: ::std::default::Default::default(),
+            diskread: ::std::default::Default::default(),
+            diskwrite: ::std::default::Default::default(),
+            lock: ::std::default::Default::default(),
+            maxdisk: ::std::default::Default::default(),
+            maxmem: ::std::default::Default::default(),
+            maxswap: ::std::default::Default::default(),
+            mem: ::std::default::Default::default(),
+            name: ::std::default::Default::default(),
+            netin: ::std::default::Default::default(),
+            netout: ::std::default::Default::default(),
+            pressurecpusome: ::std::default::Default::default(),
+            pressureiofull: ::std::default::Default::default(),
+            pressureiosome: ::std::default::Default::default(),
+            pressurememoryfull: ::std::default::Default::default(),
+            pressurememorysome: ::std::default::Default::default(),
+            tags: ::std::default::Default::default(),
+            template: ::std::default::Default::default(),
+            uptime: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -61,9 +74,41 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_number_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Current CPU usage."]
+    #[doc = ""]
+    pub cpu: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum usable CPUs."]
     #[doc = ""]
     pub cpus: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_unsigned_int_optional",
+        deserialize_with = "crate::types::deserialize_unsigned_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Root disk image space-usage in bytes."]
+    #[doc = ""]
+    pub disk: Option<u64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The amount of bytes the guest read from it's block devices since the guest was started. (Note: This info is not available for all storage types.)"]
+    #[doc = ""]
+    pub diskread: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The amount of bytes the guest wrote from it's block devices since the guest was started. (Note: This info is not available for all storage types.)"]
+    #[doc = ""]
+    pub diskwrite: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The current config lock, if any."]
     #[doc = ""]
@@ -73,7 +118,7 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Root disk size in bytes."]
+    #[doc = "Root disk image size in bytes."]
     #[doc = ""]
     pub maxdisk: Option<i64>,
     #[serde(
@@ -92,10 +137,74 @@ pub struct GetOutputItems {
     #[doc = "Maximum SWAP memory in bytes."]
     #[doc = ""]
     pub maxswap: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Currently used memory in bytes."]
+    #[doc = ""]
+    pub mem: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Container name."]
     #[doc = ""]
     pub name: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The amount of traffic in bytes that was sent to the guest over the network since it was started."]
+    #[doc = ""]
+    pub netin: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The amount of traffic in bytes that was sent from the guest over the network since it was started."]
+    #[doc = ""]
+    pub netout: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "CPU Some pressure stall average over the last 10 seconds."]
+    #[doc = ""]
+    pub pressurecpusome: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "IO Full pressure stall average over the last 10 seconds."]
+    #[doc = ""]
+    pub pressureiofull: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "IO Some pressure stall average over the last 10 seconds."]
+    #[doc = ""]
+    pub pressureiosome: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Memory Full pressure stall average over the last 10 seconds."]
+    #[doc = ""]
+    pub pressurememoryfull: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Memory Some pressure stall average over the last 10 seconds."]
+    #[doc = ""]
+    pub pressurememorysome: Option<f64>,
     #[doc = "LXC Container status."]
     #[doc = ""]
     pub status: Status,
@@ -104,11 +213,19 @@ pub struct GetOutputItems {
     #[doc = ""]
     pub tags: Option<String>,
     #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Determines if the guest is a template."]
+    #[doc = ""]
+    pub template: Option<bool>,
+    #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Uptime."]
+    #[doc = "Uptime in seconds."]
     #[doc = ""]
     pub uptime: Option<i64>,
     #[doc = "The (unique) ID of the VM."]
@@ -126,47 +243,50 @@ impl PostParams {
         Self {
             ostemplate,
             vmid,
-            arch: Default::default(),
-            bwlimit: Default::default(),
-            cmode: Default::default(),
-            console: Default::default(),
-            cores: Default::default(),
-            cpulimit: Default::default(),
-            cpuunits: Default::default(),
-            debug: Default::default(),
-            description: Default::default(),
-            devs: Default::default(),
-            features: Default::default(),
-            force: Default::default(),
-            hookscript: Default::default(),
-            hostname: Default::default(),
-            ignore_unpack_errors: Default::default(),
-            lock: Default::default(),
-            memory: Default::default(),
-            mps: Default::default(),
-            nameserver: Default::default(),
-            nets: Default::default(),
-            onboot: Default::default(),
-            ostype: Default::default(),
-            password: Default::default(),
-            pool: Default::default(),
-            protection: Default::default(),
-            restore: Default::default(),
-            rootfs: Default::default(),
-            searchdomain: Default::default(),
-            ssh_public_keys: Default::default(),
-            start: Default::default(),
-            startup: Default::default(),
-            storage: Default::default(),
-            swap: Default::default(),
-            tags: Default::default(),
-            template: Default::default(),
-            timezone: Default::default(),
-            tty: Default::default(),
-            unique: Default::default(),
-            unprivileged: Default::default(),
-            unuseds: Default::default(),
-            additional_properties: Default::default(),
+            arch: ::std::default::Default::default(),
+            bwlimit: ::std::default::Default::default(),
+            cmode: ::std::default::Default::default(),
+            console: ::std::default::Default::default(),
+            cores: ::std::default::Default::default(),
+            cpulimit: ::std::default::Default::default(),
+            cpuunits: ::std::default::Default::default(),
+            debug: ::std::default::Default::default(),
+            description: ::std::default::Default::default(),
+            devs: ::std::default::Default::default(),
+            entrypoint: ::std::default::Default::default(),
+            env: ::std::default::Default::default(),
+            features: ::std::default::Default::default(),
+            force: ::std::default::Default::default(),
+            ha_managed: ::std::default::Default::default(),
+            hookscript: ::std::default::Default::default(),
+            hostname: ::std::default::Default::default(),
+            ignore_unpack_errors: ::std::default::Default::default(),
+            lock: ::std::default::Default::default(),
+            memory: ::std::default::Default::default(),
+            mps: ::std::default::Default::default(),
+            nameserver: ::std::default::Default::default(),
+            nets: ::std::default::Default::default(),
+            onboot: ::std::default::Default::default(),
+            ostype: ::std::default::Default::default(),
+            password: ::std::default::Default::default(),
+            pool: ::std::default::Default::default(),
+            protection: ::std::default::Default::default(),
+            restore: ::std::default::Default::default(),
+            rootfs: ::std::default::Default::default(),
+            searchdomain: ::std::default::Default::default(),
+            ssh_public_keys: ::std::default::Default::default(),
+            start: ::std::default::Default::default(),
+            startup: ::std::default::Default::default(),
+            storage: ::std::default::Default::default(),
+            swap: ::std::default::Default::default(),
+            tags: ::std::default::Default::default(),
+            template: ::std::default::Default::default(),
+            timezone: ::std::default::Default::default(),
+            tty: ::std::default::Default::default(),
+            unique: ::std::default::Default::default(),
+            unprivileged: ::std::default::Default::default(),
+            unuseds: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -231,6 +351,14 @@ pub struct PostParams {
     #[doc = ""]
     pub devs: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Command to run as init, optionally with arguments; may start with an absolute path, relative path, or a binary in $PATH."]
+    #[doc = ""]
+    pub entrypoint: Option<EntrypointStr>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The container runtime environment as NUL-separated list. Replaces any lxc.environment.runtime entries in the config."]
+    #[doc = ""]
+    pub env: Option<EnvStr>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Allow containers access to advanced features."]
     #[doc = ""]
     pub features: Option<String>,
@@ -242,8 +370,17 @@ pub struct PostParams {
     #[doc = "Allow to overwrite existing container."]
     #[doc = ""]
     pub force: Option<bool>,
+    #[serde(rename = "ha-managed")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Script that will be exectued during various steps in the containers lifetime."]
+    #[doc = "Add the CT as a HA resource after it was created."]
+    #[doc = ""]
+    pub ha_managed: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Script that will be executed during various steps in the containers lifetime."]
     #[doc = ""]
     pub hookscript: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -396,7 +533,7 @@ pub struct PostParams {
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Makes the container run as unprivileged user. (Should not be modified manually.)"]
+    #[doc = "Makes the container run as unprivileged user. For creation, the default is 1. For restore, the default is the value from the backup. (Should not be modified manually.)"]
     #[doc = ""]
     pub unprivileged: Option<bool>,
     #[serde(rename = "unused[n]")]
@@ -988,6 +1125,89 @@ impl ::serde::Serialize for DescriptionStr {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for DescriptionStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::bounded_string::deserialize_bounded_string(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct EntrypointStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for EntrypointStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = None::<usize>;
+    const DEFAULT: Option<&'static str> = Some("/sbin/init");
+    const PATTERN: Option<&'static str> = Some("(?^:[^\\x00-\\x08\\x10-\\x1F\\x7F]+)");
+    const TYPE_DESCRIPTION: &'static str =
+        "a string with pattern r\"(?^:[^\\x00-\\x08\\x10-\\x1F\\x7F]+)\" and no length constraints";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for EntrypointStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for EntrypointStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::bounded_string::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for EntrypointStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::bounded_string::deserialize_bounded_string(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct EnvStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for EnvStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = None::<usize>;
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = Some(
+        "(?^:(?:\\w+=[^\\x00-\\x08\\x10-\\x1F\\x7F]*)(?:\\0\\w+=[^\\x00-\\x08\\x10-\\x1F\\x7F]*)*)",
+    );
+    const TYPE_DESCRIPTION: &'static str = "a string with pattern r\"(?^:(?:\\w+=[^\\x00-\\x08\\x10-\\x1F\\x7F]*)(?:\\0\\w+=[^\\x00-\\x08\\x10-\\x1F\\x7F]*)*)\" and no length constraints";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for EnvStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for EnvStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::bounded_string::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for EnvStr {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,

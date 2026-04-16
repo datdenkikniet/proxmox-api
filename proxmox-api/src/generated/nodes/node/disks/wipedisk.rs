@@ -29,7 +29,7 @@ impl PutParams {
     pub fn new(disk: DiskStr) -> Self {
         Self {
             disk,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

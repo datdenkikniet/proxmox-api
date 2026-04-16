@@ -46,9 +46,9 @@ impl GetOutputItems {
             ty,
             upid,
             user,
-            endtime: Default::default(),
-            status: Default::default(),
-            additional_properties: Default::default(),
+            endtime: ::std::default::Default::default(),
+            status: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -101,7 +101,7 @@ pub struct GetParams {
     #[doc = ""]
     pub errors: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Only list this amount of tasks."]
+    #[doc = "Only list this number of tasks."]
     #[doc = ""]
     pub limit: Option<LimitInt>,
     #[serde(

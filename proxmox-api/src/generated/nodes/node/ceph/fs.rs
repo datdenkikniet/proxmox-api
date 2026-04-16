@@ -32,7 +32,7 @@ impl GetOutputItems {
             data_pool,
             metadata_pool,
             name,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

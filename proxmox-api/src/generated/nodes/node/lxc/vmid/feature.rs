@@ -29,7 +29,7 @@ impl GetOutput {
     pub fn new(hasfeature: bool) -> Self {
         Self {
             hasfeature,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -52,8 +52,8 @@ impl GetParams {
     pub fn new(feature: Feature) -> Self {
         Self {
             feature,
-            snapname: Default::default(),
-            additional_properties: Default::default(),
+            snapname: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

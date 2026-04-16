@@ -38,8 +38,8 @@ impl GetParams {
     pub fn new(timeframe: Timeframe) -> Self {
         Self {
             timeframe,
-            cf: Default::default(),
-            additional_properties: Default::default(),
+            cf: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -82,6 +82,8 @@ impl TryFrom<&str> for Cf {
 pub enum Timeframe {
     #[serde(rename = "day")]
     Day,
+    #[serde(rename = "decade")]
+    Decade,
     #[serde(rename = "hour")]
     Hour,
     #[serde(rename = "month")]
@@ -96,6 +98,7 @@ impl TryFrom<&str> for Timeframe {
     fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
         match value {
             "day" => Ok(Self::Day),
+            "decade" => Ok(Self::Decade),
             "hour" => Ok(Self::Hour),
             "month" => Ok(Self::Month),
             "week" => Ok(Self::Week),

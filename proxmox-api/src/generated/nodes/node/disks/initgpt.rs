@@ -29,8 +29,8 @@ impl PostParams {
     pub fn new(disk: DiskStr) -> Self {
         Self {
             disk,
-            uuid: Default::default(),
-            additional_properties: Default::default(),
+            uuid: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

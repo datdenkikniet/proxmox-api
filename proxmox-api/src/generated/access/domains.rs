@@ -42,9 +42,9 @@ impl GetOutputItems {
         Self {
             realm,
             ty,
-            comment: Default::default(),
-            tfa: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            tfa: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -73,43 +73,47 @@ impl PostParams {
         Self {
             realm,
             ty,
-            acr_values: Default::default(),
-            autocreate: Default::default(),
-            base_dn: Default::default(),
-            bind_dn: Default::default(),
-            capath: Default::default(),
-            case_sensitive: Default::default(),
-            cert: Default::default(),
-            certkey: Default::default(),
-            check_connection: Default::default(),
-            client_id: Default::default(),
-            client_key: Default::default(),
-            comment: Default::default(),
-            default: Default::default(),
-            domain: Default::default(),
-            filter: Default::default(),
-            group_classes: Default::default(),
-            group_dn: Default::default(),
-            group_filter: Default::default(),
-            group_name_attr: Default::default(),
-            issuer_url: Default::default(),
-            mode: Default::default(),
-            password: Default::default(),
-            port: Default::default(),
-            prompt: Default::default(),
-            scopes: Default::default(),
-            secure: Default::default(),
-            server1: Default::default(),
-            server2: Default::default(),
-            sslversion: Default::default(),
-            sync_defaults_options: Default::default(),
-            sync_attributes: Default::default(),
-            tfa: Default::default(),
-            user_attr: Default::default(),
-            user_classes: Default::default(),
-            username_claim: Default::default(),
-            verify: Default::default(),
-            additional_properties: Default::default(),
+            acr_values: ::std::default::Default::default(),
+            autocreate: ::std::default::Default::default(),
+            base_dn: ::std::default::Default::default(),
+            bind_dn: ::std::default::Default::default(),
+            capath: ::std::default::Default::default(),
+            case_sensitive: ::std::default::Default::default(),
+            cert: ::std::default::Default::default(),
+            certkey: ::std::default::Default::default(),
+            check_connection: ::std::default::Default::default(),
+            client_id: ::std::default::Default::default(),
+            client_key: ::std::default::Default::default(),
+            comment: ::std::default::Default::default(),
+            default: ::std::default::Default::default(),
+            domain: ::std::default::Default::default(),
+            filter: ::std::default::Default::default(),
+            group_classes: ::std::default::Default::default(),
+            group_dn: ::std::default::Default::default(),
+            group_filter: ::std::default::Default::default(),
+            group_name_attr: ::std::default::Default::default(),
+            groups_autocreate: ::std::default::Default::default(),
+            groups_claim: ::std::default::Default::default(),
+            groups_overwrite: ::std::default::Default::default(),
+            issuer_url: ::std::default::Default::default(),
+            mode: ::std::default::Default::default(),
+            password: ::std::default::Default::default(),
+            port: ::std::default::Default::default(),
+            prompt: ::std::default::Default::default(),
+            query_userinfo: ::std::default::Default::default(),
+            scopes: ::std::default::Default::default(),
+            secure: ::std::default::Default::default(),
+            server1: ::std::default::Default::default(),
+            server2: ::std::default::Default::default(),
+            sslversion: ::std::default::Default::default(),
+            sync_defaults_options: ::std::default::Default::default(),
+            sync_attributes: ::std::default::Default::default(),
+            tfa: ::std::default::Default::default(),
+            user_attr: ::std::default::Default::default(),
+            user_classes: ::std::default::Default::default(),
+            username_claim: ::std::default::Default::default(),
+            verify: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -212,6 +216,29 @@ pub struct PostParams {
     #[doc = "LDAP attribute representing a groups name. If not set or found, the first value of the DN will be used as name."]
     #[doc = ""]
     pub group_name_attr: Option<GroupNameAttrStr>,
+    #[serde(rename = "groups-autocreate")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Automatically create groups if they do not exist."]
+    #[doc = ""]
+    pub groups_autocreate: Option<bool>,
+    #[serde(rename = "groups-claim")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "OpenID claim used to retrieve groups with."]
+    #[doc = ""]
+    pub groups_claim: Option<GroupsClaimStr>,
+    #[serde(rename = "groups-overwrite")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "All groups will be overwritten for the user on login."]
+    #[doc = ""]
+    pub groups_overwrite: Option<bool>,
     #[serde(rename = "issuer-url")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "OpenID Issuer Url"]
@@ -233,6 +260,15 @@ pub struct PostParams {
     #[doc = "Specifies whether the Authorization Server prompts the End-User for reauthentication and consent."]
     #[doc = ""]
     pub prompt: Option<PromptStr>,
+    #[serde(rename = "query-userinfo")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Enables querying the userinfo endpoint for claims values."]
+    #[doc = ""]
+    pub query_userinfo: Option<bool>,
     #[doc = "Authentication domain ID"]
     #[doc = ""]
     pub realm: RealmStr,
@@ -871,6 +907,47 @@ impl ::serde::Serialize for GroupNameAttrStr {
     }
 }
 impl<'de> ::serde::Deserialize<'de> for GroupNameAttrStr {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::bounded_string::deserialize_bounded_string(deserializer)
+    }
+}
+#[derive(Debug, Clone, PartialEq, PartialOrd)]
+pub struct GroupsClaimStr {
+    value: String,
+}
+impl crate::types::bounded_string::BoundedString for GroupsClaimStr {
+    const MIN_LENGTH: Option<usize> = None::<usize>;
+    const MAX_LENGTH: Option<usize> = Some(256usize);
+    const DEFAULT: Option<&'static str> = None::<&'static str>;
+    const PATTERN: Option<&'static str> = Some("(?^:[A-Za-z0-9\\.\\-_]+)");
+    const TYPE_DESCRIPTION: &'static str =
+        "a string with pattern r\"(?^:[A-Za-z0-9\\.\\-_]+)\" and length at most 256";
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+    fn new(value: String) -> Result<Self, crate::types::bounded_string::BoundedStringError> {
+        Self::validate(&value)?;
+        Ok(Self { value })
+    }
+}
+impl std::convert::TryFrom<String> for GroupsClaimStr {
+    type Error = crate::types::bounded_string::BoundedStringError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        crate::types::bounded_string::BoundedString::new(value)
+    }
+}
+impl ::serde::Serialize for GroupsClaimStr {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::bounded_string::serialize_bounded_string(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for GroupsClaimStr {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: ::serde::Deserializer<'de>,

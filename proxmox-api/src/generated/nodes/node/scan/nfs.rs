@@ -30,7 +30,7 @@ impl GetOutputItems {
         Self {
             options,
             path,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -53,7 +53,7 @@ impl GetParams {
     pub fn new(server: String) -> Self {
         Self {
             server,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

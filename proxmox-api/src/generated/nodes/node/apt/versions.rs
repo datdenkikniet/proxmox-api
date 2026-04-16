@@ -25,12 +25,157 @@ where
         self.client.get(&path, &())
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+impl GetOutputItems {
+    pub fn new(
+        arch: Arch,
+        currentstate: CurrentState,
+        description: String,
+        origin: String,
+        package: String,
+        priority: String,
+        section: String,
+        title: String,
+        version: String,
+    ) -> Self {
+        Self {
+            arch,
+            currentstate,
+            description,
+            origin,
+            package,
+            priority,
+            section,
+            title,
+            version,
+            managerversion: ::std::default::Default::default(),
+            notifystatus: ::std::default::Default::default(),
+            oldversion: ::std::default::Default::default(),
+            runningkernel: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
+    #[serde(rename = "Arch")]
+    #[doc = "Package Architecture."]
+    #[doc = ""]
+    pub arch: Arch,
+    #[serde(rename = "CurrentState")]
+    #[doc = "Current state of the package installed on the system."]
+    #[doc = ""]
+    pub currentstate: CurrentState,
+    #[serde(rename = "Description")]
+    #[doc = "Package description."]
+    #[doc = ""]
+    pub description: String,
+    #[serde(rename = "ManagerVersion")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Version of the currently running pve-manager API server."]
+    #[doc = ""]
+    pub managerversion: Option<String>,
+    #[serde(rename = "NotifyStatus")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Version for which PVE has already sent an update notification for."]
+    #[doc = ""]
+    pub notifystatus: Option<String>,
+    #[serde(rename = "OldVersion")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Old version currently installed."]
+    #[doc = ""]
+    pub oldversion: Option<String>,
+    #[serde(rename = "Origin")]
+    #[doc = "Package origin, e.g., 'Proxmox' or 'Debian'."]
+    #[doc = ""]
+    pub origin: String,
+    #[serde(rename = "Package")]
+    #[doc = "Package name."]
+    #[doc = ""]
+    pub package: String,
+    #[serde(rename = "Priority")]
+    #[doc = "Package priority."]
+    #[doc = ""]
+    pub priority: String,
+    #[serde(rename = "RunningKernel")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Kernel release, only for package 'proxmox-ve'."]
+    #[doc = ""]
+    pub runningkernel: Option<String>,
+    #[serde(rename = "Section")]
+    #[doc = "Package section."]
+    #[doc = ""]
+    pub section: String,
+    #[serde(rename = "Title")]
+    #[doc = "Package title."]
+    #[doc = ""]
+    pub title: String,
+    #[serde(rename = "Version")]
+    #[doc = "New version to be updated to."]
+    #[doc = ""]
+    pub version: String,
     #[serde(
         flatten,
         default,
         skip_serializing_if = "::std::collections::HashMap::is_empty"
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "Package Architecture."]
+#[doc = ""]
+pub enum Arch {
+    #[serde(rename = "all")]
+    All,
+    #[serde(rename = "amd64")]
+    Amd64,
+    #[serde(rename = "arm64")]
+    Arm64,
+    #[serde(rename = "armhf")]
+    Armhf,
+    #[serde(rename = "ppc64el")]
+    Ppc64el,
+    #[serde(rename = "risc64")]
+    Risc64,
+    #[serde(rename = "s390x")]
+    S390x,
+}
+impl TryFrom<&str> for Arch {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "all" => Ok(Self::All),
+            "amd64" => Ok(Self::Amd64),
+            "arm64" => Ok(Self::Arm64),
+            "armhf" => Ok(Self::Armhf),
+            "ppc64el" => Ok(Self::Ppc64el),
+            "risc64" => Ok(Self::Risc64),
+            "s390x" => Ok(Self::S390x),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "Current state of the package installed on the system."]
+#[doc = ""]
+pub enum CurrentState {
+    ConfigFiles,
+    HalfConfigured,
+    HalfInstalled,
+    Installed,
+    NotInstalled,
+    UnPacked,
+}
+impl TryFrom<&str> for CurrentState {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "ConfigFiles" => Ok(Self::ConfigFiles),
+            "HalfConfigured" => Ok(Self::HalfConfigured),
+            "HalfInstalled" => Ok(Self::HalfInstalled),
+            "Installed" => Ok(Self::Installed),
+            "NotInstalled" => Ok(Self::NotInstalled),
+            "UnPacked" => Ok(Self::UnPacked),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
 }

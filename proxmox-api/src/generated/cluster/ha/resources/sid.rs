@@ -22,9 +22,9 @@ where
 {
     #[doc = "Delete resource configuration."]
     #[doc = ""]
-    pub fn delete(&self) -> Result<(), T::Error> {
+    pub fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
-        self.client.delete(&path, &())
+        self.client.delete(&path, &params)
     }
 }
 impl<T> SidClient<T>
@@ -49,18 +49,36 @@ where
         self.client.put(&path, &params)
     }
 }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct DeleteParams {
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Remove this resource from rules that reference it, deleting the rule if this resource is the only resource in the rule"]
+    #[doc = ""]
+    pub purge: Option<bool>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 impl GetOutput {
     pub fn new(digest: String, sid: String, ty: String) -> Self {
         Self {
             digest,
             sid,
             ty,
-            comment: Default::default(),
-            group: Default::default(),
-            max_relocate: Default::default(),
-            max_restart: Default::default(),
-            state: Default::default(),
-            additional_properties: Default::default(),
+            comment: ::std::default::Default::default(),
+            failback: ::std::default::Default::default(),
+            group: ::std::default::Default::default(),
+            max_relocate: ::std::default::Default::default(),
+            max_restart: ::std::default::Default::default(),
+            state: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -73,6 +91,14 @@ pub struct GetOutput {
     #[doc = "Can be used to prevent concurrent modifications."]
     #[doc = ""]
     pub digest: String,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The HA resource is automatically migrated to the node with the highest priority according to their node affinity rule, if a node with a higher priority than the current node comes online."]
+    #[doc = ""]
+    pub failback: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The HA group identifier."]
     #[doc = ""]
@@ -125,6 +151,14 @@ pub struct PutParams {
     #[doc = "Prevent changes if current configuration file has a different digest. This can be used to prevent concurrent modifications."]
     #[doc = ""]
     pub digest: Option<DigestStr>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Automatically migrate HA resource to the node with the highest priority according to their node affinity  rules, if a node with a higher priority than the current node comes online."]
+    #[doc = ""]
+    pub failback: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The HA group identifier."]
     #[doc = ""]

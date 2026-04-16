@@ -42,18 +42,33 @@ impl GetOutputItems {
         Self {
             status,
             vmid,
-            cpus: Default::default(),
-            lock: Default::default(),
-            maxdisk: Default::default(),
-            maxmem: Default::default(),
-            name: Default::default(),
-            pid: Default::default(),
-            qmpstatus: Default::default(),
-            running_machine: Default::default(),
-            running_qemu: Default::default(),
-            tags: Default::default(),
-            uptime: Default::default(),
-            additional_properties: Default::default(),
+            cpu: ::std::default::Default::default(),
+            cpus: ::std::default::Default::default(),
+            diskread: ::std::default::Default::default(),
+            diskwrite: ::std::default::Default::default(),
+            lock: ::std::default::Default::default(),
+            maxdisk: ::std::default::Default::default(),
+            maxmem: ::std::default::Default::default(),
+            mem: ::std::default::Default::default(),
+            memhost: ::std::default::Default::default(),
+            name: ::std::default::Default::default(),
+            netin: ::std::default::Default::default(),
+            netout: ::std::default::Default::default(),
+            pid: ::std::default::Default::default(),
+            pressurecpufull: ::std::default::Default::default(),
+            pressurecpusome: ::std::default::Default::default(),
+            pressureiofull: ::std::default::Default::default(),
+            pressureiosome: ::std::default::Default::default(),
+            pressurememoryfull: ::std::default::Default::default(),
+            pressurememorysome: ::std::default::Default::default(),
+            qmpstatus: ::std::default::Default::default(),
+            running_machine: ::std::default::Default::default(),
+            running_qemu: ::std::default::Default::default(),
+            serial: ::std::default::Default::default(),
+            tags: ::std::default::Default::default(),
+            template: ::std::default::Default::default(),
+            uptime: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -64,9 +79,33 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_number_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Current CPU usage."]
+    #[doc = ""]
+    pub cpu: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Maximum usable CPUs."]
     #[doc = ""]
     pub cpus: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The amount of bytes the guest read from it's block devices since the guest was started. (Note: This info is not available for all storage types.)"]
+    #[doc = ""]
+    pub diskread: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The amount of bytes the guest wrote from it's block devices since the guest was started. (Note: This info is not available for all storage types.)"]
+    #[doc = ""]
+    pub diskwrite: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "The current config lock, if any."]
     #[doc = ""]
@@ -87,8 +126,24 @@ pub struct GetOutputItems {
     #[doc = "Maximum memory in bytes."]
     #[doc = ""]
     pub maxmem: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "VM name."]
+    #[doc = "Currently used memory in bytes."]
+    #[doc = ""]
+    pub mem: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Current memory usage on the host."]
+    #[doc = ""]
+    pub memhost: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "VM (host)name."]
     #[doc = ""]
     pub name: Option<String>,
     #[serde(
@@ -96,9 +151,73 @@ pub struct GetOutputItems {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "PID of running qemu process."]
+    #[doc = "The amount of traffic in bytes that was sent to the guest over the network since it was started."]
+    #[doc = ""]
+    pub netin: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The amount of traffic in bytes that was sent from the guest over the network since it was started."]
+    #[doc = ""]
+    pub netout: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "PID of the QEMU process, if the VM is running."]
     #[doc = ""]
     pub pid: Option<i64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "CPU Full pressure stall average over the last 10 seconds."]
+    #[doc = ""]
+    pub pressurecpufull: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "CPU Some pressure stall average over the last 10 seconds."]
+    #[doc = ""]
+    pub pressurecpusome: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "IO Full pressure stall average over the last 10 seconds."]
+    #[doc = ""]
+    pub pressureiofull: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "IO Some pressure stall average over the last 10 seconds."]
+    #[doc = ""]
+    pub pressureiosome: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Memory Full pressure stall average over the last 10 seconds."]
+    #[doc = ""]
+    pub pressurememoryfull: Option<f64>,
+    #[serde(
+        serialize_with = "crate::types::serialize_number_optional",
+        deserialize_with = "crate::types::deserialize_number_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Memory Some pressure stall average over the last 10 seconds."]
+    #[doc = ""]
+    pub pressurememorysome: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "VM run state from the 'query-status' QMP monitor command."]
     #[doc = ""]
@@ -110,9 +229,17 @@ pub struct GetOutputItems {
     pub running_machine: Option<String>,
     #[serde(rename = "running-qemu")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "The currently running QEMU version (if running)."]
+    #[doc = "The QEMU version the VM is currently using (if running)."]
     #[doc = ""]
     pub running_qemu: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Guest has serial device configured."]
+    #[doc = ""]
+    pub serial: Option<bool>,
     #[doc = "QEMU process status."]
     #[doc = ""]
     pub status: Status,
@@ -121,11 +248,19 @@ pub struct GetOutputItems {
     #[doc = ""]
     pub tags: Option<String>,
     #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Determines if the guest is a template."]
+    #[doc = ""]
+    pub template: Option<bool>,
+    #[serde(
         serialize_with = "crate::types::serialize_int_optional",
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Uptime."]
+    #[doc = "Uptime in seconds."]
     #[doc = ""]
     pub uptime: Option<i64>,
     #[doc = "The (unique) ID of the VM."]
@@ -159,92 +294,98 @@ impl PostParams {
     pub fn new(vmid: VmidInt) -> Self {
         Self {
             vmid,
-            acpi: Default::default(),
-            affinity: Default::default(),
-            agent: Default::default(),
-            arch: Default::default(),
-            archive: Default::default(),
-            args: Default::default(),
-            audio0: Default::default(),
-            autostart: Default::default(),
-            balloon: Default::default(),
-            bios: Default::default(),
-            boot: Default::default(),
-            bootdisk: Default::default(),
-            bwlimit: Default::default(),
-            cdrom: Default::default(),
-            cicustom: Default::default(),
-            cipassword: Default::default(),
-            citype: Default::default(),
-            ciupgrade: Default::default(),
-            ciuser: Default::default(),
-            cores: Default::default(),
-            cpu: Default::default(),
-            cpulimit: Default::default(),
-            cpuunits: Default::default(),
-            description: Default::default(),
-            efidisk0: Default::default(),
-            force: Default::default(),
-            freeze: Default::default(),
-            hookscript: Default::default(),
-            hostpcis: Default::default(),
-            hotplug: Default::default(),
-            hugepages: Default::default(),
-            ides: Default::default(),
-            ipconfigs: Default::default(),
-            ivshmem: Default::default(),
-            keephugepages: Default::default(),
-            keyboard: Default::default(),
-            kvm: Default::default(),
-            live_restore: Default::default(),
-            localtime: Default::default(),
-            lock: Default::default(),
-            machine: Default::default(),
-            memory: Default::default(),
-            migrate_downtime: Default::default(),
-            migrate_speed: Default::default(),
-            name: Default::default(),
-            nameserver: Default::default(),
-            nets: Default::default(),
-            numa: Default::default(),
-            numas: Default::default(),
-            onboot: Default::default(),
-            ostype: Default::default(),
-            parallels: Default::default(),
-            pool: Default::default(),
-            protection: Default::default(),
-            reboot: Default::default(),
-            rng0: Default::default(),
-            satas: Default::default(),
-            scsis: Default::default(),
-            scsihw: Default::default(),
-            searchdomain: Default::default(),
-            serials: Default::default(),
-            shares: Default::default(),
-            smbios1: Default::default(),
-            smp: Default::default(),
-            sockets: Default::default(),
-            spice_enhancements: Default::default(),
-            sshkeys: Default::default(),
-            start: Default::default(),
-            startdate: Default::default(),
-            startup: Default::default(),
-            storage: Default::default(),
-            tablet: Default::default(),
-            tags: Default::default(),
-            tdf: Default::default(),
-            template: Default::default(),
-            tpmstate0: Default::default(),
-            unique: Default::default(),
-            unuseds: Default::default(),
-            usbs: Default::default(),
-            vcpus: Default::default(),
-            vga: Default::default(),
-            virtios: Default::default(),
-            vmgenid: Default::default(),
-            vmstatestorage: Default::default(),
-            watchdog: Default::default(),
-            additional_properties: Default::default(),
+            acpi: ::std::default::Default::default(),
+            affinity: ::std::default::Default::default(),
+            agent: ::std::default::Default::default(),
+            allow_ksm: ::std::default::Default::default(),
+            amd_sev: ::std::default::Default::default(),
+            arch: ::std::default::Default::default(),
+            archive: ::std::default::Default::default(),
+            args: ::std::default::Default::default(),
+            audio0: ::std::default::Default::default(),
+            autostart: ::std::default::Default::default(),
+            balloon: ::std::default::Default::default(),
+            bios: ::std::default::Default::default(),
+            boot: ::std::default::Default::default(),
+            bootdisk: ::std::default::Default::default(),
+            bwlimit: ::std::default::Default::default(),
+            cdrom: ::std::default::Default::default(),
+            cicustom: ::std::default::Default::default(),
+            cipassword: ::std::default::Default::default(),
+            citype: ::std::default::Default::default(),
+            ciupgrade: ::std::default::Default::default(),
+            ciuser: ::std::default::Default::default(),
+            cores: ::std::default::Default::default(),
+            cpu: ::std::default::Default::default(),
+            cpulimit: ::std::default::Default::default(),
+            cpuunits: ::std::default::Default::default(),
+            description: ::std::default::Default::default(),
+            efidisk0: ::std::default::Default::default(),
+            force: ::std::default::Default::default(),
+            freeze: ::std::default::Default::default(),
+            ha_managed: ::std::default::Default::default(),
+            hookscript: ::std::default::Default::default(),
+            hostpcis: ::std::default::Default::default(),
+            hotplug: ::std::default::Default::default(),
+            hugepages: ::std::default::Default::default(),
+            ides: ::std::default::Default::default(),
+            import_working_storage: ::std::default::Default::default(),
+            intel_tdx: ::std::default::Default::default(),
+            ipconfigs: ::std::default::Default::default(),
+            ivshmem: ::std::default::Default::default(),
+            keephugepages: ::std::default::Default::default(),
+            keyboard: ::std::default::Default::default(),
+            kvm: ::std::default::Default::default(),
+            live_restore: ::std::default::Default::default(),
+            localtime: ::std::default::Default::default(),
+            lock: ::std::default::Default::default(),
+            machine: ::std::default::Default::default(),
+            memory: ::std::default::Default::default(),
+            migrate_downtime: ::std::default::Default::default(),
+            migrate_speed: ::std::default::Default::default(),
+            name: ::std::default::Default::default(),
+            nameserver: ::std::default::Default::default(),
+            nets: ::std::default::Default::default(),
+            numa: ::std::default::Default::default(),
+            numas: ::std::default::Default::default(),
+            onboot: ::std::default::Default::default(),
+            ostype: ::std::default::Default::default(),
+            parallels: ::std::default::Default::default(),
+            pool: ::std::default::Default::default(),
+            protection: ::std::default::Default::default(),
+            reboot: ::std::default::Default::default(),
+            rng0: ::std::default::Default::default(),
+            satas: ::std::default::Default::default(),
+            scsis: ::std::default::Default::default(),
+            scsihw: ::std::default::Default::default(),
+            searchdomain: ::std::default::Default::default(),
+            serials: ::std::default::Default::default(),
+            shares: ::std::default::Default::default(),
+            smbios1: ::std::default::Default::default(),
+            smp: ::std::default::Default::default(),
+            sockets: ::std::default::Default::default(),
+            spice_enhancements: ::std::default::Default::default(),
+            sshkeys: ::std::default::Default::default(),
+            start: ::std::default::Default::default(),
+            startdate: ::std::default::Default::default(),
+            startup: ::std::default::Default::default(),
+            storage: ::std::default::Default::default(),
+            tablet: ::std::default::Default::default(),
+            tags: ::std::default::Default::default(),
+            tdf: ::std::default::Default::default(),
+            template: ::std::default::Default::default(),
+            tpmstate0: ::std::default::Default::default(),
+            unique: ::std::default::Default::default(),
+            unuseds: ::std::default::Default::default(),
+            usbs: ::std::default::Default::default(),
+            vcpus: ::std::default::Default::default(),
+            vga: ::std::default::Default::default(),
+            virtios: ::std::default::Default::default(),
+            virtiofss: ::std::default::Default::default(),
+            vmgenid: ::std::default::Default::default(),
+            vmstatestorage: ::std::default::Default::default(),
+            watchdog: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -266,6 +407,20 @@ pub struct PostParams {
     #[doc = "Enable/disable communication with the QEMU Guest Agent and its properties."]
     #[doc = ""]
     pub agent: Option<String>,
+    #[serde(rename = "allow-ksm")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Allow memory pages of this guest to be merged via KSM (Kernel Samepage Merging)."]
+    #[doc = ""]
+    pub allow_ksm: Option<bool>,
+    #[serde(rename = "amd-sev")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Secure Encrypted Virtualization (SEV) features by AMD CPUs"]
+    #[doc = ""]
+    pub amd_sev: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Virtual processor architecture. Defaults to the host."]
     #[doc = ""]
@@ -402,6 +557,15 @@ pub struct PostParams {
     #[doc = "Freeze CPU at startup (use 'c' monitor command to start execution)."]
     #[doc = ""]
     pub freeze: Option<bool>,
+    #[serde(rename = "ha-managed")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Add the VM as a HA resource after it was created."]
+    #[doc = ""]
+    pub ha_managed: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Script that will be executed during various steps in the vms lifetime."]
     #[doc = ""]
@@ -429,7 +593,9 @@ pub struct PostParams {
     #[doc = ""]
     pub hotplug: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Enable/disable hugepages memory."]
+    #[doc = "Enables hugepages memory."]
+    #[doc = ""]
+    #[doc = "Sets the size of hugepages in MiB. If the value is set to 'any' then 1 GiB hugepages will be used if possible, otherwise the size will fall back to 2 MiB."]
     #[doc = ""]
     pub hugepages: Option<Hugepages>,
     #[serde(rename = "ide[n]")]
@@ -442,6 +608,16 @@ pub struct PostParams {
     #[doc = "Use volume as IDE hard disk or CD-ROM (n is 0 to 3). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
     #[doc = ""]
     pub ides: ::std::collections::HashMap<u32, String>,
+    #[serde(rename = "import-working-storage")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "A file-based storage with 'images' content-type enabled, which is used as an intermediary extraction storage during import. Defaults to the source storage."]
+    #[doc = ""]
+    pub import_working_storage: Option<String>,
+    #[serde(rename = "intel-tdx")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Trusted Domain Extension (TDX) features by Intel CPUs"]
+    #[doc = ""]
+    pub intel_tdx: Option<String>,
     #[serde(rename = "ipconfig[n]")]
     #[serde(
         serialize_with = "crate::types::serialize_multi::<NumberedIpconfigs, _>",
@@ -520,7 +696,7 @@ pub struct PostParams {
     #[doc = ""]
     pub memory: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Set maximum tolerated downtime (in seconds) for migrations."]
+    #[doc = "Set maximum tolerated downtime (in seconds) for migrations. Should the migration not be able to converge in the very end, because too much newly dirtied RAM needs to be transferred, the limit will be increased automatically step-by-step until migration can converge."]
     #[doc = ""]
     pub migrate_downtime: Option<MigrateDowntimeNum>,
     #[serde(
@@ -839,6 +1015,16 @@ pub struct PostParams {
     #[doc = "Use volume as VIRTIO hard disk (n is 0 to 15). Use the special syntax STORAGE_ID:SIZE_IN_GiB to allocate a new volume. Use STORAGE_ID:0 and the 'import-from' parameter to import from an existing volume."]
     #[doc = ""]
     pub virtios: ::std::collections::HashMap<u32, String>,
+    #[serde(rename = "virtiofs[n]")]
+    #[serde(
+        serialize_with = "crate::types::serialize_multi::<NumberedVirtiofss, _>",
+        deserialize_with = "crate::types::deserialize_multi::<NumberedVirtiofss, _>"
+    )]
+    #[serde(skip_serializing_if = "::std::collections::HashMap::is_empty", default)]
+    #[serde(flatten)]
+    #[doc = "Configuration for sharing a directory between host and guest using Virtio-fs."]
+    #[doc = ""]
+    pub virtiofss: ::std::collections::HashMap<u32, String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "Set VM Generation ID. Use '1' to autogenerate on create or update, pass '0' to disable explicitly."]
     #[doc = ""]
@@ -893,6 +1079,8 @@ impl crate::types::multi::Test for PostParams {
                 <NumberedUsbs as crate::types::multi::NumberedItems>::key_matches
                     as fn(&str) -> bool,
                 <NumberedVirtios as crate::types::multi::NumberedItems>::key_matches
+                    as fn(&str) -> bool,
+                <NumberedVirtiofss as crate::types::multi::NumberedItems>::key_matches
                     as fn(&str) -> bool,
             ];
             array.iter().any(|f| f(input))
@@ -962,7 +1150,9 @@ impl TryFrom<&str> for Citype {
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
-#[doc = "Enable/disable hugepages memory."]
+#[doc = "Enables hugepages memory."]
+#[doc = ""]
+#[doc = "Sets the size of hugepages in MiB. If the value is set to 'any' then 1 GiB hugepages will be used if possible, otherwise the size will fall back to 2 MiB."]
 #[doc = ""]
 pub enum Hugepages {
     #[serde(rename = "1024")]
@@ -1111,7 +1301,7 @@ impl TryFrom<&str> for Lock {
         }
     }
 }
-#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
 #[doc = "Specify guest operating system."]
 #[doc = ""]
 #[doc = "Specify guest operating system. This is used to enable special"]
@@ -1152,6 +1342,7 @@ pub enum Ostype {
     #[serde(rename = "l26")]
     L26,
     #[serde(rename = "other")]
+    #[default]
     Other,
     #[serde(rename = "solaris")]
     Solaris,
@@ -1311,6 +1502,12 @@ struct NumberedUsbs;
 impl crate::types::multi::NumberedItems for NumberedUsbs {
     type Item = String;
     const PREFIX: &'static str = "usb";
+}
+#[derive(Default)]
+struct NumberedVirtiofss;
+impl crate::types::multi::NumberedItems for NumberedVirtiofss {
+    type Item = String;
+    const PREFIX: &'static str = "virtiofs";
 }
 #[derive(Default)]
 struct NumberedVirtios;

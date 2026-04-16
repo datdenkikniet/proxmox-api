@@ -29,7 +29,7 @@ impl GetOutput {
     pub fn new(filename: String) -> Self {
         Self {
             filename,
-            additional_properties: Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -48,8 +48,8 @@ impl GetParams {
         Self {
             ds,
             timeframe,
-            cf: Default::default(),
-            additional_properties: Default::default(),
+            cf: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }

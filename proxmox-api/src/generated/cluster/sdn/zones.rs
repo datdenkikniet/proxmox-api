@@ -38,53 +38,180 @@ where
     }
 }
 impl GetOutputItems {
-    pub fn new(ty: String, zone: String) -> Self {
+    pub fn new(ty: Type, zone: String) -> Self {
         Self {
             ty,
             zone,
-            dhcp: Default::default(),
-            dns: Default::default(),
-            dnszone: Default::default(),
-            ipam: Default::default(),
-            mtu: Default::default(),
-            nodes: Default::default(),
-            pending: Default::default(),
-            reversedns: Default::default(),
-            state: Default::default(),
-            additional_properties: Default::default(),
+            advertise_subnets: ::std::default::Default::default(),
+            bridge: ::std::default::Default::default(),
+            bridge_disable_mac_learning: ::std::default::Default::default(),
+            controller: ::std::default::Default::default(),
+            dhcp: ::std::default::Default::default(),
+            digest: ::std::default::Default::default(),
+            disable_arp_nd_suppression: ::std::default::Default::default(),
+            dns: ::std::default::Default::default(),
+            dnszone: ::std::default::Default::default(),
+            exitnodes: ::std::default::Default::default(),
+            exitnodes_local_routing: ::std::default::Default::default(),
+            exitnodes_primary: ::std::default::Default::default(),
+            ipam: ::std::default::Default::default(),
+            mac: ::std::default::Default::default(),
+            mtu: ::std::default::Default::default(),
+            nodes: ::std::default::Default::default(),
+            peers: ::std::default::Default::default(),
+            pending: ::std::default::Default::default(),
+            reversedns: ::std::default::Default::default(),
+            rt_import: ::std::default::Default::default(),
+            state: ::std::default::Default::default(),
+            tag: ::std::default::Default::default(),
+            vlan_protocol: ::std::default::Default::default(),
+            vrf_vxlan: ::std::default::Default::default(),
+            vxlan_port: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize)]
 pub struct GetOutputItems {
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub dhcp: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub dns: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub dnszone: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub ipam: Option<String>,
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub mtu: Option<i64>,
-    #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub nodes: Option<String>,
+    #[serde(rename = "advertise-subnets")]
     #[serde(
         serialize_with = "crate::types::serialize_bool_optional",
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub pending: Option<bool>,
+    #[doc = "Advertise IP prefixes (Type-5 routes) instead of MAC/IP pairs (Type-2 routes). EVPN zone only."]
+    #[doc = ""]
+    pub advertise_subnets: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "the bridge for which VLANs should be managed. VLAN & QinQ zone only."]
+    #[doc = ""]
+    pub bridge: Option<String>,
+    #[serde(rename = "bridge-disable-mac-learning")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Disable auto mac learning. VLAN zone only."]
+    #[doc = ""]
+    pub bridge_disable_mac_learning: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "ID of the controller for this zone. EVPN zone only."]
+    #[doc = ""]
+    pub controller: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Name of DHCP server backend for this zone."]
+    #[doc = ""]
+    pub dhcp: Option<Dhcp>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Digest of the controller section."]
+    #[doc = ""]
+    pub digest: Option<String>,
+    #[serde(rename = "disable-arp-nd-suppression")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Suppress IPv4 ARP && IPv6 Neighbour Discovery messages. EVPN zone only."]
+    #[doc = ""]
+    pub disable_arp_nd_suppression: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "ID of the DNS server for this zone."]
+    #[doc = ""]
+    pub dns: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Domain name for this zone."]
+    #[doc = ""]
+    pub dnszone: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "List of PVE Nodes that should act as exit node for this zone. EVPN zone only."]
+    #[doc = ""]
+    pub exitnodes: Option<String>,
+    #[serde(rename = "exitnodes-local-routing")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Create routes on the exit nodes, so they can connect to EVPN guests. EVPN zone only."]
+    #[doc = ""]
+    pub exitnodes_local_routing: Option<bool>,
+    #[serde(rename = "exitnodes-primary")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Force traffic through this exitnode first. EVPN zone only."]
+    #[doc = ""]
+    pub exitnodes_primary: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "ID of the IPAM for this zone."]
+    #[doc = ""]
+    pub ipam: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "MAC address of the anycast router for this zone."]
+    #[doc = ""]
+    pub mac: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "MTU of the zone, will be used for the created VNet bridges."]
+    #[doc = ""]
+    pub mtu: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Nodes where this zone should be created."]
+    #[doc = ""]
+    pub nodes: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Comma-separated list of peers, that are part of the VXLAN zone. Usually the IPs of the nodes. VXLAN zone only."]
+    #[doc = ""]
+    pub peers: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Changes that have not yet been applied to the running configuration."]
+    #[doc = ""]
+    pub pending: Option<PendingGetOutputItemsPending>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "ID of the reverse DNS server for this zone."]
+    #[doc = ""]
     pub reversedns: Option<String>,
+    #[serde(rename = "rt-import")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    pub state: Option<String>,
+    #[doc = "Route-Targets that should be imported into the VRF of this zone via BGP. EVPN zone only."]
+    #[doc = ""]
+    pub rt_import: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "State of the SDN configuration object."]
+    #[doc = ""]
+    pub state: Option<State>,
+    #[serde(
+        serialize_with = "crate::types::serialize_unsigned_int_optional",
+        deserialize_with = "crate::types::deserialize_unsigned_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Service-VLAN Tag (outer VLAN). QinQ zone only"]
+    #[doc = ""]
+    pub tag: Option<u64>,
     #[serde(rename = "type")]
-    pub ty: String,
+    #[doc = "Type of the zone."]
+    #[doc = ""]
+    pub ty: Type,
+    #[serde(rename = "vlan-protocol")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "VLAN protocol for the creation of the QinQ zone. QinQ zone only."]
+    #[doc = ""]
+    pub vlan_protocol: Option<VlanProtocol>,
+    #[serde(rename = "vrf-vxlan")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "VNI for the zone VRF. EVPN zone only."]
+    #[doc = ""]
+    pub vrf_vxlan: Option<VrfVxlanInt>,
+    #[serde(rename = "vxlan-port")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "UDP port that should be used for the VXLAN tunnel (default 4789). VXLAN zone only."]
+    #[doc = ""]
+    pub vxlan_port: Option<VxlanPortInt>,
+    #[doc = "Name of the zone."]
+    #[doc = ""]
     pub zone: String,
     #[serde(
         flatten,
@@ -123,35 +250,167 @@ pub struct GetParams {
     )]
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, Default)]
+pub struct PendingGetOutputItemsPending {
+    #[serde(rename = "advertise-subnets")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Advertise IP prefixes (Type-5 routes) instead of MAC/IP pairs (Type-2 routes). EVPN zone only."]
+    #[doc = ""]
+    pub advertise_subnets: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "the bridge for which VLANs should be managed. VLAN & QinQ zone only."]
+    #[doc = ""]
+    pub bridge: Option<String>,
+    #[serde(rename = "bridge-disable-mac-learning")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Disable auto mac learning. VLAN zone only."]
+    #[doc = ""]
+    pub bridge_disable_mac_learning: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "ID of the controller for this zone. EVPN zone only."]
+    #[doc = ""]
+    pub controller: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Name of DHCP server backend for this zone."]
+    #[doc = ""]
+    pub dhcp: Option<Dhcp>,
+    #[serde(rename = "disable-arp-nd-suppression")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Suppress IPv4 ARP && IPv6 Neighbour Discovery messages. EVPN zone only."]
+    #[doc = ""]
+    pub disable_arp_nd_suppression: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "ID of the DNS server for this zone."]
+    #[doc = ""]
+    pub dns: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Domain name for this zone."]
+    #[doc = ""]
+    pub dnszone: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "List of PVE Nodes that should act as exit node for this zone. EVPN zone only."]
+    #[doc = ""]
+    pub exitnodes: Option<String>,
+    #[serde(rename = "exitnodes-local-routing")]
+    #[serde(
+        serialize_with = "crate::types::serialize_bool_optional",
+        deserialize_with = "crate::types::deserialize_bool_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Create routes on the exit nodes, so they can connect to EVPN guests. EVPN zone only."]
+    #[doc = ""]
+    pub exitnodes_local_routing: Option<bool>,
+    #[serde(rename = "exitnodes-primary")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Force traffic through this exitnode first. EVPN zone only."]
+    #[doc = ""]
+    pub exitnodes_primary: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "ID of the IPAM for this zone."]
+    #[doc = ""]
+    pub ipam: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "MAC address of the anycast router for this zone."]
+    #[doc = ""]
+    pub mac: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_int_optional",
+        deserialize_with = "crate::types::deserialize_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "MTU of the zone, will be used for the created VNet bridges."]
+    #[doc = ""]
+    pub mtu: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Nodes where this zone should be created."]
+    #[doc = ""]
+    pub nodes: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Comma-separated list of peers, that are part of the VXLAN zone. Usually the IPs of the nodes. VXLAN zone only."]
+    #[doc = ""]
+    pub peers: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "ID of the reverse DNS server for this zone."]
+    #[doc = ""]
+    pub reversedns: Option<String>,
+    #[serde(rename = "rt-import")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Route-Targets that should be imported into the VRF of this zone via BGP. EVPN zone only."]
+    #[doc = ""]
+    pub rt_import: Option<String>,
+    #[serde(
+        serialize_with = "crate::types::serialize_unsigned_int_optional",
+        deserialize_with = "crate::types::deserialize_unsigned_int_optional"
+    )]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Service-VLAN Tag (outer VLAN). QinQ zone only"]
+    #[doc = ""]
+    pub tag: Option<u64>,
+    #[serde(rename = "vlan-protocol")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "VLAN protocol for the creation of the QinQ zone. QinQ zone only."]
+    #[doc = ""]
+    pub vlan_protocol: Option<VlanProtocol>,
+    #[serde(rename = "vrf-vxlan")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "VNI for the zone VRF. EVPN zone only."]
+    #[doc = ""]
+    pub vrf_vxlan: Option<VrfVxlanInt>,
+    #[serde(rename = "vxlan-port")]
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "UDP port that should be used for the VXLAN tunnel (default 4789). VXLAN zone only."]
+    #[doc = ""]
+    pub vxlan_port: Option<VxlanPortInt>,
+    #[serde(
+        flatten,
+        default,
+        skip_serializing_if = "::std::collections::HashMap::is_empty"
+    )]
+    pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
+}
 impl PostParams {
     pub fn new(ty: Type, zone: String) -> Self {
         Self {
             ty,
             zone,
-            advertise_subnets: Default::default(),
-            bridge: Default::default(),
-            bridge_disable_mac_learning: Default::default(),
-            controller: Default::default(),
-            dhcp: Default::default(),
-            disable_arp_nd_suppression: Default::default(),
-            dns: Default::default(),
-            dnszone: Default::default(),
-            dp_id: Default::default(),
-            exitnodes: Default::default(),
-            exitnodes_local_routing: Default::default(),
-            exitnodes_primary: Default::default(),
-            ipam: Default::default(),
-            mac: Default::default(),
-            mtu: Default::default(),
-            nodes: Default::default(),
-            peers: Default::default(),
-            reversedns: Default::default(),
-            rt_import: Default::default(),
-            tag: Default::default(),
-            vlan_protocol: Default::default(),
-            vrf_vxlan: Default::default(),
-            vxlan_port: Default::default(),
-            additional_properties: Default::default(),
+            advertise_subnets: ::std::default::Default::default(),
+            bridge: ::std::default::Default::default(),
+            bridge_disable_mac_learning: ::std::default::Default::default(),
+            controller: ::std::default::Default::default(),
+            dhcp: ::std::default::Default::default(),
+            disable_arp_nd_suppression: ::std::default::Default::default(),
+            dns: ::std::default::Default::default(),
+            dnszone: ::std::default::Default::default(),
+            dp_id: ::std::default::Default::default(),
+            exitnodes: ::std::default::Default::default(),
+            exitnodes_local_routing: ::std::default::Default::default(),
+            exitnodes_primary: ::std::default::Default::default(),
+            fabric: ::std::default::Default::default(),
+            ipam: ::std::default::Default::default(),
+            lock_token: ::std::default::Default::default(),
+            mac: ::std::default::Default::default(),
+            mtu: ::std::default::Default::default(),
+            nodes: ::std::default::Default::default(),
+            peers: ::std::default::Default::default(),
+            reversedns: ::std::default::Default::default(),
+            rt_import: ::std::default::Default::default(),
+            tag: ::std::default::Default::default(),
+            vlan_protocol: ::std::default::Default::default(),
+            vrf_vxlan: ::std::default::Default::default(),
+            vxlan_port: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
@@ -163,10 +422,12 @@ pub struct PostParams {
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Advertise evpn subnets if you have silent hosts"]
+    #[doc = "Advertise IP prefixes (Type-5 routes) instead of MAC/IP pairs (Type-2 routes)."]
     #[doc = ""]
     pub advertise_subnets: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "The bridge for which VLANs should be managed."]
+    #[doc = ""]
     pub bridge: Option<String>,
     #[serde(rename = "bridge-disable-mac-learning")]
     #[serde(
@@ -178,7 +439,7 @@ pub struct PostParams {
     #[doc = ""]
     pub bridge_disable_mac_learning: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Frr router name"]
+    #[doc = "Controller for this zone."]
     #[doc = ""]
     pub controller: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -191,7 +452,7 @@ pub struct PostParams {
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Disable ipv4 arp && ipv6 neighbour discovery suppression"]
+    #[doc = "Suppress IPv4 ARP && IPv6 Neighbour Discovery messages."]
     #[doc = ""]
     pub disable_arp_nd_suppression: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -221,20 +482,29 @@ pub struct PostParams {
         deserialize_with = "crate::types::deserialize_bool_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Allow exitnodes to connect to evpn guests"]
+    #[doc = "Allow exitnodes to connect to EVPN guests."]
     #[doc = ""]
     pub exitnodes_local_routing: Option<bool>,
     #[serde(rename = "exitnodes-primary")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Force traffic to this exitnode first."]
+    #[doc = "Force traffic through this exitnode first."]
     #[doc = ""]
     pub exitnodes_primary: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "SDN fabric to use as underlay for this VXLAN zone."]
+    #[doc = ""]
+    pub fabric: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
     #[doc = "use a specific ipam"]
     #[doc = ""]
     pub ipam: Option<String>,
+    #[serde(rename = "lock-token")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Anycast logical router mac address"]
+    #[doc = "the token for unlocking the global SDN configuration"]
+    #[doc = ""]
+    pub lock_token: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Anycast logical router mac address."]
     #[doc = ""]
     pub mac: Option<crate::types::MacAddr<true>>,
     #[serde(
@@ -242,7 +512,7 @@ pub struct PostParams {
         deserialize_with = "crate::types::deserialize_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "MTU"]
+    #[doc = "MTU of the zone, will be used for the created VNet bridges."]
     #[doc = ""]
     pub mtu: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -250,7 +520,7 @@ pub struct PostParams {
     #[doc = ""]
     pub nodes: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "peers address list."]
+    #[doc = "Comma-separated list of peers, that are part of the VXLAN zone. Usually the IPs of the nodes."]
     #[doc = ""]
     pub peers: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none", default)]
@@ -259,7 +529,7 @@ pub struct PostParams {
     pub reversedns: Option<String>,
     #[serde(rename = "rt-import")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Route-Target import"]
+    #[doc = "List of Route Targets that should be imported into the VRF of the zone."]
     #[doc = ""]
     pub rt_import: Option<String>,
     #[serde(
@@ -267,7 +537,7 @@ pub struct PostParams {
         deserialize_with = "crate::types::deserialize_unsigned_int_optional"
     )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Service-VLAN Tag"]
+    #[doc = "Service-VLAN Tag (outer VLAN)"]
     #[doc = ""]
     pub tag: Option<u64>,
     #[serde(rename = "type")]
@@ -276,19 +546,17 @@ pub struct PostParams {
     pub ty: Type,
     #[serde(rename = "vlan-protocol")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
+    #[doc = "Which VLAN protocol should be used for the creation of the QinQ zone."]
+    #[doc = ""]
     pub vlan_protocol: Option<VlanProtocol>,
     #[serde(rename = "vrf-vxlan")]
-    #[serde(
-        serialize_with = "crate::types::serialize_int_optional",
-        deserialize_with = "crate::types::deserialize_int_optional"
-    )]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "l3vni."]
+    #[doc = "VNI for the zone VRF."]
     #[doc = ""]
-    pub vrf_vxlan: Option<i64>,
+    pub vrf_vxlan: Option<VrfVxlanInt>,
     #[serde(rename = "vxlan-port")]
     #[serde(skip_serializing_if = "Option::is_none", default)]
-    #[doc = "Vxlan tunnel udp port (default 4789)."]
+    #[doc = "UDP port that should be used for the VXLAN tunnel (default 4789)."]
     #[doc = ""]
     pub vxlan_port: Option<VxlanPortInt>,
     #[doc = "The SDN zone object identifier."]
@@ -302,7 +570,7 @@ pub struct PostParams {
     pub additional_properties: ::std::collections::HashMap<String, ::serde_json::Value>,
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
-#[doc = "Type of the DHCP backend for this zone"]
+#[doc = "Name of DHCP server backend for this zone."]
 #[doc = ""]
 pub enum Dhcp {
     #[serde(rename = "dnsmasq")]
@@ -313,6 +581,28 @@ impl TryFrom<&str> for Dhcp {
     fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
         match value {
             "dnsmasq" => Ok(Self::Dnsmasq),
+            v => Err(format!("Unknown variant {v}")),
+        }
+    }
+}
+#[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq)]
+#[doc = "State of the SDN configuration object."]
+#[doc = ""]
+pub enum State {
+    #[serde(rename = "changed")]
+    Changed,
+    #[serde(rename = "deleted")]
+    Deleted,
+    #[serde(rename = "new")]
+    New,
+}
+impl TryFrom<&str> for State {
+    type Error = String;
+    fn try_from(value: &str) -> Result<Self, <Self as TryFrom<&str>>::Error> {
+        match value {
+            "changed" => Ok(Self::Changed),
+            "deleted" => Ok(Self::Deleted),
+            "new" => Ok(Self::New),
             v => Err(format!("Unknown variant {v}")),
         }
     }
@@ -349,6 +639,8 @@ impl TryFrom<&str> for Type {
     }
 }
 #[derive(Clone, Debug, :: serde :: Serialize, :: serde :: Deserialize, PartialEq, Default)]
+#[doc = "VLAN protocol for the creation of the QinQ zone. QinQ zone only."]
+#[doc = ""]
 pub enum VlanProtocol {
     #[serde(rename = "802.1ad")]
     _8021ad,
@@ -367,11 +659,48 @@ impl TryFrom<&str> for VlanProtocol {
     }
 }
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct VrfVxlanInt(i128);
+impl crate::types::bounded_integer::BoundedInteger for VrfVxlanInt {
+    const MIN: Option<i128> = Some(1i128);
+    const MAX: Option<i128> = Some(16777215i128);
+    const DEFAULT: Option<i128> = None::<i128>;
+    const TYPE_DESCRIPTION: &'static str = "an integer between 1 and 16777215";
+    fn get(&self) -> i128 {
+        self.0
+    }
+    fn new(value: i128) -> Result<Self, crate::types::bounded_integer::BoundedIntegerError> {
+        Self::validate(value)?;
+        Ok(Self(value))
+    }
+}
+impl std::convert::TryFrom<i128> for VrfVxlanInt {
+    type Error = crate::types::bounded_integer::BoundedIntegerError;
+    fn try_from(value: i128) -> Result<Self, Self::Error> {
+        crate::types::bounded_integer::BoundedInteger::new(value)
+    }
+}
+impl ::serde::Serialize for VrfVxlanInt {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: ::serde::Serializer,
+    {
+        crate::types::bounded_integer::serialize_bounded_integer(self, serializer)
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for VrfVxlanInt {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        crate::types::bounded_integer::deserialize_bounded_integer(deserializer)
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
 pub struct VxlanPortInt(i128);
 impl crate::types::bounded_integer::BoundedInteger for VxlanPortInt {
     const MIN: Option<i128> = Some(1i128);
     const MAX: Option<i128> = Some(65536i128);
-    const DEFAULT: Option<i128> = None::<i128>;
+    const DEFAULT: Option<i128> = Some(4789i128);
     const TYPE_DESCRIPTION: &'static str = "an integer between 1 and 65536";
     fn get(&self) -> i128 {
         self.0

@@ -29,9 +29,9 @@ impl GetOutputItems {
     pub fn new(vnet: String) -> Self {
         Self {
             vnet,
-            status: Default::default(),
-            statusmsg: Default::default(),
-            additional_properties: Default::default(),
+            status: ::std::default::Default::default(),
+            statusmsg: ::std::default::Default::default(),
+            additional_properties: ::std::default::Default::default(),
         }
     }
 }
