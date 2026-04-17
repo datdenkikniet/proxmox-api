@@ -198,7 +198,11 @@ impl crate::client::Client for Client {
         } else if let Some(errors) = result.errors {
             Err(Error::EncounteredErrors(errors))
         } else {
-            Err(Error::UnknownFailure(response_status))
+            // PVE sometimes returns {"data":null} for array endpoints that have no
+            // data (e.g. LXC container network interfaces), so return an empty array
+            // if we got a non-error response to an array endpoint, but it was empty.
+            serde_json::from_value(serde_json::Value::Array(vec![]))
+                .map_err(|_| Error::UnknownFailure(response_status))
         }
     }
 }
