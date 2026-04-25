@@ -52,9 +52,9 @@ impl AuthState {
     }
 
     /// Set the API token.
-    pub fn set_api_token(&self, user: &str, realm: &str, token_id: &str, token: &str) {
+    pub fn set_api_token(&self, user: &str, realm: &str, token_id: &str, token_secret: &str) {
         // PVEAPIToken=USER@REALM!TOKENID=UUID
-        self.inner.write().api_token = Some(format!("{user}@{realm}!{token_id}={token}"));
+        self.inner.write().api_token = Some(format!("{user}@{realm}!{token_id}={token_secret}"));
     }
 
     /// Set the CSRF and auth ticket

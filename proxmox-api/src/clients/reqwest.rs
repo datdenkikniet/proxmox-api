@@ -61,10 +61,10 @@ impl Client {
         }
     }
 
-    pub fn with_api_token(self, token_id: &str, token: &str) -> Self {
+    pub fn with_api_token(self, token_id: &str, token_secret: &str) -> Self {
         // PVEAPIToken=USER@REALM!TOKENID=UUID
         self.auth_state
-            .set_api_token(&self.user, &self.realm, token_id, token);
+            .set_api_token(&self.user, &self.realm, token_id, token_secret);
         self
     }
 
