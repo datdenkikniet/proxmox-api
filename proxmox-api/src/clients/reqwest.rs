@@ -43,12 +43,9 @@ impl Client {
         )
     }
 
-    pub fn new(host: &str, user: &str, realm: &str, client: Option<reqwest::Client>) -> Self {
+    pub fn new(host: &str, user: &str, realm: &str, client: Option<Arc<reqwest::Client>>) -> Self {
         Self {
-            client: match client {
-                None => Self::client(),
-                Some(client) => Arc::new(client),
-            },
+            client: client.unwrap_or_else(Self::client),
             host: host.to_string(),
             user: user.into(),
             realm: realm.into(),
