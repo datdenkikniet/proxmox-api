@@ -10,8 +10,46 @@ pub enum Error {
     ResponseWasNotString,
     DecodingFailed(String, serde_json::Error),
     UrlEncodingFailed(String),
-    UnknownFailure(StatusCode),
+    UnknownFailure(StatusCode, Option<String>),
     Other(&'static str),
+}
+
+impl std::fmt::Display for Error {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Error::Reqwest(e) => write!(f, "{e}"),
+            Error::EncounteredErrors(v) => write!(f, "Proxmox returned errors: {v}"),
+            Error::ResponseWasNotString => write!(f, "response body was not valid UTF-8"),
+            Error::DecodingFailed(text, e) => {
+                write!(f, "failed to decode response: {e}; body: {text}")
+            }
+            Error::UrlEncodingFailed(msg) => write!(f, "failed to URL-encode request body: {msg}"),
+            Error::UnknownFailure(status, body) => {
+                write!(f, "HTTP {status}")?;
+                if let Some(body) = body {
+                    write!(f, ": {body}")?;
+                }
+                Ok(())
+            }
+            Error::Other(msg) => write!(f, "{msg}"),
+        }
+    }
+}
+
+impl std::error::Error for Error {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match self {
+            Error::Reqwest(e) => Some(e),
+            _ => None,
+        }
+    }
+}
+
+fn extract_message(body: &str) -> String {
+    serde_json::from_str::<serde_json::Value>(body)
+        .ok()
+        .and_then(|v| v.get("message").and_then(|m| m.as_str().map(String::from)))
+        .unwrap_or_else(|| body.to_string())
 }
 
 impl From<reqwest::Error> for Error {
@@ -179,11 +217,10 @@ impl crate::client::Client for Client {
         log::debug!("JSON response: {json_str}");
 
         if response_status != StatusCode::OK {
-            // TODO: get useful error message from status message line.
-            // perhaps it is in the extensions? Proxmox sometimes returns
-            // HTTP 500 Disk is locked, and we need to be able to extract
-            // that information, somehow... Ureq client can do this
-            return Err(Error::UnknownFailure(response_status));
+            return Err(Error::UnknownFailure(
+                response_status,
+                Some(extract_message(json_str)),
+            ));
         }
 
         let result: Response<R> = serde_json::from_str(json_str)
@@ -194,7 +231,10 @@ impl crate::client::Client for Client {
         } else if let Some(errors) = result.errors {
             Err(Error::EncounteredErrors(errors))
         } else {
-            Err(Error::UnknownFailure(response_status))
+            Err(Error::UnknownFailure(
+                response_status,
+                Some(extract_message(json_str)),
+            ))
         }
     }
 }
