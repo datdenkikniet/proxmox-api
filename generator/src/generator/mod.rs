@@ -180,8 +180,18 @@ impl Generator {
                     None
                 };
 
+                let perm_doc = info.permissions.as_ref().and_then(|perm| {
+                    let lines = perm.doc_strings();
+                    if lines.is_empty() {
+                        None
+                    } else {
+                        Some(quote! { #(#[doc = #lines])* })
+                    }
+                });
+
                 let fn_definition = quote! {
                     #doc
+                    #perm_doc
                     pub async fn #fn_name(#signature) #returns {
                         let path = self.path.to_string();
                         #call
