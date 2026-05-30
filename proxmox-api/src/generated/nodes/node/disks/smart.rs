@@ -20,6 +20,7 @@ where
 {
     #[doc = "Get SMART Health of a disk."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Audit\"])"]
     pub async fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params).await

@@ -21,6 +21,7 @@ where
 {
     #[doc = "User index."]
     #[doc = ""]
+    #[doc = "The returned list is restricted to users where you have 'User.Modify' or 'Sys.Audit' permissions on '/access/groups' or on a group the user belongs too. But it always includes the current (authenticated) user."]
     pub async fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &params).await?;
@@ -33,6 +34,8 @@ where
 {
     #[doc = "Create new user."]
     #[doc = ""]
+    #[doc = "Permission check: and(userid-param(\"Realm.AllocateUser\"), userid-group([\"User.Modify\"], groups_param=\"create\"))"]
+    #[doc = "You need 'Realm.AllocateUser' on '/access/realm/\\<realm\\>' on the realm of user \\<userid\\>, and 'User.Modify' permissions to '/access/groups/\\<group\\>' for any group specified (or 'User.Modify' on '/access/groups' if you pass no groups."]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

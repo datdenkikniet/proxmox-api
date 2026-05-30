@@ -20,6 +20,7 @@ where
 {
     #[doc = "Delete a TFA entry by ID."]
     #[doc = ""]
+    #[doc = "Permission check: or(userid-param(\"self\"), userid-group([\"User.Modify\"]))"]
     pub async fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Fetch a requested TFA entry if present."]
     #[doc = ""]
+    #[doc = "Permission check: or(userid-param(\"self\"), userid-group([\"User.Modify\", \"Sys.Audit\"]))"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -42,6 +44,7 @@ where
 {
     #[doc = "Add a TFA entry for a user."]
     #[doc = ""]
+    #[doc = "Permission check: or(userid-param(\"self\"), userid-group([\"User.Modify\"]))"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

@@ -20,6 +20,8 @@ where
 {
     #[doc = "Destroy a ZFS pool."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Modify\"])"]
+    #[doc = "Requires additionally 'Datastore.Allocate' on /storage when setting 'cleanup-config'"]
     pub async fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params).await
@@ -31,6 +33,7 @@ where
 {
     #[doc = "Get details about a zpool."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Audit\"])"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await

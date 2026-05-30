@@ -20,6 +20,8 @@ where
 {
     #[doc = "Syncs users and/or groups from the configured LDAP to user.cfg. NOTE: Synced groups will have the name 'name-$realm', so make sure those groups do not exist to prevent overwriting."]
     #[doc = ""]
+    #[doc = "Permission check: and(perm(\"/access/realm/{realm}\", [\"Realm.AllocateUser\"]), perm(\"/access/groups\", [\"User.Modify\"]))"]
+    #[doc = "'Realm.AllocateUser' on '/access/realm/\\<realm\\>' and  'User.Modify' permissions to '/access/groups/'."]
     pub async fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

@@ -20,6 +20,7 @@ where
 {
     #[doc = "Show the current pool status."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Audit\", \"Datastore.Audit\"], any)"]
     pub async fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params).await

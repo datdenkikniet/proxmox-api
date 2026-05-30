@@ -20,6 +20,7 @@ where
 {
     #[doc = "Get the base parameters for creating a guest which imports data from a foreign importable guest, like an ESXi VM"]
     #[doc = ""]
+    #[doc = "You need read access for the volume."]
     pub async fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params).await

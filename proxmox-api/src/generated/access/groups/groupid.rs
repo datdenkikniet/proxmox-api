@@ -20,6 +20,7 @@ where
 {
     #[doc = "Delete group."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/access/groups\", [\"Group.Allocate\"])"]
     pub async fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &()).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Get group configuration."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/access/groups\", [\"Sys.Audit\", \"Group.Allocate\"], any)"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -42,6 +44,7 @@ where
 {
     #[doc = "Update group data."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/access/groups\", [\"Group.Allocate\"])"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

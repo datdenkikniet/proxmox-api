@@ -20,6 +20,7 @@ where
 {
     #[doc = "Bulk suspend all guests on the cluster."]
     #[doc = ""]
+    #[doc = "The 'VM.PowerMgmt' permission is required on '/' or on '/vms/\\<ID\\>' for each ID passed via the 'vms' parameter. Additionally, you need 'VM.Config.Disk' on the '/vms/{vmid}' path and 'Datastore.AllocateSpace' for the configured state-storage(s)"]
     pub async fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

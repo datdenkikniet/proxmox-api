@@ -20,6 +20,7 @@ where
 {
     #[doc = "Get automatically generated cloudinit config."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.Audit\"])"]
     pub async fn get(&self, params: GetParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params).await

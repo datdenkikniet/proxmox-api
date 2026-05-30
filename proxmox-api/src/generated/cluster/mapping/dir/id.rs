@@ -20,6 +20,7 @@ where
 {
     #[doc = "Remove directory mapping."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/mapping/dir\", [\"Mapping.Modify\"])"]
     pub async fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &()).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Get directory mapping."]
     #[doc = ""]
+    #[doc = "Permission check: or(perm(\"/mapping/dir/{id}\", [\"Mapping.Use\"]), perm(\"/mapping/dir/{id}\", [\"Mapping.Modify\"]), perm(\"/mapping/dir/{id}\", [\"Mapping.Audit\"]))"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -42,6 +44,7 @@ where
 {
     #[doc = "Update a directory mapping."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/mapping/dir/{id}\", [\"Mapping.Modify\"])"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

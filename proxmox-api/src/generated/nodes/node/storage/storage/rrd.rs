@@ -20,6 +20,7 @@ where
 {
     #[doc = "Read storage RRD statistics (returns PNG)."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/storage/{storage}\", [\"Datastore.Audit\", \"Datastore.AllocateSpace\"], any)"]
     pub async fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params).await

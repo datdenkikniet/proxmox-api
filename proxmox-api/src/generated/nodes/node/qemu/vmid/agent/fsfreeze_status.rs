@@ -20,6 +20,7 @@ where
 {
     #[doc = "Execute fsfreeze-status."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.GuestAgent.Audit\", \"VM.GuestAgent.FileSystemMgmt\", \"VM.GuestAgent.Unrestricted\"], any)"]
     pub async fn post(&self) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &()).await

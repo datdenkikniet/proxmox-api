@@ -20,6 +20,8 @@ where
 {
     #[doc = "Suspend virtual machine."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.PowerMgmt\"])"]
+    #[doc = "You need 'VM.PowerMgmt' on /vms/{vmid}, and if you have set 'todisk', you need also 'VM.Config.Disk' on /vms/{vmid} and 'Datastore.AllocateSpace' on the storage for the vmstate."]
     pub async fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

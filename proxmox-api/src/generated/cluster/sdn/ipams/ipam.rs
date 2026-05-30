@@ -21,6 +21,7 @@ where
 {
     #[doc = "Delete sdn ipam object configuration."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/sdn/ipams\", [\"SDN.Allocate\"])"]
     pub async fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params).await
@@ -32,6 +33,7 @@ where
 {
     #[doc = "Read sdn ipam configuration."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/sdn/ipams/{ipam}\", [\"SDN.Allocate\"])"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -43,6 +45,7 @@ where
 {
     #[doc = "Update sdn ipam object configuration."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/sdn/ipams\", [\"SDN.Allocate\"])"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

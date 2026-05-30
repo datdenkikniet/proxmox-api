@@ -20,6 +20,7 @@ where
 {
     #[doc = "Sets the password for the given user to the given password"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.GuestAgent.Unrestricted\"])"]
     pub async fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

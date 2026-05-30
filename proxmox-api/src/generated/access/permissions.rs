@@ -20,6 +20,7 @@ where
 {
     #[doc = "Retrieve effective permissions of given user/token."]
     #[doc = ""]
+    #[doc = "Each user/token is allowed to dump their own permissions (or that of owned tokens). A user can dump the permissions of another user or their tokens if they have 'Sys.Audit' permission on /access."]
     pub async fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params).await

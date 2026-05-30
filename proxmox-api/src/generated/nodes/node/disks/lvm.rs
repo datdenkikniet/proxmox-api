@@ -21,6 +21,7 @@ where
 {
     #[doc = "List LVM Volume Groups"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Audit\"])"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -32,6 +33,8 @@ where
 {
     #[doc = "Create an LVM Volume Group"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Modify\"])"]
+    #[doc = "Requires additionally 'Datastore.Allocate' on /storage when setting 'add_storage'"]
     pub async fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

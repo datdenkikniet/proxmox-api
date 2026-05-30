@@ -20,6 +20,7 @@ where
 {
     #[doc = "Get snapshot configuration"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.Snapshot\", \"VM.Snapshot.Rollback\", \"VM.Audit\"], any)"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Update snapshot metadata."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.Snapshot\"])"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

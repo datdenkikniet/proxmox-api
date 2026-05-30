@@ -20,6 +20,8 @@ where
 {
     #[doc = "Download templates, ISO images, OVAs and VM images by using an URL."]
     #[doc = ""]
+    #[doc = "Permission check: and(perm(\"/storage/{storage}\", [\"Datastore.AllocateTemplate\"]), or(perm(\"/\", [\"Sys.Audit\", \"Sys.Modify\"]), perm(\"/nodes/{node}\", [\"Sys.AccessNetwork\"])))"]
+    #[doc = "Requires allocation access on the storage and as this allows one to probe the (local!) host network indirectly it also requires one of Sys.Modify on / (for backwards compatibility) or the newer Sys.AccessNetwork privilege on the node."]
     pub async fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

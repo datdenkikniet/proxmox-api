@@ -20,6 +20,7 @@ where
 {
     #[doc = "Delete ha group configuration. (deprecated in favor of HA rules)"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Console\"])"]
     pub async fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &()).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Read ha group configuration. (deprecated in favor of HA rules)"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Audit\"])"]
     pub async fn get(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -42,6 +44,7 @@ where
 {
     #[doc = "Update ha group configuration. (deprecated in favor of HA rules)"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Console\"])"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

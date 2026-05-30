@@ -20,6 +20,7 @@ where
 {
     #[doc = "Get vnet firewall options."]
     #[doc = ""]
+    #[doc = "Needs SDN.Audit or SDN.Allocate permissions on '/sdn/zones/\\<zone\\>/\\<vnet\\>'"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Set Firewall options."]
     #[doc = ""]
+    #[doc = "Needs SDN.Allocate permissions on '/sdn/zones/\\<zone\\>/\\<vnet\\>'"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

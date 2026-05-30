@@ -20,6 +20,7 @@ where
 {
     #[doc = "Get datacenter options. Without 'Sys.Audit' on '/' not all options are returned."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Audit\"])"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Set datacenter options."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Modify\"])"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

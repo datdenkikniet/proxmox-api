@@ -20,6 +20,7 @@ where
 {
     #[doc = "Create initial ceph default configuration and setup symlinks."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Modify\"])"]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

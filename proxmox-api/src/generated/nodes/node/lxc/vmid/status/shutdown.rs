@@ -20,6 +20,7 @@ where
 {
     #[doc = "Shutdown the container. This will trigger a clean shutdown of the container, see lxc-stop(1) for details."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.PowerMgmt\"])"]
     pub async fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

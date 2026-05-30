@@ -20,6 +20,7 @@ where
 {
     #[doc = "Read node RRD statistics (returns PNG)"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/nodes/{node}\", [\"Sys.Audit\"])"]
     pub async fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params).await

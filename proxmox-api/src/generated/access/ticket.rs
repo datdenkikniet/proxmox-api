@@ -20,6 +20,7 @@ where
 {
     #[doc = "Dummy. Useful for formatters which want to provide a login page."]
     #[doc = ""]
+    #[doc = "Accessible without authentication."]
     pub async fn get(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Create or verify authentication ticket."]
     #[doc = ""]
+    #[doc = "Accessible without authentication."]
     pub async fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

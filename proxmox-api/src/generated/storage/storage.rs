@@ -20,6 +20,7 @@ where
 {
     #[doc = "Delete storage configuration."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/storage\", [\"Datastore.Allocate\"])"]
     pub async fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &()).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Read storage configuration."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/storage/{storage}\", [\"Datastore.Allocate\"])"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -42,6 +44,7 @@ where
 {
     #[doc = "Update storage configuration."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/storage\", [\"Datastore.Allocate\"])"]
     pub async fn put(&self, params: PutParams) -> Result<PutOutput, T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

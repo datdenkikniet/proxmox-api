@@ -20,6 +20,7 @@ where
 {
     #[doc = "Get Access Control List (ACLs)."]
     #[doc = ""]
+    #[doc = "The returned list is restricted to objects where you have rights to modify permissions."]
     pub async fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &()).await?;
@@ -32,6 +33,7 @@ where
 {
     #[doc = "Update Access Control List (add or remove permissions)."]
     #[doc = ""]
+    #[doc = "Permission check: perm-modify(\"{path}\")"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

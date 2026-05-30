@@ -20,6 +20,7 @@ where
 {
     #[doc = "Lists possible IPSet/Alias reference which are allowed in source/dest properties."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Audit\"])"]
     pub async fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &params).await?;

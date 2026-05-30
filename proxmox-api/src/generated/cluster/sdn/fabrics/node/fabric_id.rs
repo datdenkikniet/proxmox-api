@@ -21,6 +21,8 @@ where
 {
     #[doc = "SDN Fabrics Index"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/sdn/fabrics/{fabric_id}\", [\"SDN.Audit\"])"]
+    #[doc = "Only returns nodes where you have 'Sys.Audit' or 'Sys.Modify' permissions."]
     pub async fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &params).await?;
@@ -33,6 +35,7 @@ where
 {
     #[doc = "Add a node"]
     #[doc = ""]
+    #[doc = "Permission check: and(perm(\"/sdn/fabrics/{fabric_id}\", [\"SDN.Allocate\"]), perm(\"/nodes/{node_id}\", [\"Sys.Modify\"]))"]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

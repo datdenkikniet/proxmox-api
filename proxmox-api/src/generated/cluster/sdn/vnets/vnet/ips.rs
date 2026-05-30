@@ -20,6 +20,7 @@ where
 {
     #[doc = "Delete IP Mappings in a VNet"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/sdn/zones/{zone}/{vnet}\", [\"SDN.Allocate\"])"]
     pub async fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Create IP Mapping in a VNet"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/sdn/zones/{zone}/{vnet}\", [\"SDN.Allocate\"])"]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await
@@ -42,6 +44,7 @@ where
 {
     #[doc = "Update IP Mapping in a VNet"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/sdn/zones/{zone}/{vnet}\", [\"SDN.Allocate\"])"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

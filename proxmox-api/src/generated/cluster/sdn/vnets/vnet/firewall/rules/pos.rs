@@ -20,6 +20,7 @@ where
 {
     #[doc = "Delete rule."]
     #[doc = ""]
+    #[doc = "Needs SDN.Allocate permissions on '/sdn/zones/\\<zone\\>/\\<vnet\\>'"]
     pub async fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Get single rule data."]
     #[doc = ""]
+    #[doc = "Needs SDN.Audit or SDN.Allocate permissions on '/sdn/zones/\\<zone\\>/\\<vnet\\>'"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -42,6 +44,7 @@ where
 {
     #[doc = "Modify rule data."]
     #[doc = ""]
+    #[doc = "Needs SDN.Allocate permissions on '/sdn/zones/\\<zone\\>/\\<vnet\\>'"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

@@ -20,6 +20,7 @@ where
 {
     #[doc = "Migration tunnel endpoint for websocket upgrade - only for internal use by VM migration."]
     #[doc = ""]
+    #[doc = "You need to pass a ticket valid for the selected socket. Tickets can be created via the mtunnel API call, which will check permissions accordingly."]
     pub async fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params).await

@@ -20,6 +20,7 @@ where
 {
     #[doc = "Verify OpenID authorization code and create a ticket."]
     #[doc = ""]
+    #[doc = "Accessible without authentication."]
     pub async fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

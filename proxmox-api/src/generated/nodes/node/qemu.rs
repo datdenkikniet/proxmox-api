@@ -21,6 +21,7 @@ where
 {
     #[doc = "Virtual machine index (per node)."]
     #[doc = ""]
+    #[doc = "Only list VMs where you have VM.Audit permissions on /vms/\\<vmid\\>."]
     pub async fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &params).await?;
@@ -33,6 +34,7 @@ where
 {
     #[doc = "Create or restore a virtual machine."]
     #[doc = ""]
+    #[doc = "You need 'VM.Allocate' permissions on /vms/{vmid} or on the VM pool /pool/{pool}. For restore (option 'archive'), it is enough if the user has 'VM.Backup' permission and the VM already exists. If you create disks you need 'Datastore.AllocateSpace' on any used storage.If you use a bridge/vlan, you need 'SDN.Use' on any used bridge/vlan."]
     pub async fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

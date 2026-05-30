@@ -22,6 +22,7 @@ where
 {
     #[doc = "Stop a task."]
     #[doc = ""]
+    #[doc = "The user needs 'Sys.Modify' permissions on '/nodes/\\<node\\>' if they aren't the owner of the task."]
     pub async fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &()).await

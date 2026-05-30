@@ -20,6 +20,7 @@ where
 {
     #[doc = "List all tags for an OCI repository reference."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/nodes/{node}\", [\"Sys.AccessNetwork\"])"]
     pub async fn get(&self, params: GetParams) -> Result<Vec<String>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<String>> = self.client.get(&path, &params).await?;

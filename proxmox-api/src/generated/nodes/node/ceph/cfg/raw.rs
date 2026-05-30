@@ -20,6 +20,7 @@ where
 {
     #[doc = "Get the Ceph configuration file."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Audit\", \"Datastore.Audit\"], any)"]
     pub async fn get(&self) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await

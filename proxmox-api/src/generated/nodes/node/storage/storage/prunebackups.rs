@@ -20,6 +20,7 @@ where
 {
     #[doc = "Prune backups. Only those using the standard naming scheme are considered."]
     #[doc = ""]
+    #[doc = "You need the 'Datastore.Allocate' privilege on the storage (or if a VM ID is specified, 'Datastore.AllocateSpace' and 'VM.Backup' for the VM)."]
     pub async fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Get prune information for backups. NOTE: this is only a preview and might not be what a subsequent prune call does if backups are removed/added in the meantime."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/storage/{storage}\", [\"Datastore.Audit\", \"Datastore.AllocateSpace\"], any)"]
     pub async fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &params).await?;

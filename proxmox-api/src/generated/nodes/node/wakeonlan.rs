@@ -20,6 +20,7 @@ where
 {
     #[doc = "Try to wake a node via 'wake on LAN' network packet."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/nodes/{node}\", [\"Sys.PowerMgmt\"])"]
     pub async fn post(&self) -> Result<crate::types::MacAddr<true>, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &()).await

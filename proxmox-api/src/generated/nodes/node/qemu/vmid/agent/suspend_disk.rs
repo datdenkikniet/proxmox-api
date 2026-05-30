@@ -20,6 +20,7 @@ where
 {
     #[doc = "Execute suspend-disk."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.PowerMgmt\", \"VM.GuestAgent.Unrestricted\"], any)"]
     pub async fn post(&self) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &()).await

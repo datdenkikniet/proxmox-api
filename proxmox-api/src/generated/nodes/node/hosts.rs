@@ -20,6 +20,7 @@ where
 {
     #[doc = "Get the content of /etc/hosts."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Audit\"])"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Write /etc/hosts."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/nodes/{node}\", [\"Sys.Modify\"])"]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

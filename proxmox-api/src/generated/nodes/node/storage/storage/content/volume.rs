@@ -20,6 +20,7 @@ where
 {
     #[doc = "Delete volume"]
     #[doc = ""]
+    #[doc = "You need 'Datastore.Allocate' privilege on the storage (or 'Datastore.AllocateSpace' for backup volumes if you have VM.Backup privilege on the VM)."]
     pub async fn delete(&self, params: DeleteParams) -> Result<Option<String>, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Get volume attributes"]
     #[doc = ""]
+    #[doc = "You need read access for the volume."]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -53,6 +55,7 @@ where
 {
     #[doc = "Update volume attributes"]
     #[doc = ""]
+    #[doc = "You need read access for the volume."]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

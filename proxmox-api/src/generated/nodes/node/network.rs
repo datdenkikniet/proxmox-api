@@ -21,6 +21,7 @@ where
 {
     #[doc = "Revert network configuration changes."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/nodes/{node}\", [\"Sys.Modify\"])"]
     pub async fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &()).await
@@ -44,6 +45,7 @@ where
 {
     #[doc = "Create network device configuration"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/nodes/{node}\", [\"Sys.Modify\"])"]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await
@@ -55,6 +57,7 @@ where
 {
     #[doc = "Reload network configuration"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/nodes/{node}\", [\"Sys.Modify\"])"]
     pub async fn put(&self, params: PutParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

@@ -20,6 +20,7 @@ where
 {
     #[doc = "Execute network-get-interfaces."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.GuestAgent.Audit\", \"VM.GuestAgent.Unrestricted\"], any)"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await

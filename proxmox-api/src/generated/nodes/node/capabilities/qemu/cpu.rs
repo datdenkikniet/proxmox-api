@@ -20,6 +20,7 @@ where
 {
     #[doc = "List all custom and default CPU models."]
     #[doc = ""]
+    #[doc = "Only returns custom models when the current user has Sys.Audit on /nodes."]
     pub async fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &()).await?;

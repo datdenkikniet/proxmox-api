@@ -21,6 +21,7 @@ where
 {
     #[doc = "Group index."]
     #[doc = ""]
+    #[doc = "The returned list is restricted to groups where you have 'User.Modify', 'Sys.Audit'  or 'Group.Allocate' permissions on /access/groups/\\<group\\>."]
     pub async fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &()).await?;
@@ -33,6 +34,7 @@ where
 {
     #[doc = "Create new group."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/access/groups\", [\"Group.Allocate\"])"]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

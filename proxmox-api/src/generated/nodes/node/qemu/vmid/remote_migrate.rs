@@ -20,6 +20,7 @@ where
 {
     #[doc = "Migrate virtual machine to a remote cluster. Creates a new migration task. EXPERIMENTAL feature!"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.Migrate\"])"]
     pub async fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

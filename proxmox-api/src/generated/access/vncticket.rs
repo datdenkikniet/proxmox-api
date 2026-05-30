@@ -20,6 +20,7 @@ where
 {
     #[doc = "verify VNC authentication ticket."]
     #[doc = ""]
+    #[doc = "Accessible without authentication."]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

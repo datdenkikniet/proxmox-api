@@ -20,6 +20,7 @@ where
 {
     #[doc = "Creates a VNC Shell proxy."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/nodes/{node}\", [\"Sys.Console\"])"]
     pub async fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

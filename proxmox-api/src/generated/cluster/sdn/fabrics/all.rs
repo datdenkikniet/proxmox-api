@@ -20,6 +20,7 @@ where
 {
     #[doc = "SDN Fabrics Index"]
     #[doc = ""]
+    #[doc = "Only list fabrics where you have 'SDN.Audit' or 'SDN.Allocate' permissions on\n'/sdn/fabrics/\\<fabric\\>', only list nodes where you have 'Sys.Audit' or 'Sys.Modify' on /nodes/\\<node_id\\>"]
     pub async fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params).await

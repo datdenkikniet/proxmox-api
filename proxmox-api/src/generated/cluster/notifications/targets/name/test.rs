@@ -20,6 +20,7 @@ where
 {
     #[doc = "Send a test notification to a provided target."]
     #[doc = ""]
+    #[doc = "Permission check: or(perm(\"/mapping/notifications\", [\"Mapping.Modify\"]), perm(\"/mapping/notifications\", [\"Mapping.Audit\"]), perm(\"/mapping/notifications\", [\"Mapping.Use\"]))"]
     pub async fn post(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &()).await

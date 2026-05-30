@@ -46,6 +46,7 @@ where
 {
     #[doc = "Destroy the VM and  all used/owned volumes. Removes any VM specific permissions and firewall rules"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.Allocate\"])"]
     pub async fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params).await

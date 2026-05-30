@@ -20,6 +20,7 @@ where
 {
     #[doc = "Remove smtp endpoint"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/mapping/notifications\", [\"Mapping.Modify\"])"]
     pub async fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &()).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Return a specific smtp endpoint"]
     #[doc = ""]
+    #[doc = "Permission check: or(perm(\"/mapping/notifications\", [\"Mapping.Modify\"]), perm(\"/mapping/notifications\", [\"Mapping.Audit\"]))"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -42,6 +44,7 @@ where
 {
     #[doc = "Update existing smtp endpoint"]
     #[doc = ""]
+    #[doc = "Permission check: and(perm(\"/mapping/notifications\", [\"Mapping.Modify\"]), or(perm(\"/\", [\"Sys.Audit\", \"Sys.Modify\"]), perm(\"/\", [\"Sys.AccessNetwork\"])))"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

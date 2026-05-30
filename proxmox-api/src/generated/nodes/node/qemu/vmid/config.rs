@@ -20,6 +20,7 @@ where
 {
     #[doc = "Get the virtual machine configuration with pending configuration changes applied. Set the 'current' parameter to get the current configuration instead."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.Audit\"])"]
     pub async fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Set virtual machine options (asynchronous API)."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.Config.Disk\", \"VM.Config.CDROM\", \"VM.Config.CPU\", \"VM.Config.Memory\", \"VM.Config.Network\", \"VM.Config.HWType\", \"VM.Config.Options\", \"VM.Config.Cloudinit\"], any)"]
     pub async fn post(&self, params: PostParams) -> Result<Option<String>, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await
@@ -42,6 +44,7 @@ where
 {
     #[doc = "Set virtual machine options (synchronous API) - You should consider using the POST method instead for any actions involving hotplug or storage allocation."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.Config.Disk\", \"VM.Config.CDROM\", \"VM.Config.CPU\", \"VM.Config.Memory\", \"VM.Config.Network\", \"VM.Config.HWType\", \"VM.Config.Options\", \"VM.Config.Cloudinit\"], any)"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

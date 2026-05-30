@@ -21,6 +21,7 @@ where
 {
     #[doc = "SDN Fabrics Index"]
     #[doc = ""]
+    #[doc = "Only list nodes where you have 'SDN.Audit' or 'SDN.Allocate' permissions on\n'/sdn/fabrics/\\<fabric\\>' and 'Sys.Audit' or 'Sys.Modify' on /nodes/\\<node_id\\>"]
     pub async fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &params).await?;

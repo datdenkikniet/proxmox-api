@@ -20,6 +20,7 @@ where
 {
     #[doc = "Return the version of the cluster join API available on this node."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Audit\"])"]
     pub async fn get(&self) -> Result<u64, T::Error> {
         let path = self.path.to_string();
         Ok(self

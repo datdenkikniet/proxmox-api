@@ -20,6 +20,7 @@ where
 {
     #[doc = "List PVE IPAM Entries"]
     #[doc = ""]
+    #[doc = "Only list entries where you have 'SDN.Audit' or 'SDN.Allocate' permissions on '/sdn/zones/\\<zone\\>/\\<vnet\\>'"]
     pub async fn get(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await

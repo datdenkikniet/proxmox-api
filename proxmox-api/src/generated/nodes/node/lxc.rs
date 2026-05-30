@@ -21,6 +21,7 @@ where
 {
     #[doc = "LXC container index (per node)."]
     #[doc = ""]
+    #[doc = "Only list CTs where you have VM.Audit permission on /vms/\\<vmid\\>."]
     pub async fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &()).await?;
@@ -33,6 +34,7 @@ where
 {
     #[doc = "Create or restore a container."]
     #[doc = ""]
+    #[doc = "You need 'VM.Allocate' permission on /vms/{vmid} or on the VM pool /pool/{pool}. For restore, it is enough if the user has 'VM.Backup' permission and the VM already exists. You also need 'Datastore.AllocateSpace' permissions on the storage. For privileged containers, 'Sys.Modify' permissions on '/' are required."]
     pub async fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

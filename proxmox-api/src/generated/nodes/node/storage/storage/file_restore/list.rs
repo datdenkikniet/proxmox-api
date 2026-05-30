@@ -20,6 +20,7 @@ where
 {
     #[doc = "List files and directories for single file restore under the given path."]
     #[doc = ""]
+    #[doc = "You need read access for the volume."]
     pub async fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &params).await?;

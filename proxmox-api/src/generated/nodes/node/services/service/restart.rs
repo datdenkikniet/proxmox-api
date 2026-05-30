@@ -20,6 +20,7 @@ where
 {
     #[doc = "Hard restart service. Use reload if you want to reduce interruptions."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/nodes/{node}\", [\"Sys.Modify\"])"]
     pub async fn post(&self) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &()).await
