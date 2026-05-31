@@ -20,6 +20,7 @@ where
 {
     #[doc = "Rollback pending changes to SDN configuration"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/sdn\", [\"SDN.Allocate\"])"]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

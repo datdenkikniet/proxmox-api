@@ -20,6 +20,7 @@ where
 {
     #[doc = "List local LVM Thin Pools."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/storage\", [\"Datastore.Allocate\"])"]
     pub async fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &params).await?;

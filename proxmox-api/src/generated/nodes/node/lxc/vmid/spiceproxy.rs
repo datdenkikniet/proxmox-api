@@ -20,6 +20,7 @@ where
 {
     #[doc = "Returns a SPICE configuration to connect to the CT."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.Console\"])"]
     pub async fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

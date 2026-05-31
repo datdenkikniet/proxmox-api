@@ -21,6 +21,7 @@ where
 {
     #[doc = "Get HA groups. (deprecated in favor of HA rules)"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Audit\"])"]
     pub async fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &()).await?;
@@ -33,6 +34,7 @@ where
 {
     #[doc = "Create a new HA group. (deprecated in favor of HA rules)"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Console\"])"]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

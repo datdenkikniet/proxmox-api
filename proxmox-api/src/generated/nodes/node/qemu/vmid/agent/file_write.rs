@@ -20,6 +20,7 @@ where
 {
     #[doc = "Writes the given file via guest agent."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.GuestAgent.FileWrite\", \"VM.GuestAgent.Unrestricted\"], any)"]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

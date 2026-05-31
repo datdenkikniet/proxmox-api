@@ -20,6 +20,8 @@ where
 {
     #[doc = "Unmounts the storage and removes the mount unit."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Modify\"])"]
+    #[doc = "Requires additionally 'Datastore.Allocate' on /storage when setting 'cleanup-config'"]
     pub async fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params).await

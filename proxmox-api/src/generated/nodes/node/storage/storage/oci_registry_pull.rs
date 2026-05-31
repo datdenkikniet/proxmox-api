@@ -20,6 +20,7 @@ where
 {
     #[doc = "Pull an OCI image from a registry."]
     #[doc = ""]
+    #[doc = "Permission check: and(perm(\"/storage/{storage}\", [\"Datastore.AllocateTemplate\"]), perm(\"/nodes/{node}\", [\"Sys.AccessNetwork\"]))"]
     pub async fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

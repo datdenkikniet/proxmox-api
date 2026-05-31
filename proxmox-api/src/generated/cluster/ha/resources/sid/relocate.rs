@@ -20,6 +20,7 @@ where
 {
     #[doc = "Request resource relocatzion to another node. This stops the service on the old node, and restarts it on the target node."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Console\"])"]
     pub async fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

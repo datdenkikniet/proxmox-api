@@ -21,6 +21,7 @@ where
 {
     #[doc = "Delete an authentication server."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/access/realm\", [\"Realm.Allocate\"])"]
     pub async fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &()).await
@@ -32,6 +33,7 @@ where
 {
     #[doc = "Get auth server configuration."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/access/realm\", [\"Realm.Allocate\", \"Sys.Audit\"], any)"]
     pub async fn get(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -43,6 +45,7 @@ where
 {
     #[doc = "Update authentication server settings."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/access/realm\", [\"Realm.Allocate\"])"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

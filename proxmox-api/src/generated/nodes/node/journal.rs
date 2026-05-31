@@ -20,6 +20,7 @@ where
 {
     #[doc = "Read Journal"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/nodes/{node}\", [\"Sys.Syslog\"])"]
     pub async fn get(&self, params: GetParams) -> Result<Vec<String>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<String>> = self.client.get(&path, &params).await?;

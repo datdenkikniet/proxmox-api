@@ -21,6 +21,7 @@ where
 {
     #[doc = "List TFA configurations of users."]
     #[doc = ""]
+    #[doc = "Returns all or just the logged-in user, depending on privileges."]
     pub async fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &()).await?;

@@ -20,6 +20,7 @@ where
 {
     #[doc = "Get the status of a specific ceph flag."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Audit\"])"]
     pub async fn get(&self) -> Result<bool, T::Error> {
         let path = self.path.to_string();
         Ok(self
@@ -35,6 +36,7 @@ where
 {
     #[doc = "Set or clear (unset) a specific ceph flag"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Modify\"])"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

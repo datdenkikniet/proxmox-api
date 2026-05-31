@@ -21,6 +21,7 @@ where
 {
     #[doc = "Get the cloudinit configuration with both current and pending values."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.Audit\"])"]
     pub async fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &()).await?;
@@ -33,6 +34,7 @@ where
 {
     #[doc = "Regenerate and change cloudinit config drive."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.Config.Cloudinit\"])"]
     pub async fn put(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &()).await

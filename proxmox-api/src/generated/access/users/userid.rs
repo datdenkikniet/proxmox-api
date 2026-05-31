@@ -23,6 +23,7 @@ where
 {
     #[doc = "Delete user."]
     #[doc = ""]
+    #[doc = "Permission check: and(userid-param(\"Realm.AllocateUser\"), userid-group([\"User.Modify\"]))"]
     pub async fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &()).await
@@ -34,6 +35,7 @@ where
 {
     #[doc = "Get user configuration."]
     #[doc = ""]
+    #[doc = "Permission check: userid-group([\"User.Modify\", \"Sys.Audit\"])"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -45,6 +47,7 @@ where
 {
     #[doc = "Update user configuration."]
     #[doc = ""]
+    #[doc = "Permission check: userid-group([\"User.Modify\"], groups_param=\"update\")"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

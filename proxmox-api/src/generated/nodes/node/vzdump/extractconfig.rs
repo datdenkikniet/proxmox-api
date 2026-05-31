@@ -20,6 +20,7 @@ where
 {
     #[doc = "Extract configuration from vzdump backup archive."]
     #[doc = ""]
+    #[doc = "The user needs 'VM.Backup' permissions on the backed up guest ID, and 'Datastore.AllocateSpace' on the backup storage."]
     pub async fn get(&self, params: GetParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params).await

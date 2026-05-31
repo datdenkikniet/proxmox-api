@@ -20,6 +20,7 @@ where
 {
     #[doc = "Returns included guests and the backup status of their disks. Optimized to be used in ExtJS tree views."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Audit\"])"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await

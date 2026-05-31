@@ -20,6 +20,7 @@ where
 {
     #[doc = "Stop all VMs and Containers."]
     #[doc = ""]
+    #[doc = "The 'VM.PowerMgmt' permission is required on '/' or on '/vms/\\<ID\\>' for each ID passed via the 'vms' parameter."]
     pub async fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

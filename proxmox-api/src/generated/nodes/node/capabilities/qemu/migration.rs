@@ -20,6 +20,7 @@ where
 {
     #[doc = "Get node-specific QEMU migration capabilities of the node. Requires the 'Sys.Audit' permission on '/nodes/\\<node\\>'."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/nodes/{node}\", [\"Sys.Audit\"])"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await

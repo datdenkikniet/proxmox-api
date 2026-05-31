@@ -20,6 +20,7 @@ where
 {
     #[doc = "List local disks."]
     #[doc = ""]
+    #[doc = "Permission check: or(perm(\"/\", [\"Sys.Audit\"]), perm(\"/nodes/{node}\", [\"Sys.Audit\"]))"]
     pub async fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &params).await?;

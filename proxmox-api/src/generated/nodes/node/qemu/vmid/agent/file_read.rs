@@ -20,6 +20,7 @@ where
 {
     #[doc = "Reads the given file via guest agent. Is limited to 16777216 bytes."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.GuestAgent.FileRead\", \"VM.GuestAgent.Unrestricted\"], any)"]
     pub async fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params).await

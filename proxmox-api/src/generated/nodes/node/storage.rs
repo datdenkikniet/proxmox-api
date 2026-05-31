@@ -21,6 +21,7 @@ where
 {
     #[doc = "Get status for all datastores."]
     #[doc = ""]
+    #[doc = "Only list entries where you have 'Datastore.Audit' or 'Datastore.AllocateSpace' permissions on '/storage/\\<storage\\>'"]
     pub async fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &params).await?;

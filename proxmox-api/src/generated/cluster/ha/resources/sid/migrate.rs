@@ -20,6 +20,7 @@ where
 {
     #[doc = "Request resource migration (online) to another node."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Console\"])"]
     pub async fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

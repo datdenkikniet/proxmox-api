@@ -21,6 +21,7 @@ where
 {
     #[doc = "SDN subnets index."]
     #[doc = ""]
+    #[doc = "Only list entries where you have 'SDN.Audit' or 'SDN.Allocate' permissions on '/sdn/zones/\\<zone\\>/\\<vnet\\>'"]
     pub async fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &params).await?;
@@ -33,6 +34,7 @@ where
 {
     #[doc = "Create a new sdn subnet object."]
     #[doc = ""]
+    #[doc = "Require 'SDN.Allocate' permission on '/sdn/zones/\\<zone\\>/\\<vnet\\>'"]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

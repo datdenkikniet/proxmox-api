@@ -20,6 +20,7 @@ where
 {
     #[doc = "Resize a container mount point."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.Config.Disk\"], any)"]
     pub async fn put(&self, params: PutParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

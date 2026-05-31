@@ -20,6 +20,8 @@ where
 {
     #[doc = "Create a copy of virtual machine/template."]
     #[doc = ""]
+    #[doc = "Permission check: and(perm(\"/vms/{vmid}\", [\"VM.Clone\"]), or(perm(\"/vms/{newid}\", [\"VM.Allocate\"]), perm(\"/pool/{pool}\", [\"VM.Allocate\"], require_param=\"pool\")))"]
+    #[doc = "You need 'VM.Clone' permissions on /vms/{vmid}, and 'VM.Allocate' permissions on /vms/{newid} (or on the VM pool /pool/{pool}). You also need 'Datastore.AllocateSpace' on any used storage and 'SDN.Use' on any used bridge/vnet"]
     pub async fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

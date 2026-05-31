@@ -20,6 +20,7 @@ where
 {
     #[doc = "Get the MAC VRF for a VNet in an EVPN zone."]
     #[doc = ""]
+    #[doc = "Require 'SDN.Audit' permissions on '/sdn/zones/\\<zone\\>/\\<vnet\\>'"]
     pub async fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &()).await?;

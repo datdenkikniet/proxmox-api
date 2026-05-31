@@ -20,6 +20,7 @@ where
 {
     #[doc = "Rollback VM state to specified snapshot."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.Snapshot\", \"VM.Snapshot.Rollback\"], any)"]
     pub async fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

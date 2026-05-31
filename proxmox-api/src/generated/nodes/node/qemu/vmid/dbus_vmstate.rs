@@ -20,6 +20,7 @@ where
 {
     #[doc = "Control the dbus-vmstate helper for a given running VM."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.Migrate\"])"]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

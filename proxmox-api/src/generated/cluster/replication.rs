@@ -21,6 +21,7 @@ where
 {
     #[doc = "List replication jobs."]
     #[doc = ""]
+    #[doc = "Will only return replication jobs for which the calling user has VM.Audit permission on /vms/\\<vmid\\>."]
     pub async fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &()).await?;
@@ -33,6 +34,7 @@ where
 {
     #[doc = "Create a new replication job"]
     #[doc = ""]
+    #[doc = "Requires the VM.Replicate permission on /vms/\\<vmid\\>."]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

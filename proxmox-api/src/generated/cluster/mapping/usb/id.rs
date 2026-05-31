@@ -20,6 +20,7 @@ where
 {
     #[doc = "Remove Hardware Mapping."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/mapping/usb\", [\"Mapping.Modify\"])"]
     pub async fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &()).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Get USB Mapping."]
     #[doc = ""]
+    #[doc = "Permission check: or(perm(\"/mapping/usb/{id}\", [\"Mapping.Audit\"]), perm(\"/mapping/usb/{id}\", [\"Mapping.Use\"]), perm(\"/mapping/usb/{id}\", [\"Mapping.Modify\"]))"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -42,6 +44,7 @@ where
 {
     #[doc = "Update a hardware mapping."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/mapping/usb/{id}\", [\"Mapping.Modify\"])"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

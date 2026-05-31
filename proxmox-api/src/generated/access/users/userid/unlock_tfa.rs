@@ -20,6 +20,7 @@ where
 {
     #[doc = "Unlock a user's TFA authentication."]
     #[doc = ""]
+    #[doc = "Permission check: userid-group([\"User.Modify\"])"]
     pub async fn put(&self) -> Result<bool, T::Error> {
         let path = self.path.to_string();
         Ok(self

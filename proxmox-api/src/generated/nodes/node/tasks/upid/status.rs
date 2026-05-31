@@ -20,6 +20,7 @@ where
 {
     #[doc = "Read task status."]
     #[doc = ""]
+    #[doc = "The user needs 'Sys.Audit' permissions on '/nodes/\\<node\\>' if they are not the owner of the task."]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await

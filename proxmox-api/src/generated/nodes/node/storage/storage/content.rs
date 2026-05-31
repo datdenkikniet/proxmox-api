@@ -21,6 +21,7 @@ where
 {
     #[doc = "List storage content."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/storage/{storage}\", [\"Datastore.Audit\", \"Datastore.AllocateSpace\"], any)"]
     pub async fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &params).await?;
@@ -33,6 +34,7 @@ where
 {
     #[doc = "Allocate disk images."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/storage/{storage}\", [\"Datastore.AllocateSpace\"])"]
     pub async fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

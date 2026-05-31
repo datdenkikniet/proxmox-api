@@ -57,6 +57,7 @@ where
 {
     #[doc = "Execute QEMU Guest Agent commands."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.GuestAgent.Unrestricted\", \"VM.GuestAgent.Unrestricted\"], any)"]
     pub async fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

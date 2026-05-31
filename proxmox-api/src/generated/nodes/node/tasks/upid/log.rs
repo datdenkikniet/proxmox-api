@@ -20,6 +20,7 @@ where
 {
     #[doc = "Read task log."]
     #[doc = ""]
+    #[doc = "The user needs 'Sys.Audit' permissions on '/nodes/\\<node\\>' if they aren't the owner of the task."]
     pub async fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &params).await?;

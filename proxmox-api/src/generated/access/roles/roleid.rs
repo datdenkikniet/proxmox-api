@@ -20,6 +20,7 @@ where
 {
     #[doc = "Delete role."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/access\", [\"Sys.Modify\"])"]
     pub async fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &()).await
@@ -42,6 +43,7 @@ where
 {
     #[doc = "Update an existing role."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/access\", [\"Sys.Modify\"])"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

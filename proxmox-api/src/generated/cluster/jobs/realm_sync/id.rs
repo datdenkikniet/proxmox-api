@@ -20,6 +20,7 @@ where
 {
     #[doc = "Delete realm-sync job definition."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Modify\"])"]
     pub async fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &()).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Read realm-sync job definition."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Audit\"])"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -42,6 +44,8 @@ where
 {
     #[doc = "Create new realm-sync job."]
     #[doc = ""]
+    #[doc = "Permission check: and(perm(\"/access/realm/{realm}\", [\"Realm.AllocateUser\"]), perm(\"/access/groups\", [\"User.Modify\"]))"]
+    #[doc = "'Realm.AllocateUser' on '/access/realm/\\<realm\\>' and 'User.Modify' permissions to '/access/groups/'."]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await
@@ -53,6 +57,8 @@ where
 {
     #[doc = "Update realm-sync job definition."]
     #[doc = ""]
+    #[doc = "Permission check: and(perm(\"/access/realm/{realm}\", [\"Realm.AllocateUser\"]), perm(\"/access/groups\", [\"User.Modify\"]))"]
+    #[doc = "'Realm.AllocateUser' on '/access/realm/\\<realm\\>' and 'User.Modify' permissions to '/access/groups/'."]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

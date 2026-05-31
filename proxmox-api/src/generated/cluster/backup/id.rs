@@ -21,6 +21,7 @@ where
 {
     #[doc = "Delete vzdump backup job definition."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Modify\"])"]
     pub async fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &()).await
@@ -32,6 +33,7 @@ where
 {
     #[doc = "Read vzdump backup job definition."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Audit\"])"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -43,6 +45,8 @@ where
 {
     #[doc = "Update vzdump backup job definition."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Modify\"])"]
+    #[doc = "The 'tmpdir', 'dumpdir' and 'script' parameters are additionally restricted to the 'root@pam' user."]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

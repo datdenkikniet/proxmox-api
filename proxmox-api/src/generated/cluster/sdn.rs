@@ -28,6 +28,7 @@ where
 {
     #[doc = "Directory index."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/sdn\", [\"SDN.Audit\"])"]
     pub async fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &()).await?;
@@ -40,6 +41,7 @@ where
 {
     #[doc = "Apply sdn controller changes && reload."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/sdn\", [\"SDN.Allocate\"])"]
     pub async fn put(&self, params: PutParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

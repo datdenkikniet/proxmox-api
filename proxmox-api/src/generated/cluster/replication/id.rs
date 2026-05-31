@@ -20,6 +20,7 @@ where
 {
     #[doc = "Mark replication job for removal."]
     #[doc = ""]
+    #[doc = "Requires the VM.Replicate permission on /vms/\\<vmid\\>."]
     pub async fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Read replication job configuration."]
     #[doc = ""]
+    #[doc = "Requires the VM.Audit permission on /vms/\\<vmid\\>."]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -42,6 +44,7 @@ where
 {
     #[doc = "Update replication job configuration."]
     #[doc = ""]
+    #[doc = "Requires the VM.Replicate permission on /vms/\\<vmid\\>."]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

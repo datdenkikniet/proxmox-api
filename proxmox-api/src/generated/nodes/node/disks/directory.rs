@@ -21,6 +21,7 @@ where
 {
     #[doc = "PVE Managed Directory storages."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Audit\"])"]
     pub async fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &()).await?;
@@ -33,6 +34,8 @@ where
 {
     #[doc = "Create a Filesystem on an unused disk. Will be mounted under '/mnt/pve/NAME'."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Modify\"])"]
+    #[doc = "Requires additionally 'Datastore.Allocate' on /storage when setting 'add_storage'"]
     pub async fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

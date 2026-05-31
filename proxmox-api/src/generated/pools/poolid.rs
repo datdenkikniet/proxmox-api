@@ -20,6 +20,8 @@ where
 {
     #[doc = "Delete pool (deprecated, no support for nested pools, use 'DELETE /pools/?poolid={poolid}')."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/pool/{poolid}\", [\"Pool.Allocate\"])"]
+    #[doc = "You can only delete empty pools (no members)."]
     pub async fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &()).await
@@ -31,6 +33,7 @@ where
 {
     #[doc = "Get pool configuration (deprecated, no support for nested pools, use 'GET /pools/?poolid={poolid}')."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/pool/{poolid}\", [\"Pool.Audit\"])"]
     pub async fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params).await
@@ -42,6 +45,8 @@ where
 {
     #[doc = "Update pool data (deprecated, no support for nested pools - use 'PUT /pools/?poolid={poolid}' instead)."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/pool/{poolid}\", [\"Pool.Allocate\"])"]
+    #[doc = "You also need the right to modify permissions on any object you add/delete."]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

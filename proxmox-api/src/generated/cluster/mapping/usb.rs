@@ -21,6 +21,7 @@ where
 {
     #[doc = "List USB Hardware Mappings"]
     #[doc = ""]
+    #[doc = "Only lists entries where you have 'Mapping.Modify', 'Mapping.Use' or 'Mapping.Audit' permissions on '/mapping/usb/\\<id\\>'."]
     pub async fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &params).await?;
@@ -33,6 +34,7 @@ where
 {
     #[doc = "Create a new hardware mapping."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/mapping/usb\", [\"Mapping.Modify\"])"]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

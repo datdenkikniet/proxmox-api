@@ -20,6 +20,7 @@ where
 {
     #[doc = "Extract a file or directory (as zip archive) from a PBS backup."]
     #[doc = ""]
+    #[doc = "You need read access for the volume."]
     pub async fn get(&self, params: GetParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params).await

@@ -20,6 +20,7 @@ where
 {
     #[doc = "Release global lock for SDN configuration"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/sdn\", [\"SDN.Allocate\"])"]
     pub async fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Acquire global lock for SDN configuration"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/sdn\", [\"SDN.Allocate\"])"]
     pub async fn post(&self, params: PostParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

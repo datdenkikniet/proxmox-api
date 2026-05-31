@@ -20,6 +20,7 @@ where
 {
     #[doc = "Get the currently configured vzdump defaults."]
     #[doc = ""]
+    #[doc = "The user needs 'Datastore.Audit' or 'Datastore.AllocateSpace' permissions for the specified storage (or default storage if none specified). Some properties are only returned when the user has 'Sys.Audit' permissions for the node."]
     pub async fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params).await

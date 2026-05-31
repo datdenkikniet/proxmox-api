@@ -21,6 +21,8 @@ where
 {
     #[doc = "Delete pool."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/pool/{poolid}\", [\"Pool.Allocate\"])"]
+    #[doc = "You can only delete empty pools (no members)."]
     pub async fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params).await
@@ -32,6 +34,7 @@ where
 {
     #[doc = "List pools or get pool configuration."]
     #[doc = ""]
+    #[doc = "List all pools where you have Pool.Audit permissions on /pool/\\<pool\\>, or the pool specific with {poolid}"]
     pub async fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &params).await?;
@@ -44,6 +47,7 @@ where
 {
     #[doc = "Create new pool."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/pool/{poolid}\", [\"Pool.Allocate\"])"]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await
@@ -55,6 +59,8 @@ where
 {
     #[doc = "Update pool."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/pool/{poolid}\", [\"Pool.Allocate\"])"]
+    #[doc = "You also need the right to modify permissions on any object you add/delete."]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

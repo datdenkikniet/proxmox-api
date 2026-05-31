@@ -20,6 +20,7 @@ where
 {
     #[doc = "Add a node"]
     #[doc = ""]
+    #[doc = "Permission check: and(perm(\"/sdn/fabrics/{fabric_id}\", [\"SDN.Allocate\"]), perm(\"/nodes/{node_id}\", [\"Sys.Modify\"]))"]
     pub async fn delete(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &()).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Get a node"]
     #[doc = ""]
+    #[doc = "Permission check: and(perm(\"/sdn/fabrics/{fabric_id}\", [\"SDN.Audit\", \"SDN.Allocate\"], any), perm(\"/nodes/{node_id}\", [\"Sys.Audit\", \"Sys.Modify\"], any))"]
     pub async fn get(&self) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &()).await
@@ -42,6 +44,7 @@ where
 {
     #[doc = "Update a node"]
     #[doc = ""]
+    #[doc = "Permission check: and(perm(\"/sdn/fabrics/{fabric_id}\", [\"SDN.Allocate\"]), perm(\"/nodes/{node_id}\", [\"Sys.Modify\"]))"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

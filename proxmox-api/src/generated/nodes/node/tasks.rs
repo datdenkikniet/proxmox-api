@@ -21,6 +21,7 @@ where
 {
     #[doc = "Read task list for one node (finished tasks)."]
     #[doc = ""]
+    #[doc = "List task associated with the current user, or all task the user has 'Sys.Audit' permissions on /nodes/\\<node\\> (the \\<node\\> the task runs on)."]
     pub async fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &params).await?;

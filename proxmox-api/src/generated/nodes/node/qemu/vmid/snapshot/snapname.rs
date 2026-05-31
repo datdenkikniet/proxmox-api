@@ -22,6 +22,7 @@ where
 {
     #[doc = "Delete a VM snapshot."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/vms/{vmid}\", [\"VM.Snapshot\"])"]
     pub async fn delete(&self, params: DeleteParams) -> Result<String, T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params).await

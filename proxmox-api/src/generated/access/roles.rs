@@ -33,6 +33,7 @@ where
 {
     #[doc = "Create new role."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/access\", [\"Sys.Modify\"])"]
     pub async fn post(&self, params: PostParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

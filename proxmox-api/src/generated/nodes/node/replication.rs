@@ -21,6 +21,7 @@ where
 {
     #[doc = "List status of all replication jobs on this node."]
     #[doc = ""]
+    #[doc = "Requires the VM.Audit permission on /vms/\\<vmid\\>."]
     pub async fn get(&self, params: GetParams) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &params).await?;

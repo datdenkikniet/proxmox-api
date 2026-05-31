@@ -20,6 +20,7 @@ where
 {
     #[doc = "Get user TFA types (Personal and Realm)."]
     #[doc = ""]
+    #[doc = "Permission check: or(userid-param(\"self\"), userid-group([\"User.Modify\", \"Sys.Audit\"]))"]
     pub async fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params).await

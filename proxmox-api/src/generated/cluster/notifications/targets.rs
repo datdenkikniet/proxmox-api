@@ -21,6 +21,7 @@ where
 {
     #[doc = "Returns a list of all entities that can be used as notification targets."]
     #[doc = ""]
+    #[doc = "Permission check: or(perm(\"/mapping/notifications\", [\"Mapping.Modify\"]), perm(\"/mapping/notifications\", [\"Mapping.Audit\"]), perm(\"/mapping/notifications\", [\"Mapping.Use\"]))"]
     pub async fn get(&self) -> Result<Vec<GetOutputItems>, T::Error> {
         let path = self.path.to_string();
         let optional_vec: Option<Vec<GetOutputItems>> = self.client.get(&path, &()).await?;

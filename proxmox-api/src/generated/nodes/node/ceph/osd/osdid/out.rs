@@ -20,6 +20,7 @@ where
 {
     #[doc = "ceph osd out"]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/\", [\"Sys.Modify\"])"]
     pub async fn post(&self) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &()).await

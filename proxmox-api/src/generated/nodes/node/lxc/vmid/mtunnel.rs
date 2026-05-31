@@ -20,6 +20,8 @@ where
 {
     #[doc = "Migration tunnel endpoint - only for internal use by CT migration."]
     #[doc = ""]
+    #[doc = "Permission check: and(perm(\"/vms/{vmid}\", [\"VM.Allocate\"]), perm(\"/\", [\"Sys.Incoming\"]))"]
+    #[doc = "You need 'VM.Allocate' permissions on '/vms/{vmid}' and Sys.Incoming on '/'. Further permission checks happen during the actual migration."]
     pub async fn post(&self, params: PostParams) -> Result<PostOutput, T::Error> {
         let path = self.path.to_string();
         self.client.post(&path, &params).await

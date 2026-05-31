@@ -20,6 +20,7 @@ where
 {
     #[doc = "Delete sdn zone object configuration."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/sdn/zones/{zone}\", [\"SDN.Allocate\"])"]
     pub async fn delete(&self, params: DeleteParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.delete(&path, &params).await
@@ -31,6 +32,7 @@ where
 {
     #[doc = "Read sdn zone configuration."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/sdn/zones/{zone}\", [\"SDN.Allocate\"])"]
     pub async fn get(&self, params: GetParams) -> Result<GetOutput, T::Error> {
         let path = self.path.to_string();
         self.client.get(&path, &params).await
@@ -42,6 +44,7 @@ where
 {
     #[doc = "Update sdn zone object configuration."]
     #[doc = ""]
+    #[doc = "Permission check: perm(\"/sdn/zones/{zone}\", [\"SDN.Allocate\"])"]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await

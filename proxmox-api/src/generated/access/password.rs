@@ -20,6 +20,8 @@ where
 {
     #[doc = "Change user password."]
     #[doc = ""]
+    #[doc = "Permission check: or(userid-param(\"self\"), and(userid-param(\"Realm.AllocateUser\"), userid-group([\"User.Modify\"])))"]
+    #[doc = "Each user is allowed to change their own password. A user can change the password of another user if they have 'Realm.AllocateUser' (on the realm of user \\<userid\\>) and 'User.Modify' permission on /access/groups/\\<group\\> on a group where user \\<userid\\> is member of. For the PAM realm, a password change does not take  effect cluster-wide, but only applies to the local node."]
     pub async fn put(&self, params: PutParams) -> Result<(), T::Error> {
         let path = self.path.to_string();
         self.client.put(&path, &params).await
