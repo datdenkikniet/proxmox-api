@@ -20,9 +20,7 @@ $ cd generator/
 $ ./generate.sh
 ```
 
-To see the PVE-schema.json file that the CI is using, you can download the artifacts produced by an [actions] run.
-
-[actions]: https://github.com/datdenkikniet/proxmox-api/actions
+The schema is generated from [PVE-schema.json](./generator/PVE-schema.json).
 
 ## License
 
