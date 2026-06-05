@@ -22,6 +22,17 @@ impl std::fmt::Display for Method {
 pub trait Client: Clone {
     type Error: core::fmt::Debug;
 
+    /// Upload a file to a Proxmox VE API endpoint using multipart/form-data.
+    fn upload<B, R>(
+        &self,
+        path: &str,
+        body: &B,
+        data: Vec<u8>,
+    ) -> impl Future<Output = Result<R, Self::Error>>
+    where
+        B: Serialize,
+        R: DeserializeOwned;
+
     /// Transmit an authenticated request to a Proxmox VE API endpoint
     /// using the provided method, path, body, and query.
     fn request_with_body_and_query<B, Q, R>(
@@ -100,6 +111,19 @@ where
     T: Client,
 {
     type Error = <T as Client>::Error;
+
+    fn upload<B, R>(
+        &self,
+        path: &str,
+        body: &B,
+        data: Vec<u8>,
+    ) -> impl Future<Output = Result<R, Self::Error>>
+    where
+        B: Serialize,
+        R: DeserializeOwned,
+    {
+        T::upload(self, path, body, data)
+    }
 
     fn request_with_body_and_query<B, Q, R>(
         &self,

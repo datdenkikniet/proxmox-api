@@ -128,10 +128,21 @@ impl Generator {
                 let fn_name_str = method.to_ascii_lowercase();
                 let fn_name = Ident::new(&fn_name_str, quote!().span());
 
+                // Detect upload endpoints so we can generate a specific signature for them.
+                let is_file_upload = fn_name_str == "post"
+                    && matches!(segment, PathElement::Literal(s) if s == "upload");
+
                 let (signature, defer_signature) = if let Some(TypeDef::Struct(strt)) = &parameters
                 {
                     let name = Ident::new(&strt.name(), quote! {}.span());
-                    (quote!(&self, params: #name), quote!(&path, &params))
+                    if is_file_upload {
+                        (
+                            quote!(&self, params: #name, data: Vec<u8>),
+                            quote!(&path, &params, data),
+                        )
+                    } else {
+                        (quote!(&self, params: #name), quote!(&path, &params))
+                    }
                 } else {
                     (quote!(&self), quote!(&path, &()))
                 };
@@ -147,7 +158,11 @@ impl Generator {
 
                         let (_, name) = def.as_field_ty(ret.optional.get());
 
-                        let call = Self::to_call(def.primitive(), &fn_name, defer_signature);
+                        let call = if is_file_upload {
+                            quote!(self.client.upload(#defer_signature).await)
+                        } else {
+                            Self::to_call(def.primitive(), &fn_name, defer_signature)
+                        };
 
                         let call = if matches!(def, TypeDef::Array(_)) {
                             quote! {

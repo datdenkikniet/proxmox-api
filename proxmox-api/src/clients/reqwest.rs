@@ -52,6 +52,37 @@ fn extract_message(body: &str) -> String {
         .unwrap_or_else(|| body.to_string())
 }
 
+async fn parse_response<R: serde::de::DeserializeOwned>(
+    response: reqwest::Response,
+) -> Result<R, Error> {
+    let response_status = response.status();
+    let json_data = response.bytes().await?;
+    let json_str = std::str::from_utf8(&json_data).map_err(|_| Error::ResponseWasNotString)?;
+
+    log::debug!("JSON response: {json_str}");
+
+    if response_status != StatusCode::OK {
+        return Err(Error::UnknownFailure(
+            response_status,
+            Some(extract_message(json_str)),
+        ));
+    }
+
+    let result: Response<R> =
+        serde_json::from_str(json_str).map_err(|e| Error::DecodingFailed(json_str.into(), e))?;
+
+    if let Some(data) = result.data {
+        Ok(data)
+    } else if let Some(errors) = result.errors {
+        Err(Error::EncounteredErrors(errors))
+    } else {
+        Err(Error::UnknownFailure(
+            response_status,
+            Some(extract_message(json_str)),
+        ))
+    }
+}
+
 impl From<reqwest::Error> for Error {
     fn from(value: reqwest::Error) -> Self {
         Self::Reqwest(value)
@@ -170,6 +201,50 @@ impl Client {
 impl crate::client::Client for Client {
     type Error = Error;
 
+    async fn upload<B, R>(&self, path: &str, body: &B, data: Vec<u8>) -> Result<R, Error>
+    where
+        B: Serialize,
+        R: DeserializeOwned,
+    {
+        log::debug!("POST (upload) {}", path);
+
+        // Serialize body to a JSON object so we can separate the filename
+        // (which becomes the file-name attribute on the binary part) from the
+        // remaining fields, which are sent as plain text form fields.
+        let fields = serde_json::to_value(body)
+            .map_err(|_| Error::Other("failed to serialize upload body"))?;
+        let fields = fields.as_object().ok_or(Error::Other(
+            "upload params must serialize to a JSON object",
+        ))?;
+
+        let filename = fields
+            .get("filename")
+            .and_then(|v| v.as_str())
+            .ok_or(Error::Other("upload params missing filename field"))?
+            .to_string();
+
+        let mut form = reqwest::multipart::Form::new();
+        for (key, value) in fields {
+            if key == "filename" {
+                continue;
+            }
+            if let Some(s) = value.as_str() {
+                form = form.text(key.clone(), s.to_string());
+            }
+        }
+
+        let file_part = reqwest::multipart::Part::bytes(data)
+            .file_name(filename)
+            .mime_str("application/octet-stream")
+            .expect("known-valid MIME type");
+        form = form.part("filename", file_part);
+
+        let request = self.client.request(Method::POST, self.route(path));
+        let response = self.append_headers(request.multipart(form)).send().await?;
+
+        parse_response(response).await
+    }
+
     async fn request_with_body_and_query<B, Q, R>(
         &self,
         method: crate::client::Method,
@@ -209,33 +284,7 @@ impl crate::client::Client for Client {
 
         let response = self.append_headers(request).send().await?;
 
-        let response_status = response.status();
-
-        let json_data = response.bytes().await?;
-        let json_str = std::str::from_utf8(&json_data).map_err(|_| Error::ResponseWasNotString)?;
-
-        log::debug!("JSON response: {json_str}");
-
-        if response_status != StatusCode::OK {
-            return Err(Error::UnknownFailure(
-                response_status,
-                Some(extract_message(json_str)),
-            ));
-        }
-
-        let result: Response<R> = serde_json::from_str(json_str)
-            .map_err(|e| Error::DecodingFailed(json_str.into(), e))?;
-
-        if let Some(data) = result.data {
-            Ok(data)
-        } else if let Some(errors) = result.errors {
-            Err(Error::EncounteredErrors(errors))
-        } else {
-            Err(Error::UnknownFailure(
-                response_status,
-                Some(extract_message(json_str)),
-            ))
-        }
+        parse_response(response).await
     }
 }
 
