@@ -23,7 +23,7 @@ where
     #[doc = "Permission check: perm(\"/storage/{storage}\", [\"Datastore.AllocateTemplate\"])"]
     pub async fn post(&self, params: PostParams, data: Vec<u8>) -> Result<String, T::Error> {
         let path = self.path.to_string();
-        self.client.upload(&path, &params, data).await
+        self.client.upload(&path, params, data).await
     }
 }
 impl PostParams {

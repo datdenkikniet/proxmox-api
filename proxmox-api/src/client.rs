@@ -1,5 +1,9 @@
 use serde::{Serialize, de::DeserializeOwned};
 
+pub trait AsFilename {
+    fn as_filename(&self) -> String;
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Method {
     Post,
@@ -26,11 +30,11 @@ pub trait Client: Clone {
     fn upload<B, R>(
         &self,
         path: &str,
-        body: &B,
+        body: B,
         data: Vec<u8>,
     ) -> impl Future<Output = Result<R, Self::Error>>
     where
-        B: Serialize,
+        B: IntoIterator<Item = (String, String)> + AsFilename,
         R: DeserializeOwned;
 
     /// Transmit an authenticated request to a Proxmox VE API endpoint
@@ -115,11 +119,11 @@ where
     fn upload<B, R>(
         &self,
         path: &str,
-        body: &B,
+        body: B,
         data: Vec<u8>,
     ) -> impl Future<Output = Result<R, Self::Error>>
     where
-        B: Serialize,
+        B: IntoIterator<Item = (String, String)> + AsFilename,
         R: DeserializeOwned,
     {
         T::upload(self, path, body, data)

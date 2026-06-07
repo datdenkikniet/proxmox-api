@@ -9,6 +9,9 @@ mod generated;
 #[allow(unused)]
 pub use generated::*;
 
+#[cfg(feature = "nodes")]
+mod specialized;
+
 #[cfg(feature = "reqwest-client")]
 mod clients;
 

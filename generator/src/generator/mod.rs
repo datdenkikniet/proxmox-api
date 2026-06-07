@@ -129,8 +129,7 @@ impl Generator {
                 let fn_name = Ident::new(&fn_name_str, quote!().span());
 
                 // Detect upload endpoints so we can generate a specific signature for them.
-                let is_file_upload = fn_name_str == "post"
-                    && matches!(segment, PathElement::Literal(s) if s == "upload");
+                let is_file_upload = fn_name_str == "post" && info.name == "upload";
 
                 let (signature, defer_signature) = if let Some(TypeDef::Struct(strt)) = &parameters
                 {
@@ -138,7 +137,7 @@ impl Generator {
                     if is_file_upload {
                         (
                             quote!(&self, params: #name, data: Vec<u8>),
-                            quote!(&path, &params, data),
+                            quote!(&path, params, data),
                         )
                     } else {
                         (quote!(&self, params: #name), quote!(&path, &params))

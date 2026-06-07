@@ -201,36 +201,18 @@ impl Client {
 impl crate::client::Client for Client {
     type Error = Error;
 
-    async fn upload<B, R>(&self, path: &str, body: &B, data: Vec<u8>) -> Result<R, Error>
+    async fn upload<B, R>(&self, path: &str, body: B, data: Vec<u8>) -> Result<R, Error>
     where
-        B: Serialize,
+        B: IntoIterator<Item = (String, String)> + crate::client::AsFilename,
         R: DeserializeOwned,
     {
         log::debug!("POST (upload) {}", path);
 
-        // Serialize body to a JSON object so we can separate the filename
-        // (which becomes the file-name attribute on the binary part) from the
-        // remaining fields, which are sent as plain text form fields.
-        let fields = serde_json::to_value(body)
-            .map_err(|_| Error::Other("failed to serialize upload body"))?;
-        let fields = fields.as_object().ok_or(Error::Other(
-            "upload params must serialize to a JSON object",
-        ))?;
-
-        let filename = fields
-            .get("filename")
-            .and_then(|v| v.as_str())
-            .ok_or(Error::Other("upload params missing filename field"))?
-            .to_string();
+        let filename = body.as_filename();
 
         let mut form = reqwest::multipart::Form::new();
-        for (key, value) in fields {
-            if key == "filename" {
-                continue;
-            }
-            if let Some(s) = value.as_str() {
-                form = form.text(key.clone(), s.to_string());
-            }
+        for (key, value) in body {
+            form = form.text(key, value);
         }
 
         let file_part = reqwest::multipart::Part::bytes(data)
