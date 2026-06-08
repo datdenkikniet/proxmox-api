@@ -12,6 +12,12 @@ pub enum Error {
     DecodingFailed(String, serde_json::Error),
     UrlEncodingFailed(String),
     UnknownFailure(StatusCode, Option<String>),
+    ApiFailure {
+        status: StatusCode,
+        message: String,
+        errors: Option<serde_json::Map<String, serde_json::Value>>,
+        body: String,
+    },
     Other(&'static str),
 }
 
@@ -33,6 +39,18 @@ impl std::fmt::Display for Error {
                 }
                 Ok(())
             }
+            Error::ApiFailure {
+                status,
+                message,
+                errors,
+                ..
+            } => {
+                write!(f, "HTTP {status}: {message}")?;
+                if let Some(errors) = errors {
+                    write!(f, "; errors: {}", serde_json::Value::Object(errors.clone()))?;
+                }
+                Ok(())
+            }
             Error::Other(msg) => write!(f, "{msg}"),
         }
     }
@@ -48,11 +66,27 @@ impl std::error::Error for Error {
     }
 }
 
-fn extract_message(body: &str) -> String {
-    serde_json::from_str::<serde_json::Value>(body)
-        .ok()
-        .and_then(|v| v.get("message").and_then(|m| m.as_str().map(String::from)))
-        .unwrap_or_else(|| body.to_string())
+struct ApiErrorDetail {
+    message: String,
+    errors: Option<serde_json::Map<String, serde_json::Value>>,
+}
+
+fn extract_api_error_detail(body: &str) -> ApiErrorDetail {
+    match serde_json::from_str::<serde_json::Value>(body) {
+        Ok(json) => {
+            let message = json
+                .get("message")
+                .and_then(|m| m.as_str())
+                .map(String::from)
+                .unwrap_or_else(|| body.to_string());
+            let errors = json.get("errors").and_then(|e| e.as_object()).cloned();
+            ApiErrorDetail { message, errors }
+        }
+        Err(_) => ApiErrorDetail {
+            message: body.to_string(),
+            errors: None,
+        },
+    }
 }
 
 async fn parse_response<R: serde::de::DeserializeOwned>(
@@ -65,10 +99,13 @@ async fn parse_response<R: serde::de::DeserializeOwned>(
     log::debug!("JSON response: {json_str}");
 
     if response_status != StatusCode::OK {
-        return Err(Error::UnknownFailure(
-            response_status,
-            Some(extract_message(json_str)),
-        ));
+        let detail = extract_api_error_detail(json_str);
+        return Err(Error::ApiFailure {
+            status: response_status,
+            message: detail.message,
+            errors: detail.errors,
+            body: json_str.to_owned(),
+        });
     }
 
     let result: Response<R> =
@@ -81,7 +118,7 @@ async fn parse_response<R: serde::de::DeserializeOwned>(
     } else {
         Err(Error::UnknownFailure(
             response_status,
-            Some(extract_message(json_str)),
+            Some(extract_api_error_detail(json_str).message),
         ))
     }
 }
