@@ -11,7 +11,10 @@ pub enum Error {
     ResponseWasNotString,
     DecodingFailed(String, serde_json::Error),
     UrlEncodingFailed(String),
-    UnknownFailure(StatusCode, Option<String>),
+    UnknownFailure {
+        status: StatusCode,
+        message: Option<String>,
+    },
     ApiFailure {
         status: StatusCode,
         message: String,
@@ -32,10 +35,10 @@ impl std::fmt::Display for Error {
                 write!(f, "failed to decode response: {e}; body: {text}")
             }
             Error::UrlEncodingFailed(msg) => write!(f, "failed to URL-encode request body: {msg}"),
-            Error::UnknownFailure(status, body) => {
+            Error::UnknownFailure { status, message } => {
                 write!(f, "HTTP {status}")?;
-                if let Some(body) = body {
-                    write!(f, ": {body}")?;
+                if let Some(message) = message {
+                    write!(f, ": {message}")?;
                 }
                 Ok(())
             }
@@ -116,10 +119,10 @@ async fn parse_response<R: serde::de::DeserializeOwned>(
     } else if let Some(errors) = result.errors {
         Err(Error::EncounteredErrors(errors))
     } else {
-        Err(Error::UnknownFailure(
-            response_status,
-            Some(extract_api_error_detail(json_str).message),
-        ))
+        Err(Error::UnknownFailure {
+            status: response_status,
+            message: Some(extract_api_error_detail(json_str).message),
+        })
     }
 }
 
