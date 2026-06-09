@@ -12,11 +12,20 @@ impl IntoIterator for PostParams {
     type IntoIter = std::vec::IntoIter<(String, String)>;
 
     fn into_iter(self) -> Self::IntoIter {
+        let PostParams {
+            content,
+            checksum,
+            checksum_algorithm,
+            filename: _,
+            tmpfilename,
+            additional_properties,
+        } = self;
+
         let mut fields = Vec::new();
 
         fields.push((
             "content".to_string(),
-            match self.content {
+            match content {
                 Content::Import => "import",
                 Content::Iso => "iso",
                 Content::Vztmpl => "vztmpl",
@@ -24,11 +33,11 @@ impl IntoIterator for PostParams {
             .to_string(),
         ));
 
-        if let Some(checksum) = self.checksum {
+        if let Some(checksum) = checksum {
             fields.push(("checksum".to_string(), checksum));
         }
 
-        if let Some(algo) = self.checksum_algorithm {
+        if let Some(algo) = checksum_algorithm {
             fields.push((
                 "checksum-algorithm".to_string(),
                 match algo {
@@ -43,14 +52,14 @@ impl IntoIterator for PostParams {
             ));
         }
 
-        if let Some(tmpfilename) = self.tmpfilename {
+        if let Some(tmpfilename) = tmpfilename {
             fields.push((
                 "tmpfilename".to_string(),
                 tmpfilename.get_value().to_string(),
             ));
         }
 
-        for (k, v) in self.additional_properties {
+        for (k, v) in additional_properties {
             if let Some(s) = v.as_str() {
                 fields.push((k, s.to_string()));
             }
