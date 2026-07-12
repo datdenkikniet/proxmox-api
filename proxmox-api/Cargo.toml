@@ -1,11 +1,11 @@
 [package]
 name = "proxmox-api"
 description = "Rust bindings for the Proxmox VE HTTP API"
-categories = [ "virtualization", "api-bindings" ]
-keywords = [ "proxmox", "proxmoxve" ]
+categories = ["virtualization", "api-bindings"]
+keywords = ["proxmox", "proxmoxve"]
 version = "0.2.0"
 edition = "2024"
-authors = [ "Johannes Cornelis Draaijer <jcdra1@gmail.com>" ]
+authors = ["Johannes Cornelis Draaijer <jcdra1@gmail.com>"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/datdenkikniet/proxmox-api"
 documentation = "https://docs.rs/proxmox-api/"
@@ -18,34 +18,64 @@ pve-version = "9.1.2"
 features = ["default", "reqwest-client"]
 
 [features]
-default = [ "access", "cluster", "nodes", "pools", "storage", "version" ]
+default = ["access", "cluster", "nodes", "pools", "storage", "version"]
 access = []
 cluster = []
 nodes = []
 pools = []
 storage = []
 version = []
-reqwest-client = [ "dep:reqwest", "dep:log", "dep:parking_lot", "dep:serde_urlencoded" ]
-cli = [ "dep:clap", "dep:pretty_env_logger", "reqwest-client" ]
+reqwest-client = [
+    "dep:reqwest",
+    "dep:log",
+    "dep:parking_lot",
+    "dep:serde_urlencoded",
+    "tokio/fs",
+]
+cli = ["dep:clap", "dep:pretty_env_logger", "reqwest-client"]
 
 [[bin]]
 name = "proxmox-api"
 path = "./src/cli/main.rs"
-required-features = [ "cli" ]
+required-features = ["cli"]
 
 [dependencies]
-serde = { version = "1.0.228", default-features = false, features = ["std", "derive"] }
+serde = { version = "1.0.228", default-features = false, features = [
+    "std",
+    "derive",
+] }
 
 # TODO: add a generic catch-all type to the client trait. This way we can
 # make serde_json optional, too!
-serde_json = { version = "1.0.150", default-features = false, features = ["std"] }
+serde_json = { version = "1.0.150", default-features = false, features = [
+    "std",
+] }
 
 # CLI deps
 serde_urlencoded = { optional = true, version = "0.7.1" }
-log = { optional = true, version = "0.4.30", default-features = false, features = ["std"] }
+log = { optional = true, version = "0.4.30", default-features = false, features = [
+    "std",
+] }
 parking_lot = { optional = true, version = "0.12.5" }
-reqwest = { optional = true, version = "0.13", default-features = false, features = ["default-tls", "query", "multipart"] }
-clap = { optional = true, version = "4.6.1", default-features = false, features = ["std", "help", "usage", "error-context", "color", "derive", "env"] }
+reqwest = { optional = true, version = "0.13", default-features = false, features = [
+    "default-tls",
+    "query",
+    "multipart",
+    "stream",
+] }
+clap = { optional = true, version = "4.6.1", default-features = false, features = [
+    "std",
+    "help",
+    "usage",
+    "error-context",
+    "color",
+    "derive",
+    "env",
+] }
 pretty_env_logger = { optional = true, version = "0.5.0" }
 regex = "1.12.3"
-tokio = { version = "1.52.3", default-features = false, features = ["macros", "rt", "rt-multi-thread"] }
+tokio = { version = "1.52.3", default-features = false, features = [
+    "macros",
+    "rt",
+    "rt-multi-thread",
+] }

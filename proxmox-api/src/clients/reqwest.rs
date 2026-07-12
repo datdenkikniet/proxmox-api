@@ -6,6 +6,7 @@ use super::base_access::{AuthState, Ticket, TicketResponse};
 #[derive(Debug)]
 pub enum Error {
     Reqwest(reqwest::Error),
+    Io(std::io::Error),
     EncounteredErrors(serde_json::Value),
     ResponseWasNotString,
     DecodingFailed(String, serde_json::Error),
@@ -18,6 +19,7 @@ impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Error::Reqwest(e) => write!(f, "{e}"),
+            Error::Io(e) => write!(f, "{e}"),
             Error::EncounteredErrors(v) => write!(f, "Proxmox returned errors: {v}"),
             Error::ResponseWasNotString => write!(f, "response body was not valid UTF-8"),
             Error::DecodingFailed(text, e) => {
@@ -40,6 +42,7 @@ impl std::error::Error for Error {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
             Error::Reqwest(e) => Some(e),
+            Error::Io(e) => Some(e),
             _ => None,
         }
     }
@@ -201,7 +204,12 @@ impl Client {
 impl crate::client::Client for Client {
     type Error = Error;
 
-    async fn upload<B, R>(&self, path: &str, body: B, data: Vec<u8>) -> Result<R, Error>
+    async fn upload<B, R>(
+        &self,
+        path: &str,
+        body: B,
+        data: impl Into<crate::client::UploadBody>,
+    ) -> Result<R, Error>
     where
         B: IntoIterator<Item = (String, String)> + crate::client::AsFilename,
         R: DeserializeOwned,
@@ -215,7 +223,16 @@ impl crate::client::Client for Client {
             form = form.text(key, value);
         }
 
-        let file_part = reqwest::multipart::Part::bytes(data)
+        let file_part = match data.into() {
+            crate::client::UploadBody::Vec(data) => reqwest::multipart::Part::bytes(data),
+            crate::client::UploadBody::File(file) => {
+                let len = file.metadata().map_err(Error::Io)?.len();
+                let file = tokio::fs::File::from_std(file);
+                reqwest::multipart::Part::stream_with_length(file, len)
+            }
+        };
+
+        let file_part = file_part
             .file_name(filename)
             .mime_str("application/octet-stream")
             .expect("known-valid MIME type");

@@ -1,7 +1,25 @@
 use serde::{Serialize, de::DeserializeOwned};
+use std::fs::File;
 
 pub trait AsFilename {
     fn as_filename(&self) -> String;
+}
+
+pub enum UploadBody {
+    Vec(Vec<u8>),
+    File(File),
+}
+
+impl From<Vec<u8>> for UploadBody {
+    fn from(value: Vec<u8>) -> Self {
+        Self::Vec(value)
+    }
+}
+
+impl From<File> for UploadBody {
+    fn from(value: File) -> Self {
+        Self::File(value)
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -31,7 +49,7 @@ pub trait Client: Clone {
         &self,
         path: &str,
         body: B,
-        data: Vec<u8>,
+        data: impl Into<UploadBody>,
     ) -> impl Future<Output = Result<R, Self::Error>>
     where
         B: IntoIterator<Item = (String, String)> + AsFilename,
@@ -120,7 +138,7 @@ where
         &self,
         path: &str,
         body: B,
-        data: Vec<u8>,
+        data: impl Into<UploadBody>,
     ) -> impl Future<Output = Result<R, Self::Error>>
     where
         B: IntoIterator<Item = (String, String)> + AsFilename,

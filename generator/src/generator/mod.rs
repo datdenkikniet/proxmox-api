@@ -136,7 +136,7 @@ impl Generator {
                     let name = Ident::new(&strt.name(), quote! {}.span());
                     if is_file_upload {
                         (
-                            quote!(&self, params: #name, data: Vec<u8>),
+                            quote!(&self, params: #name, data: impl Into<crate::client::UploadBody>),
                             quote!(&path, params, data),
                         )
                     } else {
