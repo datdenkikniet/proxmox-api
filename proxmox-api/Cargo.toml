@@ -40,20 +40,20 @@ path = "./src/cli/main.rs"
 required-features = ["cli"]
 
 [dependencies]
-serde = { version = "1.0.228", default-features = false, features = [
+serde = { version = "1.0.229", default-features = false, features = [
     "std",
     "derive",
 ] }
 
 # TODO: add a generic catch-all type to the client trait. This way we can
 # make serde_json optional, too!
-serde_json = { version = "1.0.150", default-features = false, features = [
+serde_json = { version = "1.0.151", default-features = false, features = [
     "std",
 ] }
 
 # CLI deps
 serde_urlencoded = { optional = true, version = "0.7.1" }
-log = { optional = true, version = "0.4.30", default-features = false, features = [
+log = { optional = true, version = "0.4.34", default-features = false, features = [
     "std",
 ] }
 parking_lot = { optional = true, version = "0.12.5" }
@@ -63,7 +63,7 @@ reqwest = { optional = true, version = "0.13", default-features = false, feature
     "multipart",
     "stream",
 ] }
-clap = { optional = true, version = "4.6.1", default-features = false, features = [
+clap = { optional = true, version = "4.6.7", default-features = false, features = [
     "std",
     "help",
     "usage",
@@ -73,8 +73,8 @@ clap = { optional = true, version = "4.6.1", default-features = false, features 
     "env",
 ] }
 pretty_env_logger = { optional = true, version = "0.5.0" }
-regex = "1.12.3"
-tokio = { version = "1.52.3", default-features = false, features = [
+regex = "1.13.1"
+tokio = { version = "1.53.1", default-features = false, features = [
     "macros",
     "rt",
     "rt-multi-thread",
