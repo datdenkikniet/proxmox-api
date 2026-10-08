@@ -111,13 +111,21 @@ async fn parse_response<R: serde::de::DeserializeOwned>(
         });
     }
 
-    let result: Response<R> =
+    // Decode the envelope first so API errors are not hidden by an invalid data payload.
+    let result: Response<serde_json::Value> =
         serde_json::from_str(json_str).map_err(|e| Error::DecodingFailed(json_str.into(), e))?;
 
-    if let Some(data) = result.data {
-        Ok(data)
-    } else if let Some(errors) = result.errors {
+    if let Some(errors) = result.errors {
         Err(Error::EncounteredErrors(errors))
+    } else if result.data.is_some() {
+        // Decode from the original text so flattened numbered-field deserializers
+        // can borrow map keys. An owned Value cannot provide borrowed strings.
+        let typed_result: Response<R> = serde_json::from_str(json_str)
+            .map_err(|e| Error::DecodingFailed(json_str.into(), e))?;
+        typed_result.data.ok_or_else(|| Error::UnknownFailure {
+            status: response_status,
+            message: Some(extract_api_error_detail(json_str).message),
+        })
     } else {
         Err(Error::UnknownFailure {
             status: response_status,
@@ -328,7 +336,18 @@ impl crate::client::Client for Client {
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(bound(deserialize = "T: Deserialize<'de>"))]
 pub struct Response<T> {
+    /// `None` means the field is absent; an explicit null is deserialized as `T`.
+    #[serde(default, deserialize_with = "deserialize_present_data")]
     pub data: Option<T>,
     pub errors: Option<serde_json::Value>,
+}
+
+fn deserialize_present_data<'de, T, D>(deserializer: D) -> Result<Option<T>, D::Error>
+where
+    T: Deserialize<'de>,
+    D: serde::Deserializer<'de>,
+{
+    T::deserialize(deserializer).map(Some)
 }
